@@ -245,7 +245,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
       <div class="eyebrow">Deendayal Port · Kandla · Dry cargo jetty</div>
       <h1>Berth <span>Board</span><span class="draft">31 OCT 2026</span></h1>
     </div>
-    <div class="asof"><span class="upd" id="upd"></span><br>Berthing List <b>31.10.26 · 0700</b> (KPSAA mail)<br>Signals up to <b>30/31 Oct night (amended 2115)</b> · Programme <b>01.11 (meeting 31.10, TF/SH/2102)</b> · revised list 31.10 (15:09)<br>Policy <b>24.03.25 + 4 amendments</b><br><span id="tide"></span></div>
+    <div class="asof"><span class="upd" id="upd"></span><br>Berthing List <b>31.10.26 · 0700</b> (KPSAA mail)<br>Signals up to <b>31 Oct night (disp 1919)</b> · Programme <b>01.11 (meeting 31.10, TF/SH/2102)</b> · revised list 31.10 (15:09)<br>Policy <b>24.03.25 + 4 amendments</b><br><span id="tide"></span></div>
   </header>
   <div class="notices" id="notices"></div>
 
@@ -318,7 +318,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="learn" id="learn"></div>
   </section>
 
-  <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · signals to 30 Oct 2115 · movement programmes TF/SH/2102 for 31.10 and 01.11.</footer>
+  <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · signals to 31 Oct 1919 · movement programmes TF/SH/2102 for 31.10 and 01.11.</footer>
 </div>
 
 <script>
@@ -333,8 +333,8 @@ function part(x){const H=dt(x).getUTCHours();return H<6?'early hours':H<12?'morn
 function frac(p){const w=Math.floor(p),f=p-w;const s={0:'',0.25:'¼',0.5:'½',0.75:'¾'}[Math.round(f*4)/4];return (w===0&&s?'':w)+(s||'');}
 function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
-const NOW=h('10-31 15:00');
-const UPDATED='31 Oct 2026 · 18:05 IST';
+const NOW=h('10-31 21:00');
+const UPDATED='31 Oct 2026 · 21:10 IST';
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
@@ -345,6 +345,7 @@ const NOTICES=[
 // Expected-vs-actual log. {d:'date', v:'vessel', exp:'what the board expected', act:'what the port did', why:'reason / hypothesis', fix:'rule change', st:'open'|'adopted'|'ok'}
 // st: open = waiting for Mihir to confirm the reason; adopted = folded into the rules; ok = matched, nothing to learn
 const LEARN=[
+ {d:'31 Oct pm',v:'Sailing times · signal vs programme',exp:'Programme for 31.10: Moonlit out 17:00, Sea Gautam out 17:00; programme for 01.11: Ocean Camellia out 23:00.',act:'Day signal: Moonlit out 14:00 (amended from 16:15), Sea Gautam 15:15; night signal: Ocean Camellia 21:30.',why:'HM fixes the actual slot on the tide and pilot availability; the programme time is a planning figure, the signal is the real one and can be 1–3 h either way.',fix:'Board uses the signal time once a signal exists; programme time until then. Nothing to change in the rules.',st:'ok'},
  {d:'31 Oct pm',v:'CJ-14 · African Quail vs Feng Hai Da',exp:'Board\'s meeting preview: CJ-14 (after AC Kathryn ~12:30) → African Quail, SAAGAR break bulk; "palat sakta hai agar SAAGAR bulk vessel ready ho".',act:'Programme for 01.11: AC Kathryn sails 1 Nov 17:05; CJ-14 → Feng Hai Da (24 HRS group). African Quail not programmed.',why:'Exactly the flip the preview named: Rome Trader (petcoke, ETA 31 Oct) reported, declared ready 09:00 and carries SAAGAR status (SGR = Y only in the revised afternoon list; blank in the 0700 list) — it took the SAAGAR bulk slot at CJ-6. With Centurion Buyo on the break-bulk slot, SAAGAR was full, so CJ-14 went down the order to 24 HRS. Also AC Kathryn finishes a day later than the board\'s estimate.',fix:'(1) A vessel\'s SAAGAR status must be known before it is ranked — ask: is it Indian-flag / SAAGAR-registered? (2) An ETA vessel that reports and declares before the meeting is eligible for the NEXT day\'s programme — board already allows this. (3) Logs ETCs now taken from the list.',st:'open'},
  {d:'31 Oct pm',v:'Logs discharge rate · back to DPA norm',exp:'Board had used 4,800 CBM/day for logs vessels (working assumption) → AC Kathryn sailing 31 Oct 12:30.',act:'Programme: AC Kathryn readiness 1 Nov 17:05 (≈ 4,000 CBM/day). Mihir: drop the 4,800 figure, go by what the system prints.',why:'Per-vessel rates vary; a private assumption only creates confusion against the official sheet.',fix:'Logs ETCs taken from the list as printed; waiting logs vessels planned at the DPA norm (3,450 CBM/day, or the list norm where given).',st:'adopted'},
  {d:'31 Oct pm',v:'Rome Trader · petcoke at CJ-6',exp:'Board keeps coal at CJ-7/8 only and treated petcoke like coal.',act:'Programme: Rome Trader (petcoke, 50,010 MT, SGR) berths CJ-6 41½–49¾ after Outrivaling 3 shifts to OTB.',why:'Petcoke is not restricted to the coal berths; CJ-6 (hopper → truck, no stacking) is acceptable for it.',fix:'Petcoke allowed at any non-clean berth; only coal stays CJ-7/8.',st:'adopted'},
@@ -434,10 +435,10 @@ const POOL=['1','2','3','4','5','6','7','8','13','14','15','15A','16'];
 // at berth / fixed by signal
 const V=[
  {b:'1',n:'Emmanouil',nm:3450,p:[0.5,7.5],c:'Rice bags',q:26710,u:'MT',cat:'BIT',f:'10-29 02:42',t:'11-05 22:30'},
- {b:'2',n:'Moonlit',nm:6500,p:[8.5,16],c:'Rice bags',q:28800,u:'MT',cat:'8K',f:'10-26 21:45',t:'10-31 17:00',note:'list ETC 31 Oct 10:05; sailing programmed 17:00 (draft 10.10 m, tide)'},
- {b:'2',n:'Karpathos Dawn',nm:6500,p:[8.5,16.75],c:'Rice bags',q:50000,u:'MT',cat:'8K',f:'10-31 19:00',t:'11-08 12:00',est:1,note:'berthing today per programme TF/SH/2102, o/c after Moonlit'},
- {b:'3',n:'Seagautam',p:[17.75,22.5],c:'Ammonium sulphate bulk',q:6000,u:'MT',cat:'24H',f:'10-30 17:45',t:'10-31 17:45'},
- {b:'3',n:'Horizon Chaser',p:[17.75,22],c:'Bitumen (tanker)',q:3902,u:'MT',cat:'BIT',f:'10-31 19:00',t:'11-01 17:00',note:'sails 1 Nov 17:00 per programme for 01.11 (readiness draft 4.5 m)'},
+ {b:'2',n:'Moonlit',nm:6500,p:[8.5,16],c:'Rice bags',q:28800,u:'MT',cat:'8K',f:'10-26 21:45',t:'10-31 14:00',note:'sailed 14:00 per day signal 31 Oct (Capt Karan); programme had 17:00, list ETC 10:05'},
+ {b:'2',n:'Karpathos Dawn',nm:6500,p:[8.5,16.75],c:'Rice bags',q:50000,u:'MT',cat:'8K',f:'10-31 16:00',t:'11-08 08:00',est:1,note:'in o/c after Moonlit (day signal 31 Oct, Capt Karan); made-fast time estimated ~16:00'},
+ {b:'3',n:'Seagautam',p:[17.75,22.5],c:'Ammonium sulphate bulk',q:6000,u:'MT',cat:'24H',f:'10-30 17:45',t:'10-31 15:15',note:'sailed 15:15 per day signal 31 Oct (Capt Pathak)'},
+ {b:'3',n:'Horizon Chaser',p:[17.75,22],c:'Bitumen (tanker)',q:3902,u:'MT',cat:'BIT',f:'10-31 17:15',t:'11-01 17:00',note:'in o/c after Sea Gautam (day signal 31 Oct, Capt Pathak; made fast ~17:15 est); sails 1 Nov 17:00 per programme'},
  {b:'4',n:'Eva Bright',nm:11500,p:[23.5,31.5],c:'Polyhalite fertiliser',q:25000,u:'MT',cat:'GOV',f:'10-29 16:05',t:'10-31 22:15'},
  {b:'5',n:'Aya',p:[32.5,39.75],c:'Rice bags',q:25100,u:'MT',cat:'GEN',f:'10-28 17:05',t:'11-04 00:45'},
  {b:'6',n:'Outrivaling 3',p:[42.75,48],c:'Soda ash J-bags / pipes',q:10341,u:'MT',cat:'GEN',f:'10-30 05:30',t:'11-01 09:00',est:1,note:'programme for 01.11: shifting CJ-6 → OTB at agent\'s a/c (time not given)'},
@@ -445,8 +446,8 @@ const V=[
  {b:'7',n:'Xanadu',nm:50000,p:[49,57.25],c:'Coal bulk',q:79219,u:'MT',cat:'HP',f:'10-28 16:05',t:'10-30 23:30',etc:'10-30 08:06'},
  {b:'7',n:'Fu Hai 16',nm:50000,p:[50.75,57.25],c:'Iron ore fines',q:53243,u:'MT',cat:'HP',f:'10-31 03:00',t:'11-01 06:30',note:'HP quote 50,000 MTPD; sails 1 Nov 06:30 per programme, outward draft 12.65 m at a 12.0 m berth (tidal benefit)'},
  {b:'7',n:'Meghna Venus',nm:50000,p:[50.75,57.25],c:'Clay / feldspar',q:55000,u:'MT',cat:'HP',f:'11-01 08:30',t:'11-02 16:00',est:1,note:'programme for 01.11: HP 50,000 MTPD quote; sailing draft 12.72 m'},
- {b:'8',n:'Ocean Camellia',nm:8050,p:[58.25,68],c:'Urea bulk',q:55040,u:'MT',cat:'GOV',f:'10-25 04:30',t:'10-31 23:00',note:'night sailing 23:00 per programme for 01.11'},
- {b:'8',n:'Vishva Preeti',nm:8050,p:[58.25,68],c:'Urea bulk',q:52500,u:'MT',cat:'GOV',f:'11-01 01:00',t:'11-07 20:00',est:1,note:'programme for 01.11: Govt, night berthing after Ocean Camellia'},
+ {b:'8',n:'Ocean Camellia',nm:8050,p:[58.25,68],c:'Urea bulk',q:55040,u:'MT',cat:'GOV',f:'10-25 04:30',t:'10-31 21:30',note:'night signal 31 Oct: out 21:30 (Capt Goel); programme had 23:00'},
+ {b:'8',n:'Vishva Preeti',nm:8050,p:[58.25,68],c:'Urea bulk',q:52500,u:'MT',cat:'GOV',f:'11-01 01:30',t:'11-07 20:00',est:1,note:'night signal 31 Oct: in 01:30 (Capt Sud), 58¼–68, Govt'},
  {b:'9',n:'Lacerta',nm:20000,p:[69.25,79.25],c:'US coal',q:78005,u:'MT',cat:'PPP',f:'10-28 04:50',t:'10-30 23:30'},
  {b:'9',n:'Cervia',nm:20000,p:[69.25,78.25],c:'Coal bulk',q:82390,u:'MT',cat:'PPP',f:'10-31 06:20',t:'11-04 11:12',note:'list ETC at 20,000 MTPD'},
  {b:'13',n:'Bauhinia',p:[113,121.25],c:'Project cargo',q:4292,u:'MT',cat:'STL',f:'10-29 01:06',t:'10-31 04:00'},
@@ -963,7 +964,8 @@ const MV=[
  ['Day signal · 30 Oct (final, disp 2300 + amendments)',[['06:00','OUT','Agia Fevronia','CJ-16 · 173½–188','Karan','10-30 06:00','done'],['09:45','WARP','African Predator','CJ-15 · → 146¾–158¾','Sandeep','10-30 09:45',''],['10:15','WARP','Centurion Buyo','CJ-15A · → 159¾–169½','Pathak','10-30 10:15',''],['o/c','IN','Maritime Harmony','CJ-16 · 171½–188','Yadav','10-30 11:30',''],['14:00','OUT','Xanadu','CJ-7 · 49–57¼','Bali','','PP CANCELLED — delay in cargo operation'],['o/c','IN','Fu Hai 16','CJ-7 · 50¾–57¼','Bali','','PP CANCELLED — berth not vacant'],['13:30','IN','Horizon Chaser','CJ-3 · 17–21¼','Bali','','PP CANCELLED — vessel ETA delayed']]],
  ['Day signal · 30 Oct (new, disp 1400)',[['15:45','WARP','Aya','CJ-5 · 31½–38¾ → 32½–39¾','Bali','10-30 15:45',''],['16:15','WARP','Eva Bright','CJ-4 · 22½–30½ → 23½–31½','Bali','10-30 16:15',''],['16:45','IN','Sea Gautam','CJ-3 · 17¾–22½','Omesh','10-30 17:45','Coastal · speed 6 kts']]],
  ['Night signal · 30/31 Oct (disp 1640/1705, amended to 2115)',[['23:30','OUT','Xanadu','CJ-7 · 49–57¼','Goel','10-30 23:30','RT · was 2200'],['o/c','IN','Fu Hai 16','CJ-7 · 50¾–57¼','Sud','10-31 01:00','flood'],['23:30','OUT','Lacerta','CJ-9 · 69¼–79¼ (PPP)','Deepak','10-30 23:30',''],['04:00','IN','Cervia','CJ-9 · 69¼–79¼ (PPP)','Sud','10-31 04:00','ebb'],['o/c','OUT','Bauhinia','CJ-13 · 113–121¼','Deepak','10-31 04:00','was 0400'],['o/c','IN','Rahma','CJ-13 · 113–125','Goel','10-31 04:30','after Shamim out 0230']]],
- ['Day signal · 31 Oct',[['06:30','TURN','African Predator','CJ-15 · 146¾–158¾','G. Raj','10-31 06:30','flood → ebb side']]],
+ ['Day signal · 31 Oct (disp 0805 / 1030 → amended 1045 / final 1310)',[['06:30','TURN','African Predator','CJ-15 · 146¾–158¾','G. Raj','10-31 06:30','flood → ebb side'],['15:15','OUT','Sea Gautam','CJ-3 · 17½–22¼','Pathak','10-31 15:15',''],['o/c','IN','Horizon Chaser','CJ-3 · 17¾–22','Pathak','10-31 17:15','bitumen tanker'],['14:00','OUT','Moonlit','CJ-2 · 8½–16','Karan','10-31 14:00','was 1615 → 1400 (amended 1045); programme said 1700'],['o/c','IN','Karpathos Dawn','CJ-2 · 8½–16¾','Karan','10-31 16:00','6.5K group'],['16:30','OUT','Arista','CJ-11 · 87–94½ (container, not tracked)','Karan','10-31 16:30','was 1500']]],
+ ['Night signal · 31 Oct / 1 Nov (disp 1919)',[['21:30','OUT','Ocean Camellia','CJ-8 · 58¼–68','Goel','10-31 21:30','programme had 2300'],['01:30','IN','Vishva Preeti','CJ-8 · 58¼–68','Sud','11-01 01:30','Govt · night berthing']]],
  ['Programme for 1 Nov (berthing meeting 31 Oct 11:00, TF/SH/2102 dt 31 Oct)',[['17:00','OUT','Horizon Chaser','CJ-3 · 17¾–22','—','11-01 17:00','readiness draft 4.5 m'],['—','OUT','Outrivaling 3','CJ-6 → OTB','—','11-01 09:00','shifting to OTB, agent\'s a/c'],['o/c','IN','Rome Trader','CJ-6 · 41½–49¾','—','11-01 11:00','SGR (SAAGAR) · petcoke'],['06:30','OUT','Fu Hai 16','CJ-7 · 50¾–57¼','—','11-01 06:30','outward draft 12.65 m'],['o/c','IN','Meghna Venus','CJ-7 · 50¾–57¼','—','11-01 08:30','HP 50,000 MTPD · sailing draft 12.72 m'],['23:00','OUT','Ocean Camellia','CJ-8 · 58¼–68','—','10-31 23:00','night sailing'],['o/c','IN','Vishva Preeti','CJ-8 · 58¼–68','—','11-01 01:00','Govt · night berthing'],['17:05','OUT','AC Kathryn','CJ-14 · 127–140¾','—','11-01 17:05','readiness draft 6.05 m'],['o/c','IN','Feng Hai Da','CJ-14 · 126–137','—','11-01 19:00','24 HRS · starboard, agent\'s req'],['17:00','OUT','Maritime Harmony','CJ-16 · 171½–188','—','11-01 17:00','sailing draft 14.1 m'],['o/c','IN','Alasia','CJ-16 · 173½–188','—','11-01 19:00','HP 40,000 MTPD · sailing draft 13.3 m'],['09:00','OUT','African Predator','CJ-15 → OTB','—','11-01 09:00','shifting to OTB, agent\'s req · draft 10.1 m'],['o/c','IN','Katong WW','CJ-15 · 142½–155','—','11-01 11:00','CSTL(SGR)']]],
  ['Programme for 31 Oct (berthing meeting 30 Oct 11:00, TF/SH/2102)',[['17:00','OUT','Moonlit','CJ-2 · 8½–16','—','10-31 17:00','readiness draft 10.10 m'],['o/c','IN','Karpathos Dawn','CJ-2 · 8½–16¾','—','10-31 19:00','6.5K group'],['17:00','OUT','Sea Gautam','CJ-3 · 17¾–22½','—','10-31 17:00',''],['o/c','IN','Horizon Chaser','CJ-3 · 17¾–22','—','10-31 19:00','bitumen tanker'],['15:00','OUT','Bauhinia','CJ-13 · 113–121¼','—','10-31 04:00','signal advanced it to o/c after Shamim'],['o/c','IN','Rahma','CJ-13 · 113–125','—','10-31 04:30','Steel/Project']]]
 ];
