@@ -202,6 +202,14 @@ table{border-collapse:collapse;width:100%}
 .mine td.w{font-family:var(--f-disp);font-size:22px;font-weight:800;color:var(--brass);line-height:1.1;overflow-wrap:anywhere}
 .mine td.w small{display:block;font-family:var(--f-mono);font-size:11px;color:var(--muted);font-weight:400;white-space:normal;line-height:1.4;margin-top:2px}
 .mine .empty{color:var(--muted);font-size:13px}
+.timber{border-color:var(--brk)}
+.tmb td.n{font-weight:700;font-size:13.5px}
+.tmb td.n small{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px}
+.tmb td.d{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);line-height:1.5}
+.tmb td.d b{color:var(--fg);display:block;font-size:12.5px}
+.tmb tr.grp td{background:rgba(77,180,165,.08);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--brk);padding:5px 8px}
+.tmb .dl{font-weight:700}.tmb .dl.late{color:var(--warn)}.tmb .dl.early{color:var(--ok)}.tmb .dl.same{color:var(--muted)}
+@media (max-width:640px){.tmb{min-width:760px;table-layout:fixed}.tmb td.n{width:150px}}
 .grp .nx small{display:block;color:var(--muted);font-size:11.5px;font-weight:400}
 footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   .upd{display:inline-block;margin-bottom:6px;padding:4px 10px;border:1px solid var(--brass,#c9a24c);border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--brass,#c9a24c)} .upd b{color:inherit;font-weight:700}
@@ -269,6 +277,10 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="sechead"><h2 id="mh">Mihir &amp; Company · our vessels</h2><p>Every vessel in the berthing list with agent Mihir &amp; Company, with where it stands today and when it berths.</p></div>
     <div id="mine"></div>
   </section>
+  <section class="card timber" aria-labelledby="th">
+    <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
+    <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
+  </section>
   <section class="card" aria-labelledby="mp">
     <div class="sechead"><h2 id="mp">Meeting preview</h2><p>The 11:00 berthing meeting programmes movements up to 18:00 of the next day. For each DPA berth the board expects to free up in that window: who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated here. Compare with the programme when it comes.</p></div>
     <div class="scroll"><table class="mpt" id="mpt"></table></div>
@@ -324,7 +336,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="learn" id="learn"></div>
   </section>
 
-  <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · signals to 31 Oct 1919 · movement programmes TF/SH/2102 for 31.10 and 01.11.</footer>
+  <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · signals to 31 Oct 1919 · movement programmes TF/SH/2102 for 31.10 and 01.11 · timber desk position report 30.10 (updated to 31.10 1800).</footer>
 </div>
 
 <script>
@@ -341,7 +353,26 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 01:40 IST';
+const UPDATED='1 Nov 2026 · 02:00 IST';
+// ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
+// board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
+const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
+ {n:'AC Kathryn',cbm:29066,from:'Australia',c:'Pine logs',arr:'10-09 17:00',b:'10-25 06:36',pri:'SAAGAR',st:'berth'},
+ {n:'Centurion Buyo',cbm:29852,from:'Australia',c:'Pine logs',arr:'10-20 06:24',b:'10-30 01:45',pri:'SAAGAR',st:'berth'},
+ {n:'African Quail',cbm:34758,from:'Argentina',c:'Pine logs',arr:'10-27 00:15',etb:'11-01',st:'wait'},
+ {n:'Lanna Naree',cbm:29222,from:'Malaysia',c:'Hardwood logs',arr:'10-27 12:54',etb:'11-05',st:'wait',note:'"Lunna Naree" in the team report'},
+ {n:'African Peacock',cbm:36926,from:'Australia',c:'Pine logs',eta:'10-31 02:00',etb:'11-07',st:'eta'},
+ {n:'Drake Well',cbm:null,from:'Argentina',c:'Pine logs',eta:'11-05 23:30',etb:'11-10',st:'eta'},
+ {n:'Enishi',cbm:null,from:'Australia',c:'Pine logs',eta:'11-06 05:00',etb:'11-13',st:'eta'},
+ {n:'ML Egret',cbm:42886,from:'New Zealand',c:'Pine logs',eta:'11-06 15:00',etb:'11-17',st:'eta'},
+ {n:'Uni Blossom',cbm:null,from:'Uruguay',c:'Pine logs',eta:'11-07',etb:'11-23',st:'eta'},
+ {n:'Darya Priya',cbm:null,from:'New Zealand',c:'Pine logs',eta:'11-15',etb:'11-29',st:'eta'},
+ {n:'AG Varvara',cbm:null,from:'Australia',c:'Pine logs',eta:'11-15',etb:'12-01',st:'eta'},
+ {n:'CD Glory',cbm:null,from:'Malaysia',c:'Hardwood logs',eta:'11-20',etb:'11-27',st:'eta'},
+ {n:'Paiwan Ace',cbm:null,from:'Uruguay',c:'Pine logs',eta:'11-21',etb:'12-09',st:'eta'},
+ {n:'African Pheasant',cbm:null,from:'New Zealand',c:'Logs',eta:'11-23',etb:'12-11',st:'eta'},
+ {n:'Paiwan Wisdom',cbm:null,from:'USA',c:'Logs',eta:'11-26',etb:'12-13',st:'eta'}
+]};
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
@@ -392,6 +423,34 @@ function preview(){
    <td class="pk"><b>${x.n}</b>${isMine(x.n)?'<span class="tag">Mihir &amp; Co</span>':''}${x.shifted?'<span class="tag shift">SHIFT · port convenience</span>':''}<small>${x.c} · ${nf.format(x.q)} ${x.u}${agTxt(x.n)}</small><small>${x.shifted?`shifted from CJ-${x.fromB} (${CL[x.cat]||x.cat}, slot unchanged) · frees CJ-${x.fromB} for <b>${x.forWho}</b> (${CL[x.forCat]||x.forCat}) · alongside ~${fmt(x.F)}`:`${CL[x.cat]||x.cat}${x.via?' slot · as '+x.via:''} · alongside ~${fmt(x.F)}${x.tide?' · '+x.tide:''}`}</small></td>
    <td class="al">${x.alt?`<b>${x.alt.n}</b><small>${x.alt.c} · ${CL[x.alt.cat]||x.alt.cat}${x.alt.via?' as '+x.alt.via:''}${x.alt.same?' · same group, next rank':''}</small>`:'<span style="color:var(--dim)">nobody else eligible</span>'}</td>
    <td class="fl">${x.flips&&x.flips.length?'<ul>'+x.flips.map(f=>`<li>${f}</li>`).join('')+'</ul>':'—'}</td></tr>`).join('');
+}
+function timber(){
+  const el=document.getElementById('timber'); const sub=document.getElementById('tsub');
+  sub.innerHTML=`Our timber desk's "<b>Kandla Timber Vessel's Position</b>" (dated ${TIMBER.d}, updated to ${TIMBER.upto}) beside the board's reading. Team ETB = the desk's own estimate; Board = berthing list / programme / projection. Vessels not yet in the DPA list are shown for the desk's planning only and are not in the board's queue.`;
+  const hd=x=>x?(x.length===5?h(x+' 12:00'):h(x)):null;
+  const fd=x=>x?(x.length===5?fday(h(x+' 12:00')):fmt(h(x))):'—';
+  const G={berth:'Working at berth',wait:'Waiting for berth',eta:'Expected'};
+  let last=null;
+  const row=r=>{
+    const v=V.filter(x=>x.n===r.n).sort((a,z)=>z.F-a.F)[0], sp=S.find(x=>x.n===r.n), w=W.find(x=>x.n===r.n);
+    const listQ=(v&&v.q)||(w&&w.q); const qdiff=r.cbm&&listQ&&Math.abs(listQ-r.cbm)>1?` <span style="color:var(--muted)">(list ${nf.format(listQ)})</span>`:'';
+    let board='', bt=null;
+    if(v&&v.T<=NOW)board=`<b>sailed</b>CJ-${v.b} · ${fmt(v.T)}`;
+    else if(v&&v.F<=NOW)board=`<b>CJ-${v.b} · at berth</b>ETC ${fmt(v.T)}${v.est?' (est)':''}${v.shiftedTo?' · shift → CJ-'+v.shiftedTo:''}`;
+    else if(v)board=`<b>CJ-${v.b} · ${fmt(v.F)}</b>fixed by programme / signal`;
+    else if(sp){bt=sp.F;board=`<b>CJ-${sp.b} · ${fday(sp.F)} ~${fmt(sp.F,false)}</b>${CL[sp.cat]||sp.cat}${sp.via?' slot as '+sp.via:''} · projected`;}
+    else if(w&&w.rdy==null)board=`<b>readiness N/A</b>${w.x||'in DPA list, not ready'}`;
+    else if(w)board=`<b>beyond projection</b>in DPA list · ${CL[Object.keys(w.rk)[0]]||'no group rank'}`;
+    else board=`<b style="color:var(--muted)">not in DPA list yet</b>${r.eta?'ETA '+fd(r.eta):''}`;
+    let dl='—';
+    if(r.etb&&bt!=null){const dd=Math.round((bt-hd(r.etb))/24);dl=dd===0?'<span class="dl same">same day</span>':dd>0?`<span class="dl late">board +${dd} d later</span>`:`<span class="dl early">board ${dd} d earlier</span>`;}
+    else if(r.st==='berth')dl='<span class="dl same">at berth</span>';
+    return `<tr class="${isMine(r.n)?'me':''}"><td class="n">${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${r.c} · ${r.from}${r.note?' · '+r.note:''}</small></td>
+      <td class="d">${r.cbm?nf.format(r.cbm)+' CBM':'<span style="color:var(--muted)">CBM n/a</span>'}${qdiff}</td>
+      <td class="d">${r.arr?'<b>arrived '+fmt(h(r.arr))+'</b>':r.eta?'<b>ETA '+fd(r.eta)+'</b>':'—'}</td>
+      <td class="d">${r.b?'<b>berthed '+fmt(h(r.b))+'</b>'+(r.pri?'under '+(CL[r.pri]||r.pri):''):r.etb?'<b>ETB '+fd(r.etb)+'</b>team estimate':'—'}</td>
+      <td class="d">${board}</td><td class="d">${dl}</td></tr>`;};
+  el.innerHTML='<tr><th>Vessel</th><th>Qty</th><th>Arrival</th><th>Team</th><th>Board</th><th>Δ</th></tr>'+TIMBER.rows.map(r=>{const g=r.st!==last?`<tr class="grp"><td colspan="6">${G[r.st]}</td></tr>`:'';last=r.st;return g+row(r);}).join('');
 }
 function notices(){const el=document.getElementById('notices');el.innerHTML=NOTICES.map(n=>`<div class="nt"><span class="d">${n.d}</span><div><b>${n.t}</b><small>${n.s}${n.src?' · '+n.src:''}</small></div></div>`).join('');}
 function learn(){const el=document.getElementById('learn');if(!LEARN.length){el.innerHTML='<div class="empty">No variance recorded yet.</div>';return;}
@@ -1110,7 +1169,7 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();learn();tideLine();preview();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();learn();timber();tideLine();preview();qdetail();side();gantt();groups();moves();
   if(scroll)document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});
 }
 // open at the focused vessel's berthing time if projected
