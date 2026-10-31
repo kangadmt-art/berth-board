@@ -202,6 +202,18 @@ table{border-collapse:collapse;width:100%}
 .mine td.w{font-family:var(--f-disp);font-size:22px;font-weight:800;color:var(--brass);line-height:1.1;overflow-wrap:anywhere}
 .mine td.w small{display:block;font-family:var(--f-mono);font-size:11px;color:var(--muted);font-weight:400;white-space:normal;line-height:1.4;margin-top:2px}
 .mine .empty{color:var(--muted);font-size:13px}
+.mine tr.hist td{padding:4px 8px 12px;border-top:0}
+.mine .ht{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:2px 0 6px}
+.mine ol.hl{list-style:none;margin:0;padding:0 0 0 14px;border-left:2px solid var(--line)}
+.mine ol.hl li{position:relative;padding:0 0 10px 12px;font-size:12.5px}
+.mine ol.hl li::before{content:'';position:absolute;left:-19px;top:5px;width:8px;height:8px;border-radius:50%;background:var(--line);border:2px solid var(--bg,#0f1c2e)}
+.mine ol.hl li.live::before{background:var(--brass)}
+.mine .hh{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.mine .hh .hd{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.mine .hh b{font-size:13px;color:var(--fg)}
+.mine .hs{font-family:var(--f-mono);font-size:11px;color:var(--brk);margin-top:1px}
+.mine .hw{color:var(--muted);font-size:12px;margin-top:2px;line-height:1.45}
+.mine .dl{font-family:var(--f-mono);font-size:11px;font-weight:700}.mine .dl.late{color:var(--warn)}.mine .dl.early{color:var(--ok)}.mine .dl.same{color:var(--muted)}
 .timber{border-color:var(--brk)}
 .tmb td.n{font-weight:700;font-size:13.5px}
 .tmb td.n small{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px}
@@ -373,7 +385,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 03:40 IST';
+const UPDATED='1 Nov 2026 · 03:55 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
@@ -396,6 +408,15 @@ const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
+// ---- Projection history for Mihir & Company vessels: every board update that moved the expected berthing, with the reason — so the
+// party can be told why the date moved. The daily tasks append an entry when the projection changes. exp:'MM-DD HH:MM' board's expected berthing.
+const MYLOG={
+ 'African Quail':[
+  {d:'31 Oct 0700 list',exp:'11-01 14:30',b:'14',slot:'SAAGAR break bulk',why:'Next in SAAGAR after AC Kathryn (CJ-14, ETC 1 Nov ~12:30). Team ETB was also 1 Nov.'},
+  {d:'31 Oct pm · programme 01.11',exp:'11-04 16:00',b:'6',slot:'SAAGAR bulk (cross-fill)',why:'Rome Trader (petcoke) was declared SAAGAR in the revised list and took the SAAGAR bulk slot at CJ-6; CJ-14 went to Feng Hai Da (24-hr group); AC Kathryn now sails 1 Nov 17:05. SAAGAR full until Rome Trader sails 4 Nov 14:00.'},
+  {d:'31 Oct night · rules review',exp:'11-04 19:10',b:'15A',slot:'SAAGAR bulk (cross-fill)',why:'Timber cannot work at CJ-6 (commodity rule) — so the berth after Rome Trader cannot be Quail\'s; the slot still frees 4 Nov 14:00 and the first clean-berth gap after that is CJ-15A once Mettle Star finishes. Same day, later evening.'}
+ ]
+};
 const NOTICES=[
  {d:'31 Oct',t:'Berth reference data loaded: Civil Engg "Cargo Berth Details" (lengths, live load), DC permissible-draught circular MR/SH/1120/2026 (Oct–Dec HW & channel draught, berth-wise draught), DPA port layout drawing',s:'Used for the quay strip, draught checks and barge windows. Base for berth lengths = Civil Engg sheet; vessels placed by the HM panel marks the berthing list uses.',src:'Mihir, 31 Oct'},
  {d:'29 Oct',t:'Rebates / concessions on wharfage of bagged cargo; railway terminal charge waiver & concession; vessel-related charge rebates for coastal & foreign container vessels',s:'Four DPA circulars circulated by KPSAA on 29 Oct. Tariff only; no change to berthing order. Details on request.',src:'KPSAA mail 29.10.26'}
@@ -1075,7 +1096,14 @@ function mine(){
   const m=document.getElementById('mine'); const names=[...new Set(V.map(v=>v.n).concat(W.map(w=>w.n)))].filter(isMine);
   if(!names.length){m.innerHTML='<div class="empty">No vessel with agent Mihir &amp; Company in today\'s berthing list (at berth, waiting or expected).</div>';return;}
   const rows=names.map(n=>({n,s:statusOf(n)})).filter(r=>r.s).sort((a,z)=>({at:0,today:1,proj:2,na:3,far:4,sailed:5}[a.s.k]-{at:0,today:1,proj:2,na:3,far:4,sailed:5}[z.s.k]));
-  m.innerHTML=`<table><tbody>${rows.map(({n,s},i)=>{const o=s.o;return `<tr><td class="n"><span class="sn">${i+1}</span><button type="button" class="link" data-n="${n}">${n}</button><small>${o.c} · ${nf.format(o.q)} ${o.u} · ${CL[o.cat]||groupLine(o)}</small></td><td class="w">${s.d}<small>${s.sub}</small></td></tr>`;}).join('')}</tbody></table>`;
+  const hist=n=>{
+    const L=(MYLOG[n]||[]).slice(); const sp=S.find(x=>x.n===n), v=V.filter(x=>x.n===n).sort((a,z)=>z.F-a.F)[0];
+    const nowExp=v?v.F:(sp?sp.F:null);
+    const rowsH=L.map(e=>({...e,t:h(e.exp)}));
+    if(nowExp!=null){const last=rowsH[rowsH.length-1];if(!last||Math.abs(last.t-nowExp)>0.5)rowsH.push({d:'Now · '+UPDATED.replace(/ IST$/,''),t:nowExp,b:v?v.b:sp.b,slot:v?(CL[v.cat]||v.cat)+(v.F<=NOW?' · at berth':' · fixed'):(CL[sp.cat]||sp.cat)+(sp.via?' slot as '+sp.via:''),why:v?(v.F<=NOW?'Alongside.':'Fixed by programme / signal.'):'Current projection under today\'s list and rules.',live:1});else{last.live=1;last.d+=' → unchanged now';}}
+    if(!rowsH.length)return '';
+    return `<tr class="hist"><td colspan="2"><div class="ht">Projection history · why the date moved</div><ol class="hl">${rowsH.map((e,i)=>{const prev=rowsH[i-1];const dd=prev?Math.round((e.t-prev.t)/24*10)/10:null;const tag=dd==null?'<span class="dl same">first estimate</span>':Math.abs(dd)<0.25?'<span class="dl same">same</span>':dd>0?`<span class="dl late">+${dd} d later</span>`:`<span class="dl early">${dd} d earlier</span>`;return `<li class="${e.live?'live':''}"><div class="hh"><span class="hd">${e.d}</span><b>${fday(e.t)} ~${fmt(e.t,false)} · CJ-${e.b}</b>${tag}</div><div class="hs">${e.slot}</div><div class="hw">${e.why}</div></li>`;}).join('')}</ol></td></tr>`;};
+  m.innerHTML=`<table><tbody>${rows.map(({n,s},i)=>{const o=s.o;return `<tr><td class="n"><span class="sn">${i+1}</span><button type="button" class="link" data-n="${n}">${n}</button><small>${o.c} · ${nf.format(o.q)} ${o.u} · ${CL[o.cat]||groupLine(o)}</small></td><td class="w">${s.d}<small>${s.sub}</small></td></tr>`+hist(n);}).join('')}</tbody></table>`;
   m.querySelectorAll('.link').forEach(b=>b.onclick=()=>{focus=b.dataset.n;sel=b.dataset.n;render(true);});
 }
 function nextOn(b,t){const n=S.filter(x=>x.b===b&&x.F>=t).sort((a,z)=>a.F-z.F)[0];return n?`<ol><li><b>${n.n}</b> (${n.c}) under ${CL[n.cat]}, likely ~${fmt(n.F)}.</li></ol>`:'<ol><li>No ready vessel projected.</li></ol>';}
