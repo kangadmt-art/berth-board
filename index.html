@@ -209,6 +209,7 @@ table{border-collapse:collapse;width:100%}
 .tmb td.d b{color:var(--fg);display:block;font-size:12.5px}
 .tmb tr.grp td{background:rgba(77,180,165,.08);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--brk);padding:5px 8px}
 .tmb .dl{font-weight:700}.tmb .dl.late{color:var(--warn)}.tmb .dl.early{color:var(--ok)}.tmb .dl.same{color:var(--muted)}
+.sn{display:inline-block;min-width:18px;height:18px;line-height:18px;padding:0 5px;margin-right:6px;border-radius:9px;background:rgba(92,200,255,.14);color:var(--brass);font-family:var(--f-mono);font-size:10.5px;font-weight:700;text-align:center;vertical-align:middle}
 .tmb .tag.src{border-color:var(--brk);color:var(--brk);margin-left:0}.tmb .tag.src.team{border-color:var(--muted);color:var(--muted)}
 .tmb tr.teamonly td{color:var(--muted)}.tmb tr.teamonly td.n{color:var(--fg)}
 @media (max-width:640px){.tmb{min-width:760px;table-layout:fixed}.tmb td.n{width:150px}}
@@ -372,7 +373,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 03:30 IST';
+const UPDATED='1 Nov 2026 · 03:40 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
@@ -438,8 +439,8 @@ function preview(){
   const el=document.getElementById('mpt');
   const hd=document.querySelector('#mp');if(hd)hd.innerHTML=`Meeting preview · meeting of ${fday(meet)} 11:00 → movements till ${fday(end)} 18:00`;
   if(!rows.length){el.innerHTML=`<tr><td class="fl">No DPA berth is projected to free up before ${fday(end)} 18:00 beyond what the programme already fixes.</td></tr>`;return;}
-  el.innerHTML='<tr><th style="width:200px">Berth frees</th><th>Board\'s pick</th><th>Next in line</th><th>What could overturn it at the meeting</th></tr>'+rows.map(x=>`<tr class="${isMine(x.n)?'me':''} ${x.projChk?'chk':''} ${x.shifted?'sh':''}">
-   <td class="w"><b>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev}${(()=>{const pv=V.find(v=>v.n===x.prev)||S.find(v=>v.n===x.prev);return pv?' · '+pv.c+(pv.cat?' · '+(CL[pv.cat]||pv.cat):''):'';})()}${/shifted out/.test(x.prev)?'':' sails'}${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(Math.abs(x.prevAt-nextMeet(NOW))<0.01?'not in today\'s programme → decided at the '+fmt(x.prevAt,false)+' meeting':x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
+  el.innerHTML='<tr><th style="width:200px">Berth frees</th><th>Board\'s pick</th><th>Next in line</th><th>What could overturn it at the meeting</th></tr>'+rows.map((x,i)=>`<tr class="${isMine(x.n)?'me':''} ${x.projChk?'chk':''} ${x.shifted?'sh':''}">
+   <td class="w"><b><span class="sn">${i+1}</span>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev}${(()=>{const pv=V.find(v=>v.n===x.prev)||S.find(v=>v.n===x.prev);return pv?' · '+pv.c+(pv.cat?' · '+(CL[pv.cat]||pv.cat):''):'';})()}${/shifted out/.test(x.prev)?'':' sails'}${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(Math.abs(x.prevAt-nextMeet(NOW))<0.01?'not in today\'s programme → decided at the '+fmt(x.prevAt,false)+' meeting':x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
    <td class="pk"><b>${x.n}</b>${isMine(x.n)?'<span class="tag">Mihir &amp; Co</span>':''}${x.shifted?'<span class="tag shift">SHIFT · port convenience</span>':''}<small>${x.c} · ${nf.format(x.q)} ${x.u}${agTxt(x.n)}</small><small>${x.shifted?`shifted from CJ-${x.fromB} (${CL[x.cat]||x.cat}, slot unchanged) · frees CJ-${x.fromB} for <b>${x.forWho}</b> (${CL[x.forCat]||x.forCat}) · alongside ~${fmt(x.F)}`:`${CL[x.cat]||x.cat}${x.via?' slot · as '+x.via:''} · alongside ~${fmt(x.F)}${x.tide?' · '+x.tide:''}`}</small></td>
    <td class="al">${x.alt?`<b>${x.alt.n}</b><small>${x.alt.c} · ${CL[x.alt.cat]||x.alt.cat}${x.alt.via?' as '+x.alt.via:''}${x.alt.same?' · same group, next rank':''}</small>`:'<span style="color:var(--dim)">nobody else eligible</span>'}</td>
    <td class="fl">${x.flips&&x.flips.length?'<ul>'+x.flips.map(f=>`<li>${f}</li>`).join('')+'</ul>':'—'}</td></tr>`).join('');
@@ -477,10 +478,10 @@ function timber(){
       <td class="d">${board}</td><td class="d">${dl}</td></tr>`;};
   el.innerHTML='<tr><th style="width:34px">#</th><th>Vessel</th><th>Qty</th><th>Arrival</th><th>Team</th><th>Board</th><th>Δ</th></tr>'+TIMBER.rows.map((r,i)=>{const g=r.st!==last?`<tr class="grp"><td colspan="7">${G[r.st]}</td></tr>`:'';last=r.st;return g+row(r,i+1);}).join('');
 }
-function notices(){const el=document.getElementById('notices');el.innerHTML=NOTICES.map(n=>`<div class="nt"><span class="d">${n.d}</span><div><b>${n.t}</b><small>${n.s}${n.src?' · '+n.src:''}</small></div></div>`).join('');}
+function notices(){const el=document.getElementById('notices');el.innerHTML=NOTICES.map((n,i)=>`<div class="nt"><span class="d"><span class="sn">${i+1}</span>${n.d}</span><div><b>${n.t}</b><small>${n.s}${n.src?' · '+n.src:''}</small></div></div>`).join('');}
 function learn(){const el=document.getElementById('learn');if(!LEARN.length){el.innerHTML='<div class="empty">No variance recorded yet.</div>';return;}
   const L={open:'open · confirm?',adopted:'adopted in rules',ok:'matched'};
-  el.innerHTML=LEARN.map(x=>`<div class="lc ${x.st}"><div class="hd"><div><b>${x.v}</b><small>${x.d}</small></div><span class="st">${L[x.st]||x.st}</span></div><dl><dt>Expected</dt><dd>${x.exp}</dd><dt>Actual</dt><dd>${x.act}</dd><dt>Reason</dt><dd>${x.why}</dd>${x.fix?`<dt>Rule</dt><dd>${x.fix}</dd>`:''}</dl></div>`).join('');}
+  el.innerHTML=LEARN.map((x,i)=>`<div class="lc ${x.st}"><div class="hd"><div><b><span class="sn">${i+1}</span>${x.v}</b><small>${x.d}</small></div><span class="st">${L[x.st]||x.st}</span></div><dl><dt>Expected</dt><dd>${x.exp}</dd><dt>Actual</dt><dd>${x.act}</dd><dt>Reason</dt><dd>${x.why}</dd>${x.fix?`<dt>Rule</dt><dd>${x.fix}</dd>`:''}</dl></div>`).join('');}
  // last time the board data was refreshed (shown in header + footer)
 document.getElementById('upd').innerHTML='LAST UPDATED <b>'+UPDATED+'</b>';
 function tideLine(){const d=dt(NOW);const k=String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');const t=TIDES[k];const n=dt(NOW+24);const k2=String(n.getUTCMonth()+1).padStart(2,'0')+'-'+String(n.getUTCDate()).padStart(2,'0');const t2=TIDES[k2];
@@ -1029,8 +1030,8 @@ function barge(){
   const tEnd=bargeEnd(T);
   if(T>=tEnd-0.01){el.innerHTML=`<div class="bh"><h3>Barge windows</h3><small>Programme coverage ends ${fmt(tEnd)}.</small></div><div class="m" style="color:var(--muted)">No data — the port's movement programme runs only till ${fmt(tEnd)}. Barge windows after that will appear once the next berthing-meeting programme is loaded.</div>`;return;}
   el.innerHTML=`<div class="bh"><h3>Barge windows · till programme end</h3><small>From ${fmt(T)} to ${fmt(tEnd)} (end of the port's movement programme): quay spaces of ≥${BARGE_MIN_M} m (metres from the DPA port drawing) that stay free for at least ${BARGE_MIN_H} h. Max barge LOA = space − ${CLEAR_M} m clearance. Only spaces between vessels actually at berth (or the quay ends) are counted; spaces next to a projected vessel are not. No data beyond ${fmt(tEnd,false)}.</small></div>
-   ${W.length?`<div class="bg">${W.map(x=>`<div class="bgc ${x.tight?'tight':''}">
-     <div class="r">${fmt(x.start,false)} → ${x.openEnd?fmt(tEnd,false)+' (prog. end)':fmt(x.end,false)}<small>${x.start<T+0.01?'open now':fday(x.start)} · <b style="color:var(--fg)">${Math.floor(x.hrs)+' h'}${x.openEnd?'+':''}</b></small></div>
+   ${W.length?`<div class="bg">${W.map((x,i)=>`<div class="bgc ${x.tight?'tight':''}">
+     <div class="r"><span class="sn">${i+1}</span>${fmt(x.start,false)} → ${x.openEnd?fmt(tEnd,false)+' (prog. end)':fmt(x.end,false)}<small>${x.start<T+0.01?'open now':fday(x.start)} · <b style="color:var(--fg)">${Math.floor(x.hrs)+' h'}${x.openEnd?'+':''}</b></small></div>
      <div class="m">Panels <b>${pr([x.a,x.z])}</b> · ${x.berths.join(' / ')} · ~${Math.round(x.m)} m · fits barge up to <b>~${x.maxLoa} m LOA</b>${x.tight?' · tight, 2,100 DWT class only':''}</div>
      <div class="m">Beside: ${x.first.left?`${x.first.left.n} (${x.first.left.c})`:'north end'} · ${x.first.right?`${x.first.right.n} (${x.first.right.c})`:'south end'}</div>
      <div class="w">${x.openEnd?'Still open at programme end '+fmt(tEnd)+' — beyond that no data':x.closer?`Closes when ${x.closer.n} berths${x.closer.proj?' (projected)':''}`:'Closes on the next movement'}</div></div>`).join('')}</div>`
@@ -1074,7 +1075,7 @@ function mine(){
   const m=document.getElementById('mine'); const names=[...new Set(V.map(v=>v.n).concat(W.map(w=>w.n)))].filter(isMine);
   if(!names.length){m.innerHTML='<div class="empty">No vessel with agent Mihir &amp; Company in today\'s berthing list (at berth, waiting or expected).</div>';return;}
   const rows=names.map(n=>({n,s:statusOf(n)})).filter(r=>r.s).sort((a,z)=>({at:0,today:1,proj:2,na:3,far:4,sailed:5}[a.s.k]-{at:0,today:1,proj:2,na:3,far:4,sailed:5}[z.s.k]));
-  m.innerHTML=`<table><tbody>${rows.map(({n,s})=>{const o=s.o;return `<tr><td class="n"><button type="button" class="link" data-n="${n}">${n}</button><small>${o.c} · ${nf.format(o.q)} ${o.u} · ${CL[o.cat]||groupLine(o)}</small></td><td class="w">${s.d}<small>${s.sub}</small></td></tr>`;}).join('')}</tbody></table>`;
+  m.innerHTML=`<table><tbody>${rows.map(({n,s},i)=>{const o=s.o;return `<tr><td class="n"><span class="sn">${i+1}</span><button type="button" class="link" data-n="${n}">${n}</button><small>${o.c} · ${nf.format(o.q)} ${o.u} · ${CL[o.cat]||groupLine(o)}</small></td><td class="w">${s.d}<small>${s.sub}</small></td></tr>`;}).join('')}</tbody></table>`;
   m.querySelectorAll('.link').forEach(b=>b.onclick=()=>{focus=b.dataset.n;sel=b.dataset.n;render(true);});
 }
 function nextOn(b,t){const n=S.filter(x=>x.b===b&&x.F>=t).sort((a,z)=>a.F-z.F)[0];return n?`<ol><li><b>${n.n}</b> (${n.c}) under ${CL[n.cat]}, likely ~${fmt(n.F)}.</li></ol>`:'<ol><li>No ready vessel projected.</li></ol>';}
@@ -1165,7 +1166,7 @@ function gantt(){
 }
 
 function groups(){
-  const row=(C,nx,lbl,sub)=>`<tr><td class="c"><b>${lbl}</b><small>${sub}</small></td><td><div class="nx">${nx.length?nx.map(s=>`<span><span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${s.c} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready with a SAAGAR rank</span>'}</div></td></tr>`;
+  const row=(C,nx,lbl,sub)=>`<tr><td class="c"><b>${lbl}</b><small>${sub}</small></td><td><div class="nx">${nx.length?nx.map((s,j)=>`<span><span><span class="sn">${j+1}</span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${s.c} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready with a SAAGAR rank</span>'}</div></td></tr>`;
   const out=CATS.map(C=>{
     const all=S.filter(s=>s.cat===C.k).sort((a,z)=>a.F-z.F);
     if(C.k==='SAAGAR'){
@@ -1182,7 +1183,7 @@ function groups(){
       return bulkRow+row(C,own.slice(0,3),'SAAGAR · break bulk','1 berth · logs, steel, project');
     }
     const nx=all.slice(0,3);
-    return `<tr><td class="c"><b>${C.l}</b><small>${C.s}</small></td><td><div class="nx">${nx.length?nx.map(s=>`<span><span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${s.c} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready</span>'}</div></td></tr>`;
+    return `<tr><td class="c"><b>${C.l}</b><small>${C.s}</small></td><td><div class="nx">${nx.length?nx.map((s,j)=>`<span><span><span class="sn">${j+1}</span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${s.c} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready</span>'}</div></td></tr>`;
   }).join('');
   document.getElementById('groups').innerHTML=`<table class="grp"><tbody>${out}</tbody></table>`;
   document.querySelectorAll('#groups .link').forEach(b=>b.onclick=()=>{focus=b.dataset.n;render(true);});
