@@ -335,7 +335,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='31 Oct 2026 · 23:20 IST';
+const UPDATED='31 Oct 2026 · 23:35 IST';
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
@@ -346,6 +346,7 @@ const NOTICES=[
 // Expected-vs-actual log. {d:'date', v:'vessel', exp:'what the board expected', act:'what the port did', why:'reason / hypothesis', fix:'rule change', st:'open'|'adopted'|'ok'}
 // st: open = waiting for Mihir to confirm the reason; adopted = folded into the rules; ok = matched, nothing to learn
 const LEARN=[
+ {d:'31 Oct night',v:'Sr No 7 seniority · slot held at meeting · unprogrammed berths',exp:'Board gave CJ-4 to Tan Binh 267 (HP rank 2) against the Govt slot because rank-1 Yuan Hang Wei Ye (iron ore) cannot use CJ-4; gave Orion the Coastal slot after Katong WW\'s board-estimated sailing; berthed vessels on berths that free up tonight although the 1 Nov programme has nothing for them.',act:'Mihir: the 30k/25k slot goes to the most senior of the group (Yuan Hang Wei Ye) — a junior does not take it because the senior cannot use that berth. Katong WW was allotted in today\'s meeting against Coastal, so Coastal is engaged for the whole programme; Orion cannot take it. Nothing unprogrammed berths before the next meeting.',why:'Slots are decided at the meeting for the whole programme window, by seniority within the group; an estimated sailing is not a free slot.',fix:'Coded: Sr No 7 fallback = most senior ready HP vessel only (slot waits if it cannot use the berth); a vessel alongside at the meeting with only an estimated sailing keeps its group slot till the window ends; a berth freeing without a programmed inward vessel is allotted only from the next 11:00 meeting (+2 h).',st:'adopted'},
  {d:'31 Oct pm',v:'Berth × cargo restrictions · meeting review',exp:'Board offered CJ-4 to Yuan Hang Wei Ye (iron ore pellet feed), CJ-6 to African Quail (logs), and treated the Coastal slot as free while Katong WW (SAAGAR project against Coastal) was alongside.',act:'Mihir: iron ore not at CJ-1–5; timber cannot work at CJ-2, 3, 6; fertiliser not at CJ-13–16; coal only CJ-5–8; bags only CJ-1–4 and CJ-13–16; "2 shorecrane required" → CJ-2/3 only; vessel-specific requirement in the remark (e.g. Alasia aggregate → CJ-13–16) is binding; millscale is allowed at CJ-13–16; a vessel declared at the meeting counts for the programme only if it arrives before the first HW after the meeting.',why:'Commodity-wise berth restrictions and crane/shore limits are standing practice, not in the written policy.',fix:'All of the above coded as okBerth() + meetOK(); a SAAGAR project vessel berthed against Coastal occupies the Coastal slot.',st:'adopted'},
  {d:'31 Oct pm',v:'Sailing times · signal vs programme',exp:'Programme for 31.10: Moonlit out 17:00, Sea Gautam out 17:00; programme for 01.11: Ocean Camellia out 23:00.',act:'Day signal: Moonlit out 14:00 (amended from 16:15), Sea Gautam 15:15; night signal: Ocean Camellia 21:30.',why:'HM fixes the actual slot on the tide and pilot availability; the programme time is a planning figure, the signal is the real one and can be 1–3 h either way.',fix:'Board uses the signal time once a signal exists; programme time until then. Nothing to change in the rules.',st:'ok'},
  {d:'31 Oct pm',v:'CJ-14 · African Quail vs Feng Hai Da',exp:'Board\'s meeting preview: CJ-14 (after AC Kathryn ~12:30) → African Quail, SAAGAR break bulk; "palat sakta hai agar SAAGAR bulk vessel ready ho".',act:'Programme for 01.11: AC Kathryn sails 1 Nov 17:05; CJ-14 → Feng Hai Da (24 HRS group). African Quail not programmed.',why:'Exactly the flip the preview named: Rome Trader (petcoke, ETA 31 Oct) reported, declared ready 09:00 and carries SAAGAR status (SGR = Y only in the revised afternoon list; blank in the 0700 list) — it took the SAAGAR bulk slot at CJ-6. With Centurion Buyo on the break-bulk slot, SAAGAR was full, so CJ-14 went down the order to 24 HRS. Also AC Kathryn finishes a day later than the board\'s estimate.',fix:'Mihir (31 Oct): no Indian-flag rule. A vessel is SAAGAR only if it declares SAAGAR priority (the SGR "Y" / rank in the list, or declared at the meeting) — the board takes the declaration as given and cannot know it earlier. So the Quail flip was not predictable from the 0700 list; the preview\'s "palat sakta hai" line is the right place for it. Board: SAAGAR status = list/meeting declaration only.',st:'adopted'},
@@ -610,6 +611,8 @@ function okBerth(w,b,o){
 // (ETA / reporting) before the first high water after the meeting. meetOf(t) = the latest 11:00 meeting whose programme covers t.
 const meetOf=t=>{const d=dt(t);const hod=d.getUTCHours()+d.getUTCMinutes()/60;const day0=t-hod;return hod>=11?day0+11:day0-24+11;};
 const firstHW=m=>{const k=dkey(m);const d=dt(m);const day0=m-11;const hw=(TIDES[k]||[]).map(h=>day0+parseInt(h[0].slice(0,2))+parseInt(h[0].slice(2,4))/60).filter(x=>x>m);if(hw.length)return hw[0];const n=(TIDES[dkey(m+24)]||[]);return n.length?day0+24+parseInt(n[0][0].slice(0,2))+parseInt(n[0][0].slice(2,4))/60:m+12;};
+// next berthing meeting after time t (11:00 daily): nothing unprogrammed is berthed before it
+const nextMeet=t=>{const d=dt(t);const hod=d.getUTCHours()+d.getUTCMinutes()/60;const day0=t-hod;return hod<11?day0+11:day0+24+11;};
 const meetOK=(w,t)=>{const m=meetOf(t);if(w.rep==null||w.rep<=m)return true;return w.rep<=firstHW(m);};
 const CUTS={};
 // allotment time of a fixed vessel = sailing time of the vessel it follows on the same berth (programme fixes the slot then), else its made-fast time
@@ -619,7 +622,7 @@ function simulate(ov){
   const S=[]; const done=new Set();
   // Group-slot occupancy (Mihir, 31 Oct 23:00): a vessel alongside at the meeting keeps its group slot (e.g. SAAGAR project against Coastal)
   // for the whole programme window unless its sailing is fixed (list ETC / programme). A board-estimated sailing does not free the slot for the meeting.
-  const slotEnd=(v,t)=>{if(!v.est)return v.T;const m=meetOf(t),we=m-11+24+18;return (v.T<we&&v.F<=m)?Math.max(v.T,we):v.T;};
+  const slotEnd=(v,t)=>{if(!v.est)return v.T;const m=meetOf(t),we=m-11+24+18;return (v.F<=m&&v.T>m&&v.T<we)?we:v.T;};
   const occ=t=>V.filter(v=>POOL.includes(v.b)&&allotAt(v)<=t&&t<slotEnd(v,t)).concat(S.filter(s=>(s.prevAt!=null?s.prevAt:s.F)<=t&&t<s.T)); // a berth counts against the group from the moment it is allotted, not only once the vessel is alongside
   const ev=POOL.map(b=>{const last=V.filter(v=>v.b===b).sort((a,z)=>z.T-a.T)[0];return {b,t:last?last.T:NOW,prev:last?last.n:'—',prevEst:last?!!last.est:false};});
   let guard=0;
@@ -660,7 +663,10 @@ function simulate(ov){
     const rkQ=k=>baseUse.filter(w=>w.rk[k]&&w.rk[k]!==99).sort((a,z)=>a.rk[k]-z.rk[k]);
     const isProj=w=>/project|windmill/i.test(w.c);
     // COASTAL slot, when no coastal vessel: only SAAGAR *project* (windmill / project cargo) vessels, never SAAGAR bulk or break bulk
-    const pools={HPQ:()=>rkQ('HP'),WIND:()=>baseUse.filter(w=>isProj(w)&&w.rk.SAAGAR).sort((a,z)=>a.rk.SAAGAR-z.rk.SAAGAR),GENQ:genQ};
+    // Mihir (31 Oct 23:05): the 30k/25k slot against Govt / Coastal / 24-hr goes to the most senior vessel of the group (e.g. Yuan Hang Wei Ye, HP rank 1);
+    // a junior vessel does not take the slot just because the senior cannot use this particular berth — the slot waits.
+    const hpTop=W.filter(w=>!done.has(w.n)&&R(w)!=null&&R(w)<=e.t&&w.rep<=e.t&&w.rk.HP&&w.rk.HP!==99).sort((a,z)=>a.rk.HP-z.rk.HP)[0];
+    const pools={HPQ:()=>hpTop&&baseUse.includes(hpTop)?[hpTop]:[],WIND:()=>baseUse.filter(w=>isProj(w)&&w.rk.SAAGAR).sort((a,z)=>a.rk.SAAGAR-z.rk.SAAGAR),GENQ:genQ};
     const ranked=[]; // every group's first candidate in slot order → ranked[0] is the pick, ranked[1] the runner-up (for the meeting preview)
     for(const C of CATS){
       // Govt rule (Mihir, 31 Oct): a 30k/25k (Sr No 7) vessel berthed against a Govt slot is re-tagged to Sr No 7 day priority
@@ -696,7 +702,7 @@ function simulate(ov){
     if(pick.x&&/REQ|TRANSHIP/i.test(pick.x))flips.push('agent remark: '+pick.x);
     if(GEARLESS(pick)&&!CLEANONLY(pick.c))flips.push('LOA > 200 m — gearless, works on the port shore crane (CJ-7/8 only)');
     done.add(pick.n);
-    const F=e.t+2, T=F+stayH(pick,via==='30k/25k quote'?'HP':(via==='General'?'GEN':cat)), B=BERTHS.find(x=>x.id===e.b);
+    const nm=nextMeet(NOW); const F=Math.max(e.t+2,(e.t<nm?nm+2:e.t+2)), T=F+stayH(pick,via==='30k/25k quote'?'HP':(via==='General'?'GEN':cat)), B=BERTHS.find(x=>x.id===e.b);
     const tide=tideFlag(pick,B);
     const s={b:e.b,n:pick.n,c:pick.c,q:pick.q,u:pick.u,cat,via,F,T,g:pick.g,proj:1,w:pick,prev:e.prev,prevAt:e.t,prevEst:e.prevEst,tide,alt,flips,
       p:[B.p[0]+0.5,Math.min(B.p[0]+0.5+pick.loa/MPP(B),B.p[1]+3)]};
