@@ -335,7 +335,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='31 Oct 2026 · 21:40 IST';
+const UPDATED='31 Oct 2026 · 22:55 IST';
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
@@ -346,17 +346,18 @@ const NOTICES=[
 // Expected-vs-actual log. {d:'date', v:'vessel', exp:'what the board expected', act:'what the port did', why:'reason / hypothesis', fix:'rule change', st:'open'|'adopted'|'ok'}
 // st: open = waiting for Mihir to confirm the reason; adopted = folded into the rules; ok = matched, nothing to learn
 const LEARN=[
+ {d:'31 Oct pm',v:'Berth × cargo restrictions · meeting review',exp:'Board offered CJ-4 to Yuan Hang Wei Ye (iron ore pellet feed), CJ-6 to African Quail (logs), and treated the Coastal slot as free while Katong WW (SAAGAR project against Coastal) was alongside.',act:'Mihir: iron ore not at CJ-1–5; timber cannot work at CJ-2, 3, 6; fertiliser not at CJ-13–16; coal only CJ-5–8; bags only CJ-1–4 and CJ-13–16; "2 shorecrane required" → CJ-2/3 only; vessel-specific requirement in the remark (e.g. Alasia aggregate → CJ-13–16) is binding; millscale is allowed at CJ-13–16; a vessel declared at the meeting counts for the programme only if it arrives before the first HW after the meeting.',why:'Commodity-wise berth restrictions and crane/shore limits are standing practice, not in the written policy.',fix:'All of the above coded as okBerth() + meetOK(); a SAAGAR project vessel berthed against Coastal occupies the Coastal slot.',st:'adopted'},
  {d:'31 Oct pm',v:'Sailing times · signal vs programme',exp:'Programme for 31.10: Moonlit out 17:00, Sea Gautam out 17:00; programme for 01.11: Ocean Camellia out 23:00.',act:'Day signal: Moonlit out 14:00 (amended from 16:15), Sea Gautam 15:15; night signal: Ocean Camellia 21:30.',why:'HM fixes the actual slot on the tide and pilot availability; the programme time is a planning figure, the signal is the real one and can be 1–3 h either way.',fix:'Board uses the signal time once a signal exists; programme time until then. Nothing to change in the rules.',st:'ok'},
  {d:'31 Oct pm',v:'CJ-14 · African Quail vs Feng Hai Da',exp:'Board\'s meeting preview: CJ-14 (after AC Kathryn ~12:30) → African Quail, SAAGAR break bulk; "palat sakta hai agar SAAGAR bulk vessel ready ho".',act:'Programme for 01.11: AC Kathryn sails 1 Nov 17:05; CJ-14 → Feng Hai Da (24 HRS group). African Quail not programmed.',why:'Exactly the flip the preview named: Rome Trader (petcoke, ETA 31 Oct) reported, declared ready 09:00 and carries SAAGAR status (SGR = Y only in the revised afternoon list; blank in the 0700 list) — it took the SAAGAR bulk slot at CJ-6. With Centurion Buyo on the break-bulk slot, SAAGAR was full, so CJ-14 went down the order to 24 HRS. Also AC Kathryn finishes a day later than the board\'s estimate.',fix:'(1) A vessel\'s SAAGAR status must be known before it is ranked — ask: is it Indian-flag / SAAGAR-registered? (2) An ETA vessel that reports and declares before the meeting is eligible for the NEXT day\'s programme — board already allows this. (3) Logs ETCs now taken from the list.',st:'open'},
  {d:'31 Oct pm',v:'Logs discharge rate · back to DPA norm',exp:'Board had used 4,800 CBM/day for logs vessels (working assumption) → AC Kathryn sailing 31 Oct 12:30.',act:'Programme: AC Kathryn readiness 1 Nov 17:05 (≈ 4,000 CBM/day). Mihir: drop the 4,800 figure, go by what the system prints.',why:'Per-vessel rates vary; a private assumption only creates confusion against the official sheet.',fix:'Logs ETCs taken from the list as printed; waiting logs vessels planned at the DPA norm (3,450 CBM/day, or the list norm where given).',st:'adopted'},
  {d:'31 Oct pm',v:'Rome Trader · petcoke at CJ-6',exp:'Board keeps coal at CJ-7/8 only and treated petcoke like coal.',act:'Programme: Rome Trader (petcoke, 50,010 MT, SGR) berths CJ-6 41½–49¾ after Outrivaling 3 shifts to OTB.',why:'Petcoke is not restricted to the coal berths; CJ-6 (hopper → truck, no stacking) is acceptable for it.',fix:'Petcoke allowed at any non-clean berth; only coal stays CJ-7/8.',st:'adopted'},
- {d:'31 Oct pm',v:'CJ-7 · HN Doris vs Meghna Venus',exp:'Board: CJ-7 after Fu Hai 16 → HN Doris (Govt #2).',act:'Programme: CJ-7 → Meghna Venus, HP 50,000 MTPD quote; HN Doris not programmed. Vishva Preeti (Govt #1) → CJ-8 as the board expected.',why:'Likely the two Govt berths were counted as Eva Bright (still at CJ-4, not in the programme for 01.11) + Vishva Preeti, so HN Doris waits; and a 50,000 MTPD quote took the HP slot. To confirm at the meeting.',fix:'None yet — depends on whether Eva Bright\'s berth still counts as Govt on 1 Nov.',st:'open'},
+ {d:'31 Oct pm',v:'CJ-7 · HN Doris vs Meghna Venus',exp:'Board: CJ-7 after Fu Hai 16 → HN Doris (Govt #2).',act:'Programme: CJ-7 → Meghna Venus, HP 50,000 MTPD quote; HN Doris not programmed. Vishva Preeti (Govt #1) → CJ-8 as the board expected.',why:'Likely the two Govt berths were counted as Eva Bright (still at CJ-4, not in the programme for 01.11) + Vishva Preeti, so HN Doris waits; and a 50,000 MTPD quote took the HP slot. To confirm at the meeting.',fix:'Mihir (31 Oct): HN Doris is 229 m — LOA > 200 is mostly gearless, works only on the port shore crane at CJ-7/8, and only one gearless fertiliser vessel is taken at a time. So HN Doris waits while Vishva Preeti (229 m, urea) works CJ-8. Board now: gearless rule + one-gearless-fertiliser rule.',st:'adopted'},
  {d:'31 Oct pm',v:'CJ-16 · Alasia over Orion',exp:'Board: CJ-16 after Maritime Harmony → Orion (HP #4, salt).',act:'Programme: → Alasia (aggregates, ETA 1 Nov 00:30) with a 40,000 MTPD quote, berthing 1 Nov evening.',why:'HP is decided by the quote at the meeting, not by the printed rank; an ETA vessel that reports in time competes.',fix:'Board already flags "quotes decide" on HP/Sr No 7 slots; nothing more to model without the quotes.',st:'ok'},
  {d:'31 Oct pm',v:'Tidal benefit observed · CJ-7',exp:'Berth draught 12.0 m, board allows +1.5 m at CJ-6–10.',act:'Programme: Fu Hai 16 outward draught 12.65 m; Meghna Venus sailing draught 12.72 m — both at CJ-7.',why:'First data points: ≥ 0.7 m over the chart figure is accepted at CJ-7.',fix:'Keep 1.5 m for now; two more observations will set the margin.',st:'ok'},
  {d:'31 Oct pm',v:'CJ-15 · Katong WW (Coastal slot, SAAGAR project)',exp:'Board: CJ-15 after African Predator → Katong WW as SAAGAR project against the Coastal slot.',act:'Programme: CJ-15 → Katong WW, category CSTL(SGR). African Predator shifts to OTB 09:00 at agent\'s request.',why:'Rule confirmed on day one.',fix:'—',st:'ok'},
  {d:'31 Oct',v:'Port-convenience shift · for whom?',exp:'Board would have shifted African Quail (logs, CJ-14) to CJ-4 within 10 h of berthing to make room for Feng Hai Da (48 windmill blades, 1,085 MT, ~22 h job).',act:'Not observed; board assumption.',why:'A 4-hour shift of a logs vessel for a one-day project parcel seems unlikely; shifts are made for sizeable clean-cargo vessels (salt HP, big project).',fix:'Mihir (31 Oct): no fixed format — depends on the port. Shifted vessels are those that can work at both CJ and OTB: mainly timber/logs, also bags; never project, fertiliser, salt or coal. No hour rule, but with only ~8 h of work left the port probably won\'t shift. Board now: shiftable = logs/bags, > 8 h left, no size test on the incoming vessel.',st:'adopted'},
  {d:'31 Oct',v:'Govt slot filled by a Sr No 7 vessel',exp:'Board had treated a 30k/25k (Sr No 7) vessel berthed against a Govt slot as occupying that slot, so the next Govt vessel (HN Doris) waited for it.',act:'Practice (Mihir): when a Govt vessel turns up, the Sr No 7 vessel already alongside is re-tagged to Sr No 7 day priority and the Govt vessel takes the next free berth it fits.',why:'The Govt earmark is 2 Govt vessels at berth, not 2 fixed berths; a fallback occupant does not count against it.',fix:'Govt slot count ignores fallback-filled vessels. Other groups unchanged.',st:'adopted'},
- {d:'31 Oct',v:'Tidal benefit · CJ-6 to CJ-10 only',exp:'Board first allowed 1.0 m over the berth draught at every berth.',act:'Practice (Mihir): tidal benefit is given only at CJ-6–10 — permissible draught + next low-water height (e.g. 12.0 + ~1.5 m), never at CJ-1–5 or CJ-13–16.',why:'Depth and LW height at the middle berths allow it; the shallow north berths and the clean south berths are held to the chart figure.',fix:'CJ-6–10 allow up to 1.5 m over; others strict. The 1.5 m is a working figure — to be refined from what the port actually does.',st:'open'},
+ {d:'31 Oct',v:'Tidal benefit · CJ-6 to CJ-10 only',exp:'Board first allowed 1.0 m over the berth draught at every berth.',act:'Practice (Mihir): tidal benefit is given only at CJ-6–10 — permissible draught + next low-water height (e.g. 12.0 + ~1.5 m), never at CJ-1–5 or CJ-13–16.',why:'Depth and LW height at the middle berths allow it; the shallow north berths and the clean south berths are held to the chart figure.',fix:'Mihir (31 Oct): keep it simple — at CJ-6–10 permissible draught is 12 m but up to 14 m is allowed when the channel draught at HW that day is more than 14 m. Board now uses exactly that (TIDE_MAX 14.0, from the DC circular HW table).',st:'adopted'},
  {d:'31 Oct',v:'SAAGAR has three types · project goes against Coastal',exp:'Board gave the SAAGAR break-bulk slot (CJ-14 after AC Kathryn) to Katong WW (project cargo, SGR #1) ahead of African Quail (logs, SGR #2).',act:'Practice (Mihir): SAAGAR = bulk, break bulk, project. The 1 bulk + 1 break-bulk slots are for bulk / break bulk; a SAAGAR project vessel is berthed against the Coastal slot (when no coastal vessel is ready), and never SAAGAR bulk / break bulk there.',why:'Project cargo is slow and small; the coastal slot absorbs it without eating a SAAGAR cargo slot.',fix:'Coastal fallback = SAAGAR project vessels by SGR rank; SAAGAR slots skip project vessels while a bulk / break-bulk SAAGAR vessel is ready.',st:'adopted'},
  {d:'31 Oct',v:'Berth draught limits · all groups',exp:'Board placed deep-draught vessels (e.g. Tai Knight 14.2 m coal, Bristol 13.5 m DAP, Levante Spirit 12.9 m MOP) on any berth by group.',act:'DC chart: CJ-1–5 permit 10.5 m, CJ-6–10 12.0 m, CJ-13 13.5 m, CJ-14–16 14.5 m (tidal benefit possible).',why:'Arrival draught decides which berths a vessel can take at all; a 14.2 m coal vessel cannot use CJ-7/8, which is why Tai Knight asks for OTB.',fix:'Vessels are now offered only berths whose permissible draught covers their arrival draught (strict, no tidal benefit assumed).',st:'adopted'},
  {d:'31 Oct',v:'Katong WW · SAAGAR break bulk',exp:'African Quail (SGR #2 on 30 Oct) next SAAGAR break-bulk vessel after AC Kathryn.',act:'31 Oct list gives Katong WW (project cargo, 1,321 MT) SGR rank 1; it was only STL #4 the day before.',why:'A project-cargo vessel can carry SAAGAR status and then ranks in the SGR column by its own reporting date, ahead of logs vessels that reported later.',fix:'Ranks are now taken from the SGR column as printed; SAAGAR break bulk includes project cargo.',st:'adopted'},
@@ -424,8 +425,14 @@ const MPP=b=>b.len/(b.p[1]-b.p[0]);
 // Tidal benefit (Mihir, 31 Oct): in practice given only at CJ-6 to CJ-10 — permissible draught + height of the next low water
 // (e.g. 12.0 + ~1.5 = 13.5 m), agent undertaking to reduce draught before LW. Not at CJ-1–5 or CJ-13–16. Margin per berth = b.tide;
 // 1.5 m is a working figure to be refined from observation.
-const tideOf=b=>(b&&b.tide)||0;
-const tideFlag=(w,B)=>(B&&B.dr&&w.dr&&w.dr>B.dr)?`draught ${w.dr} m > berth ${B.dr} m · needs tidal benefit`:null;
+// Simplified (Mihir, 31 Oct 22:30): at CJ-6–10 the port allows up to 14.0 m draught (beyond the 12.0 m chart figure) provided the
+// channel draught at high water that day is more than 14 m. Elsewhere the chart draught is the limit.
+const TIDE_MAX=14.0;
+const dkey=t=>{const d=dt(t);return String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');};
+const chanMax=t=>{const x=TIDES[dkey(t)];return x?Math.max(...x.map(h=>h[1])):0;};
+const maxDr=(b,t)=>(b&&b.tide&&chanMax(t)>TIDE_MAX)?Math.max(b.dr,TIDE_MAX):(b&&b.dr)||99;
+const tideOf=b=>(b&&b.tide)?TIDE_MAX-b.dr:0; // legacy
+const tideFlag=(w,B)=>(B&&B.dr&&w.dr&&w.dr>B.dr)?`draught ${w.dr} m > chart ${B.dr} m · tidal benefit up to ${TIDE_MAX} m (channel > 14 m at HW)`:null;
 // Channel draught at HW, Oct–Dec 2026 (DC circular MR/SH/1120/2026 dated 11.9.2026): [ 'MM-DD', [['HHMM',m],['HHMM',m]] ]
 const TIDES={'10-31':[['0604',15.25],['1756',14.50]],
  '11-01':[['0710',15.02],['1905',14.20]],'11-02':[['0824',14.85],['2037',14.03]],'11-03':[['0935',14.78],['2219',14.16]],'11-04':[['1040',14.82],['2338',14.55]],'11-05':[['1139',14.85]],'11-06':[['0037',14.94],['1228',14.85]],'11-07':[['0121',15.18],['1311',14.76]],'11-08':[['0158',15.27],['1347',14.69]],'11-09':[['0231',15.29],['1420',14.67]],'11-10':[['0302',15.31],['1455',14.69]],'11-11':[['0336',15.33],['1529',14.66]],'11-12':[['0110*',15.28],['1601',14.56]],'11-13':[['0444',15.17],['1634',14.38]],'11-14':[['0516',15.01],['1707',14.16]],'11-15':[['0549',14.84],['1747',13.95]],'11-16':[['0628',14.71],['1838',13.80]],'11-17':[['0718',14.62],['1949',13.73]],'11-18':[['0823',14.58],['2118',13.85]],'11-19':[['0931',14.59],['2238',14.16]],'11-20':[['1033',14.64],['2341',14.55]],'11-21':[['1129',14.66]],'11-22':[['0032',14.88],['1217',14.66]],'11-23':[['0117',15.12],['1302',14.67]],'11-24':[['0200',15.28],['1346',14.75]],'11-25':[['0241',15.43],['1428',14.85]],'11-26':[['0327',15.54],['1515',14.91]],'11-27':[['0415',15.58],['1603',14.90]],'11-28':[['0506',15.53],['1656',14.77]],'11-29':[['0600',15.40],['1756',14.56]],'11-30':[['0658',15.23],['1906',14.34]],
@@ -570,7 +577,40 @@ const isLogs=c=>/log|timber/i.test(c);
 const SHIFTABLE=c=>/log|timber|bag/i.test(c)&&!/project|windmill|fert|urea|salt|coal|petcoke/i.test(c);
 const SHIFT_H=4, SHIFT_MIN_LEFT=8, SHIFT_MIN_STAY=0; // Mihir 31 Oct: no fixed rule on the incoming vessel's size; a vessel with only ~8 h of work left is probably not shifted
 const LOGS_RATE=3450; // DPA norm for logs (CBM/day). The 4,800 CBM/day working assumption was withdrawn on 31 Oct — list ETCs and norms are used as printed
-const DIRTY=c=>/coal|petcoke|iron|pellet/i.test(c);
+const DIRTY=c=>/coal|petcoke|iron|pellet/i.test(c)&&!/mill ?scale/i.test(c); // millscale is allowed at CJ-13–16 (Mihir, 31 Oct)
+// ---- berth / cargo restrictions (Mihir, 31 Oct 22:30) ----
+const IRON=c=>/iron|pellet/i.test(c);           // iron ore: NOT at CJ-1–5
+const FERT=c=>/urea|mop|npk|dap|tsp|fert|sulphate|potash|phos/i.test(c); // fertiliser: NOT at CJ-13–16
+const COAL=c=>/coal|petcoke/i.test(c);          // coal: only CJ-5–8
+const BAGB=['1','2','3','4'].concat(CLEAN);      // bags: only CJ-1–4 and CJ-13–16
+const NOTIMBER=['2','3','6'];                     // timber cannot work at CJ-2, 3, 6
+const COALB2=['5','6','7','8'];
+const SHORECRANE=['7','8'];                       // port's big shore cranes: only CJ-7 / CJ-8
+const GEARLESS=w=>(w.loa||LOA[w.n]||0)>200;      // LOA > 200 m is mostly gearless → needs the port crane → CJ-7/8 (clean-only cargo excepted: it has no other berths)
+// vessel-specific berth requirement from the list remark ("CJ-13–16", "wants CJ-6 to 9") or declared here
+const REQ={'Ege-M':CLEAN.slice(),'Yuan Hang Wei Ye':['6','7','8']};
+const reqOf=w=>{if(REQ[w.n])return REQ[w.n];const m=/CJ[- ]?(\d+)\s*(?:–|-|to)\s*(\d+)/i.exec(w.x||'');if(!m)return null;const a=+m[1],z=+m[2];return BERTHS.filter(b=>{const n=parseInt(b.id);return n>=a&&n<=z;}).map(b=>b.id);};
+function okBerth(w,b,o){
+  const c=w.c||'';
+  if(IRON(c)&&['1','2','3','4','5'].includes(b))return false;
+  if(isLogs(c)&&NOTIMBER.includes(b))return false;
+  if(FERT(c)&&CLEAN.includes(b))return false;
+  if(COAL(c)&&!COALB2.includes(b))return false;
+  if(isBag(c)&&!BAGB.includes(b))return false;
+  if(/2\s*(shore ?crane|s\.?c\.?\b)/i.test(w.x||'')&&!['2','3'].includes(b))return false; // "2 shorecrane required" → CJ-2 / CJ-3 only
+  const rq=reqOf(w);if(rq&&!rq.includes(b))return false;
+  if(CLEAN.includes(b)&&DIRTY(c))return false;
+  if(!CLEAN.includes(b)&&CLEANONLY(c))return false;
+  if(GEARLESS(w)&&!CLEANONLY(c)&&!SHORECRANE.includes(b))return false;
+  // one gearless fertiliser vessel at a time (port crane limitation; Mihir 31 Oct — e.g. HN Doris waits while Vishva Preeti works)
+  if(o&&GEARLESS(w)&&FERT(c)&&o.some(x=>FERT(x.c||'')&&(x.loa||LOA[x.n]||0)>200))return false;
+  return true;
+}
+// Meeting rule (Mihir, 31 Oct): a vessel declared at the 11:00 meeting can be programmed up to tomorrow 18:00 only if it arrives
+// (ETA / reporting) before the first high water after the meeting. meetOf(t) = the latest 11:00 meeting whose programme covers t.
+const meetOf=t=>{const d=dt(t);const hod=d.getUTCHours()+d.getUTCMinutes()/60;const day0=t-hod;return hod>=11?day0+11:day0-24+11;};
+const firstHW=m=>{const k=dkey(m);const d=dt(m);const day0=m-11;const hw=(TIDES[k]||[]).map(h=>day0+parseInt(h[0].slice(0,2))+parseInt(h[0].slice(2,4))/60).filter(x=>x>m);if(hw.length)return hw[0];const n=(TIDES[dkey(m+24)]||[]);return n.length?day0+24+parseInt(n[0][0].slice(0,2))+parseInt(n[0][0].slice(2,4))/60:m+12;};
+const meetOK=(w,t)=>{const m=meetOf(t);if(w.rep==null||w.rep<=m)return true;return w.rep<=firstHW(m);};
 const CUTS={};
 function simulate(ov){
   const R=w=>(ov&&w.n===ov)?NOW:w.rdy;
@@ -586,13 +626,13 @@ function simulate(ov){
     // and a shiftable vessel (logs/bags) on a clean berth still has > 8 h of work → it shifts here, clean-only vessel takes its berth
     if(!CLEAN.includes(e.b)&&!ov){
       const Bb=BERTHS.find(x=>x.id===e.b)||{};const BD=Bb.dr;
-      const ready=W.filter(w=>!done.has(w.n)&&w.rdy!=null&&w.rdy<=e.t&&w.rep<=e.t&&!(BM&&w.loa>BM)&&!(BD&&w.dr&&w.dr>BD+tideOf(Bb)));
+      const ready=W.filter(w=>!done.has(w.n)&&w.rdy!=null&&w.rdy<=e.t&&w.rep<=e.t&&!(BM&&w.loa>BM)&&!(w.dr&&w.dr>maxDr(Bb,e.t))&&okBerth(w,e.b,o)&&meetOK(w,e.t));
       let top=null;
       for(const C of CATS){ if(o.filter(x=>x.cat===C.k&&!(C.k==='GOV'&&x.via)).length>=C.max)continue;
         const q=C.k==='GEN'?ready.slice().sort((a,z)=>a.rep-z.rep):C.k==='BIT'?[]:ready.filter(w=>w.rk[C.k]&&w.rk[C.k]!==99).sort((a,z)=>a.rk[C.k]-z.rk[C.k]);
         if(q.length){top=q[0];break;} }
       if(top&&CLEANONLY(top.c)&&stayH(top,'GEN')>=SHIFT_MIN_STAY){
-        const mov=o.filter(x=>CLEAN.includes(x.b)&&SHIFTABLE(x.c)&&x.T-e.t>SHIFT_MIN_LEFT&&!x.shifted&&!(x.loa&&BM&&x.loa>BM)).sort((a,z)=>(z.T-z.F)-(a.T-a.F))[0];
+        const mov=o.filter(x=>CLEAN.includes(x.b)&&SHIFTABLE(x.c)&&x.T-e.t>SHIFT_MIN_LEFT&&!x.shifted&&!(x.loa&&BM&&x.loa>BM)&&okBerth({n:x.n,c:x.c,loa:x.loa,x:''},e.b)).sort((a,z)=>(z.T-z.F)-(a.T-a.F))[0];
         if(mov){
           const left=mov.T-e.t, from=mov.b;
           if(mov.fixed){CUTS[mov.n]=e.t;mov.T=e.t;} else {mov.T=e.t;}
@@ -608,7 +648,7 @@ function simulate(ov){
     }
     const Bq=BERTHS.find(x=>x.id===e.b)||{};const BDr=Bq.dr;
     const base=W.filter(w=>!done.has(w.n)&&R(w)!=null&&R(w)<=e.t&&w.rep<=e.t).filter(w=>
-      !(BM&&w.loa>BM) && !(BDr&&w.dr&&w.dr>BDr+tideOf(Bq)) && !(CLEAN.includes(e.b)&&DIRTY(w.c)) && !(!COALB.includes(e.b)&&/coal/i.test(w.c)) && !(!CLEAN.includes(e.b)&&CLEANONLY(w.c)));
+      !(BM&&w.loa>BM) && !(w.dr&&w.dr>maxDr(Bq,e.t)) && okBerth(w,e.b,o) && meetOK(w,e.t));
     const base0=e.forName?base.filter(w=>w.n===e.forName):base; const baseUse=base0.length?base0:base;
     const bagsNow=o.filter(x=>(x.cat==='GEN'||x.cat==='BIT'||x.cat==='STL')&&isBag(x.c)).length;
     const genQ=()=>baseUse.filter(w=>!(bagsNow>=3&&isBag(w.c))).sort((a,z)=>a.rep-z.rep);
@@ -649,6 +689,7 @@ function simulate(ov){
     if(tideFlag(pick,BERTHS.find(x=>x.id===e.b)))flips.push('HM does not allow tidal benefit for this draught');
     if(alt)flips.push('otherwise next in line: '+alt.n+' ('+(CL[alt.cat]||alt.cat)+(alt.via?' slot as '+alt.via:'')+')');
     if(pick.x&&/REQ|TRANSHIP/i.test(pick.x))flips.push('agent remark: '+pick.x);
+    if(GEARLESS(pick)&&!CLEANONLY(pick.c))flips.push('LOA > 200 m — gearless, works on the port shore crane (CJ-7/8 only)');
     done.add(pick.n);
     const F=e.t+2, T=F+stayH(pick,via==='30k/25k quote'?'HP':(via==='General'?'GEN':cat)), B=BERTHS.find(x=>x.id===e.b);
     const tide=tideFlag(pick,B);
