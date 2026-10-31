@@ -335,7 +335,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='31 Oct 2026 · 23:10 IST';
+const UPDATED='31 Oct 2026 · 23:20 IST';
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
@@ -617,7 +617,10 @@ const allotAt=v=>{if(v._al!=null)return v._al;const prev=V.filter(x=>x.b===v.b&&
 function simulate(ov){
   const R=w=>(ov&&w.n===ov)?NOW:w.rdy;
   const S=[]; const done=new Set();
-  const occ=t=>V.filter(v=>POOL.includes(v.b)&&allotAt(v)<=t&&t<v.T).concat(S.filter(s=>(s.prevAt!=null?s.prevAt:s.F)<=t&&t<s.T)); // a berth counts against the group from the moment it is allotted, not only once the vessel is alongside
+  // Group-slot occupancy (Mihir, 31 Oct 23:00): a vessel alongside at the meeting keeps its group slot (e.g. SAAGAR project against Coastal)
+  // for the whole programme window unless its sailing is fixed (list ETC / programme). A board-estimated sailing does not free the slot for the meeting.
+  const slotEnd=(v,t)=>{if(!v.est)return v.T;const m=meetOf(t),we=m-11+24+18;return (v.T<we&&v.F<=m)?Math.max(v.T,we):v.T;};
+  const occ=t=>V.filter(v=>POOL.includes(v.b)&&allotAt(v)<=t&&t<slotEnd(v,t)).concat(S.filter(s=>(s.prevAt!=null?s.prevAt:s.F)<=t&&t<s.T)); // a berth counts against the group from the moment it is allotted, not only once the vessel is alongside
   const ev=POOL.map(b=>{const last=V.filter(v=>v.b===b).sort((a,z)=>z.T-a.T)[0];return {b,t:last?last.T:NOW,prev:last?last.n:'—',prevEst:last?!!last.est:false};});
   let guard=0;
   while(ev.length&&guard++<400){
