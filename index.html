@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DPA Berth Board · 31 Oct 2026</title></head><body>
+<title>DPA Berth Board</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: vessel finder first (the one question: when does my ship berth?), then quay drawn to panel scale, then the berth timeline. Single dark navy/brass look by choice. */
+:root{
+  color-scheme:dark;
+  --bg:#0f1419; --panel:#161d24; --panel2:#1c252e; --line:#273340; --line2:#334454;
+  --fg:#e8eef4; --muted:#95a6b8; --dim:#60707f;
+  --brass:#5cc8ff; --brass2:#3a97c4;
+  --water:#121a22; --quay:#273038; --quay2:#323d47;
+  --dry:#cf8f3f; --brk:#4db4a5; --prj:#e2705a; --box:#6f98e8; --ppp:#7d8796;
+  --ok:#5fbf7f; --warn:#e2b04a; --bad:#e06464;
+  --f-disp:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"IBM Plex Sans Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.45}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 60px;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{margin:0;text-wrap:balance}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+header.top{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:14px}
+header.top h1{font-family:var(--f-disp);font-weight:800;font-size:clamp(34px,5vw,52px);line-height:.95;text-transform:uppercase}
+header.top h1 span{color:var(--brass)}
+.draft{display:inline-block;margin-left:10px;vertical-align:middle;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;border:1px dashed var(--brass2);color:var(--brass);padding:2px 7px;border-radius:3px}
+.asof{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);text-align:right;line-height:1.6}
+.asof b{color:var(--fg);font-weight:500}
+
+section.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.sechead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 16px}
+.sechead h2{font-family:var(--f-disp);font-weight:600;font-size:24px;letter-spacing:.02em;text-transform:uppercase}
+.sechead p{margin:0;color:var(--muted);font-size:12.5px;max-width:72ch}
+
+/* finder */
+.finder{border-color:var(--brass2);background:linear-gradient(180deg,#132339,#0f1c2e)}
+.pick{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pick label{font-weight:600;font-size:15px}
+select{font-family:var(--f-body);font-size:15px;background:var(--bg);color:var(--fg);border:1px solid var(--brass2);border-radius:5px;padding:8px 10px;min-width:0;max-width:100%;flex:1 1 280px}
+select:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.quick{display:flex;flex-wrap:wrap;gap:6px}
+.qb{font-family:var(--f-body);font-size:12px;background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:20px;padding:3px 10px;cursor:pointer}
+.qb:hover{color:var(--fg);border-color:var(--brass2)}
+.result{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px}
+@media (max-width:820px){.result{grid-template-columns:1fr}}
+.big{display:flex;flex-direction:column;gap:6px}
+.big .vn{font-family:var(--f-disp);font-weight:800;font-size:30px;text-transform:uppercase;letter-spacing:.02em;line-height:1}
+.big .meta{color:var(--muted);font-size:13px}
+.answer{margin-top:6px;border-left:3px solid var(--brass);padding:6px 0 6px 12px}
+.answer .q{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass)}
+.answer .d{font-family:var(--f-disp);font-weight:800;font-size:40px;line-height:1.05}
+.answer .d small{font-size:20px;color:var(--muted);font-weight:600}
+.answer .s{font-size:13.5px;color:var(--fg)}
+.conf{display:inline-block;font-family:var(--f-mono);font-size:10.5px;padding:2px 8px;border-radius:10px;margin-top:4px}
+.c-good{background:#18352a;color:var(--ok)} .c-fair{background:#3a3220;color:var(--warn)} .c-rough{background:#3d2020;color:#f09a82} .c-na{background:#2a2f3f;color:var(--muted)}
+.why{display:flex;flex-direction:column;gap:8px}
+.why h3{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);font-weight:500}
+.why ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px;font-size:13px}
+.ahead{font-size:12.5px;color:var(--muted)}
+.ahead table{border-collapse:collapse;width:100%}
+.ahead td{padding:4px 6px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.ahead tr.me td{color:var(--brass);font-weight:600}
+.ahead td.r{text-align:right;white-space:nowrap;font-family:var(--f-mono);font-size:11.5px}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.preset{font-family:var(--f-body);background:transparent;color:var(--muted);border:1px solid var(--line2);border-radius:4px;padding:5px 10px;cursor:pointer;font-size:12.5px}
+.preset[aria-pressed="true"]{border-color:var(--brass);background:#1c2a3e;color:var(--brass)}
+.slider{flex:1 1 280px;min-width:0;display:flex;flex-direction:column;gap:3px}
+.slider label{font-family:var(--f-mono);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.slider label b{color:var(--brass);font-weight:500}
+input[type=range]{width:100%;accent-color:var(--brass)}
+
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.strip{display:block;min-width:1000px;width:100%;height:auto}
+.striplabel{font-family:var(--f-mono);font-size:11px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:18px;height:9px;border-radius:2px}
+
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+table{border-collapse:collapse;width:100%}
+.mv td{padding:5px 6px;border-top:1px solid var(--line);vertical-align:top;font-size:12.5px}
+.mv td.t{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap;width:44px}
+.mv td.vn{font-weight:600}
+.mv td.vn small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:10px;padding:1px 5px;border-radius:3px;border:1px solid currentColor;white-space:nowrap}
+.t-in{color:var(--ok)} .t-out{color:#e9a07a} .t-shift{color:var(--box)}
+.st{font-family:var(--f-mono);font-size:10px;padding:1px 6px;border-radius:10px;white-space:nowrap}
+.st-done{background:#18352a;color:var(--ok)} .st-sch{background:#2a2f3f;color:var(--muted)} .st-pp{background:#3d2020;color:var(--bad)}
+.grp td{padding:7px 6px;border-top:1px solid var(--line);vertical-align:top;font-size:12.5px}
+.grp td.c{width:130px}
+.grp td.c b{display:block;font-weight:600}
+.grp td.c small{color:var(--dim);font-family:var(--f-mono);font-size:10.5px}
+.grp .nx{display:flex;flex-direction:column;gap:2px}
+.grp .nx span{display:flex;justify-content:space-between;gap:10px}
+.grp .nx em{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--brass);white-space:nowrap}
+.grp{table-layout:fixed}.grp td.c{width:34%}
+@media (max-width:700px){.grp .nx em{white-space:normal}.grp .nx span{flex-direction:column;gap:1px;margin-bottom:6px}.grp td.c{width:32%}.grp td.c small{display:none}}
+.grp .link{background:none;border:0;color:var(--fg);font:inherit;padding:0;cursor:pointer;text-align:left;text-decoration:underline;text-decoration-color:var(--line2);text-underline-offset:3px}
+.note{font-size:12.5px;color:var(--muted);background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.note b{color:var(--fg)}
+.note ul{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.rsum{display:flex;flex-wrap:wrap;gap:8px}
+.rchip{font-family:var(--f-body);font-size:12.5px;background:transparent;color:var(--fg);border:1px solid var(--line2);border-radius:20px;padding:4px 12px 4px 8px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.rchip i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.rchip b{font-family:var(--f-mono);font-weight:500}
+.rchip[aria-pressed="true"]{border-color:var(--brass);background:#1c2a3e}
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.rc{border:1px solid var(--line);border-left:4px solid var(--sc);border-radius:6px;background:var(--panel2);padding:10px 12px;display:flex;flex-direction:column;gap:6px;cursor:pointer;text-align:left;color:var(--fg);font:inherit}
+.rc:hover{border-color:var(--line2)}
+.rc .hd{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.rc .hd b{font-size:14.5px;line-height:1.25}
+.rc .hd small{display:block;color:var(--muted);font-size:12px;font-weight:400;margin-top:2px}
+.rc .sv{font-family:var(--f-mono);font-size:10px;color:var(--sc);border:1px solid var(--sc);border-radius:3px;padding:1px 6px;white-space:nowrap}
+.rc dl{margin:0;display:grid;grid-template-columns:70px 1fr;gap:4px 8px;font-size:12.5px}
+.rc dt{color:var(--dim);font-family:var(--f-mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.rc dd{margin:0}
+.rc .live{font-family:var(--f-mono);font-size:11.5px;color:#ff8a7a;background:#2e1818;border-radius:4px;padding:4px 8px}
+.oklist{border:1px solid #234a35;background:#0f2219;border-radius:6px;padding:10px 12px;font-size:12.5px}
+.oklist h3{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ok);font-weight:500;margin-bottom:5px}
+.oklist ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;color:var(--fg)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.stat .comm .cc{font-size:12px;padding:3px 8px 3px 7px}
+.stat .comm .cc b{font-size:15px}
+.stat.wide{grid-column:1/-1}
+.stat{cursor:pointer}.stat:hover{border-color:var(--line2)}
+.stat .last{font-family:var(--f-mono);font-size:11px;color:var(--brass);margin-top:8px}
+.stat .last b{color:var(--fg);font-weight:500}
+.cc{cursor:pointer}.cc:hover{border-color:var(--brass2)}
+.modal{position:fixed;inset:0;background:rgba(5,12,22,.78);display:flex;align-items:flex-start;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));z-index:50;overflow:auto}
+.mbox{background:var(--panel);border:1px solid var(--brass2);border-radius:10px;max-width:980px;width:100%;margin-block:4vh;display:flex;flex-direction:column;gap:10px;padding:14px 16px}
+.mbox .mh{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.mbox .mh h3{font-family:var(--f-disp);font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.mbox .mh small{color:var(--muted);font-size:12.5px}
+.mclose{font-family:var(--f-body);background:transparent;border:1px solid var(--line2);color:var(--fg);border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px}
+.mt{border-collapse:collapse;width:100%}
+.mt th{font-family:var(--f-mono);font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;text-align:left;padding:4px 6px;border-bottom:1px solid var(--line2);font-weight:500}
+.mt td{padding:6px 6px;border-top:1px solid var(--line);font-size:12.5px;vertical-align:top}
+.mt td.n{font-weight:700;white-space:nowrap}.mt td.n small{display:block;font-weight:400;color:var(--muted);font-size:11.5px;white-space:normal}
+.mt td.d{font-family:var(--f-mono);font-size:12px;color:var(--brass)}.mt td.d small{display:block;color:var(--muted);font-size:10.5px;white-space:normal}
+.mt td.n{white-space:normal}
+.mt td.na{color:var(--muted)}
+.mt tr.me td{background:#1a2740}
+@media (max-width:700px){.mt td.hide,.mt th.hide{display:none}}
+.stat.wide .top{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px}
+.comm{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 12px;border-top:3px solid var(--sc,var(--line2))}
+.stat .v{font-family:var(--f-disp);font-weight:800;font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:15px;color:var(--muted);font-weight:600;margin-left:4px}
+.stat .l{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.3}
+.stat .l b{color:var(--fg);font-weight:600}
+.side{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.sb{border:1px solid var(--line);border-radius:6px;padding:10px 12px;background:var(--panel2);display:flex;flex-direction:column;gap:4px;border-left:4px solid var(--ppp)}
+.sb .h{display:flex;justify-content:space-between;gap:8px;font-family:var(--f-mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.sb .h b{color:var(--fg);font-weight:600;font-size:13px;letter-spacing:0;text-transform:none}
+.sb .n{font-family:var(--f-disp);font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.sb .n small{font-family:var(--f-body);font-size:12.5px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:6px}
+.sb .s{font-size:12.5px;color:var(--muted)}
+.sb .s b{color:var(--brass);font-weight:600}
+.sb.mnt{border-left-color:#f0c070}
+.comm{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.comm .lbl{font-family:var(--f-mono);font-size:11px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-right:4px}
+.cc{display:inline-flex;align-items:center;gap:7px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--sc);border-radius:4px;padding:4px 10px 4px 8px;font-size:12.5px}
+.cc b{font-family:var(--f-disp);font-size:18px;font-weight:800;line-height:1}
+.cc small{color:var(--muted);font-size:11px}
+.barge{border:1px dashed var(--brass2);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;background:rgba(214,180,104,.04)}
+.barge .bh{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;align-items:baseline}
+.barge .bh h3{font-family:var(--f-disp);font-size:20px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.barge .bh small{color:var(--muted);font-size:12px}
+.bg{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:8px}
+.bgc{border:1px solid var(--line2);border-left:4px solid var(--ok);border-radius:6px;padding:9px 11px;background:var(--panel2);display:flex;flex-direction:column;gap:3px;font-size:12.5px}
+.bgc.tight{border-left-color:var(--warn)}
+.bgc .r{font-family:var(--f-disp);font-size:22px;font-weight:800;line-height:1}
+.bgc .r small{font-family:var(--f-mono);font-size:11px;color:var(--muted);font-weight:400;margin-left:6px}
+.bgc .m{color:var(--muted)}.bgc .m b{color:var(--fg);font-weight:600}
+.bgc .w{color:var(--brass)}
+.qdetail{background:var(--panel2);border:1px solid var(--line2);border-left:4px solid var(--brass);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.qdetail .top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.qdetail .top h3{font-family:var(--f-disp);font-size:28px;font-weight:800;text-transform:uppercase;letter-spacing:.02em}
+.qdetail .kvs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px 18px}
+.kv{display:flex;flex-direction:column;gap:1px;min-width:0}
+.kv span{font-family:var(--f-mono);font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.kv b{font-weight:500;font-variant-numeric:tabular-nums}
+.kv b.hl{color:var(--brass)}
+.qdetail .nxt{font-size:13px;color:var(--muted);border-top:1px dashed var(--line2);padding-top:8px}
+.qdetail .nxt b{color:var(--fg)}
+.star{font-family:var(--f-body);font-size:12.5px;background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:20px;padding:4px 12px;cursor:pointer}
+.star[aria-pressed="true"]{border-color:var(--brass);color:var(--brass);background:#1c2a3e}
+.mine{border-color:var(--brass2);background:linear-gradient(180deg,#1a2740,#0f1c2e)}
+.mine table{border-collapse:collapse;width:100%}
+.mine td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:top;font-size:13px}
+.mine td.n{font-weight:700;font-size:14px;white-space:nowrap}
+.mine td.n small{display:block;font-weight:400;color:var(--muted);font-size:11.5px;white-space:normal}
+.mine table{table-layout:fixed}
+.mine td.n{width:42%;white-space:normal;overflow-wrap:anywhere}
+.mine td.w{font-family:var(--f-disp);font-size:22px;font-weight:800;color:var(--brass);line-height:1.1;overflow-wrap:anywhere}
+.mine td.w small{display:block;font-family:var(--f-mono);font-size:11px;color:var(--muted);font-weight:400;white-space:normal;line-height:1.4;margin-top:2px}
+.mine .empty{color:var(--muted);font-size:13px}
+.grp .nx small{display:block;color:var(--muted);font-size:11.5px;font-weight:400}
+footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
+  .upd{display:inline-block;margin-bottom:6px;padding:4px 10px;border:1px solid var(--brass,#c9a24c);border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--brass,#c9a24c)} .upd b{color:inherit;font-weight:700}
+.notices{display:flex;flex-direction:column;gap:6px;margin:-6px 0 14px}
+.notices:empty{display:none}
+.nt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-left:4px solid var(--brass,#c9a24c);background:var(--panel2);border-radius:6px;padding:8px 12px;font-size:12.5px}
+.nt .d{font-family:var(--f-mono);font-size:10.5px;color:var(--brass,#c9a24c);white-space:nowrap;padding-top:2px}
+.nt b{display:block;font-size:13px;margin-bottom:2px}
+.nt small{color:var(--muted)}
+.learn{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+.learn .empty{color:var(--muted);font-size:12.5px;grid-column:1/-1}
+.lc{border:1px solid var(--line);border-left:4px solid var(--warn,#e0a040);border-radius:6px;background:var(--panel2);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.lc.adopted{border-left-color:var(--ok)}
+.lc.ok{border-left-color:var(--ok)}
+.lc .hd{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.lc .hd b{font-size:14px;line-height:1.25}
+.lc .hd small{display:block;color:var(--muted);font-size:11.5px;font-weight:400;margin-top:2px}
+.lc .st{font-family:var(--f-mono);font-size:10px;border:1px solid currentColor;border-radius:3px;padding:1px 6px;white-space:nowrap;color:var(--warn,#e0a040)}
+.lc.adopted .st,.lc.ok .st{color:var(--ok)}
+.lc dl{margin:0;display:grid;grid-template-columns:76px 1fr;gap:4px 8px;font-size:12.5px}
+.lc dt{color:var(--dim);font-family:var(--f-mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.lc dd{margin:0}
+.mpt{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed}
+.mpt th{font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+.mpt td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top;overflow-wrap:anywhere}
+.mpt td.w{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);line-height:1.5}
+.mpt td.w b{color:var(--fg);display:block;font-size:12.5px}
+.mpt .pk b{font-size:13.5px}
+.mpt .pk small,.mpt .al small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px}
+.mpt .fl{color:var(--muted);font-size:12px}
+.mpt .fl li{margin:0 0 3px 14px}
+.mpt .fl ul{margin:0;padding:0}
+.mpt tr.me td{background:rgba(201,162,76,.08)}
+.mpt .tag{font-family:var(--f-mono);font-size:10px;border:1px solid var(--brass);color:var(--brass);border-radius:3px;padding:0 5px;margin-left:4px}
+@media (max-width:640px){.mpt{table-layout:auto}.mpt td.w{white-space:normal}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Deendayal Port · Kandla · Dry cargo jetty</div>
+      <h1>Berth <span>Board</span><span class="draft">31 OCT 2026</span></h1>
+    </div>
+    <div class="asof"><span class="upd" id="upd"></span><br>Berthing List <b>31.10.26 · 0700</b> (KPSAA mail)<br>Signals up to <b>30/31 Oct night (amended 2115)</b> · Programme <b>01.11 (meeting 31.10, TF/SH/2102)</b> · revised list 31.10 (15:09)<br>Policy <b>24.03.25 + 4 amendments</b><br><span id="tide"></span></div>
+  </header>
+  <div class="notices" id="notices"></div>
+
+  <div class="stats" id="stats" aria-label="Waiting at Kandla"></div>
+  <section class="card finder" aria-labelledby="fh">
+    <div class="sechead"><h2 id="fh">Kab berth milega?</h2><p>Pick any waiting or expected vessel. The board runs today's queue forward under the berthing policy and shows when that vessel's turn is likely to come.</p></div>
+    <div class="pick">
+      <label for="vsel">Vessel</label>
+      <select id="vsel"></select>
+    </div>
+    <div class="quick" id="quick"></div>
+    <div class="result" id="result"></div>
+  </section>
+  <section class="card mine" aria-labelledby="mh">
+    <div class="sechead"><h2 id="mh">Mihir &amp; Company · our vessels</h2><p>Every vessel in the berthing list with agent Mihir &amp; Company, with where it stands today and when it berths.</p></div>
+    <div id="mine"></div>
+  </section>
+  <section class="card" aria-labelledby="mp">
+    <div class="sechead"><h2 id="mp">Meeting preview</h2><p>The 11:00 berthing meeting programmes movements up to 18:00 of the next day. For each DPA berth the board expects to free up in that window: who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated here. Compare with the programme when it comes.</p></div>
+    <div class="scroll"><table class="mpt" id="mpt"></table></div>
+  </section>
+  <section class="card" aria-labelledby="rh">
+    <div class="sechead"><h2 id="rh">Routine se hat ke · not sailing on time</h2><p>Only vessels still alongside past their ETC, or whose sailing was postponed, show up here. Vessels finishing on or before ETC are not listed.</p></div>
+    <div class="rsum" id="rsum" role="group" aria-label="Filter checks"></div>
+    <div class="rules" id="rules"></div>
+    <div class="oklist" id="oklist"></div>
+  </section>
+
+  <section class="card">
+    <div class="sechead">
+      <h2>Quay by panel number</h2>
+      <p>North end (CJ-1) left, south (CJ-16) right. Solid hull = at berth as per list/signal. Dotted hull = projected by the board. Click a hull to look it up above. Drawn to scale in metres from the Civil Engg "Cargo Berth Details" sheet (CJ-1–4 182.93 m, CJ-5–6 205.79, CJ-7 238.64, CJ-8 213.64, CJ-9 182.93, CJ-10 209.14, CJ-13–16 300 each); permissible draught from the Deputy Conservator's chart. Panel marks are not equal: ~22.9 m on CJ-1–6, ~34 m on CJ-7, ~21 m on CJ-8–10, and on CJ-13–16 the HM's marks 111–189 run ~15.4 m apart over the 1,200 m (the Civil sheet counts 20 m structural panels there, 131–145 / 146–159 / 160–174). Tidal benefit applies at CJ-6–10 only. Quay live load (Civil Engg sheet): 3.3 t/m² at CJ-1–5 and CJ-6 panels 42–45, 3.5 t/m² quay-side at CJ-7–9, 5 t/m² at CJ-10–16 and in the transit areas behind CJ-6–9 (IIT Mumbai report), which is why heavy stacking stays off the north berths. CJ-13–16 are shown as the operational slots the DPA list uses (13 · 14 · 15 · 15A · 16).</p>
+    </div>
+    <div class="controls">
+      <div class="presets" id="presets" role="group" aria-label="Time"></div>
+      <div class="slider">
+        <label for="tslider"><span>Drag to move through the next 10 days</span><b id="tlabel"></b></label>
+        <input type="range" id="tslider" step="1">
+      </div>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="striplabel">Panels 0 – 85 · CJ-1 to CJ-10</div>
+    <div class="scroll"><svg class="strip" id="stripA" role="img" aria-label="Quay CJ-1 to CJ-10"></svg></div>
+    <div class="striplabel">Panels 110 – 189 · CJ-13 to CJ-16 (CJ-11/12 container berths between, not shown)</div>
+    <div class="scroll"><svg class="strip" id="stripB" role="img" aria-label="Quay CJ-13 to CJ-16"></svg></div>
+    <div class="barge" id="barge"></div>
+    <div class="qdetail" id="qdetail"></div>
+    <div class="striplabel">Outside the DPA queue · CJ-9 (PPP) and CJ-10 (maintenance)</div>
+    <div class="side" id="side"></div>
+  </section>
+
+  <section class="card">
+    <div class="sechead"><h2>Berth timeline · next 10 days</h2><p>Solid = at berth till ETC from the list. Hatched = ETC estimated (qty ÷ norm). Dotted outline = projected next vessel. Only DPA queue berths shown; CJ-9 (PPP), CJ-10 (maintenance) and container berths CJ-11/12 are left out.</p></div>
+    <div class="scroll"><svg id="gantt" class="strip" role="img" aria-label="Berth timeline"></svg></div>
+  </section>
+
+  <div class="two">
+    <section class="card">
+      <div class="sechead"><h2>Who's next, by group</h2><p>Projected berthing date for the next vessels in each priority group.</p></div>
+      <div id="groups"></div>
+    </section>
+    <section class="card">
+      <div class="sechead"><h2>Signal movements · cargo berths</h2><p>From the Harbour Master's signal sheets, red-ink corrections included.</p></div>
+      <div id="moves"></div>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="lh">
+    <div class="sechead"><h2 id="lh">Expected vs actual · logic check</h2><p>Every day the board's projection is compared with what the port actually did. Where the port moved differently, the reason is noted and, once confirmed, folded back into the rules. The policy is the framework; this log is how the board learns the practice.</p></div>
+    <div class="learn" id="learn"></div>
+  </section>
+
+  <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · signals to 30 Oct 2115 · movement programmes TF/SH/2102 for 31.10 and 01.11.</footer>
+</div>
+
+<script>
+(function(){
+const BASE=Date.UTC(2026,9,25,0,0);
+function h(s){const [d,t]=s.split(' ');const [M,D]=d.split('-').map(Number);const [H,m]=t.split(':').map(Number);return (Date.UTC(2026,M-1,D,H,m)-BASE)/36e5;}
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DAY=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function dt(x){return new Date(BASE+x*36e5);}
+function fmt(x,withDate=true){const d=dt(x);const hh=String(d.getUTCHours()).padStart(2,'0'),mm=String(d.getUTCMinutes()).padStart(2,'0');return withDate?`${d.getUTCDate()} ${MON[d.getUTCMonth()]} ${hh}:${mm}`:`${hh}:${mm}`;}
+function fday(x){const d=dt(x);return `${DAY[d.getUTCDay()]} ${d.getUTCDate()} ${MON[d.getUTCMonth()]}`;}
+function part(x){const H=dt(x).getUTCHours();return H<6?'early hours':H<12?'morning':H<17?'afternoon':H<21?'evening':'night';}
+function frac(p){const w=Math.floor(p),f=p-w;const s={0:'',0.25:'¼',0.5:'½',0.75:'¾'}[Math.round(f*4)/4];return (w===0&&s?'':w)+(s||'');}
+function pr(a){return frac(a[0])+'–'+frac(a[1]);}
+const nf=new Intl.NumberFormat('en-IN');
+const NOW=h('10-31 15:00');
+const UPDATED='31 Oct 2026 · 18:05 IST';
+const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
+
+// Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
+const NOTICES=[
+ {d:'31 Oct',t:'Berth reference data loaded: Civil Engg "Cargo Berth Details" (lengths, live load), DC permissible-draught circular MR/SH/1120/2026 (Oct–Dec HW & channel draught, berth-wise draught), DPA port layout drawing',s:'Used for the quay strip, draught checks and barge windows. Base for berth lengths = Civil Engg sheet; vessels placed by the HM panel marks the berthing list uses.',src:'Mihir, 31 Oct'},
+ {d:'29 Oct',t:'Rebates / concessions on wharfage of bagged cargo; railway terminal charge waiver & concession; vessel-related charge rebates for coastal & foreign container vessels',s:'Four DPA circulars circulated by KPSAA on 29 Oct. Tariff only; no change to berthing order. Details on request.',src:'KPSAA mail 29.10.26'}
+];
+// Expected-vs-actual log. {d:'date', v:'vessel', exp:'what the board expected', act:'what the port did', why:'reason / hypothesis', fix:'rule change', st:'open'|'adopted'|'ok'}
+// st: open = waiting for Mihir to confirm the reason; adopted = folded into the rules; ok = matched, nothing to learn
+const LEARN=[
+ {d:'31 Oct pm',v:'CJ-14 · African Quail vs Feng Hai Da',exp:'Board\'s meeting preview: CJ-14 (after AC Kathryn ~12:30) → African Quail, SAAGAR break bulk; "palat sakta hai agar SAAGAR bulk vessel ready ho".',act:'Programme for 01.11: AC Kathryn sails 1 Nov 17:05; CJ-14 → Feng Hai Da (24 HRS group). African Quail not programmed.',why:'Exactly the flip the preview named: Rome Trader (petcoke, ETA 31 Oct) reported, declared ready 09:00 and carries SAAGAR status (SGR = Y only in the revised afternoon list; blank in the 0700 list) — it took the SAAGAR bulk slot at CJ-6. With Centurion Buyo on the break-bulk slot, SAAGAR was full, so CJ-14 went down the order to 24 HRS. Also AC Kathryn finishes a day later than the board\'s estimate.',fix:'(1) A vessel\'s SAAGAR status must be known before it is ranked — ask: is it Indian-flag / SAAGAR-registered? (2) An ETA vessel that reports and declares before the meeting is eligible for the NEXT day\'s programme — board already allows this. (3) Logs ETCs now taken from the list.',st:'open'},
+ {d:'31 Oct pm',v:'Logs discharge rate · back to DPA norm',exp:'Board had used 4,800 CBM/day for logs vessels (working assumption) → AC Kathryn sailing 31 Oct 12:30.',act:'Programme: AC Kathryn readiness 1 Nov 17:05 (≈ 4,000 CBM/day). Mihir: drop the 4,800 figure, go by what the system prints.',why:'Per-vessel rates vary; a private assumption only creates confusion against the official sheet.',fix:'Logs ETCs taken from the list as printed; waiting logs vessels planned at the DPA norm (3,450 CBM/day, or the list norm where given).',st:'adopted'},
+ {d:'31 Oct pm',v:'Rome Trader · petcoke at CJ-6',exp:'Board keeps coal at CJ-7/8 only and treated petcoke like coal.',act:'Programme: Rome Trader (petcoke, 50,010 MT, SGR) berths CJ-6 41½–49¾ after Outrivaling 3 shifts to OTB.',why:'Petcoke is not restricted to the coal berths; CJ-6 (hopper → truck, no stacking) is acceptable for it.',fix:'Petcoke allowed at any non-clean berth; only coal stays CJ-7/8.',st:'adopted'},
+ {d:'31 Oct pm',v:'CJ-7 · HN Doris vs Meghna Venus',exp:'Board: CJ-7 after Fu Hai 16 → HN Doris (Govt #2).',act:'Programme: CJ-7 → Meghna Venus, HP 50,000 MTPD quote; HN Doris not programmed. Vishva Preeti (Govt #1) → CJ-8 as the board expected.',why:'Likely the two Govt berths were counted as Eva Bright (still at CJ-4, not in the programme for 01.11) + Vishva Preeti, so HN Doris waits; and a 50,000 MTPD quote took the HP slot. To confirm at the meeting.',fix:'None yet — depends on whether Eva Bright\'s berth still counts as Govt on 1 Nov.',st:'open'},
+ {d:'31 Oct pm',v:'CJ-16 · Alasia over Orion',exp:'Board: CJ-16 after Maritime Harmony → Orion (HP #4, salt).',act:'Programme: → Alasia (aggregates, ETA 1 Nov 00:30) with a 40,000 MTPD quote, berthing 1 Nov evening.',why:'HP is decided by the quote at the meeting, not by the printed rank; an ETA vessel that reports in time competes.',fix:'Board already flags "quotes decide" on HP/Sr No 7 slots; nothing more to model without the quotes.',st:'ok'},
+ {d:'31 Oct pm',v:'Tidal benefit observed · CJ-7',exp:'Berth draught 12.0 m, board allows +1.5 m at CJ-6–10.',act:'Programme: Fu Hai 16 outward draught 12.65 m; Meghna Venus sailing draught 12.72 m — both at CJ-7.',why:'First data points: ≥ 0.7 m over the chart figure is accepted at CJ-7.',fix:'Keep 1.5 m for now; two more observations will set the margin.',st:'ok'},
+ {d:'31 Oct pm',v:'CJ-15 · Katong WW (Coastal slot, SAAGAR project)',exp:'Board: CJ-15 after African Predator → Katong WW as SAAGAR project against the Coastal slot.',act:'Programme: CJ-15 → Katong WW, category CSTL(SGR). African Predator shifts to OTB 09:00 at agent\'s request.',why:'Rule confirmed on day one.',fix:'—',st:'ok'},
+ {d:'31 Oct',v:'Port-convenience shift · for whom?',exp:'Board would have shifted African Quail (logs, CJ-14) to CJ-4 within 10 h of berthing to make room for Feng Hai Da (48 windmill blades, 1,085 MT, ~22 h job).',act:'Not observed; board assumption.',why:'A 4-hour shift of a logs vessel for a one-day project parcel seems unlikely; shifts are made for sizeable clean-cargo vessels (salt HP, big project).',fix:'Shift only for a clean-only vessel with ≥ 36 h of work. To be confirmed from practice.',st:'open'},
+ {d:'31 Oct',v:'Govt slot filled by a Sr No 7 vessel',exp:'Board had treated a 30k/25k (Sr No 7) vessel berthed against a Govt slot as occupying that slot, so the next Govt vessel (HN Doris) waited for it.',act:'Practice (Mihir): when a Govt vessel turns up, the Sr No 7 vessel already alongside is re-tagged to Sr No 7 day priority and the Govt vessel takes the next free berth it fits.',why:'The Govt earmark is 2 Govt vessels at berth, not 2 fixed berths; a fallback occupant does not count against it.',fix:'Govt slot count ignores fallback-filled vessels. Other groups unchanged.',st:'adopted'},
+ {d:'31 Oct',v:'Tidal benefit · CJ-6 to CJ-10 only',exp:'Board first allowed 1.0 m over the berth draught at every berth.',act:'Practice (Mihir): tidal benefit is given only at CJ-6–10 — permissible draught + next low-water height (e.g. 12.0 + ~1.5 m), never at CJ-1–5 or CJ-13–16.',why:'Depth and LW height at the middle berths allow it; the shallow north berths and the clean south berths are held to the chart figure.',fix:'CJ-6–10 allow up to 1.5 m over; others strict. The 1.5 m is a working figure — to be refined from what the port actually does.',st:'open'},
+ {d:'31 Oct',v:'SAAGAR has three types · project goes against Coastal',exp:'Board gave the SAAGAR break-bulk slot (CJ-14 after AC Kathryn) to Katong WW (project cargo, SGR #1) ahead of African Quail (logs, SGR #2).',act:'Practice (Mihir): SAAGAR = bulk, break bulk, project. The 1 bulk + 1 break-bulk slots are for bulk / break bulk; a SAAGAR project vessel is berthed against the Coastal slot (when no coastal vessel is ready), and never SAAGAR bulk / break bulk there.',why:'Project cargo is slow and small; the coastal slot absorbs it without eating a SAAGAR cargo slot.',fix:'Coastal fallback = SAAGAR project vessels by SGR rank; SAAGAR slots skip project vessels while a bulk / break-bulk SAAGAR vessel is ready.',st:'adopted'},
+ {d:'31 Oct',v:'Berth draught limits · all groups',exp:'Board placed deep-draught vessels (e.g. Tai Knight 14.2 m coal, Bristol 13.5 m DAP, Levante Spirit 12.9 m MOP) on any berth by group.',act:'DC chart: CJ-1–5 permit 10.5 m, CJ-6–10 12.0 m, CJ-13 13.5 m, CJ-14–16 14.5 m (tidal benefit possible).',why:'Arrival draught decides which berths a vessel can take at all; a 14.2 m coal vessel cannot use CJ-7/8, which is why Tai Knight asks for OTB.',fix:'Vessels are now offered only berths whose permissible draught covers their arrival draught (strict, no tidal benefit assumed).',st:'adopted'},
+ {d:'31 Oct',v:'Katong WW · SAAGAR break bulk',exp:'African Quail (SGR #2 on 30 Oct) next SAAGAR break-bulk vessel after AC Kathryn.',act:'31 Oct list gives Katong WW (project cargo, 1,321 MT) SGR rank 1; it was only STL #4 the day before.',why:'A project-cargo vessel can carry SAAGAR status and then ranks in the SGR column by its own reporting date, ahead of logs vessels that reported later.',fix:'Ranks are now taken from the SGR column as printed; SAAGAR break bulk includes project cargo.',st:'adopted'},
+ {d:'31 Oct',v:'Levante Spirit · Govt priority',exp:'Board had a third Govt vessel at CJ-14 on 1 Nov.',act:'Policy allows 2 Govt berths at a time.',why:'Board bug: a berth already allotted (vessel on the way in) was not counted against the group until the vessel was alongside.',fix:'A berth counts against the group from the moment it is allotted.',st:'adopted'},
+ {d:'31 Oct',v:'Moonlit · CJ-2 sailing',exp:'List ETC 31 Oct 10:05.',act:'Programme TF/SH/2102 sails her at 17:00 (readiness draft 10.10 m).',why:'Deep-draft departures wait for the tide; ETC is not the sailing time.',fix:'When a programme exists, its sailing time overrides the list ETC.',st:'adopted'}
+];
+// Snapshot of the board's own projection at publish time (next 48 h), so tomorrow's run can compare it with the list
+const PRED=[
+ ['Vishva Preeti','8','1 Nov 01:00','programme 01.11'],['Rome Trader','6','1 Nov 11:00','programme 01.11'],['Meghna Venus','7','1 Nov 08:30','programme 01.11'],['Katong WW','15','1 Nov 11:00','programme 01.11'],['Feng Hai Da','14','1 Nov 19:00','programme 01.11'],['Alasia','16','1 Nov 19:00','programme 01.11'],
+ ['Yuan Hang Wei Ye','4','1 Nov 00:15','projected · Govt slot, Sr No 7'],['HN Doris','15','2 Nov 03:00','projected'],['Tan Binh 267','7','2 Nov 18:00','projected · Sr No 7'],['Orion','13','2 Nov 19:00','projected'],['Lakmos','14','2 Nov 19:00','projected']
+];
+function preview(){
+  // The 11:00 berthing meeting programmes movements up to 18:00 of the next day. Preview covers the NEXT meeting's window:
+  // meeting today 11:00 (if we are before it) or tomorrow 11:00, and berths freeing from now until 18:00 of the day after that meeting.
+  const d=dt(T);const hod=d.getUTCHours()+d.getUTCMinutes()/60;const day0=T-hod; // 00:00 today
+  const meet=hod<11?day0+11:day0+24+11; const end=meet-11+24+18;
+  const rows=S.filter(x=>x.proj&&!x.shifted&&x.prevAt!=null&&x.prevAt>=T-12&&x.prevAt<=end).sort((a,z)=>a.prevAt-z.prevAt);
+  const el=document.getElementById('mpt');
+  const hd=document.querySelector('#mp');if(hd)hd.innerHTML=`Meeting preview · meeting of ${fday(meet)} 11:00 → movements till ${fday(end)} 18:00`;
+  if(!rows.length){el.innerHTML=`<tr><td class="fl">No DPA berth is projected to free up before ${fday(end)} 18:00 beyond what the programme already fixes.</td></tr>`;return;}
+  el.innerHTML='<tr><th style="width:200px">Berth frees</th><th>Board\'s pick</th><th>Next in line</th><th>What could overturn it at the meeting</th></tr>'+rows.map(x=>`<tr class="${isMine(x.n)?'me':''}">
+   <td class="w"><b>CJ-${x.b}</b>${fmt(x.prevAt)}<br>${x.prev} sails${x.prevEst?' (est.)':''}</td>
+   <td class="pk"><b>${x.n}</b>${isMine(x.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${x.c} · ${nf.format(x.q)} ${x.u}${agTxt(x.n)}</small><small>${CL[x.cat]||x.cat}${x.via?' slot · as '+x.via:''} · alongside ~${fmt(x.F)}${x.tide?' · '+x.tide:''}</small></td>
+   <td class="al">${x.alt?`<b>${x.alt.n}</b><small>${x.alt.c} · ${CL[x.alt.cat]||x.alt.cat}${x.alt.via?' as '+x.alt.via:''}${x.alt.same?' · same group, next rank':''}</small>`:'<span style="color:var(--dim)">nobody else eligible</span>'}</td>
+   <td class="fl">${x.flips&&x.flips.length?'<ul>'+x.flips.map(f=>`<li>${f}</li>`).join('')+'</ul>':'—'}</td></tr>`).join('');
+}
+function notices(){const el=document.getElementById('notices');el.innerHTML=NOTICES.map(n=>`<div class="nt"><span class="d">${n.d}</span><div><b>${n.t}</b><small>${n.s}${n.src?' · '+n.src:''}</small></div></div>`).join('');}
+function learn(){const el=document.getElementById('learn');if(!LEARN.length){el.innerHTML='<div class="empty">No variance recorded yet.</div>';return;}
+  const L={open:'open · confirm?',adopted:'adopted in rules',ok:'matched'};
+  el.innerHTML=LEARN.map(x=>`<div class="lc ${x.st}"><div class="hd"><div><b>${x.v}</b><small>${x.d}</small></div><span class="st">${L[x.st]||x.st}</span></div><dl><dt>Expected</dt><dd>${x.exp}</dd><dt>Actual</dt><dd>${x.act}</dd><dt>Reason</dt><dd>${x.why}</dd>${x.fix?`<dt>Rule</dt><dd>${x.fix}</dd>`:''}</dl></div>`).join('');}
+ // last time the board data was refreshed (shown in header + footer)
+document.getElementById('upd').innerHTML='LAST UPDATED <b>'+UPDATED+'</b>';
+function tideLine(){const d=dt(NOW);const k=String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');const t=TIDES[k];const n=dt(NOW+24);const k2=String(n.getUTCMonth()+1).padStart(2,'0')+'-'+String(n.getUTCDate()).padStart(2,'0');const t2=TIDES[k2];
+ const f=x=>x?x.map(h=>`<b>${h[0]}</b> ${h[1].toFixed(2)} m`).join(' · '):'—';
+ const el=document.getElementById('tide');if(el)el.innerHTML=`HW &amp; channel draught · today ${f(t)} · tomorrow ${f(t2)} <small>(DC circular MR/SH/1120/2026)</small>`;}document.getElementById('updf').textContent='Updated '+UPDATED;
+
+const GROUPS={dry:{l:'Dry bulk',c:'var(--dry)'},brk:{l:'Break bulk / bags / logs',c:'var(--brk)'},prj:{l:'Project / windmill',c:'var(--prj)'}};
+function grp(c){c=c.toLowerCase();if(/project|windmill/.test(c))return'prj';if(/bag|log|pipe|pulp|steel/.test(c))return'brk';return'dry';}
+const isBag=c=>/bag/i.test(c);
+const isBreak=c=>/bag|log|pipe|pulp|steel|project/i.test(c);
+
+// berths
+// Panel ranges and permissible draught per berth: Deputy Conservator's chart (cargo berths, para 6). dr = permissible draught in m
+// (tidal benefit over this is possible subject to channel draught and agent's undertaking). CJ-13–16 are split into the
+// operational slots the DPA list itself uses (13 / 14 / 15 / 15A / 16); official chart: XIII 111–130, XIV 131–153, XV 154–167, XVI 168–189.
+// len = berth length in metres from the DPA port layout drawing ("Details of berths": CJ-1–4 182.93, CJ-5–6 205.79, CJ-7 238.64,
+// CJ-8 213.04, CJ-9 182.93, CJ-10 209.41, CJ-11 281.00, CJ-12 264.00; total 2,532.32 m). Panel marks are ~22.87 m apart on CJ-1–6
+// and ~21–23 m elsewhere, except CJ-7 (~34 m). CJ-13–16 are not in that drawing; 22.866 m/panel assumed there. dwt = design DWT.
+// Quay geometry: [HM panel mark from, to, length m]. BASE = Civil Engg "Cargo Berth Details" sheet (2026, latest): CB-1–4 182.93 m,
+// CB-5–6 205.79, CB-7 238.64, CB-8 213.64, CB-9 182.93, CB-10 209.14, CB-11 281, CB-12 264, CB-13–16 300 m each.
+// Panel numbering: for CB-1–12 the Civil sheet, DC chart and HM berthing list agree. For CB-13–16 the Civil sheet counts 20 m structural
+// panels (131–145 / 146–159 / 160–174) while the HM list and DC chart mark the quay to 189 (vessels are listed at 171½–188 on CJ-16),
+// so for CJ-13–16 the board uses HM marks 111–189 spread evenly over the 4 × 300 m (≈15.4 m per mark; berth ends ≈ 130½ / 150 / 169½ / 189).
+const GEOM=[[0,8,182.93],[8,16,182.93],[16,24,182.93],[24,32,182.93],[32,41,205.79],[41,51,205.79],[51,58,238.64],[58,68,213.64],[68,76,182.93],[76,85,209.14],[85,98,281],[98,110,264],[110,189,1200]];
+(()=>{let m=0;GEOM.forEach(g=>{g.push(m);m+=g[2];});})(); // g[3] = metres at g[0]
+function PM(p){p=Math.max(0,Math.min(189,p));const g=GEOM.find(x=>p>=x[0]&&p<=x[1]);return g[3]+(p-g[0])/(g[1]-g[0])*g[2];}
+const BERTHS=[
+ {id:'1',p:[0,8],dwt:45000,dr:10.5,ll:'3.3 / 3.3'},{id:'2',p:[8,16],dwt:45000,dr:10.5,ll:'3.3 / 3.3'},{id:'3',p:[16,24],dwt:45000,dr:10.5,maxLoa:125,ll:'3.3 / 3.3'},{id:'4',p:[24,32],dwt:45000,dr:10.5,ll:'3.3 / 3.3'},{id:'5',p:[32,41],dwt:35000,dr:10.5,ll:'3.3 / 3.3'},{id:'6',p:[41,51],dwt:35000,dr:12,tide:1.5,dmg:1,ll:'3.3 (42–45) · 5 (46–51) / per CE letter 05.08.26'},{id:'7',p:[51,58],dwt:55000,dr:12,tide:1.5,coal:1,ll:'3.5 / 5'},{id:'8',p:[58,68],dwt:55000,dr:12,tide:1.5,coal:1,ll:'3.5 / 5'},
+ {id:'9',p:[68,76],dwt:55000,dr:12,tide:1.5,ppp:1,ll:'3.5 / 5'},{id:'10',p:[76,85],dwt:55000,dr:12,tide:1.5,mnt:1,ll:'5 / 5 (under modification)'},{id:'11',p:[85,98],dwt:65000,dr:14,kict:1},{id:'12',p:[98,110],dwt:75000,dr:14.5,kict:1},
+ // CJ-13–16 (4 × 300 m) split into the operational slots the DPA list uses (13 · 14 · 15 · 15A · 16), by HM panel marks
+ {id:'13',p:[110,126],dr:13.5,clean:1,ll:'5 / 5'},{id:'14',p:[126,144],dr:14.5,clean:1,ll:'5 / 5'},{id:'15',p:[144,159.5],dr:14.5,clean:1,ll:'5 / 5'},{id:'15A',p:[159.5,171],dr:14.5,clean:1,ll:'5 / 5'},{id:'16',p:[171,189],dr:14.5,clean:1,ll:'5 / 5'}
+];
+BERTHS.forEach(b=>{b.m=[PM(b.p[0]),PM(b.p[1])];b.len=b.m[1]-b.m[0];});
+const MPP=b=>b.len/(b.p[1]-b.p[0]);
+// Tidal benefit (Mihir, 31 Oct): in practice given only at CJ-6 to CJ-10 — permissible draught + height of the next low water
+// (e.g. 12.0 + ~1.5 = 13.5 m), agent undertaking to reduce draught before LW. Not at CJ-1–5 or CJ-13–16. Margin per berth = b.tide;
+// 1.5 m is a working figure to be refined from observation.
+const tideOf=b=>(b&&b.tide)||0;
+const tideFlag=(w,B)=>(B&&B.dr&&w.dr&&w.dr>B.dr)?`draught ${w.dr} m > berth ${B.dr} m · needs tidal benefit`:null;
+// Channel draught at HW, Oct–Dec 2026 (DC circular MR/SH/1120/2026 dated 11.9.2026): [ 'MM-DD', [['HHMM',m],['HHMM',m]] ]
+const TIDES={'10-31':[['0604',15.25],['1756',14.50]],
+ '11-01':[['0710',15.02],['1905',14.20]],'11-02':[['0824',14.85],['2037',14.03]],'11-03':[['0935',14.78],['2219',14.16]],'11-04':[['1040',14.82],['2338',14.55]],'11-05':[['1139',14.85]],'11-06':[['0037',14.94],['1228',14.85]],'11-07':[['0121',15.18],['1311',14.76]],'11-08':[['0158',15.27],['1347',14.69]],'11-09':[['0231',15.29],['1420',14.67]],'11-10':[['0302',15.31],['1455',14.69]],'11-11':[['0336',15.33],['1529',14.66]],'11-12':[['0110*',15.28],['1601',14.56]],'11-13':[['0444',15.17],['1634',14.38]],'11-14':[['0516',15.01],['1707',14.16]],'11-15':[['0549',14.84],['1747',13.95]],'11-16':[['0628',14.71],['1838',13.80]],'11-17':[['0718',14.62],['1949',13.73]],'11-18':[['0823',14.58],['2118',13.85]],'11-19':[['0931',14.59],['2238',14.16]],'11-20':[['1033',14.64],['2341',14.55]],'11-21':[['1129',14.66]],'11-22':[['0032',14.88],['1217',14.66]],'11-23':[['0117',15.12],['1302',14.67]],'11-24':[['0200',15.28],['1346',14.75]],'11-25':[['0241',15.43],['1428',14.85]],'11-26':[['0327',15.54],['1515',14.91]],'11-27':[['0415',15.58],['1603',14.90]],'11-28':[['0506',15.53],['1656',14.77]],'11-29':[['0600',15.40],['1756',14.56]],'11-30':[['0658',15.23],['1906',14.34]],
+ '12-01':[['0756',15.04],['2031',14.22]],'12-02':[['0853',14.85],['2158',14.30]],'12-03':[['0953',14.66],['2312',14.55]],'12-04':[['1053',14.53]],'12-05':[['0010',14.84],['1149',14.40]],'12-06':[['0058',15.05],['1240',14.29]],'12-07':[['0138',15.13],['1323',14.25]],'12-08':[['0213',15.15],['1401',14.28]],'12-09':[['0245',15.16],['1439',14.39]],'12-10':[['0318',15.20],['1514',14.48]],'12-11':[['0352',15.21],['1546',14.49]],'12-12':[['0425',15.18],['1620',14.41]],'12-13':[['0458',15.11],['1654',14.26]],'12-14':[['0530',15.04],['1731',14.12]],'12-15':[['0603',14.99],['1815',14.03]],'12-16':[['0640',14.95],['1911',13.98]],'12-17':[['0725',14.85],['2021',14.01]],'12-18':[['0817',14.69],['2143',14.18]],'12-19':[['0920',14.51],['2255',14.48]],'12-20':[['1026',14.38],['2357',14.80]],'12-21':[['1130',14.35]],'12-22':[['0053',15.06],['1231',14.41]],'12-23':[['0143',15.27],['1327',14.56]],'12-24':[['0229',15.44],['1421',14.75]],'12-25':[['0317',15.55],['1511',14.90]],'12-26':[['0405',15.62],['1602',14.95]],'12-27':[['0454',15.62],['1656',14.87]],'12-28':[['0541',15.53],['1750',14.72]],'12-29':[['0626',15.38],['1849',14.55]],'12-30':[['0709',15.17],['1956',14.40]],'12-31':[['0753',14.91],['2111',14.35]]};
+// * 12 Nov first HW printed as 0110 in the circular; almost certainly 0410 (sequence 0336 → 0444). Shown as printed.
+const POOL=['1','2','3','4','5','6','7','8','13','14','15','15A','16'];
+
+// at berth / fixed by signal
+const V=[
+ {b:'1',n:'Emmanouil',nm:3450,p:[0.5,7.5],c:'Rice bags',q:26710,u:'MT',cat:'BIT',f:'10-29 02:42',t:'11-05 22:30'},
+ {b:'2',n:'Moonlit',nm:6500,p:[8.5,16],c:'Rice bags',q:28800,u:'MT',cat:'8K',f:'10-26 21:45',t:'10-31 17:00',note:'list ETC 31 Oct 10:05; sailing programmed 17:00 (draft 10.10 m, tide)'},
+ {b:'2',n:'Karpathos Dawn',nm:6500,p:[8.5,16.75],c:'Rice bags',q:50000,u:'MT',cat:'8K',f:'10-31 19:00',t:'11-08 12:00',est:1,note:'berthing today per programme TF/SH/2102, o/c after Moonlit'},
+ {b:'3',n:'Seagautam',p:[17.75,22.5],c:'Ammonium sulphate bulk',q:6000,u:'MT',cat:'24H',f:'10-30 17:45',t:'10-31 17:45'},
+ {b:'3',n:'Horizon Chaser',p:[17.75,22],c:'Bitumen (tanker)',q:3902,u:'MT',cat:'BIT',f:'10-31 19:00',t:'11-01 17:00',note:'sails 1 Nov 17:00 per programme for 01.11 (readiness draft 4.5 m)'},
+ {b:'4',n:'Eva Bright',nm:11500,p:[23.5,31.5],c:'Polyhalite fertiliser',q:25000,u:'MT',cat:'GOV',f:'10-29 16:05',t:'10-31 22:15'},
+ {b:'5',n:'Aya',p:[32.5,39.75],c:'Rice bags',q:25100,u:'MT',cat:'GEN',f:'10-28 17:05',t:'11-04 00:45'},
+ {b:'6',n:'Outrivaling 3',p:[42.75,48],c:'Soda ash J-bags / pipes',q:10341,u:'MT',cat:'GEN',f:'10-30 05:30',t:'11-01 09:00',est:1,note:'programme for 01.11: shifting CJ-6 → OTB at agent\'s a/c (time not given)'},
+ {b:'6',n:'Rome Trader',p:[41.5,49.75],c:'Petcoke bulk',q:50010,u:'MT',cat:'SAAGAR',f:'11-01 11:00',t:'11-04 14:00',est:1,note:'programme for 01.11: in at CJ-6 41½–49¾ as SGR (SAAGAR bulk); ready 31 Oct 09:00'},
+ {b:'7',n:'Xanadu',nm:50000,p:[49,57.25],c:'Coal bulk',q:79219,u:'MT',cat:'HP',f:'10-28 16:05',t:'10-30 23:30',etc:'10-30 08:06'},
+ {b:'7',n:'Fu Hai 16',nm:50000,p:[50.75,57.25],c:'Iron ore fines',q:53243,u:'MT',cat:'HP',f:'10-31 03:00',t:'11-01 06:30',note:'HP quote 50,000 MTPD; sails 1 Nov 06:30 per programme, outward draft 12.65 m at a 12.0 m berth (tidal benefit)'},
+ {b:'7',n:'Meghna Venus',nm:50000,p:[50.75,57.25],c:'Clay / feldspar',q:55000,u:'MT',cat:'HP',f:'11-01 08:30',t:'11-02 16:00',est:1,note:'programme for 01.11: HP 50,000 MTPD quote; sailing draft 12.72 m'},
+ {b:'8',n:'Ocean Camellia',nm:8050,p:[58.25,68],c:'Urea bulk',q:55040,u:'MT',cat:'GOV',f:'10-25 04:30',t:'10-31 23:00',note:'night sailing 23:00 per programme for 01.11'},
+ {b:'8',n:'Vishva Preeti',nm:8050,p:[58.25,68],c:'Urea bulk',q:52500,u:'MT',cat:'GOV',f:'11-01 01:00',t:'11-07 20:00',est:1,note:'programme for 01.11: Govt, night berthing after Ocean Camellia'},
+ {b:'9',n:'Lacerta',nm:20000,p:[69.25,79.25],c:'US coal',q:78005,u:'MT',cat:'PPP',f:'10-28 04:50',t:'10-30 23:30'},
+ {b:'9',n:'Cervia',nm:20000,p:[69.25,78.25],c:'Coal bulk',q:82390,u:'MT',cat:'PPP',f:'10-31 06:20',t:'11-04 11:12',note:'list ETC at 20,000 MTPD'},
+ {b:'13',n:'Bauhinia',p:[113,121.25],c:'Project cargo',q:4292,u:'MT',cat:'STL',f:'10-29 01:06',t:'10-31 04:00'},
+ {b:'13',n:'Rahma',p:[113,125],c:'Steel pipes',q:7216,u:'MT',cat:'STL',f:'10-31 05:20',t:'11-02 17:00',est:1},
+ {b:'14',n:'AC Kathryn',p:[127,140.75],c:'JAS Aus. logs',q:29068,u:'CBM',cat:'SAAGAR',f:'10-25 06:36',t:'11-01 17:05',note:'readiness 1 Nov 17:05 per programme for 01.11 (list ETC was 2 Nov 18:48)'},
+ {b:'14',n:'Feng Hai Da',p:[126,137],c:'Windmill blades (48)',q:1085,u:'MT',cat:'24H',f:'11-01 19:00',t:'11-02 17:00',est:1,note:'programme for 01.11: 24 HRS group, starboard, agent\'s request'},
+ {b:'15',n:'African Predator',p:[146.75,158.75],c:'Windmill blades',q:38435,u:'CBM',cat:'COASTAL',f:'10-27 01:12',t:'11-01 09:00',note:'programme for 01.11: shifting CJ-15 → OTB 09:00 at agent\'s request, draft 10.1 m'},
+ {b:'15',n:'Katong WW',p:[142.5,155],c:'Project cargo',q:1321,u:'MT',cat:'COASTAL',f:'11-01 11:00',t:'11-02 01:00',est:1,note:'programme for 01.11: CSTL(SGR) — SAAGAR project vessel against the Coastal slot, as the board expected'},
+ {b:'15A',n:'Centurion Buyo',p:[159.75,169.5],c:'Pine logs',q:29852,u:'CBM',cat:'SAAGAR',f:'10-29 23:10',t:'11-05 12:55',nm:4600,note:'ETC corrected in the revised list 31.10 (afternoon): 5 Nov 12:54 at norm 4,600'},
+ {b:'16',n:'Agia Fevronia',nm:40000,p:[173.5,188],c:'Salt in bulk',q:60500,u:'MT',cat:'HP',f:'10-28 18:06',t:'10-30 06:00'},
+ {b:'16',n:'Maritime Harmony',nm:40000,p:[171.5,188],c:'Salt',q:74850,u:'MT',cat:'HP',f:'10-30 13:00',t:'11-01 17:00',note:'HP quote 40,000 MTPD; sails 1 Nov 17:00 per programme (list ETC 11:54), sailing draft 14.1 m'},
+ {b:'16',n:'Alasia',nm:40000,p:[173.5,188],c:'Aggregates',q:59900,u:'MT',cat:'HP',f:'11-01 19:00',t:'11-03 12:00',est:1,note:'programme for 01.11: HP 40,000 MTPD quote; ETA 1 Nov 00:30, sailing draft 13.3 m'}
+];
+const LOA={'Emmanouil':169.37,'Moonlit':170.7,'Karpathos Dawn':189.99,'Horizon Chaser':94.4,'Seagautam':109.8,'Rahma':180,'Cervia':229.2,'Eva Bright':179.9,'Aya':167,'Outrivaling 3':118.35,'Xanadu':228.99,'Fu Hai 16':189.99,'Ocean Camellia':229,'Lacerta':228.99,'Bauhinia':130.73,'AC Kathryn':177,'African Predator':199.98,'Centurion Buyo':182.94,'Agia Fevronia':199.85,'Maritime Harmony':224.94,'Rome Trader':189.99,'Meghna Venus':189.99,'Vishva Preeti':229,'Feng Hai Da':139.8,'Katong WW':177.5,'Alasia':199.98};
+V.forEach(v=>{v.F=h(v.f);v.T=h(v.t);v.g=grp(v.c);v.fixed=1;v.loa=LOA[v.n];});
+
+// waiting + expected. [name,cargo,qty,uom,loa,draft,readiness,{group:rank},extra]  — Berthing List 31.10.2026 (0700 hrs)
+const WRAW=[
+ ['Mak 1','Rice jumbo bags',21888,'MT',186.5,9.3,'10-04 11:00',{},''],
+ ['Nord Newport','Rice in bulk',30000,'MT',182.93,6.33,'10-10 11:00',{},''],
+ ['Suvari Bey','Rice/sugar bags',23500,'MT',153,5.7,'10-12 11:00',{},'Working at midstream meanwhile'],
+ ['Saga Viking','Kraft pulp',16038,'MT',199.2,8,'10-13 11:00',{},''],
+ ['Lakmos','Steel pipes in bundles',10600,'MT',182.94,6.25,'10-13 11:00',{STL:1},''],
+ ['HN Doris','Urea bulk',50000,'MT',229,10.67,'10-16 03:36',{GOV:2},''],
+ ['Safi Alfa','Rice bags',26100,'MT',189.99,null,'10-19 11:00',{},'Working at midstream meanwhile'],
+ ['KSL Ruiyang','DR pellets',24033,'MT',189.99,10.6,'10-21 01:06',{'24H':1},''],
+ ['Deniz ID','Rice bags',25500,'MT',167,5.6,'10-21 11:00',{},''],
+ ['Levante Spirit','MOP',57680,'MT',199.98,12.9,'10-22 23:18',{GOV:3},''],
+ ['Theometor','Rice bags',45000,'MT',187.88,6.5,'10-23 11:00',{},''],
+ ['Bao He Ling','Steel / project cargo',34217,'MT',189.9,9.1,'10-24 11:00',{'8K':2,STL:2},''],
+ ['Tan Binh 267','Ball clay / feldspar bulk',56000,'MT',190,6.2,'10-24 15:17',{HP:2,'8K':3},''],
+ ['Michelangelo','NPK',36500,'MT',229,13.45,'10-26 06:06',{GOV:4},''],
+ ['Yasa Eagle','Coal',49500,'MT',229,12,'10-26 11:00',{HP:3,'8K':4},''],
+ ['African Quail','Pine logs',33734,'CBM',179.97,10.45,'10-27 00:15',{SAAGAR:2,'8K':5},''],
+ ['Orion','Salt in bulk',61600,'MT',199,6.92,'10-27 10:42',{HP:4},''],
+ ['Lanna Naree','Timber logs',29222,'CBM',181,9.15,'10-27 12:54',{SAAGAR:3,'8K':6},''],
+ ['Ege-M','Ball clay bulk',43000,'MT',190,4.3,'10-27 23:59',{'8K':8},'CJ-13–16, 2 HMC'],
+ ['Shen Hai Shou Xin','Iron ore pellets',51112,'MT',189.99,6,'10-28 11:00',{HP:5,'8K':7},''],
+ ['Bristol','TSP + DAP',64706,'MT',189.5,13.5,'10-29 09:00',{GOV:5},''],
+ ['Bomustafao O','Rice in bags',21945,'MT',157.26,5.8,'10-29 11:00',{},'Declared ready 29 Oct'],
+ ['Yuan Hang Wei Ye','Iron ore pellet feed',50540,'MT',190,6.4,'10-29 11:00',{HP:1,'8K':1},'Declared ready 29 Oct · wants CJ-6 to 9'],
+ ['Yara J','Rice bags',30000,'MT',199.99,9.85,'10-29 11:00',{},'Declared ready 29 Oct · at midstream'],
+ ['Tai Knight','NAPP coal bulk',76785,'MT',229,14.2,'10-29 14:00',{},'Wants to discharge entire cargo at OTB'],
+ ['African Peacock','JAS pine logs',36926,'CBM',182.93,10.6,'10-31 02:06',{SAAGAR:4},'Reported 31 Oct 02:06'],
+ // readiness not declared
+ ['Haj Abdullah T','Rice bags',7700,'MT',98.17,4.5,null,{},'Reported 1 Oct'],
+ ['North Gate','Chick peas & rice jumbo bags',27000,'MT',177.13,6.2,null,{},'At M. Buoy-3 since 29 Oct'],
+ ['DSM London','Rice/sugar bags',32000,'MT',180,6.5,null,{},'Reported 12 Oct'],
+ ['Blue Shark','Sugar/rice/wheat bags',25600,'MT',167,5.9,null,{},'Reported 15 Oct'],
+ ['Fortunelit','Rice/sugar bags',27500,'MT',189.88,6.5,null,{},'At midstream'],
+ ['Crystal O','Sugar bags',31200,'MT',171.59,6.45,'10-31 15:00',{},'Declared ready (revised list 31.10) · at midstream'],
+ ['New Bliss','Sugar bags',34000,'MT',175.6,5.7,null,{},'Reported 19 Oct'],
+ ['Zheng Rong','Iron ore pellet feed',67600,'MT',229,7.23,null,{},'Reported 23 Oct'],
+ ['Leya','Iron ore pellet feed',89000,'MT',235,7.1,null,{HP:99},'Reported 24 Oct'],
+ ['Manta Sena','Rice bags',30000,'MT',177.13,6.04,null,{},'Reported 26 Oct'],
+ ['Crystal Land','Rice bags',31700,'MT',189.9,6,null,{},'Reported 27 Oct'],
+ ['Outlander','Rice bags',39000,'MT',185.74,6.5,null,{},'Expected 2 Nov'],
+ ['Lady Naeima','Rice bags',15000,'MT',137.03,3,null,{},'Expected 1 Nov'],
+ ['Libra','Rice bags',23000,'MT',150.52,5.7,null,{},'Reported 31 Oct, docs N/A'],
+ ['Mettle Star','Salt in bulk',79080,'MT',228.99,null,null,{HP:99},'Expected 1 Nov'],
+ ['Andreas Petrakis','Coal bulk',71500,'MT',225,14.15,null,{},'Expected 1 Nov'],
+ ['Star Fighter','Salt in bulk',58000,'MT',199.98,null,null,{HP:99},'Expected 2 Nov'],
+ ['Hai Long 1','Rice bags',17000,'MT',144.65,6.5,null,{},'Expected 2 Nov'],
+ ['Defne','Steel pipes',1529,'MT',115.5,4.6,null,{},'Expected 2 Nov'],
+ ['Belasitza','Ammonium sulphate bulk',28500,'MT',186,10.45,null,{},'Expected 3 Nov'],
+ ['Valentina Sea','Rice bags',39000,'MT',185.73,5.8,null,{},'Expected 4 Nov'],
+ ['Tai Keystone','Urea + transhipment',47250,'MT',228.41,12.7,null,{},'Expected 5 Nov'],
+
+];
+const W=WRAW.map(r=>({n:r[0],c:r[1],q:r[2],u:r[3],loa:r[4],dr:r[5],rdy:r[6]?h(r[6]):null,rk:r[7],x:r[8],g:grp(r[1])}));
+// reporting time = seniority (FCFS, Circular 21.05.26 cl. 2), subject to readiness when the turn comes
+const REP={'Mak 1':'09-05 01:35','Nord Newport':'10-08 23:42','Karpathos Dawn':'10-11 01:06','Suvari Bey':'10-09 15:30','Saga Viking':'10-12 05:06','Lakmos':'10-12 06:20','Vishva Preeti':'10-15 09:00','Rahma':'10-11 00:00','HN Doris':'10-16 03:36','Safi Alfa':'10-13 12:52','Meghna Venus':'10-18 20:12','KSL Ruiyang':'10-21 01:06','Deniz ID':'10-12 00:15','Katong WW':'10-22 01:30','Levante Spirit':'10-22 23:18','Theometor':'10-03 16:30','Bao He Ling':'10-19 18:00','Tan Binh 267':'10-24 15:17','Michelangelo':'10-26 06:06','Cervia':'10-24 22:48','Yasa Eagle':'10-24 10:45','African Quail':'10-27 00:15','Orion':'10-27 10:42','Lanna Naree':'10-27 12:54','Seagautam':'10-27 23:10','Ege-M':'10-27 23:59','Feng Hai Da':'10-28 00:00','Shen Hai Shou Xin':'10-27 12:54','Bristol':'10-29 09:00','Bomustafao O':'10-10 11:10','Yuan Hang Wei Ye':'10-19 12:24','Yara J':'10-19 17:55','Tai Knight':'10-29 14:00','African Peacock':'10-31 02:06','Alasia':'10-31 12:00','Rome Trader':'10-31 10:00',
+ 'Haj Abdullah T':'10-01 15:00','North Gate':'10-10 07:15','DSM London':'10-12 23:05','Blue Shark':'10-15 21:30','Fortunelit':'10-16 04:18','Crystal O':'10-16 06:00','New Bliss':'10-19 06:20','Zheng Rong':'10-23 09:30','Leya':'10-24 23:10','Manta Sena':'10-26 10:45','Crystal Land':'10-27 00:45','Outlander':'11-02 00:00','Lady Naeima':'11-01 00:00','Libra':'10-31 00:00','Mettle Star':'11-01 00:00','Andreas Petrakis':'11-01 00:00','Star Fighter':'11-02 00:00','Hai Long 1':'11-02 00:00','Defne':'11-02 00:00','Belasitza':'11-03 12:30','Valentina Sea':'11-04 00:00','Tai Keystone':'11-05 00:00','Horizon Chaser':'10-30 15:24'};
+W.forEach(w=>{w.rep=REP[w.n]?h(REP[w.n]):w.rdy;});
+// agents from the berthing list (waiting sheet carries no agent column); stevedores to be filled in
+const AG={'African Quail':'Mihir & Company','Rahma':'Parekh Marine','Cervia':'Dariya Shg','Karpathos Dawn':'DBC','Horizon Chaser':'Preetika','Seagautam':'Atlantic Shg','Theometor':'BS Shg','Nord Newport':'Kashmira','Bomustafao O':'DBC','Deniz ID':'DBC','Saga Viking':'Ben Line','Lakmos':'AML','DSM London':'DBC','Vishva Preeti':'Interocean','Blue Shark':'Interocean','HN Doris':'DBC','Meghna Venus':'Shantilal','New Bliss':'GAC Shg','Yuan Hang Wei Ye':'Genesis','Bao He Ling':'Cross Trade','Mak 1':'Samsara','KSL Ruiyang':'Genesis','Katong WW':'Parekh Marine','Levante Spirit':'Interocean','Zheng Rong':'Genesis','Tan Binh 267':'OTA Kandla','Leya':'Genesis','Yasa Eagle':'Dariya','Michelangelo':'Taurus','Manta Sena':'ACT Infraport','Crystal Land':'BS Shg','Orion':'Cross Trade','Lanna Naree':'Synergy','Shen Hai Shou Xin':'Genesis','Ege-M':'Ben Line','Feng Hai Da':'Mystic Shg','Bristol':'Taurus','Tai Knight':'Ambika','African Peacock':'DBC','Libra':'DBC','Haj Abdullah T':'DBC','Alasia':'Scorpio Shg','Rome Trader':'James Mackintosh','Lady Naeima':'DBC','Mettle Star':'Cross Trade','Andreas Petrakis':'Dariya Shg','Outlander':'BS Shg','Hai Long 1':'BS Shg','Defne':'JM Baxi','Star Fighter':'Cross Trade','Belasitza':'Interocean','Valentina Sea':'Excel Infra','Tai Keystone':'Interocean','Emmanouil':'BS Shg','Moonlit':'Upasana','Eva Bright':'JM Baxi','Aya':'Excel Infra','Outrivaling 3':'Mystic Shg','Xanadu':'Ambika','Fu Hai 16':'Genesis','Ocean Camellia':'Anline','Lacerta':'Gautham Freight','Bauhinia':'Mitsutor','AC Kathryn':'DBC','African Predator':'Synergy','Centurion Buyo':'Synergy','Agia Fevronia':'Gautham Freight','Maritime Harmony':'Cross Trade','Suvari Bey':'DBC','Yara J':'DBC','Fortunelit':'Anline','Crystal O':'DBC','Safi Alfa':'ACT Infraport','North Gate':'JM Baxi'};
+const agOf=n=>AG[n]||'—';
+const agTxt=n=>AG[n]?' · agent '+AG[n]:'';
+const isMine=n=>/mihir/i.test(agOf(n)); // our vessels = agent Mihir & Company
+const MINE={has:isMine};
+
+// slot order as practised at the berthing meeting (fb = who gets the slot when nobody of that group is ready)
+const CATS=[
+ {k:'GOV',l:'Govt priority',s:'2 berths · else 30k/25k (Sr No 7); a Sr No 7 vessel in a Govt slot never blocks a Govt vessel',max:2,fb:'HPQ'},
+ {k:'COASTAL',l:'Coastal',s:'1 berth · else SAAGAR project (windmill / project) · else 30k/25k',max:1,fb:'WIND,HPQ'},
+ {k:'HP',l:'Higher productivity',s:'2 berths · highest MTPD quote',max:2},
+ {k:'SAAGAR',l:'SAAGAR',s:'1 bulk + 1 break bulk · cross-fill · project vessels go against Coastal',max:2},
+ {k:'24H',l:'24-hour',s:'1 berth · else 30k/25k quote',max:1,fb:'HPQ'},
+ {k:'8K',l:'8,000 / 6,500 MTPD',s:'1 berth · commodity group',max:1},
+ {k:'STL',l:'Steel / project',s:'1 berth · else General',max:1,fb:'GENQ'},
+ {k:'BIT',l:'Bitumen',s:'1 berth · else General',max:1,fb:'GENQ'},
+ {k:'GEN',l:'General',s:'3 berths · FCFS · bagged max 3',max:3}
+];
+const CL=Object.fromEntries(CATS.map(c=>[c.k,c.l]));CL.PPP='PPP';CL.KICT='KICT';
+const FBL={HPQ:'30k/25k quote (Sr No 7)',WIND:'SAAGAR project',GENQ:'General'};
+
+function rate(v,cat){
+  const c=v.c.toLowerCase();
+  if(cat==='HP')return 45000;
+  if(cat==='8K')return isBreak(c)?6500:8000;
+  if(/jumbo/.test(c))return 3450; if(/bag/.test(c))return 4025;
+  if(/log|timber/.test(c))return LOGS_RATE; // DPA norm
+  if(/pulp/.test(c))return 3450; if(/pipe/.test(c))return 2875;
+  if(/steel|project/.test(c))return 5000; if(/urea/.test(c))return 8050; if(/mop/.test(c))return 14950;
+  if(/npk/.test(c))return 11500; if(/dap|tsp/.test(c))return 14950; if(/ammonium/.test(c))return 9200;
+  if(/rice/.test(c))return 9200; if(/clay|feldspar/.test(c))return 10350; if(/iron|pellet/.test(c))return 18400;
+  if(/coal|petcoke/.test(c))return 16100; if(/salt/.test(c))return 23000; return 9000;
+}
+function stayH(v,cat){ if(cat==='24H')return 22; return Math.max(14,v.q/rate(v,cat)*24+5); }
+
+// ---- projection
+const HZ=h('11-20 00:00');
+// CJ-13 to CJ-16 are clean-cargo berths: no coal, petcoke or iron ore / pellets
+const CLEAN=['13','14','15','15A','16'];
+const COALB=['7','8']; // coal vessels only at CJ-7 / CJ-8 (other cargo can still use 7/8)
+const CLEANONLY=c=>/salt|windmill|project/i.test(c); // clean cargo that goes only to CJ-13–16
+const isLogs=c=>/log|timber/i.test(c); // the cargo DPA usually shifts under port convenience
+const SHIFT_H=4, SHIFT_MIN_LEFT=12, SHIFT_MIN_STAY=36; // no shift for a clean-only vessel with < 36 h of work (small project parcels wait for the next clean berth)
+const LOGS_RATE=3450; // DPA norm for logs (CBM/day). The 4,800 CBM/day working assumption was withdrawn on 31 Oct — list ETCs and norms are used as printed
+const DIRTY=c=>/coal|petcoke|iron|pellet/i.test(c);
+const CUTS={};
+function simulate(ov){
+  const R=w=>(ov&&w.n===ov)?NOW:w.rdy;
+  const S=[]; const done=new Set();
+  const occ=t=>V.filter(v=>POOL.includes(v.b)&&v.F<=t&&t<v.T).concat(S.filter(s=>(s.prevAt!=null?s.prevAt:s.F)<=t&&t<s.T)); // a berth counts against the group from the moment it is allotted, not only once the vessel is alongside
+  const ev=POOL.map(b=>{const last=V.filter(v=>v.b===b).sort((a,z)=>z.T-a.T)[0];return {b,t:last?last.T:NOW,prev:last?last.n:'—',prevEst:last?!!last.est:false};});
+  let guard=0;
+  while(ev.length&&guard++<400){
+    ev.sort((a,z)=>a.t-z.t); const e=ev.shift(); if(e.t>HZ)break;
+    const o=occ(e.t); let pick=null,cat=null,via=null;
+    const BM=(BERTHS.find(x=>x.id===e.b)||{}).maxLoa;
+    // ---- port-convenience shift: a non-clean berth frees, a clean-only vessel (salt / windmill / project) is next on merit,
+    // and a logs vessel on a clean berth still has ≥12 h of work → logs vessel shifts here, clean-only vessel takes its berth
+    if(!CLEAN.includes(e.b)&&!ov){
+      const Bb=BERTHS.find(x=>x.id===e.b)||{};const BD=Bb.dr;
+      const ready=W.filter(w=>!done.has(w.n)&&w.rdy!=null&&w.rdy<=e.t&&w.rep<=e.t&&!(BM&&w.loa>BM)&&!(BD&&w.dr&&w.dr>BD+tideOf(Bb)));
+      let top=null;
+      for(const C of CATS){ if(o.filter(x=>x.cat===C.k&&!(C.k==='GOV'&&x.via)).length>=C.max)continue;
+        const q=C.k==='GEN'?ready.slice().sort((a,z)=>a.rep-z.rep):C.k==='BIT'?[]:ready.filter(w=>w.rk[C.k]&&w.rk[C.k]!==99).sort((a,z)=>a.rk[C.k]-z.rk[C.k]);
+        if(q.length){top=q[0];break;} }
+      if(top&&CLEANONLY(top.c)&&stayH(top,'GEN')>=SHIFT_MIN_STAY){
+        const mov=o.filter(x=>CLEAN.includes(x.b)&&isLogs(x.c)&&x.T-e.t>=SHIFT_MIN_LEFT&&!x.shifted&&!(x.loa&&BM&&x.loa>BM)).sort((a,z)=>(z.T-z.F)-(a.T-a.F))[0];
+        if(mov){
+          const left=mov.T-e.t, from=mov.b;
+          if(mov.fixed){CUTS[mov.n]=e.t;mov.T=e.t;} else {mov.T=e.t;}
+          const B=BERTHS.find(x=>x.id===e.b);
+          const sh={b:e.b,n:mov.n,c:mov.c,q:mov.q,u:mov.u,cat:mov.cat,via:'shifted from CJ-'+from+' (port convenience)',F:e.t+2,T:e.t+2+SHIFT_H+left,g:mov.g,proj:1,shifted:1,loa:mov.loa,w:mov.w||null,prev:e.prev,prevAt:e.t,prevEst:e.prevEst,
+            p:[B.p[0]+0.5,Math.min(B.p[0]+0.5+(mov.loa||180)/MPP(B),B.p[1]+3)]};
+          S.push(sh); ev.push({b:e.b,t:sh.T,prev:mov.n,prevEst:true});
+          for(let i=ev.length-1;i>=0;i--){if(ev[i].b===from&&ev[i].t>e.t)ev.splice(i,1);} // the old free-up event of the vacated berth no longer applies
+          ev.push({b:from,t:e.t+0.5,prev:mov.n+' (shifted out)',prevEst:true,forName:top.n});
+          continue;
+        }
+      }
+    }
+    const Bq=BERTHS.find(x=>x.id===e.b)||{};const BDr=Bq.dr;
+    const base=W.filter(w=>!done.has(w.n)&&R(w)!=null&&R(w)<=e.t&&w.rep<=e.t).filter(w=>
+      !(BM&&w.loa>BM) && !(BDr&&w.dr&&w.dr>BDr+tideOf(Bq)) && !(CLEAN.includes(e.b)&&DIRTY(w.c)) && !(!COALB.includes(e.b)&&/coal/i.test(w.c)) && !(!CLEAN.includes(e.b)&&CLEANONLY(w.c)));
+    const base0=e.forName?base.filter(w=>w.n===e.forName):base; const baseUse=base0.length?base0:base;
+    const bagsNow=o.filter(x=>(x.cat==='GEN'||x.cat==='BIT'||x.cat==='STL')&&isBag(x.c)).length;
+    const genQ=()=>baseUse.filter(w=>!(bagsNow>=3&&isBag(w.c))).sort((a,z)=>a.rep-z.rep);
+    const rkQ=k=>baseUse.filter(w=>w.rk[k]&&w.rk[k]!==99).sort((a,z)=>a.rk[k]-z.rk[k]);
+    const isProj=w=>/project|windmill/i.test(w.c);
+    // COASTAL slot, when no coastal vessel: only SAAGAR *project* (windmill / project cargo) vessels, never SAAGAR bulk or break bulk
+    const pools={HPQ:()=>rkQ('HP'),WIND:()=>baseUse.filter(w=>isProj(w)&&w.rk.SAAGAR).sort((a,z)=>a.rk.SAAGAR-z.rk.SAAGAR),GENQ:genQ};
+    const ranked=[]; // every group's first candidate in slot order → ranked[0] is the pick, ranked[1] the runner-up (for the meeting preview)
+    for(const C of CATS){
+      // Govt rule (Mihir, 31 Oct): a 30k/25k (Sr No 7) vessel berthed against a Govt slot is re-tagged to Sr No 7 day priority
+      // the moment a Govt vessel is ready, so it never blocks a Govt vessel. Other groups keep their slot occupied.
+      const inUse=o.filter(x=>x.cat===C.k&&!(C.k==='GOV'&&x.via)).length;
+      if(inUse>=C.max)continue;
+      let cand;
+      if(C.k==='GEN')cand=genQ();
+      else if(C.k==='BIT')cand=baseUse.filter(w=>/bitumen/i.test(w.c)).sort((a,z)=>a.rep-z.rep);
+      else{
+        cand=rkQ(C.k);
+        if(C.k==='SAAGAR'){
+          // SAAGAR has three types: bulk, break bulk, project. The 1 bulk + 1 break-bulk slots are for bulk / break bulk; project vessels
+          // go against the Coastal slot, and take a SAAGAR slot only if no bulk / break-bulk SAAGAR vessel is ready.
+          const np=cand.filter(w=>!isProj(w)); if(np.length)cand=np;
+          const other=o.filter(x=>x.cat==='SAAGAR')[0];if(other){const want=!isBreak(other.c);const alt=cand.find(w=>isBreak(w.c)===want);if(alt)cand=[alt];}}
+      }
+      cand=cand.filter(w=>!ranked.some(r=>r.w===w));
+      if(cand.length){ranked.push({w:cand[0],cat:C.k,via:null});if(cand[1])ranked.push({w:cand[1],cat:C.k,via:null,same:1});continue;}
+      if(C.fb){for(const f of C.fb.split(',')){const fc=pools[f]().filter(w=>!ranked.some(r=>r.w===w));if(fc.length){ranked.push({w:fc[0],cat:C.k,via:FBL[f]});break;}}}
+    }
+    if(ranked.length){pick=ranked[0].w;cat=ranked[0].cat;via=ranked[0].via;}
+    if(!pick){ev.push({b:e.b,t:e.t+6,prev:e.prev,prevEst:e.prevEst,idle:true});continue;}
+    const alt=ranked[1]?{n:ranked[1].w.n,c:ranked[1].w.c,cat:ranked[1].cat,via:ranked[1].via,same:!!ranked[1].same}:null;
+    // what could overturn this pick at the berthing meeting
+    const flips=[];
+    const notReady=k=>W.filter(w=>!done.has(w.n)&&w.n!==pick.n&&w.rdy==null&&w.rk[k]&&w.rk[k]!==99).slice(0,2).map(w=>w.n);
+    if(cat!=='GOV'){const g=notReady('GOV');if(g.length)flips.push('a Govt vessel declares readiness ('+g.join(', ')+')');}
+    if(cat==='SAAGAR'&&isBreak(pick.c)){const sb=W.filter(w=>!done.has(w.n)&&w.rk.SAAGAR&&!isBreak(w.c)&&!isProj(w)).map(w=>w.n);flips.push(sb.length?'a SAAGAR bulk vessel is ready ('+sb.join(', ')+') — it takes the bulk slot first':'a SAAGAR bulk vessel reports and is ready');}
+    if(via&&/Sr No 7/.test(via))flips.push('30k/25k quotes at the meeting — the highest MTPD quote takes this slot, not the rank');
+    if(tideFlag(pick,BERTHS.find(x=>x.id===e.b)))flips.push('HM does not allow tidal benefit for this draught');
+    if(alt)flips.push('otherwise next in line: '+alt.n+' ('+(CL[alt.cat]||alt.cat)+(alt.via?' slot as '+alt.via:'')+')');
+    if(pick.x&&/REQ|TRANSHIP/i.test(pick.x))flips.push('agent remark: '+pick.x);
+    done.add(pick.n);
+    const F=e.t+2, T=F+stayH(pick,via==='30k/25k quote'?'HP':(via==='General'?'GEN':cat)), B=BERTHS.find(x=>x.id===e.b);
+    const tide=tideFlag(pick,B);
+    const s={b:e.b,n:pick.n,c:pick.c,q:pick.q,u:pick.u,cat,via,F,T,g:pick.g,proj:1,w:pick,prev:e.prev,prevAt:e.t,prevEst:e.prevEst,tide,alt,flips,
+      p:[B.p[0]+0.5,Math.min(B.p[0]+0.5+pick.loa/MPP(B),B.p[1]+3)]};
+    S.push(s); ev.push({b:e.b,t:T,prev:pick.n,prevEst:true});
+  }
+  return S;
+}
+const S=simulate(); window.__S=S; window.__fmt=fmt;
+const ALL=V.concat(S);
+
+// ---- picker
+let focus='Orion', T=NOW, sel='Xanadu';
+const vsel=document.getElementById('vsel');
+const opt=(n,l)=>`<option value="${n}">${l}</option>`;
+vsel.innerHTML=
+ `<optgroup label="Waiting — ready (in queue)">${W.filter(w=>w.rdy!=null).map(w=>opt(w.n,`${w.n} · ${w.c}`)).join('')}</optgroup>`+
+ `<optgroup label="Waiting — readiness not declared">${W.filter(w=>w.rdy==null).map(w=>opt(w.n,`${w.n} · ${w.c}`)).join('')}</optgroup>`+
+ `<optgroup label="At berth / berthing per signal">${V.filter(v=>POOL.includes(v.b)&&v.T>NOW).map(v=>opt(v.n,`${v.n} · CJ-${v.b}`)).join('')}</optgroup>`;
+vsel.onchange=()=>{focus=vsel.value;render(true);};
+document.getElementById('quick').innerHTML='<span style="font-size:12px;color:var(--dim);align-self:center">Try:</span>'+['Orion','Vishva Preeti','Karpathos Dawn','KSL Ruiyang','Mak 1','Theometor','Seagautam'].map(n=>`<button type="button" class="qb" data-n="${n}">${n}</button>`).join('');
+document.querySelectorAll('.qb').forEach(b=>b.onclick=()=>{focus=b.dataset.n;render(true);});
+
+function groupLine(w){const ks=Object.keys(w.rk).filter(k=>w.rk[k]!==99);return ks.length?ks.map(k=>`${CL[k]} #${w.rk[k]}`).join(' · '):'General (by seniority)';}
+function conf(s){const d=(s.F-NOW)/24;if(d<=2.5&&!s.prevEst)return['c-good','Good — based on DPA ETC'];if(d<=5)return['c-fair','Fair — depends on estimated ETCs'];return['c-rough','Rough — far out, many moves before it'];}
+
+function result(){
+  const r=document.getElementById('result');
+  const fixed=V.find(v=>v.n===focus); const s=S.find(x=>x.n===focus); const w=W.find(x=>x.n===focus);
+  if(fixed){
+    const at=fixed.F<=NOW;
+    r.innerHTML=`<div class="big"><div class="vn">${fixed.n}</div><div class="meta">${fixed.c} · ${nf.format(fixed.q)} ${fixed.u} · ${CL[fixed.cat]||fixed.cat}${agTxt(fixed.n)}</div>
+      <div class="answer"><div class="q">${at?'At berth':'Berthing per signal'}</div><div class="d">CJ-${fixed.b} <small>panels ${pr(fixed.p)}</small></div>
+      <div class="s">${at?'Made fast '+fmt(fixed.F):'Due alongside ~'+fmt(fixed.F)} · ${(()=>{const sh=S.find(x=>x.shifted&&x.n===fixed.n);return sh?`<b style="color:var(--warn)">Projected shift</b> to CJ-${sh.b} ~${fmt(sh.F)} under port convenience (clean berth needed for a merit vessel) · then sails ~${fmt(sh.T)}`:`Expected to sail <b>${fmt(fixed.T)}</b>${fixed.est?' (estimate)':' (ETC from list)'}`;})()}</div></div></div>
+      <div class="why"><h3>Who takes CJ-${fixed.b} next</h3>${nextOn(fixed.b,fixed.T)}</div>`;
+    return;
+  }
+  if(!w){r.innerHTML='';return;}
+  if(w.rdy==null){
+    const hs=simulate(w.n).find(x=>x.n===w.n);
+    r.innerHTML=`<div class="big"><div class="vn">${w.n}</div><div class="meta">${w.c} · ${nf.format(w.q)} ${w.u} · LOA ${w.loa}${w.dr?' · dr '+w.dr:''} · ${w.x}</div>
+      <div class="answer"><div class="q">Agar aaj ready ho jaaye</div><div class="d">${hs?fday(hs.F):'Beyond 3 weeks'} <small>${hs?part(hs.F)+' · CJ-'+hs.b:''}</small></div>
+      <div class="s">Readiness is <b>N/A</b> in the list. Seniority counts from reporting (<b>${fmt(w.rep)}</b>), so the day it declares ready it takes its place by reporting time — ahead of vessels that reported later.</div><span class="conf c-na">Depends on readiness</span></div></div>
+      <div class="why"><h3>How this date is worked out</h3><ol><li>Board assumes it declares ready today and re-runs the whole queue.</li><li>Group: <b>${groupLine(w)}</b>.${isBag(w.c)?' Bagged cargo — General has max 3 bag berths at a time.':''}</li><li>Each day it stays not ready, its turn passes to the next ready vessel and this date moves out.</li></ol></div>`;
+    return;
+  }
+  if(!s){
+    r.innerHTML=`<div class="big"><div class="vn">${w.n}</div><div class="meta">${w.c} · ${groupLine(w)}</div><div class="answer"><div class="q">Kab berth milega?</div><div class="d">After ${fday(HZ)}</div><div class="s">Not reached within the 3-week projection.</div><span class="conf c-rough">Beyond horizon</span></div></div><div class="why"></div>`;return;
+  }
+  const [cc,cl]=conf(s);
+  const ahead=S.filter(x=>x.cat===s.cat&&x.F<=s.F).sort((a,z)=>a.F-z.F).slice(-5);
+  const waitD=((s.F-w.rep)/24).toFixed(0);
+  r.innerHTML=`<div class="big"><div class="vn">${w.n}</div><div class="meta">${w.c} · ${nf.format(w.q)} ${w.u} · LOA ${w.loa}${w.dr?' · draft '+w.dr+' m':''}${agTxt(w.n)}${w.x?' · '+w.x:''}</div>
+    <div class="answer"><div class="q">Likely berthing</div><div class="d">${fday(s.F)} <small>${part(s.F)} · ~${fmt(s.F,false)}</small></div>
+    <div class="s">at <b>CJ-${s.b}</b> under <b>${CL[s.cat]}</b>${s.via?' slot (as '+s.via+')':''} · likely to sail around ${fmt(s.T)}</div>
+    <span class="conf ${cc}">${cl}</span></div></div>
+    <div class="why"><h3>Why this date</h3><ol>
+      <li>Queue position: <b>${groupLine(w)}</b>. Reported ${fmt(w.rep)} · ready ${fmt(w.rdy)}.</li>
+      <li>CJ-${s.b} frees when <b>${s.prev}</b> finishes, ~${fmt(s.prevAt)}${s.prevEst?' (estimated)':' (ETC from list)'}.</li>
+      <li>At that point the higher groups are either full or have nobody ready, so the ${CL[s.cat]} slot gets the berth${s.via?' — nobody of that group is ready, so it goes to the '+s.via+' fallback':''}.</li>
+      <li>Total wait from reporting: about <b>${waitD} days</b>.</li></ol>
+      <div class="ahead"><table><tbody>${ahead.map(x=>`<tr class="${x.n===s.n?'me':''}"><td>${x.n}</td><td>CJ-${x.b}</td><td class="r">${fmt(x.F)}</td></tr>`).join('')}</tbody></table></div></div>`;
+}
+function stats(){
+  const kind=c=>{c=c.toLowerCase();if(/bag/.test(c))return'bag';if(/log|pipe|pulp|steel|project|windmill/.test(c))return'brk';return'bulk';};
+  const wait=W.filter(w=>w.rep<=NOW), exp=W.filter(w=>w.rep>NOW);
+  const cnt=(arr,k)=>arr.filter(w=>kind(w.c)===k).length;
+  const ready=wait.filter(w=>w.rdy!=null).length, na=wait.length-ready;
+  const at=V.filter(v=>v.F<=NOW&&NOW<v.T&&POOL.includes(v.b)).length;
+  const bagAt=V.filter(v=>v.F<=NOW&&NOW<v.T&&/bag/i.test(v.c)&&(v.cat==='GEN'||v.cat==='BIT')).length;
+  const COM=[['Rice / sugar bags',/bag/i,'var(--brk)'],['Coal / petcoke',/coal|petcoke/i,'var(--dry)'],['Iron ore / pellets',/iron|pellet/i,'var(--dry)'],['Salt',/salt/i,'var(--brass)'],['Fertiliser (urea, MOP, NPK, DAP, amm. sulphate)',/urea|mop|npk|dap|tsp|sulphate|fertil/i,'var(--dry)'],['Clay / feldspar',/clay|feldspar/i,'var(--dry)'],['Logs',/log/i,'var(--brk)'],['Steel / pipes',/steel|pipe/i,'var(--brk)'],['Project / windmill',/project|windmill/i,'var(--prj)'],['Pulp / other',/./,'var(--line2)']];
+  const chipsFor=arr=>{const used=new Set();return COM.map(([l,re,c])=>{const vs=arr.filter(w=>!used.has(w.n)&&re.test(w.c));vs.forEach(w=>used.add(w.n));if(!vs.length)return'';const mt=vs.reduce((a,w)=>a+(w.u==='MT'?w.q:0),0),cbm=vs.reduce((a,w)=>a+(w.u==='CBM'?w.q:0),0);return `<span class="cc" data-com="${l}" style="--sc:${c}"><b>${vs.length}</b>${l}<small>${mt?nf.format(Math.round(mt/1000))+'k MT':''}${mt&&cbm?' + ':''}${cbm?nf.format(Math.round(cbm/1000))+'k CBM':''}</small></span>`;}).join('');};
+  const chips=chipsFor(wait);
+  const byKind=k=>chipsFor(wait.filter(w=>kind(w.c)===k));
+  const tiles=[
+   ['var(--brass)',wait.length,'','<b>Dry cargo vessels waiting</b> at Kandla (reported, not yet berthed) · '+ready+' ready · '+na+' readiness N/A'],
+   ['var(--dry)',cnt(wait,'bulk'),'','<b>Bulk</b> waiting'],
+   ['var(--brk)',cnt(wait,'bag'),'','<b>Bagged</b> waiting · '+bagAt+'/3 General bag berths in use'],
+   ['var(--prj)',cnt(wait,'brk'),'','<b>Break bulk</b> waiting'],
+   ['var(--box)',exp.length,'','<b>Expected</b> · ETA, not yet reported'],
+   ['var(--line2)',at,'<small>/'+POOL.length+'</small>','<b>DPA berths occupied</b> now · incl. CJ-3 (small vessels) · excl. CJ-9 PPP, CJ-10 maintenance, container']
+  ];
+  const lastLine=arr=>{const r=arr.filter(w=>w.rdy!=null);if(!r.length)return'';let maxF=-1,beyond=0;r.forEach(w=>{const x=S.find(q=>q.n===w.n);if(x)maxF=Math.max(maxF,x.F);else beyond++;});if(beyond)return `<div class="last">Last ready vessel: <b>beyond ${fday(HZ)}</b> (${beyond} not reached in 3-week projection)</div>`;if(maxF<0)return'';return `<div class="last">Last ready vessel berths <b>${fday(maxF)}</b> · in <b>${Math.ceil((maxF-NOW)/24)} days</b></div>`;};
+  tiles[0].push(chips,lastLine(wait),'all');tiles[1].push(byKind('bulk'),lastLine(wait.filter(w=>kind(w.c)==='bulk')),'bulk');tiles[2].push(byKind('bag'),lastLine(wait.filter(w=>kind(w.c)==='bag')),'bag');tiles[3].push(byKind('brk'),lastLine(wait.filter(w=>kind(w.c)==='brk')),'brk');tiles[4].push(chipsFor(exp),lastLine(exp),'exp');
+  const [t0,...rest]=tiles;
+  document.getElementById('stats').innerHTML=`<div class="stat wide" data-k="all" style="--sc:${t0[0]}"><div class="top"><div class="v">${t0[1]}</div><div class="l" style="margin:0">${t0[3]}</div></div><div class="comm">${chips}</div>${t0[5]}</div>`+rest.map(([c,v,sm,l,ch,ln,k])=>`<div class="stat" ${k?`data-k="${k}"`:''} style="--sc:${c}"><div class="v">${v}${sm}</div><div class="l">${l}</div>${ch?`<div class="comm">${ch}</div>`:''}${ln||''}</div>`).join('');
+  // click handlers: tile → all vessels of that kind; chip → that commodity within the tile
+  document.querySelectorAll('#stats .stat[data-k]').forEach(t=>t.onclick=e=>{const chip=e.target.closest('.cc');const k=t.dataset.k;const base=k==='exp'?exp:k==='all'?wait:wait.filter(w=>kind(w.c)===k);
+    if(chip){const re=COM.find(c=>c[0]===chip.dataset.com)[1];openList(chip.dataset.com+(k==='exp'?' · expected':' · waiting'),base.filter(w=>re.test(w.c)));}
+    else openList({all:'All dry cargo vessels waiting',bulk:'Bulk vessels waiting',bag:'Bagged cargo vessels waiting',brk:'Break bulk vessels waiting',exp:'Expected vessels (ETA)'}[k],base);});
+}
+function side(){
+  const cur=V.filter(v=>v.b==='9'&&v.F<=T&&T<v.T)[0];
+  const nxt=V.filter(v=>v.b==='9'&&v.F>T).sort((a,z)=>a.F-z.F)[0];
+  const last=V.filter(v=>v.b==='9'&&v.T<=T).sort((a,z)=>z.T-a.T)[0];
+  let c9;
+  if(cur) c9=`<div class="n">${cur.n}<small>${cur.c} · ${nf.format(cur.q)} ${cur.u} · agent ${agOf(cur.n)}</small></div>
+     <div class="s">Made fast ${fmt(cur.F)} · panels ${pr(cur.p)} · LOA ${cur.loa||'—'} m</div>
+     <div class="s">Berth vacant from <b>${fmt(cur.T)}</b>${cur.est?' (estimate — no ETC in list)':' (ETC in list)'}${nxt?` · next: ${nxt.n} (${nxt.c} · ${nf.format(nxt.q)} ${nxt.u}) ~${fmt(nxt.F)}`:''}</div>`;
+  else c9=`<div class="n">Vacant<small>${last?'since '+last.n+' ('+last.c+' · '+nf.format(last.q)+' '+last.u+') sailed '+fmt(last.T):''}</small></div><div class="s">${nxt?`Next: <b>${nxt.n}</b> · ${nxt.c} · <b>${nf.format(nxt.q)} ${nxt.u}</b> · LOA ${nxt.loa||'—'} m · berthing ~${fmt(nxt.F)} · expected to vacate ~${fmt(nxt.T)}${nxt.est?' (est)':''}`:'No vessel fixed on signal'}</div>`;
+  document.getElementById('side').innerHTML=`
+   <div class="sb"><div class="h"><b>CJ-9 · panels 68½–79</b><span>PPP · Gautham Freight</span></div>${c9}
+     <div class="s">Allotted by the operator, not from the DPA queue. Vessels here are not counted in the projection.</div></div>
+   <div class="sb mnt"><div class="h"><b>CJ-10 · panels 79–87</b><span>Under maintenance</span></div>
+     <div class="n">Closed<small>no vessel</small></div>
+     <div class="s">Vacant date: <b>not announced</b> by DPA. Will be added to the queue the day a reopening date is notified.</div></div>`;
+}
+// ---- barge gaps (DRAFT): free runs of ≥4 panels on DPA berths at time T
+const BARGE_MIN_M=90, CLEAR_M=20; // gap in metres (quay geometry from the port drawing) that a 2,100–2,500 DWT barge needs
+const gapM=(a,z)=>PM(z)-PM(a);
+const BARGE_MIN=1; // legacy panel threshold, superseded by BARGE_MIN_M
+function bargeGaps(t){
+  const present=ALL.filter(v=>v.F<=t&&t<v.T&&!['9','10','11','12'].includes(v.b)).sort((a,z)=>a.p[0]-z.p[0]);
+  const excl=BERTHS.filter(b=>b.ppp||b.mnt||b.kict).map(b=>b.p); // ranges not available to barges
+  const occ=present.map(v=>v.p).concat(excl).sort((a,z)=>a[0]-z[0]);
+  const gaps=[];let cur=0;
+  for(const [a,z] of occ){if(a>cur&&gapM(cur,a)>=BARGE_MIN_M)gaps.push([cur,a]);cur=Math.max(cur,z);}
+  if(189>cur&&gapM(cur,189)>=BARGE_MIN_M)gaps.push([cur,189]);
+  return gaps.map(([a,z])=>{
+    const m=gapM(a,z), maxLoa=Math.floor(m-CLEAR_M);
+    const berths=BERTHS.filter(b=>b.p[0]<z&&b.p[1]>a&&!b.ppp&&!b.mnt&&!b.kict).map(b=>'CJ-'+b.id);
+    const nxt=ALL.filter(v=>v.F>t&&v.p[0]<z&&v.p[1]>a&&!['9','10','11','12'].includes(v.b)).sort((x,y)=>x.F-y.F)[0];
+    const left=present.filter(v=>Math.abs(v.p[1]-a)<0.01)[0], right=present.filter(v=>Math.abs(v.p[0]-z)<0.01)[0];
+    const hrs=nxt?nxt.F-t:240;
+    // a space is only counted when both its neighbours are real (list/signal) vessels or the quay end — a space next to a
+    // projected vessel is an artefact of where the board happened to draw that vessel, not something the port has left open
+    const firm=(!left||!left.proj)&&(!right||!right.proj);
+    return {a,z,m,maxLoa,berths,nxt,left,right,tight:maxLoa<70,hrs,firm};
+  }).filter(g=>g.firm).sort((x,y)=>y.hrs-x.hrs);
+}
+const BARGE_MIN_H=4;
+// look-ahead: today and tomorrow only (till 24:00 tomorrow) — beyond that the projection is too thin to promise a barge space
+const bargeEnd=t0=>{const d=dt(t0);return t0-(d.getUTCHours()+d.getUTCMinutes()/60)+48;};
+function bargeWindows(t0){
+  const t1=bargeEnd(t0);
+  const times=[t0].concat(ALL.flatMap(v=>[v.F,v.T]).filter(x=>x>t0&&x<t1)).concat([t1]).sort((a,b)=>a-b).filter((x,i,a)=>i===0||x-a[i-1]>0.01);
+  const wins=[];
+  for(let i=0;i<times.length-1;i++){
+    const a=times[i], b=times[i+1];
+    for(const g of bargeGaps(a)){
+      const w=wins.find(w=>Math.abs(w.end-a)<0.01&&Math.min(w.z,g.z)>Math.max(w.a,g.a)&&gapM(Math.max(w.a,g.a),Math.min(w.z,g.z))>=BARGE_MIN_M);
+      if(w){w.a=Math.max(w.a,g.a);w.z=Math.min(w.z,g.z);w.end=b;w.last=g;}
+      else wins.push({a:g.a,z:g.z,start:a,end:b,last:g,first:g});
+    }
+  }
+  return wins.map(w=>{const m=gapM(w.a,w.z);const berths=BERTHS.filter(b=>b.p[0]<w.z&&b.p[1]>w.a&&!b.ppp&&!b.mnt&&!b.kict).map(b=>'CJ-'+b.id);
+    const closer=ALL.filter(v=>Math.abs(v.F-w.end)<0.01&&v.p[0]<w.z&&v.p[1]>w.a)[0];
+    return {...w,hrs:w.end-w.start,m,maxLoa:Math.floor(m-CLEAR_M),berths,closer,tight:m-CLEAR_M<70,openEnd:w.end>=t1-0.01};})
+   .filter(w=>w.hrs>=BARGE_MIN_H).sort((x,y)=>x.start-y.start);
+}
+function barge(){
+  const el=document.getElementById('barge'); const W=bargeWindows(T);
+  const tEnd=bargeEnd(T);
+  el.innerHTML=`<div class="bh"><h3>Barge windows · today &amp; tomorrow</h3><small>From ${fmt(T)} to ${fmt(tEnd)}: quay spaces of ≥${BARGE_MIN_M} m (metres from the DPA port drawing) that stay free for at least ${BARGE_MIN_H} h. Max barge LOA = space − ${CLEAR_M} m clearance. Only spaces between vessels actually at berth (or the quay ends) are counted; spaces next to a projected vessel are not. Not shown beyond tomorrow.</small></div>
+   ${W.length?`<div class="bg">${W.map(x=>`<div class="bgc ${x.tight?'tight':''}">
+     <div class="r">${fmt(x.start,false)} → ${x.openEnd?'24:00 tomorrow':fmt(x.end,false)}<small>${x.start<T+0.01?'open now':fday(x.start)} · <b style="color:var(--fg)">${Math.floor(x.hrs)+' h'}${x.openEnd?'+':''}</b></small></div>
+     <div class="m">Panels <b>${pr([x.a,x.z])}</b> · ${x.berths.join(' / ')} · ~${Math.round(x.m)} m · fits barge up to <b>~${x.maxLoa} m LOA</b>${x.tight?' · tight, 2,100 DWT class only':''}</div>
+     <div class="m">Beside: ${x.first.left?`${x.first.left.n} (${x.first.left.c})`:'north end'} · ${x.first.right?`${x.first.right.n} (${x.first.right.c})`:'south end'}</div>
+     <div class="w">${x.openEnd?'Still open at 24:00 tomorrow':x.closer?`Closes when ${x.closer.n} berths${x.closer.proj?' (projected)':''}`:'Closes on the next movement'}</div></div>`).join('')}</div>`
+   :`<div class="m" style="color:var(--muted)">No barge space of ${BARGE_MIN_H} h or more today or tomorrow.</div>`}`;
+}
+function openList(title,arr){
+  arr=arr.slice().sort((a,z)=>{const fa=(S.find(q=>q.n===a.n)||{}).F??(a.rdy==null?1e9:1e8),fz=(S.find(q=>q.n===z.n)||{}).F??(z.rdy==null?1e9:1e8);return fa-fz;});
+  const rows=arr.map(w=>{const st=statusOf(w.n)||{};const x=S.find(q=>q.n===w.n);
+    const when=x?`<td class="d">${fday(x.F)}<small>~${fmt(x.F,false)} · CJ-${x.b} · ${CL[x.cat]}${x.via?' (as '+x.via+')':''}</small></td>`:(w.rdy==null?`<td class="d na">not ready<small>${st.d&&st.d!=='—'?'if ready today: '+st.d:'readiness N/A'}</small></td>`:`<td class="d na">beyond ${fday(HZ)}</td>`);
+    return `<tr class="${isMine(w.n)?'me':''}" data-n="${w.n}"><td class="n">${w.n}${isMine(w.n)?' <span class="tag" style="color:var(--brass)">Mihir &amp; Co</span>':''}<small>${w.c} · ${nf.format(w.q)} ${w.u}${agTxt(w.n)}</small></td><td class="hide">${w.loa} m${w.dr?' · '+w.dr+' m':''}</td><td class="hide">${fmt(w.rep)}<br><small style="color:var(--muted)">${w.rdy!=null?'ready '+fmt(w.rdy):'readiness N/A'}</small></td><td class="hide">${groupLine(w)}</td>${when}</tr>`;}).join('');
+  const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mbox" role="dialog" aria-label="${title}"><div class="mh"><div><h3>${title}</h3><small>${arr.length} vessels · tap a row to open it in the finder</small></div><button type="button" class="mclose">Close ✕</button></div><div class="scroll"><table class="mt"><thead><tr><th>Vessel</th><th class="hide">LOA · draft</th><th class="hide">Reported · ready</th><th class="hide">Group / rank</th><th>Likely berthing</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  const close=()=>m.remove();m.onclick=e=>{if(e.target===m)close();};m.querySelector('.mclose').onclick=close;
+  m.querySelectorAll('tbody tr').forEach(r=>r.onclick=()=>{focus=r.dataset.n;close();render(true);});
+  document.body.appendChild(m);
+}
+function statusOf(n){
+  const v=V.filter(x=>x.n===n).sort((a,z)=>z.F-a.F)[0], s=S.find(x=>x.n===n), w=W.find(x=>x.n===n);
+  if(v){ if(v.T<=NOW) return {k:'sailed',d:fmt(v.T),sub:'sailed from CJ-'+v.b,o:v};
+         if(v.F<=NOW) return {k:'at',d:'CJ-'+v.b,sub:'at berth · ETC '+fmt(v.T)+(v.est?' (est)':''),o:v};
+         return {k:'today',d:fmt(v.F),sub:'berthing per signal · CJ-'+v.b,o:v}; }
+  if(s) return {k:'proj',d:fday(s.F),sub:part(s.F)+' ~'+fmt(s.F,false)+' · CJ-'+s.b+' · '+CL[s.cat]+(s.via?' slot as '+s.via:'')+' (projected)',o:s};
+  if(w&&w.rdy==null){const hs=simulate(n).find(x=>x.n===n);return {k:'na',d:hs?fday(hs.F):'—',sub:'if ready today · readiness N/A · '+(w.x||''),o:w};}
+  if(w) return {k:'far',d:'after '+fday(HZ),sub:'beyond projection',o:w};
+  return null;
+}
+function qdetail(){
+  const d=document.getElementById('qdetail'); const n=sel;
+  const v=V.filter(x=>x.n===n).sort((a,z)=>z.F-a.F)[0]||S.find(x=>x.n===n); const w=W.find(x=>x.n===n);
+  if(!v){d.innerHTML='<div class="nxt" style="border:0;padding:0">Click any hull on the quay or any bar in the timeline to see the vessel here.</div>';return;}
+  const st=v.proj?'Projected':(v.T<=T?'Sailed':(v.F<=T?'At berth':'Berthing per signal'));
+  const Bv=BERTHS.find(x=>x.id===v.b)||{};
+  const kv=[['Berth','CJ-'+v.b+(Bv.len?' · '+Math.round(Bv.len)+' m · draft '+Bv.dr+' m'+(Bv.tide?' (+tide)':'')+(Bv.ll?' · live load '+Bv.ll+' t/m²':''):'')],['Panels',pr(v.p)],['Cargo',v.c],['Qty',nf.format(v.q)+' '+v.u],['Group',CL[v.cat]||v.cat],['LOA',(v.loa||(w&&w.loa)||'—')+(v.loa||(w&&w.loa)?' m':'')],['Agent',agOf(n)],...(v.tide?[['Draught',v.tide]]:[]),[v.proj?'Likely alongside':'Made fast',fmt(v.F)],[(()=>{const sh=S.find(x=>x.shifted&&x.n===v.n&&!v.proj);return sh?'Shift out (projected)':(v.est||v.proj?'ETC (estimate)':'ETC (list)');})(),fmt(v.T)],(v.proj||v.F>T)?['Planned stay (by norm)',((v.T-v.F)/24).toFixed(1)+' days']:['Days at berth so far',Math.max(0,(Math.min(T,v.T)-v.F)/24).toFixed(1)]];
+  const nx=S.filter(x=>x.b===v.b&&x.F>=v.T).sort((a,z)=>a.F-z.F)[0];
+  d.innerHTML=`<div class="top"><h3>${n}</h3><span class="st st-sch">${st}</span>${MINE.has(n)?'<span class="tag" style="color:var(--brass)">Mihir &amp; Co</span>':''}</div>
+   <div class="kvs">${kv.map(([k,x])=>`<div class="kv"><span>${k}</span><b class="${k==='Agent'&&x!=='—'?'hl':''}">${x}</b></div>`).join('')}</div>
+   ${v.note?`<div class="nxt" style="border:0;padding:0;color:var(--warn)">ETC basis: ${v.note}</div>`:''}
+   <div class="nxt">Next on CJ-${v.b}: ${nx?`<b>${nx.n}</b> · ${nx.c} · ${nf.format(nx.q)} ${nx.u}${agTxt(nx.n)} · ${CL[nx.cat]} · likely ~${fmt(nx.F)}`:'no ready vessel projected'}</div>`;
+  // highlight our vessels on the quay via the tag already shown
+}
+function mine(){
+  const m=document.getElementById('mine'); const names=[...new Set(V.map(v=>v.n).concat(W.map(w=>w.n)))].filter(isMine);
+  if(!names.length){m.innerHTML='<div class="empty">No vessel with agent Mihir &amp; Company in today\'s berthing list (at berth, waiting or expected).</div>';return;}
+  const rows=names.map(n=>({n,s:statusOf(n)})).filter(r=>r.s).sort((a,z)=>({at:0,today:1,proj:2,na:3,far:4,sailed:5}[a.s.k]-{at:0,today:1,proj:2,na:3,far:4,sailed:5}[z.s.k]));
+  m.innerHTML=`<table><tbody>${rows.map(({n,s})=>{const o=s.o;return `<tr><td class="n"><button type="button" class="link" data-n="${n}">${n}</button><small>${o.c} · ${nf.format(o.q)} ${o.u} · ${CL[o.cat]||groupLine(o)}</small></td><td class="w">${s.d}<small>${s.sub}</small></td></tr>`;}).join('')}</tbody></table>`;
+  m.querySelectorAll('.link').forEach(b=>b.onclick=()=>{focus=b.dataset.n;sel=b.dataset.n;render(true);});
+}
+function nextOn(b,t){const n=S.filter(x=>x.b===b&&x.F>=t).sort((a,z)=>a.F-z.F)[0];return n?`<ol><li><b>${n.n}</b> (${n.c}) under ${CL[n.cat]}, likely ~${fmt(n.F)}.</li></ol>`:'<ol><li>No ready vessel projected.</li></ol>';}
+
+// ---- time controls
+const T0=h('10-30 12:00'),T1=h('11-09 12:00');
+const slider=document.getElementById('tslider');slider.min=0;slider.max=T1-T0;
+const PRESETS=[['Now',NOW],['31 Oct morn',h('10-31 08:00')],['31 Oct eve',h('10-31 18:00')],['1 Nov',h('11-01 12:00')],['3 Nov',h('11-03 12:00')],['6 Nov',h('11-06 12:00')]];
+document.getElementById('presets').innerHTML=PRESETS.map((p,i)=>`<button type="button" class="preset" id="pr${i}" data-i="${i}">${p[0]}</button>`).join('');
+document.querySelectorAll('.preset').forEach(b=>b.onclick=()=>{T=PRESETS[b.dataset.i][1];render();});
+slider.addEventListener('input',()=>{T=T0+Number(slider.value);render();});
+
+document.getElementById('legend').innerHTML=Object.values(GROUPS).map(g=>`<span><i style="background:${g.c}"></i>${g.l}</span>`).join('')+
+ `<span><i style="border:1.5px dotted var(--fg)"></i>Projected</span><span><i style="background:var(--brass);outline:2px solid #fff"></i>Your selected vessel</span><span><i style="background:var(--ppp)"></i>PPP berth (outside DPA queue)</span><span><i style="background:repeating-linear-gradient(135deg,#3a2a1a 0 3px,#5a4020 3px 6px)"></i>Maintenance</span>`;
+
+const NS='http://www.w3.org/2000/svg';
+function el(tag,a,p,txt){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;if(p)p.appendChild(e);return e;}
+function fit(s,px,cw){const n=Math.floor(px/cw);return s.length<=n?s:(n<=2?'':s.slice(0,n-1)+'…');}
+const FB='IBM Plex Sans Condensed, Arial Narrow, sans-serif',FM='IBM Plex Mono, monospace';
+function colorOf(v){if(v.cat==='PPP'||v.cat==='KICT')return'var(--ppp)';return GROUPS[v.g].c;}
+
+function strip(svg,p0,p1){
+  const Km=13/22.866,L=8,Wd=(PM(p1)-PM(p0))*Km+L*2,H=166;svg.setAttribute('viewBox',`0 0 ${Wd} ${H}`);svg.innerHTML='';
+  const X=p=>L+(PM(p)-PM(p0))*Km;const K=Km*22.866;const id=svg.id;
+  const defs=el('defs',{},svg);
+  const m=el('pattern',{id:'mnt'+id,width:8,height:8,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'},defs);el('rect',{width:8,height:8,fill:'#3a2a1a'},m);el('rect',{width:4,height:8,fill:'#5a4020'},m);
+  el('rect',{x:0,y:0,width:Wd,height:100,fill:'var(--water)'},svg);
+  for(let y=14;y<100;y+=18)el('path',{d:`M0 ${y} `+Array.from({length:Math.ceil(Wd/40)},()=>'q10 -3 20 0 t20 0').join(' '),fill:'none',stroke:'#12304b'},svg);
+  el('rect',{x:0,y:100,width:Wd,height:66,fill:'var(--quay)'},svg);
+  el('line',{x1:0,x2:Wd,y1:100,y2:100,stroke:'var(--brass2)','stroke-width':1.5},svg);
+  BERTHS.forEach(b=>{const a=Math.max(b.p[0],p0),z=Math.min(b.p[1],p1);if(z<=a)return;
+    el('rect',{x:X(a)+1,y:122,width:(z-a)*K-2,height:24,rx:2,fill:b.mnt?`url(#mnt${id})`:(b.kict||b.ppp)?'#2a3240':'var(--quay2)'},svg);
+    const lab='CJ-'+b.id+(b.kict?' · container (not tracked)':b.ppp?' · PPP Gautham Fr.':b.mnt?' · MAINTENANCE':b.q?' · ?':b.clean?' · clean cargo':b.dmg?' · damaged':b.coal?' · coal berth':'');
+    el('text',{x:X((a+z)/2),y:138,'text-anchor':'middle','font-family':FB,'font-size':b.ppp||b.kict?11:12,'font-weight':700,fill:b.mnt?'#f0c070':(b.kict||b.ppp)?'#aab4c2':'var(--fg)'},svg,lab);
+    el('line',{x1:X(b.p[0]),x2:X(b.p[0]),y1:100,y2:148,stroke:'#46566c'},svg);
+    if(b.dr&&!b.kict)el('text',{x:X((a+z)/2),y:159,'text-anchor':'middle','font-family':FM,'font-size':8.5,fill:'var(--dim)'},svg,Math.round(b.len)+' m · draft '+b.dr.toFixed(1)+' m');
+    if(b.mnt){el('rect',{x:X(a)+2,y:34,width:(z-a)*K-4,height:40,rx:3,fill:`url(#mnt${id})`,opacity:.55},svg);el('text',{x:X((a+z)/2),y:58,'text-anchor':'middle','font-family':FM,'font-size':10,fill:'#f0c070'},svg,'UNDER MAINTENANCE');}
+  });
+  for(let p=Math.ceil(p0);p<=p1;p++){const mj=p%10===0,f=p%5===0;
+    el('line',{x1:X(p),x2:X(p),y1:100,y2:100+(mj?10:f?7:4),stroke:mj?'var(--brass)':'#6b7b90','stroke-width':mj?1.3:1},svg);
+    if(mj)el('text',{x:X(p),y:119,'text-anchor':'middle','font-family':FM,'font-size':9.5,fill:'var(--brass)'},svg,String(p));}
+  if(SHOW_BARGE)bargeWindows(T).filter(w=>w.start<=T+0.01).forEach(x=>{const a=Math.max(x.a,p0),z=Math.min(x.z,p1);if(z<=a)return;el('rect',{x:X(a)+2,y:34,width:(z-a)*K-4,height:44,rx:4,fill:'rgba(95,191,127,.08)',stroke:x.tight?'var(--warn)':'var(--ok)','stroke-width':1.2,'stroke-dasharray':'4 3'},svg);el('text',{x:X((a+z)/2),y:60,'text-anchor':'middle','font-family':FM,'font-size':9.5,fill:x.tight?'var(--warn)':'var(--ok)'},svg,fit('BARGE · ~'+Math.round(x.m)+' m · '+Math.floor(x.hrs)+' h',(z-a)*K-8,5.8));});
+  const here=ALL.filter(v=>v.p[1]>p0&&v.p[0]<p1&&v.F<=T&&T<v.T);
+  here.forEach(v=>{
+    const a=Math.max(v.p[0],p0),z=Math.min(v.p[1],p1),x1=X(a),x2=X(z),w=x2-x1,y=32,Hh=48;
+    const me=v.n===focus||v.n===sel||isMine(v.n);
+    const g=el('g',{style:'cursor:pointer',tabindex:0,role:'button','aria-label':v.n},svg);
+    const d=`M${x1} ${y+5} Q${x1} ${y} ${x1+5} ${y} L${x2-12} ${y} L${x2} ${y+Hh/2} L${x2-12} ${y+Hh} L${x1+5} ${y+Hh} Q${x1} ${y+Hh} ${x1} ${y+Hh-5} Z`;
+    const col=me?'var(--brass)':colorOf(v);
+    if(v.proj)el('path',{d,fill:'rgba(255,255,255,.04)',stroke:col,'stroke-width':me?2.4:1.6,'stroke-dasharray':'2 3'},g);
+    else el('path',{d,fill:col,stroke:me?'#fff':'rgba(0,0,0,.35)','stroke-width':me?2.5:1},g);
+    const tc=v.proj?'var(--fg)':'#0b1420';
+    el('text',{x:x1+6,y:y+17,'font-family':FB,'font-size':12.5,'font-weight':700,fill:v.proj&&me?'var(--brass)':tc},g,fit(v.n.toUpperCase(),w-16,7.2));
+    el('text',{x:x1+6,y:y+31,'font-family':FM,'font-size':9.5,fill:tc},g,fit(v.c+' · '+nf.format(v.q)+(v.u==='MT'?'':' '+v.u),w-16,5.9));
+    el('text',{x:x1+6,y:y+43,'font-family':FM,'font-size':9,fill:tc,opacity:.8},g,fit((v.proj?'projected · ':'')+'sails '+fmt(v.T),w-16,5.6));
+    el('text',{x:x1+1,y:y-5,'font-family':FM,'font-size':9.5,fill:me?'var(--brass)':'var(--muted)'},g,fit((v.shifted?'SHIFTED · ':'')+(CL[v.cat]||v.cat),w+10,6));
+    if(v.etc&&T>h(v.etc)){const oh=Math.round(T-h(v.etc));el('path',{d,fill:'none',stroke:'#ff6a5a','stroke-width':2.4},g);el('text',{x:x2-2,y:y-5,'text-anchor':'end','font-family':FM,'font-size':9.5,'font-weight':600,fill:'#ff8a7a'},g,'OVER ETC +'+oh+'h');}
+    const go=()=>{if(v.cat==='PPP'||v.cat==='KICT')return;sel=v.n;render(false);};
+    g.addEventListener('click',go);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
+  });
+}
+
+function gantt(){
+  const svg=document.getElementById('gantt');svg.innerHTML='';
+  const rows=POOL;const LW=56,PW=1130,RH=26,TOP=42,Wd=LW+PW+10,Hh=TOP+rows.length*RH+8;
+  svg.setAttribute('viewBox',`0 0 ${Wd} ${Hh}`);
+  const X=t=>LW+(Math.max(T0,Math.min(T1,t))-T0)/(T1-T0)*PW;
+  const defs=el('defs',{},svg);const pat=el('pattern',{id:'gest',width:5,height:5,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'},defs);el('rect',{width:1.6,height:5,fill:'rgba(9,19,31,.6)'},pat);
+  const days=(T1-T0)/24;
+  for(let d=0;d<=days;d++){const t=T0+d*24,x=X(t);el('line',{x1:x,x2:x,y1:TOP-6,y2:Hh-4,stroke:'var(--line)'},svg);
+    if(d<days)el('text',{x:x+PW/days/2,y:18,'text-anchor':'middle','font-family':FM,'font-size':10.5,fill:'var(--muted)'},svg,fday(t+12));}
+  
+  rows.forEach((b,i)=>{const y=TOP+i*RH;
+    el('rect',{x:LW,y:y+1,width:PW,height:RH-2,fill:i%2?'transparent':'rgba(255,255,255,.018)'},svg);
+    el('text',{x:4,y:y+17,'font-family':FB,'font-size':12.5,'font-weight':600,fill:'var(--fg)'},svg,'CJ-'+b);
+    ALL.filter(v=>v.b===b&&v.T>T0&&v.F<T1).forEach(v=>{
+      const x1=X(v.F),x2=X(v.T),w=Math.max(2,x2-x1),me=v.n===focus;
+      const g=el('g',{style:'cursor:pointer'},svg);
+      if(v.proj)el('rect',{x:x1+.5,y:y+4,width:w-1,height:RH-8,rx:2,fill:me?'rgba(214,180,104,.25)':'rgba(255,255,255,.03)',stroke:me?'var(--brass)':colorOf(v),'stroke-width':me?2:1.2,'stroke-dasharray':'2 3'},g);
+      else{el('rect',{x:x1+.5,y:y+4,width:w-1,height:RH-8,rx:2,fill:me?'var(--brass)':colorOf(v),stroke:me?'#fff':'none','stroke-width':1.5},g);if(v.est)el('rect',{x:x1+.5,y:y+4,width:w-1,height:RH-8,rx:2,fill:'url(#gest)'},g);}
+      if(w>34)el('text',{x:x1+5,y:y+17,'font-family':FB,'font-size':11,'font-weight':600,fill:v.proj?(me?'var(--brass)':'var(--fg)'):'#0b1420'},g,fit(v.n,w-8,6.1));
+      g.addEventListener('click',()=>{sel=v.n;render(false);});
+    });
+  });
+  const xn=X(T);el('line',{x1:xn,x2:xn,y1:TOP-8,y2:Hh-4,stroke:'var(--brass)','stroke-width':1.8},svg);
+  el('rect',{x:Math.max(LW,xn-32),y:TOP-15,width:64,height:13,rx:2,fill:'var(--brass)'},svg);
+  el('text',{x:Math.max(LW+32,xn),y:TOP-5.5,'text-anchor':'middle','font-family':FM,'font-size':9.5,fill:'#0b1420'},svg,fmt(T));
+}
+
+function groups(){
+  const row=(C,nx,lbl,sub)=>`<tr><td class="c"><b>${lbl}</b><small>${sub}</small></td><td><div class="nx">${nx.length?nx.map(s=>`<span><span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${s.c} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready with a SAAGAR rank</span>'}</div></td></tr>`;
+  const out=CATS.map(C=>{
+    const all=S.filter(s=>s.cat===C.k).sort((a,z)=>a.F-z.F);
+    if(C.k==='SAAGAR'){
+      const bulk=all.filter(s=>!isBreak(s.c)), brk=all.filter(s=>isBreak(s.c));
+      // a break-bulk vessel berthing while another SAAGAR break-bulk is already alongside is using the bulk slot (cross-fill)
+      // walk all SAAGAR break-bulk vessels in berthing order: the first alongside holds the break-bulk berth, a second one alongside at the same time is using the bulk berth (cross-fill)
+      const seq=V.filter(v=>v.cat==='SAAGAR'&&isBreak(v.c)).concat(brk).sort((x,y)=>x.F-y.F);
+      const ownSet=new Set(), cross=[], own=[];
+      seq.forEach(v=>{const holder=[...ownSet].find(o=>o.F<=v.F&&v.F<o.T);if(holder){if(v.proj)cross.push(v);}else{ownSet.add(v);if(v.proj)own.push(v);}});
+      const nowAt=V.filter(v=>v.cat==='SAAGAR'&&v.F<=T&&T<v.T);
+      const nowNote=nowAt.length===2&&nowAt.every(v=>isBreak(v.c))?`<div style="color:var(--warn);font-size:12px;margin-bottom:4px">Now: ${nowAt.map(v=>v.n).join(' + ')} — both break bulk, so the bulk berth is already cross-filled.</div>`:'';
+      const bulkRow=bulk.length?row(C,bulk.slice(0,3),'SAAGAR · bulk','1 berth · dry bulk under SAAGAR')
+        :`<tr><td class="c"><b>SAAGAR · bulk</b><small>1 berth · no bulk vessel ready → goes to break bulk</small></td><td>${nowNote}<div class="nx"><span style="color:var(--warn)">No SAAGAR bulk vessel ready, so this berth cross-fills to break bulk:</span>${cross.length?cross.slice(0,3).map(s=>`<span><span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${s.c} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b} · cross-fill</em></span>`).join(''):'<span style="color:var(--dim)">no second break-bulk vessel projected</span>'}</div></td></tr>`;
+      return bulkRow+row(C,own.slice(0,3),'SAAGAR · break bulk','1 berth · logs, steel, project');
+    }
+    const nx=all.slice(0,3);
+    return `<tr><td class="c"><b>${C.l}</b><small>${C.s}</small></td><td><div class="nx">${nx.length?nx.map(s=>`<span><span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${s.c} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready</span>'}</div></td></tr>`;
+  }).join('');
+  document.getElementById('groups').innerHTML=`<table class="grp"><tbody>${out}</tbody></table>`;
+  document.querySelectorAll('#groups .link').forEach(b=>b.onclick=()=>{focus=b.dataset.n;render(true);});
+}
+
+const MV=[
+ ['Day signal · 30 Oct (final, disp 2300 + amendments)',[['06:00','OUT','Agia Fevronia','CJ-16 · 173½–188','Karan','10-30 06:00','done'],['09:45','WARP','African Predator','CJ-15 · → 146¾–158¾','Sandeep','10-30 09:45',''],['10:15','WARP','Centurion Buyo','CJ-15A · → 159¾–169½','Pathak','10-30 10:15',''],['o/c','IN','Maritime Harmony','CJ-16 · 171½–188','Yadav','10-30 11:30',''],['14:00','OUT','Xanadu','CJ-7 · 49–57¼','Bali','','PP CANCELLED — delay in cargo operation'],['o/c','IN','Fu Hai 16','CJ-7 · 50¾–57¼','Bali','','PP CANCELLED — berth not vacant'],['13:30','IN','Horizon Chaser','CJ-3 · 17–21¼','Bali','','PP CANCELLED — vessel ETA delayed']]],
+ ['Day signal · 30 Oct (new, disp 1400)',[['15:45','WARP','Aya','CJ-5 · 31½–38¾ → 32½–39¾','Bali','10-30 15:45',''],['16:15','WARP','Eva Bright','CJ-4 · 22½–30½ → 23½–31½','Bali','10-30 16:15',''],['16:45','IN','Sea Gautam','CJ-3 · 17¾–22½','Omesh','10-30 17:45','Coastal · speed 6 kts']]],
+ ['Night signal · 30/31 Oct (disp 1640/1705, amended to 2115)',[['23:30','OUT','Xanadu','CJ-7 · 49–57¼','Goel','10-30 23:30','RT · was 2200'],['o/c','IN','Fu Hai 16','CJ-7 · 50¾–57¼','Sud','10-31 01:00','flood'],['23:30','OUT','Lacerta','CJ-9 · 69¼–79¼ (PPP)','Deepak','10-30 23:30',''],['04:00','IN','Cervia','CJ-9 · 69¼–79¼ (PPP)','Sud','10-31 04:00','ebb'],['o/c','OUT','Bauhinia','CJ-13 · 113–121¼','Deepak','10-31 04:00','was 0400'],['o/c','IN','Rahma','CJ-13 · 113–125','Goel','10-31 04:30','after Shamim out 0230']]],
+ ['Day signal · 31 Oct',[['06:30','TURN','African Predator','CJ-15 · 146¾–158¾','G. Raj','10-31 06:30','flood → ebb side']]],
+ ['Programme for 1 Nov (berthing meeting 31 Oct 11:00, TF/SH/2102 dt 31 Oct)',[['17:00','OUT','Horizon Chaser','CJ-3 · 17¾–22','—','11-01 17:00','readiness draft 4.5 m'],['—','OUT','Outrivaling 3','CJ-6 → OTB','—','11-01 09:00','shifting to OTB, agent\'s a/c'],['o/c','IN','Rome Trader','CJ-6 · 41½–49¾','—','11-01 11:00','SGR (SAAGAR) · petcoke'],['06:30','OUT','Fu Hai 16','CJ-7 · 50¾–57¼','—','11-01 06:30','outward draft 12.65 m'],['o/c','IN','Meghna Venus','CJ-7 · 50¾–57¼','—','11-01 08:30','HP 50,000 MTPD · sailing draft 12.72 m'],['23:00','OUT','Ocean Camellia','CJ-8 · 58¼–68','—','10-31 23:00','night sailing'],['o/c','IN','Vishva Preeti','CJ-8 · 58¼–68','—','11-01 01:00','Govt · night berthing'],['17:05','OUT','AC Kathryn','CJ-14 · 127–140¾','—','11-01 17:05','readiness draft 6.05 m'],['o/c','IN','Feng Hai Da','CJ-14 · 126–137','—','11-01 19:00','24 HRS · starboard, agent\'s req'],['17:00','OUT','Maritime Harmony','CJ-16 · 171½–188','—','11-01 17:00','sailing draft 14.1 m'],['o/c','IN','Alasia','CJ-16 · 173½–188','—','11-01 19:00','HP 40,000 MTPD · sailing draft 13.3 m'],['09:00','OUT','African Predator','CJ-15 → OTB','—','11-01 09:00','shifting to OTB, agent\'s req · draft 10.1 m'],['o/c','IN','Katong WW','CJ-15 · 142½–155','—','11-01 11:00','CSTL(SGR)']]],
+ ['Programme for 31 Oct (berthing meeting 30 Oct 11:00, TF/SH/2102)',[['17:00','OUT','Moonlit','CJ-2 · 8½–16','—','10-31 17:00','readiness draft 10.10 m'],['o/c','IN','Karpathos Dawn','CJ-2 · 8½–16¾','—','10-31 19:00','6.5K group'],['17:00','OUT','Sea Gautam','CJ-3 · 17¾–22½','—','10-31 17:00',''],['o/c','IN','Horizon Chaser','CJ-3 · 17¾–22','—','10-31 19:00','bitumen tanker'],['15:00','OUT','Bauhinia','CJ-13 · 113–121¼','—','10-31 04:00','signal advanced it to o/c after Shamim'],['o/c','IN','Rahma','CJ-13 · 113–125','—','10-31 04:30','Steel/Project']]]
+];
+function moves(){
+  document.getElementById('moves').innerHTML=MV.map(([g,rows])=>`<div class="eyebrow" style="margin:6px 0 2px">${g}</div><table class="mv"><tbody>${rows.map(r=>{
+    const pp=/^PP/.test(r[6]),tm=r[5]?h(r[5]):null;
+    const st=pp?('<span class="st st-pp">'+(/CANCELLED/.test(r[6])?'cancelled':'postponed')+'</span>'):(tm<=T?'<span class="st st-done">done</span>':'<span class="st st-sch">scheduled</span>');
+    const ty=r[1]==='IN'?'t-in':r[1]==='OUT'?'t-out':'t-shift';
+    const cancelled=/CANCELLED/.test(r[6]);
+    return `<tr><td class="t">${r[0]}</td><td><span class="tag ${ty}">${r[1]}</span></td><td class="vn">${r[2]}<small>${r[3]} · Capt ${r[4]}${r[6]?' · '+r[6].replace(/^PP (CANCELLED — )?/,''):''}</small></td><td>${st}</td></tr>`;}).join('')}</tbody></table>`).join('');
+}
+
+const RULES=[
+ {v:'Xanadu',b:'CJ-7',cat:'Higher productivity',etc:'10-30 08:06',end:'10-30 23:30',plan:'30 Oct 10:30 → 14:00 → 22:00 → sailed 23:30 (Capt Goel)',
+  what:'Sailing postponed from 10:30 to 14:00, then CANCELLED ("delay in cargo operation"), re-fixed 22:00, finally sailed 23:30. About 15½ h past ETC.',
+  rule:'Committed 50,000 MTPD → permissible time ends at ETC 30 Oct 08:06. Beyond that: penal berth hire ₹10,000/hr (Circular 21.05.26); an HP vessel missing its productivity is liable to be shifted to OTB at agent\'s cost (Policy 4(7)).',
+  knock:'Fu Hai 16 (HP, iron ore fines) held at OTB the whole day; berths ~01:00 on 31 Oct instead of ~11:30 on 30 Oct. Horizon Chaser\'s CJ-3 berthing was also cancelled, but that was the vessel\'s own ETA delay.'}
+];
+function rules(){
+  document.getElementById('rsum').hidden=true; document.getElementById('oklist').hidden=true;
+  const live=RULES.filter(r=>T>=h(r.etc)-12 && T<h(r.end)+12);
+  document.getElementById('rules').innerHTML=live.length?live.map(r=>{
+    const oh=Math.max(0,Math.min(T,h(r.end))-h(r.etc));
+    const lv=oh>0?`<div class="live">At ${fmt(T)}: +${oh.toFixed(1)} h past ETC ≈ ₹${nf.format(Math.round(oh*10000))} penal berth hire</div>`:`<div class="live" style="color:var(--warn);background:#2c2616">ETC ${fmt(h(r.etc))} — sailing already postponed</div>`;
+    return `<button type="button" class="rc" style="--sc:var(--bad)" data-v="${r.v}"><div class="hd"><b>${r.v} · ${r.b}<small>${r.cat} · was: ${r.plan}</small></b><span class="sv">Not sailing</span></div>${lv}<dl><dt>What</dt><dd>${r.what}</dd><dt>Rule</dt><dd>${r.rule}</dd><dt>Knock-on</dt><dd>${r.knock}</dd></dl></button>`;}).join('')
+   :'<div class="oklist" style="display:block"><h3>✓ All vessels sailing on schedule</h3></div>';
+  document.querySelectorAll('.rc').forEach(b=>b.onclick=()=>{focus=b.dataset.v;render(true);});
+}
+function render(scroll){
+  vsel.value=focus;
+  slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
+  PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();learn();tideLine();preview();qdetail();side();gantt();groups();moves();
+  if(scroll)document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});
+}
+// open at the focused vessel's berthing time if projected
+const s0=S.find(x=>x.n===focus);
+render(false);
+})();
+</script>
+
+</body></html>
