@@ -335,7 +335,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='31 Oct 2026 · 23:00 IST';
+const UPDATED='31 Oct 2026 · 23:10 IST';
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
@@ -612,10 +612,12 @@ const meetOf=t=>{const d=dt(t);const hod=d.getUTCHours()+d.getUTCMinutes()/60;co
 const firstHW=m=>{const k=dkey(m);const d=dt(m);const day0=m-11;const hw=(TIDES[k]||[]).map(h=>day0+parseInt(h[0].slice(0,2))+parseInt(h[0].slice(2,4))/60).filter(x=>x>m);if(hw.length)return hw[0];const n=(TIDES[dkey(m+24)]||[]);return n.length?day0+24+parseInt(n[0][0].slice(0,2))+parseInt(n[0][0].slice(2,4))/60:m+12;};
 const meetOK=(w,t)=>{const m=meetOf(t);if(w.rep==null||w.rep<=m)return true;return w.rep<=firstHW(m);};
 const CUTS={};
+// allotment time of a fixed vessel = sailing time of the vessel it follows on the same berth (programme fixes the slot then), else its made-fast time
+const allotAt=v=>{if(v._al!=null)return v._al;const prev=V.filter(x=>x.b===v.b&&x.n!==v.n&&x.T<=v.F+0.01).sort((a,z)=>z.T-a.T)[0];v._al=(prev&&v.F-prev.T<=12)?Math.min(prev.T,v.F):v.F;return v._al;};
 function simulate(ov){
   const R=w=>(ov&&w.n===ov)?NOW:w.rdy;
   const S=[]; const done=new Set();
-  const occ=t=>V.filter(v=>POOL.includes(v.b)&&v.F<=t&&t<v.T).concat(S.filter(s=>(s.prevAt!=null?s.prevAt:s.F)<=t&&t<s.T)); // a berth counts against the group from the moment it is allotted, not only once the vessel is alongside
+  const occ=t=>V.filter(v=>POOL.includes(v.b)&&allotAt(v)<=t&&t<v.T).concat(S.filter(s=>(s.prevAt!=null?s.prevAt:s.F)<=t&&t<s.T)); // a berth counts against the group from the moment it is allotted, not only once the vessel is alongside
   const ev=POOL.map(b=>{const last=V.filter(v=>v.b===b).sort((a,z)=>z.T-a.T)[0];return {b,t:last?last.T:NOW,prev:last?last.n:'—',prevEst:last?!!last.est:false};});
   let guard=0;
   while(ev.length&&guard++<400){
@@ -628,7 +630,7 @@ function simulate(ov){
       const Bb=BERTHS.find(x=>x.id===e.b)||{};const BD=Bb.dr;
       const ready=W.filter(w=>!done.has(w.n)&&w.rdy!=null&&w.rdy<=e.t&&w.rep<=e.t&&!(BM&&w.loa>BM)&&!(w.dr&&w.dr>maxDr(Bb,e.t))&&okBerth(w,e.b,o)&&meetOK(w,e.t));
       let top=null;
-      for(const C of CATS){ if(o.filter(x=>x.cat===C.k&&!(C.k==='GOV'&&x.via)).length>=C.max)continue;
+      for(const C of CATS){ if(o.filter(x=>x.cat===C.k).length>=C.max)continue;
         const q=C.k==='GEN'?ready.slice().sort((a,z)=>a.rep-z.rep):C.k==='BIT'?[]:ready.filter(w=>w.rk[C.k]&&w.rk[C.k]!==99).sort((a,z)=>a.rk[C.k]-z.rk[C.k]);
         if(q.length){top=q[0];break;} }
       if(top&&CLEANONLY(top.c)&&stayH(top,'GEN')>=SHIFT_MIN_STAY){
@@ -660,7 +662,7 @@ function simulate(ov){
     for(const C of CATS){
       // Govt rule (Mihir, 31 Oct): a 30k/25k (Sr No 7) vessel berthed against a Govt slot is re-tagged to Sr No 7 day priority
       // the moment a Govt vessel is ready, so it never blocks a Govt vessel. Other groups keep their slot occupied.
-      const inUse=o.filter(x=>x.cat===C.k&&!(C.k==='GOV'&&x.via)).length;
+      const inUseAll=o.filter(x=>x.cat===C.k).length, inUse=o.filter(x=>x.cat===C.k&&!(C.k==='GOV'&&x.via)).length;
       if(inUse>=C.max)continue;
       let cand;
       if(C.k==='GEN')cand=genQ();
@@ -675,7 +677,7 @@ function simulate(ov){
       }
       cand=cand.filter(w=>!ranked.some(r=>r.w===w));
       if(cand.length){ranked.push({w:cand[0],cat:C.k,via:null});if(cand[1])ranked.push({w:cand[1],cat:C.k,via:null,same:1});continue;}
-      if(C.fb){for(const f of C.fb.split(',')){const fc=pools[f]().filter(w=>!ranked.some(r=>r.w===w));if(fc.length){ranked.push({w:fc[0],cat:C.k,via:FBL[f]});break;}}}
+      if(C.fb&&inUseAll<C.max){for(const f of C.fb.split(',')){const fc=pools[f]().filter(w=>!ranked.some(r=>r.w===w));if(fc.length){ranked.push({w:fc[0],cat:C.k,via:FBL[f]});break;}}}
     }
     if(ranked.length){pick=ranked[0].w;cat=ranked[0].cat;via=ranked[0].via;}
     if(!pick){ev.push({b:e.b,t:e.t+6,prev:e.prev,prevEst:e.prevEst,idle:true});continue;}
