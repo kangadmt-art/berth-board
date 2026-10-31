@@ -209,6 +209,8 @@ table{border-collapse:collapse;width:100%}
 .tmb td.d b{color:var(--fg);display:block;font-size:12.5px}
 .tmb tr.grp td{background:rgba(77,180,165,.08);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--brk);padding:5px 8px}
 .tmb .dl{font-weight:700}.tmb .dl.late{color:var(--warn)}.tmb .dl.early{color:var(--ok)}.tmb .dl.same{color:var(--muted)}
+.tmb .tag.src{border-color:var(--brk);color:var(--brk);margin-left:0}.tmb .tag.src.team{border-color:var(--muted);color:var(--muted)}
+.tmb tr.teamonly td{color:var(--muted)}.tmb tr.teamonly td.n{color:var(--fg)}
 @media (max-width:640px){.tmb{min-width:760px;table-layout:fixed}.tmb td.n{width:150px}}
 .grp .nx small{display:block;color:var(--muted);font-size:11.5px;font-weight:400}
 footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
@@ -277,10 +279,6 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="sechead"><h2 id="mh">Mihir &amp; Company · our vessels</h2><p>Every vessel in the berthing list with agent Mihir &amp; Company, with where it stands today and when it berths.</p></div>
     <div id="mine"></div>
   </section>
-  <section class="card timber" aria-labelledby="th">
-    <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
-    <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
-  </section>
   <section class="card" aria-labelledby="mp">
     <div class="sechead"><h2 id="mp">Meeting preview</h2><p>The 11:00 berthing meeting programmes movements up to 18:00 of the next day. For each DPA berth the board expects to free up in that window: who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated here. Compare with the programme when it comes.</p></div>
     <div class="scroll"><table class="mpt" id="mpt"></table></div>
@@ -336,6 +334,10 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="learn" id="learn"></div>
   </section>
 
+  <section class="card timber" aria-labelledby="th">
+    <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
+    <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
+  </section>
   <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · signals to 31 Oct 1919 · movement programmes TF/SH/2102 for 31.10 and 01.11 · timber desk position report 30.10 (updated to 31.10 1800).</footer>
 </div>
 
@@ -353,7 +355,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 02:00 IST';
+const UPDATED='1 Nov 2026 · 02:10 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
@@ -426,14 +428,19 @@ function preview(){
 }
 function timber(){
   const el=document.getElementById('timber'); const sub=document.getElementById('tsub');
-  sub.innerHTML=`Our timber desk's "<b>Kandla Timber Vessel's Position</b>" (dated ${TIMBER.d}, updated to ${TIMBER.upto}) beside the board's reading. Team ETB = the desk's own estimate; Board = berthing list / programme / projection. Vessels not yet in the DPA list are shown for the desk's planning only and are not in the board's queue.`;
+  sub.innerHTML=`Timber vessels from the DPA list, plus the ones our timber desk tracks before they reach the list ("<b>Kandla Timber Vessel's Position</b>", dated ${TIMBER.d}, updated to ${TIMBER.upto}). Where the board has DPA data it is shown; where it has none, the team's figures are shown and marked <i>team report</i>. Team ETB = the desk's own estimate; Board = list / programme / projection.`;
   const hd=x=>x?(x.length===5?h(x+' 12:00'):h(x)):null;
   const fd=x=>x?(x.length===5?fday(h(x+' 12:00')):fmt(h(x))):'—';
   const G={berth:'Working at berth',wait:'Waiting for berth',eta:'Expected'};
   let last=null;
   const row=r=>{
     const v=V.filter(x=>x.n===r.n).sort((a,z)=>z.F-a.F)[0], sp=S.find(x=>x.n===r.n), w=W.find(x=>x.n===r.n);
-    const listQ=(v&&v.q)||(w&&w.q); const qdiff=r.cbm&&listQ&&Math.abs(listQ-r.cbm)>1?` <span style="color:var(--muted)">(list ${nf.format(listQ)})</span>`:'';
+    const inDPA=!!(v||w); const listQ=(v&&v.q)||(w&&w.q);
+    // board data first (DPA list), team data only where the board has none
+    const qty=listQ?`${nf.format(listQ)} ${(v&&v.u)||(w&&w.u)||'CBM'}`+(r.cbm&&Math.abs(listQ-r.cbm)>1?` <span style="color:var(--muted)">· team ${nf.format(r.cbm)}</span>`:''):r.cbm?`${nf.format(r.cbm)} CBM <span style="color:var(--muted)">· team</span>`:'<span style="color:var(--muted)">CBM n/a</span>';
+    const repT=REP[r.n]?h(REP[r.n]):(w&&w.rep!=null?w.rep:null);
+    const arrival=inDPA&&repT!=null?`<b>reported ${fmt(repT)}</b>DPA list`:r.arr?`<b>arrived ${fmt(h(r.arr))}</b>team report`:r.eta?`<b>ETA ${fd(r.eta)}</b>team report`:'—';
+    const srcTag=inDPA?'<span class="tag src">DPA list</span>':'<span class="tag src team">team report</span>';
     let board='', bt=null;
     if(v&&v.T<=NOW)board=`<b>sailed</b>CJ-${v.b} · ${fmt(v.T)}`;
     else if(v&&v.F<=NOW)board=`<b>CJ-${v.b} · at berth</b>ETC ${fmt(v.T)}${v.est?' (est)':''}${v.shiftedTo?' · shift → CJ-'+v.shiftedTo:''}`;
@@ -445,9 +452,9 @@ function timber(){
     let dl='—';
     if(r.etb&&bt!=null){const dd=Math.round((bt-hd(r.etb))/24);dl=dd===0?'<span class="dl same">same day</span>':dd>0?`<span class="dl late">board +${dd} d later</span>`:`<span class="dl early">board ${dd} d earlier</span>`;}
     else if(r.st==='berth')dl='<span class="dl same">at berth</span>';
-    return `<tr class="${isMine(r.n)?'me':''}"><td class="n">${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${r.c} · ${r.from}${r.note?' · '+r.note:''}</small></td>
-      <td class="d">${r.cbm?nf.format(r.cbm)+' CBM':'<span style="color:var(--muted)">CBM n/a</span>'}${qdiff}</td>
-      <td class="d">${r.arr?'<b>arrived '+fmt(h(r.arr))+'</b>':r.eta?'<b>ETA '+fd(r.eta)+'</b>':'—'}</td>
+    return `<tr class="${isMine(r.n)?'me':''} ${inDPA?'':'teamonly'}"><td class="n">${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${(v&&v.c)||(w&&w.c)||r.c} · ${r.from} · ${srcTag}${r.note?' · '+r.note:''}</small></td>
+      <td class="d">${qty}</td>
+      <td class="d">${arrival}</td>
       <td class="d">${r.b?'<b>berthed '+fmt(h(r.b))+'</b>'+(r.pri?'under '+(CL[r.pri]||r.pri):''):r.etb?'<b>ETB '+fd(r.etb)+'</b>team estimate':'—'}</td>
       <td class="d">${board}</td><td class="d">${dl}</td></tr>`;};
   el.innerHTML='<tr><th>Vessel</th><th>Qty</th><th>Arrival</th><th>Team</th><th>Board</th><th>Δ</th></tr>'+TIMBER.rows.map(r=>{const g=r.st!==last?`<tr class="grp"><td colspan="6">${G[r.st]}</td></tr>`:'';last=r.st;return g+row(r);}).join('');
