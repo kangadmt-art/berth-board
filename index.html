@@ -335,7 +335,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='31 Oct 2026 · 21:30 IST';
+const UPDATED='31 Oct 2026 · 21:40 IST';
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
@@ -354,7 +354,7 @@ const LEARN=[
  {d:'31 Oct pm',v:'CJ-16 · Alasia over Orion',exp:'Board: CJ-16 after Maritime Harmony → Orion (HP #4, salt).',act:'Programme: → Alasia (aggregates, ETA 1 Nov 00:30) with a 40,000 MTPD quote, berthing 1 Nov evening.',why:'HP is decided by the quote at the meeting, not by the printed rank; an ETA vessel that reports in time competes.',fix:'Board already flags "quotes decide" on HP/Sr No 7 slots; nothing more to model without the quotes.',st:'ok'},
  {d:'31 Oct pm',v:'Tidal benefit observed · CJ-7',exp:'Berth draught 12.0 m, board allows +1.5 m at CJ-6–10.',act:'Programme: Fu Hai 16 outward draught 12.65 m; Meghna Venus sailing draught 12.72 m — both at CJ-7.',why:'First data points: ≥ 0.7 m over the chart figure is accepted at CJ-7.',fix:'Keep 1.5 m for now; two more observations will set the margin.',st:'ok'},
  {d:'31 Oct pm',v:'CJ-15 · Katong WW (Coastal slot, SAAGAR project)',exp:'Board: CJ-15 after African Predator → Katong WW as SAAGAR project against the Coastal slot.',act:'Programme: CJ-15 → Katong WW, category CSTL(SGR). African Predator shifts to OTB 09:00 at agent\'s request.',why:'Rule confirmed on day one.',fix:'—',st:'ok'},
- {d:'31 Oct',v:'Port-convenience shift · for whom?',exp:'Board would have shifted African Quail (logs, CJ-14) to CJ-4 within 10 h of berthing to make room for Feng Hai Da (48 windmill blades, 1,085 MT, ~22 h job).',act:'Not observed; board assumption.',why:'A 4-hour shift of a logs vessel for a one-day project parcel seems unlikely; shifts are made for sizeable clean-cargo vessels (salt HP, big project).',fix:'Shift only for a clean-only vessel with ≥ 36 h of work. To be confirmed from practice.',st:'open'},
+ {d:'31 Oct',v:'Port-convenience shift · for whom?',exp:'Board would have shifted African Quail (logs, CJ-14) to CJ-4 within 10 h of berthing to make room for Feng Hai Da (48 windmill blades, 1,085 MT, ~22 h job).',act:'Not observed; board assumption.',why:'A 4-hour shift of a logs vessel for a one-day project parcel seems unlikely; shifts are made for sizeable clean-cargo vessels (salt HP, big project).',fix:'Mihir (31 Oct): no fixed format — depends on the port. Shifted vessels are those that can work at both CJ and OTB: mainly timber/logs, also bags; never project, fertiliser, salt or coal. No hour rule, but with only ~8 h of work left the port probably won\'t shift. Board now: shiftable = logs/bags, > 8 h left, no size test on the incoming vessel.',st:'adopted'},
  {d:'31 Oct',v:'Govt slot filled by a Sr No 7 vessel',exp:'Board had treated a 30k/25k (Sr No 7) vessel berthed against a Govt slot as occupying that slot, so the next Govt vessel (HN Doris) waited for it.',act:'Practice (Mihir): when a Govt vessel turns up, the Sr No 7 vessel already alongside is re-tagged to Sr No 7 day priority and the Govt vessel takes the next free berth it fits.',why:'The Govt earmark is 2 Govt vessels at berth, not 2 fixed berths; a fallback occupant does not count against it.',fix:'Govt slot count ignores fallback-filled vessels. Other groups unchanged.',st:'adopted'},
  {d:'31 Oct',v:'Tidal benefit · CJ-6 to CJ-10 only',exp:'Board first allowed 1.0 m over the berth draught at every berth.',act:'Practice (Mihir): tidal benefit is given only at CJ-6–10 — permissible draught + next low-water height (e.g. 12.0 + ~1.5 m), never at CJ-1–5 or CJ-13–16.',why:'Depth and LW height at the middle berths allow it; the shallow north berths and the clean south berths are held to the chart figure.',fix:'CJ-6–10 allow up to 1.5 m over; others strict. The 1.5 m is a working figure — to be refined from what the port actually does.',st:'open'},
  {d:'31 Oct',v:'SAAGAR has three types · project goes against Coastal',exp:'Board gave the SAAGAR break-bulk slot (CJ-14 after AC Kathryn) to Katong WW (project cargo, SGR #1) ahead of African Quail (logs, SGR #2).',act:'Practice (Mihir): SAAGAR = bulk, break bulk, project. The 1 bulk + 1 break-bulk slots are for bulk / break bulk; a SAAGAR project vessel is berthed against the Coastal slot (when no coastal vessel is ready), and never SAAGAR bulk / break bulk there.',why:'Project cargo is slow and small; the coastal slot absorbs it without eating a SAAGAR cargo slot.',fix:'Coastal fallback = SAAGAR project vessels by SGR rank; SAAGAR slots skip project vessels while a bulk / break-bulk SAAGAR vessel is ready.',st:'adopted'},
@@ -565,8 +565,10 @@ const HZ=h('11-20 00:00');
 const CLEAN=['13','14','15','15A','16'];
 const COALB=['7','8']; // coal vessels only at CJ-7 / CJ-8 (other cargo can still use 7/8)
 const CLEANONLY=c=>/salt|windmill|project/i.test(c); // clean cargo that goes only to CJ-13–16
-const isLogs=c=>/log|timber/i.test(c); // the cargo DPA usually shifts under port convenience
-const SHIFT_H=4, SHIFT_MIN_LEFT=12, SHIFT_MIN_STAY=36; // no shift for a clean-only vessel with < 36 h of work (small project parcels wait for the next clean berth)
+const isLogs=c=>/log|timber/i.test(c);
+// shiftable under port convenience (Mihir, 31 Oct): cargo that can work at both CJ and OTB — mainly timber/logs, also bagged cargo. Never project, fertiliser, salt or coal.
+const SHIFTABLE=c=>/log|timber|bag/i.test(c)&&!/project|windmill|fert|urea|salt|coal|petcoke/i.test(c);
+const SHIFT_H=4, SHIFT_MIN_LEFT=8, SHIFT_MIN_STAY=0; // Mihir 31 Oct: no fixed rule on the incoming vessel's size; a vessel with only ~8 h of work left is probably not shifted
 const LOGS_RATE=3450; // DPA norm for logs (CBM/day). The 4,800 CBM/day working assumption was withdrawn on 31 Oct — list ETCs and norms are used as printed
 const DIRTY=c=>/coal|petcoke|iron|pellet/i.test(c);
 const CUTS={};
@@ -581,7 +583,7 @@ function simulate(ov){
     const o=occ(e.t); let pick=null,cat=null,via=null;
     const BM=(BERTHS.find(x=>x.id===e.b)||{}).maxLoa;
     // ---- port-convenience shift: a non-clean berth frees, a clean-only vessel (salt / windmill / project) is next on merit,
-    // and a logs vessel on a clean berth still has ≥12 h of work → logs vessel shifts here, clean-only vessel takes its berth
+    // and a shiftable vessel (logs/bags) on a clean berth still has > 8 h of work → it shifts here, clean-only vessel takes its berth
     if(!CLEAN.includes(e.b)&&!ov){
       const Bb=BERTHS.find(x=>x.id===e.b)||{};const BD=Bb.dr;
       const ready=W.filter(w=>!done.has(w.n)&&w.rdy!=null&&w.rdy<=e.t&&w.rep<=e.t&&!(BM&&w.loa>BM)&&!(BD&&w.dr&&w.dr>BD+tideOf(Bb)));
@@ -590,7 +592,7 @@ function simulate(ov){
         const q=C.k==='GEN'?ready.slice().sort((a,z)=>a.rep-z.rep):C.k==='BIT'?[]:ready.filter(w=>w.rk[C.k]&&w.rk[C.k]!==99).sort((a,z)=>a.rk[C.k]-z.rk[C.k]);
         if(q.length){top=q[0];break;} }
       if(top&&CLEANONLY(top.c)&&stayH(top,'GEN')>=SHIFT_MIN_STAY){
-        const mov=o.filter(x=>CLEAN.includes(x.b)&&isLogs(x.c)&&x.T-e.t>=SHIFT_MIN_LEFT&&!x.shifted&&!(x.loa&&BM&&x.loa>BM)).sort((a,z)=>(z.T-z.F)-(a.T-a.F))[0];
+        const mov=o.filter(x=>CLEAN.includes(x.b)&&SHIFTABLE(x.c)&&x.T-e.t>SHIFT_MIN_LEFT&&!x.shifted&&!(x.loa&&BM&&x.loa>BM)).sort((a,z)=>(z.T-z.F)-(a.T-a.F))[0];
         if(mov){
           const left=mov.T-e.t, from=mov.b;
           if(mov.fixed){CUTS[mov.n]=e.t;mov.T=e.t;} else {mov.T=e.t;}
