@@ -355,7 +355,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 02:10 IST';
+const UPDATED='1 Nov 2026 · 02:50 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
@@ -385,6 +385,7 @@ const NOTICES=[
 // Expected-vs-actual log. {d:'date', v:'vessel', exp:'what the board expected', act:'what the port did', why:'reason / hypothesis', fix:'rule change', st:'open'|'adopted'|'ok'}
 // st: open = waiting for Mihir to confirm the reason; adopted = folded into the rules; ok = matched, nothing to learn
 const LEARN=[
+ {d:'1 Nov',v:'Mettle Star (HP) · Orion (24-hr Sr No 7) · Centurion Buyo shift',exp:'Board had CJ-4 → Mak 1 (General), CJ-14 → Orion under HP, nothing for Mettle Star (readiness N/A, HP "Y" only).',act:'Mihir (1 Nov 00:12): Mettle Star should berth under HP at CJ-15A after Centurion Buyo is shifted to CJ-4; Orion berths under 30k/25k against 24-hr at CJ-14.',why:'HP is vacant within the window (Meghna Venus sails 2 Nov 16:00) and two salt vessels need clean berths but only CJ-14 frees on a firm sailing → the port shifts a logs vessel to CJ-4 to make the second clean berth. Mettle Star (ETA 1 Nov 06:00, before the meeting) is declared at the meeting; HP goes to the higher quote.',fix:'Coded: ETA vessels with a Y arriving before the first HW after the meeting are assumed declared; a Y without rank queues after the ranked vessels; shift is "required" when clean-berth demand (priority vessels) exceeds the clean berths freeing in the window; for the HP slot the bigger parcel is assumed to quote higher (ASSUMPTION — confirm from the 1 Nov programme).',st:'open'},
  {d:'31 Oct night',v:'Project vessels · ball clay / feldspar berths',exp:'Board projected CJ-15 / CJ-14 freeing at its own estimate of when Katong WW / Feng Hai Da (project cargo) finish, and offered CJ-13 to Tan Binh 267 (ball clay / feldspar).',act:'Mihir: a project vessel has no discharge norm — it sails whenever it is done, so its berth cannot be programmed ahead; ball clay / feldspar can berth only at CJ-5 to CJ-8.',why:'Project cargo has no port norm; clay / feldspar handling is restricted to the CJ-5–8 stretch.',fix:'Coded: a berth held by a project vessel is kept in the meeting preview at the board\'s estimate but highlighted (red-orange, "PROJECT VESSEL · check sailing") — to be checked at the meeting and only then considered. Who is a project vessel: project / windmill cargo by name, or any vessel in the Steel/Project group with NO norm printed in the list (Rahma, CJ-13) — steel with a printed norm sails as per norms. Exception: a vessel berthed under 24 HRS (Feng Hai Da, CJ-14) must sail within 24 h whatever the cargo, so its berth is programmed at the next meeting — next 24-hr vessel, else a 30k/25k vessel. Clay / feldspar → CJ-5–8 only (a list remark cannot widen a commodity rule).',st:'adopted'},
  {d:'31 Oct night',v:'Sr No 7 seniority · slot held at meeting · unprogrammed berths',exp:'Board gave CJ-4 to Tan Binh 267 (HP rank 2) against the Govt slot because rank-1 Yuan Hang Wei Ye (iron ore) cannot use CJ-4; gave Orion the Coastal slot after Katong WW\'s board-estimated sailing; berthed vessels on berths that free up tonight although the 1 Nov programme has nothing for them.',act:'Mihir: the 30k/25k slot goes to the most senior of the group (Yuan Hang Wei Ye) — a junior does not take it because the senior cannot use that berth. Katong WW was allotted in today\'s meeting against Coastal, so Coastal is engaged for the whole programme; Orion cannot take it. Nothing unprogrammed berths before the next meeting.',why:'Slots are decided at the meeting for the whole programme window, by seniority within the group; an estimated sailing is not a free slot.',fix:'Coded: (1) Sr No 7 fallback by seniority — the senior-most ready HP vessel first; if it cannot use this berth, the next 30k/25k vessel that can gets the movement (Mihir: "any vessel under 30k/25k"), the senior keeps its turn; (2) a ready vessel of a group waiting for a berth (Levante Spirit, Govt) claims the group\'s free slot for the window, so no 30k/25k fallback against Govt while a Govt vessel waits — if nobody is waiting in 24-hr, the 30k/25k vessel goes against 24-hr; (3) a vessel already in a programme holds its slot from now; a vessel alongside at the next meeting with only a board-estimated sailing keeps its slot till that window ends; (4) a berth freeing without a programmed inward vessel is allotted only at the next 11:00 meeting (+2 h); (5) General vessels only after every priority group that can use the berth.',st:'adopted'},
  {d:'31 Oct pm',v:'Berth × cargo restrictions · meeting review',exp:'Board offered CJ-4 to Yuan Hang Wei Ye (iron ore pellet feed), CJ-6 to African Quail (logs), and treated the Coastal slot as free while Katong WW (SAAGAR project against Coastal) was alongside.',act:'Mihir: iron ore not at CJ-1–5; timber cannot work at CJ-2, 3, 6; fertiliser not at CJ-13–16; coal only CJ-5–8; bags only CJ-1–4 and CJ-13–16; "2 shorecrane required" → CJ-2/3 only; vessel-specific requirement in the remark (e.g. Alasia aggregate → CJ-13–16) is binding; millscale is allowed at CJ-13–16; a vessel declared at the meeting counts for the programme only if it arrives before the first HW after the meeting.',why:'Commodity-wise berth restrictions and crane/shore limits are standing practice, not in the written policy.',fix:'All of the above coded as okBerth() + meetOK(); a SAAGAR project vessel berthed against Coastal occupies the Coastal slot.',st:'adopted'},
@@ -421,7 +422,7 @@ function preview(){
   const hd=document.querySelector('#mp');if(hd)hd.innerHTML=`Meeting preview · meeting of ${fday(meet)} 11:00 → movements till ${fday(end)} 18:00`;
   if(!rows.length){el.innerHTML=`<tr><td class="fl">No DPA berth is projected to free up before ${fday(end)} 18:00 beyond what the programme already fixes.</td></tr>`;return;}
   el.innerHTML='<tr><th style="width:200px">Berth frees</th><th>Board\'s pick</th><th>Next in line</th><th>What could overturn it at the meeting</th></tr>'+rows.map(x=>`<tr class="${isMine(x.n)?'me':''} ${x.projChk?'chk':''} ${x.shifted?'sh':''}">
-   <td class="w"><b>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev}${(()=>{const pv=V.find(v=>v.n===x.prev)||S.find(v=>v.n===x.prev);return pv?' · '+pv.c+(pv.cat?' · '+(CL[pv.cat]||pv.cat):''):'';})()} sails${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(Math.abs(x.prevAt-nextMeet(NOW))<0.01?'not in today\'s programme → decided at the '+fmt(x.prevAt,false)+' meeting':x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
+   <td class="w"><b>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev}${(()=>{const pv=V.find(v=>v.n===x.prev)||S.find(v=>v.n===x.prev);return pv?' · '+pv.c+(pv.cat?' · '+(CL[pv.cat]||pv.cat):''):'';})()}${/shifted out/.test(x.prev)?'':' sails'}${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(Math.abs(x.prevAt-nextMeet(NOW))<0.01?'not in today\'s programme → decided at the '+fmt(x.prevAt,false)+' meeting':x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
    <td class="pk"><b>${x.n}</b>${isMine(x.n)?'<span class="tag">Mihir &amp; Co</span>':''}${x.shifted?'<span class="tag shift">SHIFT · port convenience</span>':''}<small>${x.c} · ${nf.format(x.q)} ${x.u}${agTxt(x.n)}</small><small>${x.shifted?`shifted from CJ-${x.fromB} (${CL[x.cat]||x.cat}, slot unchanged) · frees CJ-${x.fromB} for <b>${x.forWho}</b> (${CL[x.forCat]||x.forCat}) · alongside ~${fmt(x.F)}`:`${CL[x.cat]||x.cat}${x.via?' slot · as '+x.via:''} · alongside ~${fmt(x.F)}${x.tide?' · '+x.tide:''}`}</small></td>
    <td class="al">${x.alt?`<b>${x.alt.n}</b><small>${x.alt.c} · ${CL[x.alt.cat]||x.alt.cat}${x.alt.via?' as '+x.alt.via:''}${x.alt.same?' · same group, next rank':''}</small>`:'<span style="color:var(--dim)">nobody else eligible</span>'}</td>
    <td class="fl">${x.flips&&x.flips.length?'<ul>'+x.flips.map(f=>`<li>${f}</li>`).join('')+'</ul>':'—'}</td></tr>`).join('');
@@ -433,7 +434,7 @@ function timber(){
   const fd=x=>x?(x.length===5?fday(h(x+' 12:00')):fmt(h(x))):'—';
   const G={berth:'Working at berth',wait:'Waiting for berth',eta:'Expected'};
   let last=null;
-  const row=r=>{
+  const row=(r,i)=>{
     const v=V.filter(x=>x.n===r.n).sort((a,z)=>z.F-a.F)[0], sp=S.find(x=>x.n===r.n), w=W.find(x=>x.n===r.n);
     const inDPA=!!(v||w); const listQ=(v&&v.q)||(w&&w.q);
     // board data first (DPA list), team data only where the board has none
@@ -452,12 +453,12 @@ function timber(){
     let dl='—';
     if(r.etb&&bt!=null){const dd=Math.round((bt-hd(r.etb))/24);dl=dd===0?'<span class="dl same">same day</span>':dd>0?`<span class="dl late">board +${dd} d later</span>`:`<span class="dl early">board ${dd} d earlier</span>`;}
     else if(r.st==='berth')dl='<span class="dl same">at berth</span>';
-    return `<tr class="${isMine(r.n)?'me':''} ${inDPA?'':'teamonly'}"><td class="n">${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${(v&&v.c)||(w&&w.c)||r.c} · ${r.from} · ${srcTag}${r.note?' · '+r.note:''}</small></td>
+    return `<tr class="${isMine(r.n)?'me':''} ${inDPA?'':'teamonly'}"><td class="d" style="color:var(--brk);font-weight:700">${i}</td><td class="n">${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${(v&&v.c)||(w&&w.c)||r.c} · ${r.from} · ${srcTag}${r.note?' · '+r.note:''}</small></td>
       <td class="d">${qty}</td>
       <td class="d">${arrival}</td>
       <td class="d">${r.b?'<b>berthed '+fmt(h(r.b))+'</b>'+(r.pri?'under '+(CL[r.pri]||r.pri):''):r.etb?'<b>ETB '+fd(r.etb)+'</b>team estimate':'—'}</td>
       <td class="d">${board}</td><td class="d">${dl}</td></tr>`;};
-  el.innerHTML='<tr><th>Vessel</th><th>Qty</th><th>Arrival</th><th>Team</th><th>Board</th><th>Δ</th></tr>'+TIMBER.rows.map(r=>{const g=r.st!==last?`<tr class="grp"><td colspan="6">${G[r.st]}</td></tr>`:'';last=r.st;return g+row(r);}).join('');
+  el.innerHTML='<tr><th style="width:34px">#</th><th>Vessel</th><th>Qty</th><th>Arrival</th><th>Team</th><th>Board</th><th>Δ</th></tr>'+TIMBER.rows.map((r,i)=>{const g=r.st!==last?`<tr class="grp"><td colspan="7">${G[r.st]}</td></tr>`:'';last=r.st;return g+row(r,i+1);}).join('');
 }
 function notices(){const el=document.getElementById('notices');el.innerHTML=NOTICES.map(n=>`<div class="nt"><span class="d">${n.d}</span><div><b>${n.t}</b><small>${n.s}${n.src?' · '+n.src:''}</small></div></div>`).join('');}
 function learn(){const el=document.getElementById('learn');if(!LEARN.length){el.innerHTML='<div class="empty">No variance recorded yet.</div>';return;}
@@ -701,6 +702,14 @@ const meetOK=(w,t)=>{const m=meetOf(t);if(w.rep==null||w.rep<=m)return true;retu
 const CUTS={};
 // allotment time of a fixed vessel = sailing time of the vessel it follows on the same berth (programme fixes the slot then), else its made-fast time
 const allotAt=v=>Math.min(v.F,NOW); // a vessel whose berthing is still ahead is in a published programme → its group slot is already allotted (Mihir, 31 Oct)
+// Expected-vessel ETAs from the list's ETA sheet (31.10): used for the meeting rule below
+const ETA={'Mettle Star':'11-01 06:00','Andreas Petrakis':'11-01 09:00','Lady Naeima':'11-01 12:00','Outlander':'11-02 00:00','Hai Long 1':'11-02 00:00','Star Fighter':'11-02 00:00','Belasitza':'11-03 12:30','Valentina Sea':'11-04 00:00','Defne':'11-05 00:00','Tai Keystone':'11-05 00:00'};
+// Mihir (31 Oct): a vessel declared at the 11:00 meeting counts for the programme if it arrives before the first HW after the meeting.
+// An expected vessel with a group eligibility (Y) and no readiness yet is therefore ASSUMED to declare at the next meeting if its ETA is in time
+// (e.g. Mettle Star, ETA 1 Nov 06:00, HP Y). Flagged "assumed declared" in the preview; if it does not declare, the next in line takes the slot.
+(()=>{const m=nextMeet(NOW),hw=firstHW(m);W.forEach(w=>{if(w.rdy==null&&ETA[w.n]&&Object.keys(w.rk).length){const e=h(ETA[w.n]);if(e<=hw){w.rdy=Math.max(e,m);w.rep=w.rep!=null?w.rep:w.rdy;w.assumed=1;}}});})();
+// group rank for ordering: printed rank first; an eligibility "Y" without a rank (99 / 98) queues after the ranked vessels, by reporting time
+const rkv=(w,k)=>{const r=w.rk[k];return r>=98?1000+(w.rep||0)/1e4:r;};
 function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it berths inside the next meeting's window count as slot claims (two-pass)
   const R=w=>(ov&&w.n===ov)?NOW:w.rdy;
   const S=[]; const done=new Set();
@@ -710,6 +719,7 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
   // Hold applies only to a vessel with NO basis for its sailing: no list ETC, no printed norm, no MTPD quote (project cargo, blank norms).
   // A vessel with a norm or quote (HP 50,000 MTPD, 8K, Govt norm) can be held to it, so the port programmes against it.
   const slotEnd=(v,t)=>{if(!v.est||v.cat==='24H'||v.nm)return v.T;const m=nextMeet(NOW),we=m-11+24+18;return (t<we&&v.F<=m&&v.T>m&&v.T<we)?we:v.T;}; // held for the whole window of the next meeting (till 18:00 next day)
+  const reserved=new Set(); // vessels for which a berth has already been freed by a shift (no second shift for the same vessel)
   const cut={}; // port-convenience shifts found in THIS run: vessel → time it left its original berth (V is never mutated; runs stay independent)
   const vEnd=(v,t)=>cut[v.n]!=null?Math.min(cut[v.n],slotEnd(v,t)):slotEnd(v,t);
   const occ=t=>V.filter(v=>POOL.includes(v.b)&&allotAt(v)<=t&&t<vEnd(v,t)).concat(S.filter(s=>(s.prevAt!=null?s.prevAt:s.F)<=t&&t<s.T)); // a berth counts against the group from the moment it is allotted, not only once the vessel is alongside
@@ -721,6 +731,7 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
     // Mihir (31 Oct): a project vessel has no discharge norm and sails when it is done — the sailing time is only known when it is ready.
     // The board keeps its estimate but marks the row in the meeting preview: check at the meeting, then consider.
     if(e.prevEst&&e.prevProj)e.projChk=1;
+    if(e.forName&&done.has(e.forName)){e.forName=null;e.forCat=null;} // the vessel this berth was freed for has berthed elsewhere — berth open to all
     const o=occ(e.t); let pick=null,cat=null,via=null;
     const BM=(BERTHS.find(x=>x.id===e.b)||{}).maxLoa;
     // ---- port-convenience shift (Mihir, 31 Oct): a CJ-1–10 berth is free, a priority group's slot is free now or frees inside the
@@ -738,11 +749,13 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
         const oc=o.filter(x=>x.cat===C.k), inUseC=oc.filter(x=>!(C.k==='GOV'&&x.via)).length;
         const freeNow=inUseC<C.max, freeInWindow=oc.some(x=>x.T>e.t&&x.T<=WE&&!(x.est&&!x.nm&&x.cat!=='24H'));
         if(!freeNow&&!freeInWindow)continue;
-        let q=readyAll.filter(w=>w.rk[C.k]&&w.rk[C.k]!==99).sort((a,z)=>a.rk[C.k]-z.rk[C.k]);
+        let q=readyAll.filter(w=>w.rk[C.k]).sort((a,z)=>rkv(a,C.k)-rkv(z,C.k));
         if(C.k==='SAAGAR'){const np=q.filter(w=>!PROJ(w.c));if(np.length)q=np;}
         if(!q.length)continue;
         if(freeNow&&q.some(fitsHere))break;          // a vessel of this group takes this berth directly — no shift needed
-        const cl=q.find(w=>CLEANONLY(w.c));           // the group's vessel in line needs a clean berth
+        // the group's vessel in line that needs a clean berth. For the HP slot the port takes the highest MTPD quote — unknown to the board,
+        // so the bigger parcel is assumed to quote higher (Mihir, 1 Nov: Mettle Star → HP, Orion → 30k/25k against 24-hr). Flagged in the preview.
+        const cls=q.filter(w=>CLEANONLY(w.c)&&!reserved.has(w.n)); const cl=C.k==='HP'?cls.slice().sort((a,z)=>(z.nm||z.q)-(a.nm||a.q))[0]:cls[0];
         if(cl){need={w:cl,cat:C.k,when:freeNow?e.t:Math.min(...oc.filter(x=>x.T>e.t&&x.T<=WE).map(x=>x.T))};break;}
       }
       if(need){
@@ -751,13 +764,18 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
         const mov=o.filter(x=>CLEAN.includes(x.b)&&SHIFTABLE(x.c)&&x.T>e.t+SHIFT_MIN_LEFT&&!x.shifted&&!(x.loa&&BM&&x.loa>BM)&&okBerth({n:x.n,c:x.c,loa:x.loa,x:''},e.b)&&!V.some(v=>v.b===x.b&&v.n!==x.n&&v.F>e.t)).sort((a,z)=>(z.T-e.t)-(a.T-e.t))[0];
         // "if required": not required when a clean berth the vessel can use frees inside the window anyway on a declared / programmable sailing
         const cleanComing=o.filter(x=>CLEAN.includes(x.b)&&x.T>=need.when-6&&x.T<=WE&&!(x.est&&!x.nm&&x.cat!=='24H')&&allowedBerths(need.w).includes(x.b)&&!((BERTHS.find(bb=>bb.id===x.b)||{}).maxLoa<need.w.loa)&&!V.some(v=>v.b===x.b&&v.n!==x.n&&v.F>x.T-0.01)).sort((a,z)=>a.T-z.T)[0];
-        if(mov&&cleanComing){shiftOpt={mov,need,alt:cleanComing};}
+        // demand vs supply inside the window: priority vessels needing a clean berth vs clean berths freeing on a programmable sailing (or idle)
+        const cleanDemand=readyAll.filter(w=>CLEANONLY(w.c)&&!reserved.has(w.n)&&(w.rk.HP||w.rk.COASTAL||w.rk.SAAGAR||w.rk['24H']||w.rk.STL)).length;
+        const cleanSupply=o.filter(x=>CLEAN.includes(x.b)&&x.T>e.t&&x.T<=WE&&!(x.est&&!x.nm&&x.cat!=='24H')&&!V.some(v=>v.b===x.b&&v.n!==x.n&&v.F>x.T-0.01)).length+CLEAN.filter(b=>!o.some(x=>x.b===b)).length;
+        const required=!cleanComing||cleanDemand>cleanSupply;
+        if(mov&&!required){shiftOpt={mov,need,alt:cleanComing};}
         else if(mov){
           const left=mov.T-e.t, from=mov.b;
           if(V.includes(mov))cut[mov.n]=e.t; else mov.T=e.t;
           const B=BERTHS.find(x=>x.id===e.b);
           const sh={b:e.b,n:mov.n,c:mov.c,q:mov.q,u:mov.u,cat:mov.cat,via:'shifted from CJ-'+from+' (port convenience)',fromB:from,forWho:need.w.n,forCat:need.cat,F:e.t+2,T:e.t+2+SHIFT_H+left,g:mov.g,proj:1,shifted:1,loa:mov.loa,nm:mov.nm,w:mov.w||null,prev:e.prev,prevAt:e.t,freeAt:e.freeAt||e.t,prevEst:e.prevEst,
             p:[B.p[0]+0.5,Math.min(B.p[0]+0.5+(mov.loa||180)/MPP(B),B.p[1]+3)]};
+          reserved.add(need.w.n);
           S.push(sh); ev.push({b:e.b,t:sh.T,prev:mov.n,prevEst:true,prevSoft:!mov.nm,prevProj:PROJ(mov.c)});
           for(let i=ev.length-1;i>=0;i--){if(ev[i].b===from&&ev[i].t>e.t)ev.splice(i,1);} // the old free-up event of the vacated berth no longer applies
           ev.push({b:from,t:Math.max(e.t+0.5,need.when),prev:mov.n+' (shifted out to CJ-'+e.b+')',prevEst:false,forName:need.w.n,forCat:need.cat,gated:1,freeAt:e.t+0.5});
@@ -771,12 +789,12 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
     const base0=e.forName?base.filter(w=>w.n===e.forName):base; const baseUse=base0.length?base0:base;
     const bagsNow=o.filter(x=>(x.cat==='GEN'||x.cat==='BIT'||x.cat==='STL')&&isBag(x.c)).length;
     const genQ=()=>baseUse.filter(w=>!(bagsNow>=3&&isBag(w.c))).sort((a,z)=>a.rep-z.rep);
-    const rkQ=k=>baseUse.filter(w=>w.rk[k]&&w.rk[k]!==99).sort((a,z)=>a.rk[k]-z.rk[k]);
+    const rkQ=k=>baseUse.filter(w=>w.rk[k]).sort((a,z)=>rkv(a,k)-rkv(z,k));
     const isProj=w=>/project|windmill/i.test(w.c);
     // COASTAL slot, when no coastal vessel: only SAAGAR *project* (windmill / project cargo) vessels, never SAAGAR bulk or break bulk
     // Mihir (31 Oct): the 30k/25k (Sr No 7) slot against Govt / Coastal / 24-hr goes to the group's senior-most ready vessel; if the senior cannot
     // use this particular berth (commodity / draught / LOA), the next 30k/25k vessel that can gets the movement — "any vessel under 30k/25k".
-    const hpAll=W.filter(w=>!done.has(w.n)&&R(w)!=null&&R(w)<=e.t&&w.rep<=e.t&&meetOK(w,e.t)&&w.rk.HP&&w.rk.HP!==99).sort((a,z)=>a.rk.HP-z.rk.HP);
+    const hpAll=W.filter(w=>!done.has(w.n)&&R(w)!=null&&R(w)<=e.t&&w.rep<=e.t&&meetOK(w,e.t)&&w.rk.HP).sort((a,z)=>rkv(a,'HP')-rkv(z,'HP'));
     const pools={HPQ:()=>rkQ('HP'),WIND:()=>baseUse.filter(w=>isProj(w)&&w.rk.SAAGAR).sort((a,z)=>a.rk.SAAGAR-z.rk.SAAGAR),GENQ:genQ};
     const ranked=[]; // every group's first candidate in slot order → ranked[0] is the pick, ranked[1] the runner-up (for the meeting preview)
     for(const C of CATS){
@@ -814,7 +832,7 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
     const notReady=k=>W.filter(w=>!done.has(w.n)&&w.n!==pick.n&&w.rdy==null&&w.rk[k]&&w.rk[k]!==99).slice(0,2).map(w=>w.n);
     if(cat!=='GOV'){const g=notReady('GOV');if(g.length)flips.push('a Govt vessel declares readiness ('+g.join(', ')+')');}
     if(cat==='SAAGAR'&&isBreak(pick.c)){const sb=W.filter(w=>!done.has(w.n)&&w.rk.SAAGAR&&!isBreak(w.c)&&!isProj(w)).map(w=>w.n);flips.push(sb.length?'a SAAGAR bulk vessel is ready ('+sb.join(', ')+') — it takes the bulk slot first':'a SAAGAR bulk vessel reports and is ready');}
-    if(via&&/Sr No 7/.test(via)){const skipped=hpAll.filter(w=>w.rk.HP<pick.rk.HP).map(w=>w.n);flips.push(skipped.length?'30k/25k slot by seniority — senior to '+pick.n+' but cannot use CJ-'+e.b+': '+skipped.join(', ')+' (they keep their turn for a berth that fits)':'30k/25k slot by seniority — '+pick.n+' is the senior-most ready vessel of the group');}
+    if(via&&/Sr No 7/.test(via)){const skipped=hpAll.filter(w=>rkv(w,'HP')<rkv(pick,'HP')).map(w=>w.n);flips.push(skipped.length?'30k/25k slot by seniority — senior to '+pick.n+' but cannot use CJ-'+e.b+': '+skipped.join(', ')+' (they keep their turn for a berth that fits)':'30k/25k slot by seniority — '+pick.n+' is the senior-most ready vessel of the group');}
     if(tideFlag(pick,BERTHS.find(x=>x.id===e.b)))flips.push('HM does not allow tidal benefit for this draught');
     if(alt)flips.push('otherwise next in line: '+alt.n+' ('+(CL[alt.cat]||alt.cat)+(alt.via?' slot as '+alt.via:'')+')');
     if(pick.x&&/REQ|TRANSHIP/i.test(pick.x))flips.push('agent remark: '+pick.x);
@@ -822,11 +840,13 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
     if(e.projChk)flips.unshift('CHECK AT MEETING: '+e.prev+' is berthed as a project vessel — no discharge norm (none printed in the list), it sails when done; confirm its sailing before counting this berth');
     else if(e.prevSoft&&!e.gated)flips.push(e.prev+'\'s sailing is the board\'s estimate (no ETC, norm or quote to hold it to) — the meeting may leave this berth unprogrammed');
     if(shiftOpt)flips.push('port-convenience option: shift '+shiftOpt.mov.n+' ('+shiftOpt.mov.c+', CJ-'+shiftOpt.mov.b+') here and give CJ-'+shiftOpt.mov.b+' to '+shiftOpt.need.w.n+' ('+(CL[shiftOpt.need.cat]||shiftOpt.need.cat)+') — not required as CJ-'+shiftOpt.alt.b+' frees for it ~'+fmt(shiftOpt.alt.T));
+    if(pick.assumed)flips.push(pick.n+' is assumed to declare readiness at the meeting (ETA '+fmt(h(ETA[pick.n]))+', before the first HW) — if it does not, the next in line takes the slot');
+    if(e.forName&&pick.n===e.forName&&cat==='HP')flips.push('HP slot = highest MTPD quote at the meeting — board assumes the bigger parcel ('+pick.n+') quotes higher; if another 30k/25k vessel quotes more, they swap');
     if(e.forName&&pick.n===e.forName)flips.unshift('SHIFT: berth freed by moving '+e.prev.replace(/ \(shifted out.*$/,'')+' under port convenience so that '+pick.n+' ('+(CL[cat]||cat)+') gets a clean berth — at the port\'s discretion');
     done.add(pick.n);
     const F=e.t+2, T=F+stayH(pick,via==='30k/25k quote'?'HP':(via==='General'?'GEN':cat)), B=BERTHS.find(x=>x.id===e.b);
     const tide=tideFlag(pick,B);
-    const s={b:e.b,n:pick.n,c:pick.c,q:pick.q,u:pick.u,cat,via,F,T,g:pick.g,proj:1,w:pick,prev:e.prev,prevAt:e.t,freeAt:e.freeAt||e.t,prevEst:e.prevEst,projChk:e.projChk,tide,alt,flips,
+    const s={b:e.b,n:pick.n,c:pick.c,q:pick.q,u:pick.u,cat,via,F,T,g:pick.g,proj:1,w:pick,loa:pick.loa,nm:pick.nm||null,prev:e.prev,prevAt:e.t,freeAt:e.freeAt||e.t,prevEst:e.prevEst,projChk:e.projChk,tide,alt,flips,
       p:[B.p[0]+0.5,Math.min(B.p[0]+0.5+pick.loa/MPP(B),B.p[1]+3)]};
     S.push(s); ev.push({b:e.b,t:T,prev:pick.n,prevEst:cat!=='24H',prevProj:PROJ(pick.c)&&cat!=='24H'});
   }
