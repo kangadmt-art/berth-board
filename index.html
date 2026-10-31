@@ -334,7 +334,8 @@ function frac(p){const w=Math.floor(p),f=p-w;const s={0:'',0.25:'¼',0.5:'½',0.
 function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
-const UPDATED='31 Oct 2026 · 21:20 IST';
+const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
+const UPDATED='31 Oct 2026 · 21:30 IST';
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
@@ -778,10 +779,10 @@ function bargeGaps(t){
   }).filter(g=>g.firm).sort((x,y)=>y.hrs-x.hrs);
 }
 const BARGE_MIN_H=4;
-// look-ahead: today and tomorrow only (till 24:00 tomorrow) — beyond that the projection is too thin to promise a barge space
-const bargeEnd=t0=>{const d=dt(t0);return t0-(d.getUTCHours()+d.getUTCMinutes()/60)+48;};
+// look-ahead: only as far as the port's own movement programme goes (next day 18:00) — beyond that no barge data
+const bargeEnd=t0=>PROG_END;
 function bargeWindows(t0){
-  const t1=bargeEnd(t0);
+  const t1=bargeEnd(t0); if(t0>=t1-0.01)return [];
   const times=[t0].concat(ALL.flatMap(v=>[v.F,v.T]).filter(x=>x>t0&&x<t1)).concat([t1]).sort((a,b)=>a-b).filter((x,i,a)=>i===0||x-a[i-1]>0.01);
   const wins=[];
   for(let i=0;i<times.length-1;i++){
@@ -800,13 +801,14 @@ function bargeWindows(t0){
 function barge(){
   const el=document.getElementById('barge'); const W=bargeWindows(T);
   const tEnd=bargeEnd(T);
-  el.innerHTML=`<div class="bh"><h3>Barge windows · today &amp; tomorrow</h3><small>From ${fmt(T)} to ${fmt(tEnd)}: quay spaces of ≥${BARGE_MIN_M} m (metres from the DPA port drawing) that stay free for at least ${BARGE_MIN_H} h. Max barge LOA = space − ${CLEAR_M} m clearance. Only spaces between vessels actually at berth (or the quay ends) are counted; spaces next to a projected vessel are not. Not shown beyond tomorrow.</small></div>
+  if(T>=tEnd-0.01){el.innerHTML=`<div class="bh"><h3>Barge windows</h3><small>Programme coverage ends ${fmt(tEnd)}.</small></div><div class="m" style="color:var(--muted)">No data — the port's movement programme runs only till ${fmt(tEnd)}. Barge windows after that will appear once the next berthing-meeting programme is loaded.</div>`;return;}
+  el.innerHTML=`<div class="bh"><h3>Barge windows · till programme end</h3><small>From ${fmt(T)} to ${fmt(tEnd)} (end of the port's movement programme): quay spaces of ≥${BARGE_MIN_M} m (metres from the DPA port drawing) that stay free for at least ${BARGE_MIN_H} h. Max barge LOA = space − ${CLEAR_M} m clearance. Only spaces between vessels actually at berth (or the quay ends) are counted; spaces next to a projected vessel are not. No data beyond ${fmt(tEnd,false)}.</small></div>
    ${W.length?`<div class="bg">${W.map(x=>`<div class="bgc ${x.tight?'tight':''}">
-     <div class="r">${fmt(x.start,false)} → ${x.openEnd?'24:00 tomorrow':fmt(x.end,false)}<small>${x.start<T+0.01?'open now':fday(x.start)} · <b style="color:var(--fg)">${Math.floor(x.hrs)+' h'}${x.openEnd?'+':''}</b></small></div>
+     <div class="r">${fmt(x.start,false)} → ${x.openEnd?fmt(tEnd,false)+' (prog. end)':fmt(x.end,false)}<small>${x.start<T+0.01?'open now':fday(x.start)} · <b style="color:var(--fg)">${Math.floor(x.hrs)+' h'}${x.openEnd?'+':''}</b></small></div>
      <div class="m">Panels <b>${pr([x.a,x.z])}</b> · ${x.berths.join(' / ')} · ~${Math.round(x.m)} m · fits barge up to <b>~${x.maxLoa} m LOA</b>${x.tight?' · tight, 2,100 DWT class only':''}</div>
      <div class="m">Beside: ${x.first.left?`${x.first.left.n} (${x.first.left.c})`:'north end'} · ${x.first.right?`${x.first.right.n} (${x.first.right.c})`:'south end'}</div>
-     <div class="w">${x.openEnd?'Still open at 24:00 tomorrow':x.closer?`Closes when ${x.closer.n} berths${x.closer.proj?' (projected)':''}`:'Closes on the next movement'}</div></div>`).join('')}</div>`
-   :`<div class="m" style="color:var(--muted)">No barge space of ${BARGE_MIN_H} h or more today or tomorrow.</div>`}`;
+     <div class="w">${x.openEnd?'Still open at programme end '+fmt(tEnd)+' — beyond that no data':x.closer?`Closes when ${x.closer.n} berths${x.closer.proj?' (projected)':''}`:'Closes on the next movement'}</div></div>`).join('')}</div>`
+   :`<div class="m" style="color:var(--muted)">No barge space of ${BARGE_MIN_H} h or more till ${fmt(tEnd)}.</div>`}`;
 }
 function openList(title,arr){
   arr=arr.slice().sort((a,z)=>{const fa=(S.find(q=>q.n===a.n)||{}).F??(a.rdy==null?1e9:1e8),fz=(S.find(q=>q.n===z.n)||{}).F??(z.rdy==null?1e9:1e8);return fa-fz;});
