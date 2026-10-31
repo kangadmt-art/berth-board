@@ -339,7 +339,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('10-31 21:00');
 const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 01:05 IST';
+const UPDATED='1 Nov 2026 · 01:10 IST';
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
@@ -386,7 +386,7 @@ function preview(){
   const hd=document.querySelector('#mp');if(hd)hd.innerHTML=`Meeting preview · meeting of ${fday(meet)} 11:00 → movements till ${fday(end)} 18:00`;
   if(!rows.length){el.innerHTML=`<tr><td class="fl">No DPA berth is projected to free up before ${fday(end)} 18:00 beyond what the programme already fixes.</td></tr>`;return;}
   el.innerHTML='<tr><th style="width:200px">Berth frees</th><th>Board\'s pick</th><th>Next in line</th><th>What could overturn it at the meeting</th></tr>'+rows.map(x=>`<tr class="${isMine(x.n)?'me':''} ${x.projChk?'chk':''}">
-   <td class="w"><b>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev} sails${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(Math.abs(x.prevAt-nextMeet(NOW))<0.01?'not in today\'s programme → decided at the '+fmt(x.prevAt,false)+' meeting':x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
+   <td class="w"><b>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev}${(()=>{const pv=V.find(v=>v.n===x.prev)||S.find(v=>v.n===x.prev);return pv?' · '+pv.c+(pv.cat?' · '+(CL[pv.cat]||pv.cat):''):'';})()} sails${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(Math.abs(x.prevAt-nextMeet(NOW))<0.01?'not in today\'s programme → decided at the '+fmt(x.prevAt,false)+' meeting':x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
    <td class="pk"><b>${x.n}</b>${isMine(x.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${x.c} · ${nf.format(x.q)} ${x.u}${agTxt(x.n)}</small><small>${CL[x.cat]||x.cat}${x.via?' slot · as '+x.via:''} · alongside ~${fmt(x.F)}${x.tide?' · '+x.tide:''}</small></td>
    <td class="al">${x.alt?`<b>${x.alt.n}</b><small>${x.alt.c} · ${CL[x.alt.cat]||x.alt.cat}${x.alt.via?' as '+x.alt.via:''}${x.alt.same?' · same group, next rank':''}</small>`:'<span style="color:var(--dim)">nobody else eligible</span>'}</td>
    <td class="fl">${x.flips&&x.flips.length?'<ul>'+x.flips.map(f=>`<li>${f}</li>`).join('')+'</ul>':'—'}</td></tr>`).join('');
