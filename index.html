@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DPA Berth Board · 31 Oct 2026</title></head><body>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DPA Berth Board · 1 Nov 2026 PM</title></head><body>
 <title>DPA Berth Board</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -294,9 +294,9 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   <header class="top">
     <div>
       <div class="eyebrow">Deendayal Port · Kandla · Dry cargo jetty</div>
-      <h1>Berth <span>Board</span><span class="draft">31 OCT 2026</span></h1>
+      <h1>Berth <span>Board</span><span class="draft">1 NOV 2026</span></h1>
     </div>
-    <div class="asof"><span class="upd" id="upd"></span><br>Berthing List <b>31.10.26 · 0700</b> (KPSAA mail)<br>Signals up to <b>31 Oct night (disp 1919)</b> · Programme <b>01.11 (meeting 31.10, TF/SH/2102)</b> · revised list 31.10 (15:09)<br>Policy <b>24.03.25 + 4 amendments</b><br><span id="tide"></span></div>
+    <div class="asof"><span class="upd" id="upd"></span><br>Berthing List <b>31.10.26 · 0700</b> (KPSAA mail)<br>Signals up to <b>31 Oct night (disp 1919)</b> · Programme <b>02.11 (meeting 01.11, TF/SH/2102, mailed 15:10)</b> · no 0700 list on Sun 1 Nov<br>Policy <b>24.03.25 + 4 amendments</b><br><span id="tide"></span></div>
   </header>
   <div class="notices" id="notices"></div>
 
@@ -373,7 +373,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
     <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
   </section>
-  <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · signals to 31 Oct 1919 · movement programmes TF/SH/2102 for 31.10 and 01.11 · timber desk position report 30.10 (updated to 31.10 1800).</footer>
+  <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · signals to 31 Oct 1919 · movement programmes TF/SH/2102 for 31.10, 01.11 and 02.11 (mailed 1 Nov 15:10; no Sunday 0700 list) · timber desk position report 30.10 (updated to 31.10 1800).</footer>
 </div>
 
 <script>
@@ -388,9 +388,9 @@ function part(x){const H=dt(x).getUTCHours();return H<6?'early hours':H<12?'morn
 function frac(p){const w=Math.floor(p),f=p-w;const s={0:'',0.25:'¼',0.5:'½',0.75:'¾'}[Math.round(f*4)/4];return (w===0&&s?'':w)+(s||'');}
 function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
-const NOW=h('10-31 21:00');
-const PROG_END=h('11-01 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 04:30 IST';
+const NOW=h('11-01 15:10');
+const PROG_END=h('11-02 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
+const UPDATED='1 Nov 2026 · 15:40 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
@@ -419,7 +419,8 @@ const MYLOG={
  'African Quail':[
   {d:'31 Oct 0700 list',exp:'11-01 14:30',b:'14',slot:'SAAGAR break bulk',why:'Next in SAAGAR after AC Kathryn (CJ-14, ETC 1 Nov ~12:30). Team ETB was also 1 Nov.'},
   {d:'31 Oct pm · programme 01.11',exp:'11-04 16:00',b:'6',slot:'SAAGAR bulk (cross-fill)',why:'Rome Trader (petcoke) was declared SAAGAR in the revised list and took the SAAGAR bulk slot at CJ-6; CJ-14 went to Feng Hai Da (24-hr group); AC Kathryn now sails 1 Nov 17:05. SAAGAR full until Rome Trader sails 4 Nov 14:00.'},
-  {d:'31 Oct night · rules review',exp:'11-04 19:10',b:'15A',slot:'SAAGAR bulk (cross-fill)',why:'Timber cannot work at CJ-6 (commodity rule) — so the berth after Rome Trader cannot be Quail\'s; the slot still frees 4 Nov 14:00 and the first clean-berth gap after that is CJ-15A once Mettle Star finishes. Same day, later evening.'}
+  {d:'31 Oct night · rules review',exp:'11-04 19:10',b:'15A',slot:'SAAGAR bulk (cross-fill)',why:'Timber cannot work at CJ-6 (commodity rule) — so the berth after Rome Trader cannot be Quail\'s; the slot still frees 4 Nov 14:00 and the first clean-berth gap after that is CJ-15A once Mettle Star finishes. Same day, later evening.'},
+  {d:'1 Nov pm · programme 02.11',exp:'11-04 20:10',b:'13',slot:'SAAGAR bulk (cross-fill)',why:'Programme for 2 Nov changed the berths around Quail: no Centurion Buyo shift (so CJ-15A stays with Centurion till 5 Nov), CJ-14 goes to Theometor (General) after Feng Hai Da, Yuan Hang Wei Ye takes CJ-5. Quail still waits for the SAAGAR bulk slot (Rome Trader, ETC 4 Nov 14:00, estimated — no norm printed) and the first clean berth free after that.'}
  ]
 };
 const NOTICES=[
@@ -429,6 +430,10 @@ const NOTICES=[
 // Expected-vs-actual log. {d:'date', v:'vessel', exp:'what the board expected', act:'what the port did', why:'reason / hypothesis', fix:'rule change', st:'open'|'adopted'|'ok'}
 // st: open = waiting for Mihir to confirm the reason; adopted = folded into the rules; ok = matched, nothing to learn
 const LEARN=[
+ {d:'1 Nov pm',v:'CJ-14 · Theometor (General) over Orion',exp:'Board: CJ-14 after Feng Hai Da → Orion, 30k/25k against the 24-hr slot (~2 Nov 19:00); General vessels only after the priority groups.',act:'Programme for 02.11: Feng Hai Da sails 16:30 → Theometor (rice bags, GEN) at 127–141½. Orion not programmed; the 24-hr (30K) slot went to Yuan Hang Wei Ye at CJ-5 instead.',why:'The one 30k/25k slot open in the window (against 24-hr) went to the senior 30k vessel, Yuan Hang Wei Ye — the port made a berth for her at CJ-5 by shifting Aya. With that slot used and the HP slot needing a 50k commitment nobody took, CJ-14 went to General. Why Theometor rather than Mak 1 (senior General, reported 5 Sep) is not visible in the data — readiness/documents or a port choice.',fix:'Seniority on the 30k/25k slot is confirmed (Yuan Hang first). Open: the General order (Theometor over Mak 1) — ask Mihir.',st:'open'},
+ {d:'1 Nov pm',v:'CJ-5 · Yuan Hang Wei Ye (iron ore) under 24HRS(30K) · Aya shifted to CJ-4',exp:'Board had iron ore barred from CJ-1–5 (Mihir, 31 Oct) → Yuan Hang Wei Ye at CJ-6 on 4 Nov after Rome Trader; CJ-4 → Mak 1 / Centurion Buyo shift.',act:'Programme for 02.11: Eva Bright sails 05:00 (night), Aya shifted CJ-5 → CJ-4 23½–30¾ a/c of Genesis (Yuan Hang\'s agent), Yuan Hang Wei Ye in at CJ-5 31¾–40 as 24HRS(30K), 30,000 MTPD, night starboard.',why:'Iron ore pellet feed is evidently acceptable at CJ-5 (206 m berth, draught 10.5 m, arrival 6.4 m). The 30k/25k slot against 24-hr goes to the senior vessel; the agent paid for a shift of the bags vessel to the shorter CJ-4 (183 m) so the 190 m vessel gets the 206 m berth.',fix:'Commodity rule relaxed: iron ore barred at CJ-1–4 only (CJ-5 allowed) — confirm. New practice seen: a bags/General vessel can be shifted within CJ-1–10 (at the beneficiary agent\'s cost) to free a longer berth for a priority vessel — not modelled yet.',st:'open'},
+ {d:'1 Nov pm',v:'Mettle Star · HP slot left vacant · no Centurion Buyo shift',exp:'Mihir / board: Centurion Buyo shifted CJ-15A → CJ-4, Mettle Star (ETA 1 Nov 06:00, HP Y) under HP at CJ-15A once Meghna Venus sails; Orion 30k/25k against 24-hr at CJ-14.',act:'Programme for 02.11 has no HP berthing and no port-convenience shift; the HP slot Meghna Venus vacates at 13:00 stays empty in the window. Mettle Star and Orion not programmed.',why:'Most likely Mettle Star did not declare readiness at the meeting (readiness N/A in the 31 Oct list; no 1 Nov list received on Sunday to confirm) and Orion did not take HP at a 50k commitment. The shift is only made when a priority vessel is actually ready to use the freed berth.',fix:'The "ETA vessel with a Y is assumed to declare at the meeting" rule is too optimistic — the board will keep assuming for the next meeting but flags it; better: assume only when the list shows readiness or Mihir confirms. Ask Mihir whether Mettle Star declared.',st:'open'},
+ {d:'1 Nov pm',v:'CJ-7 · Levante Spirit (Govt) after Meghna Venus',exp:'Board: Meghna Venus out ~16:00 → Levante Spirit, Govt, CJ-7 (draught 12.9 m with tidal benefit).',act:'Programme for 02.11: Meghna Venus out 13:00 (draft 12.72) → Rome Trader warps to 41–49¼ → Levante Spirit in at 50¼–57¼, GOV.',why:'As expected: the second Govt slot claimed by the waiting Govt vessel; tidal benefit allowed (channel 14.85 m at HW 2 Nov).',fix:'None — first test of the slot-claim rule and the 14 m tide rule passed. Meghna Venus finished 3 h earlier than the quote-based estimate.',st:'ok'},
  {d:'1 Nov',v:'Mettle Star (HP) · Orion (24-hr Sr No 7) · Centurion Buyo shift',exp:'Board had CJ-4 → Mak 1 (General), CJ-14 → Orion under HP, nothing for Mettle Star (readiness N/A, HP "Y" only).',act:'Mihir (1 Nov 00:12): Mettle Star should berth under HP at CJ-15A after Centurion Buyo is shifted to CJ-4; Orion berths under 30k/25k against 24-hr at CJ-14.',why:'Mihir (1 Nov 00:26): in today\'s meeting Meghna Venus and Alasia hold both HP slots; Meghna Venus sails next day, so one HP slot is vacant in the window. Orion is senior but goes into the comfortable group (30k/25k against 24-hr) and Mettle Star, junior, berths under HP at 50k — "normally the senior vessel berths under the comfortable group and the junior vessel in Higher Productivity". Mettle Star (ETA 1 Nov 06:00, before the meeting) is declared at the meeting; a logs vessel is shifted to CJ-4 to make the second clean berth.',fix:'Coded: ETA vessels with a Y arriving before the first HW after the meeting are assumed declared; a Y without rank queues after the ranked vessels; shift is "required" when clean-berth demand (priority vessels) exceeds the clean berths freeing in the window; HP slot ordered junior-first whenever a 30k/25k fallback slot is open in the window (senior → comfortable slot), else by seniority.',st:'adopted'},
  {d:'31 Oct night',v:'Project vessels · ball clay / feldspar berths',exp:'Board projected CJ-15 / CJ-14 freeing at its own estimate of when Katong WW / Feng Hai Da (project cargo) finish, and offered CJ-13 to Tan Binh 267 (ball clay / feldspar).',act:'Mihir: a project vessel has no discharge norm — it sails whenever it is done, so its berth cannot be programmed ahead; ball clay / feldspar can berth only at CJ-5 to CJ-8.',why:'Project cargo has no port norm; clay / feldspar handling is restricted to the CJ-5–8 stretch.',fix:'Coded: a berth held by a project vessel is kept in the meeting preview at the board\'s estimate but highlighted (red-orange, "PROJECT VESSEL · check sailing") — to be checked at the meeting and only then considered. Who is a project vessel: project / windmill cargo by name, or any vessel in the Steel/Project group with NO norm printed in the list (Rahma, CJ-13) — steel with a printed norm sails as per norms. Exception: a vessel berthed under 24 HRS (Feng Hai Da, CJ-14) must sail within 24 h whatever the cargo, so its berth is programmed at the next meeting — next 24-hr vessel, else a 30k/25k vessel. Clay / feldspar → CJ-5–8 only (a list remark cannot widen a commodity rule).',st:'adopted'},
  {d:'31 Oct night',v:'Sr No 7 seniority · slot held at meeting · unprogrammed berths',exp:'Board gave CJ-4 to Tan Binh 267 (HP rank 2) against the Govt slot because rank-1 Yuan Hang Wei Ye (iron ore) cannot use CJ-4; gave Orion the Coastal slot after Katong WW\'s board-estimated sailing; berthed vessels on berths that free up tonight although the 1 Nov programme has nothing for them.',act:'Mihir: the 30k/25k slot goes to the most senior of the group (Yuan Hang Wei Ye) — a junior does not take it because the senior cannot use that berth. Katong WW was allotted in today\'s meeting against Coastal, so Coastal is engaged for the whole programme; Orion cannot take it. Nothing unprogrammed berths before the next meeting.',why:'Slots are decided at the meeting for the whole programme window, by seniority within the group; an estimated sailing is not a free slot.',fix:'Coded: (1) Sr No 7 fallback by seniority — the senior-most ready HP vessel first; if it cannot use this berth, the next 30k/25k vessel that can gets the movement (Mihir: "any vessel under 30k/25k"), the senior keeps its turn; (2) a ready vessel of a group waiting for a berth (Levante Spirit, Govt) claims the group\'s free slot for the window, so no 30k/25k fallback against Govt while a Govt vessel waits — if nobody is waiting in 24-hr, the 30k/25k vessel goes against 24-hr; (3) a vessel already in a programme holds its slot from now; a vessel alongside at the next meeting with only a board-estimated sailing keeps its slot till that window ends; (4) a berth freeing without a programmed inward vessel is allotted only at the next 11:00 meeting (+2 h); (5) General vessels only after every priority group that can use the berth.',st:'adopted'},
@@ -452,8 +457,7 @@ const LEARN=[
 ];
 // Snapshot of the board's own projection at publish time (next 48 h), so tomorrow's run can compare it with the list
 const PRED=[
- ['Vishva Preeti','8','1 Nov 01:00','programme 01.11'],['Rome Trader','6','1 Nov 11:00','programme 01.11'],['Meghna Venus','7','1 Nov 08:30','programme 01.11'],['Katong WW','15','1 Nov 11:00','programme 01.11'],['Feng Hai Da','14','1 Nov 19:00','programme 01.11'],['Alasia','16','1 Nov 19:00','programme 01.11'],
- ['Yuan Hang Wei Ye','4','1 Nov 00:15','projected · Govt slot, Sr No 7'],['HN Doris','15','2 Nov 03:00','projected'],['Tan Binh 267','7','2 Nov 18:00','projected · Sr No 7'],['Orion','13','2 Nov 19:00','projected'],['Lakmos','14','2 Nov 19:00','projected']
+ ['Aya','4','2 Nov 06:30','programme 02.11 · shift from CJ-5'],['Yuan Hang Wei Ye','5','2 Nov 07:00','programme 02.11 · 24HRS(30K)'],['Levante Spirit','7','2 Nov 15:00','programme 02.11 · GOV'],['Theometor','14','2 Nov 18:30','programme 02.11 · GEN'],['Orion','15','2 Nov 13:00','projected · 30k/25k quote (Sr No 7)'],['Mettle Star','13','2 Nov 19:00','projected'],['Star Fighter','16','3 Nov 14:00','projected'],['Tan Binh 267','5','4 Nov 06:30','projected · 30k/25k quote (Sr No 7)'],['Lakmos','4','4 Nov 07:45','projected'],['Nord Newport','6','4 Nov 16:00','projected'],['African Quail','13','4 Nov 20:10','projected']
 ];
 function preview(){
   // The 11:00 berthing meeting programmes movements up to 18:00 of the next day. Preview covers the NEXT meeting's window:
@@ -568,13 +572,16 @@ const V=[
  {b:'2',n:'Karpathos Dawn',nm:6500,p:[8.5,16.75],c:'Rice bags',q:50000,u:'MT',cat:'8K',f:'10-31 16:00',t:'11-08 08:00',est:1,note:'in o/c after Moonlit (day signal 31 Oct, Capt Karan); made-fast time estimated ~16:00'},
  {b:'3',n:'Seagautam',p:[17.75,22.5],c:'Ammonium sulphate bulk',q:6000,u:'MT',cat:'24H',f:'10-30 17:45',t:'10-31 15:15',note:'sailed 15:15 per day signal 31 Oct (Capt Pathak)'},
  {b:'3',n:'Horizon Chaser',p:[17.75,22],c:'Bitumen (tanker)',q:3902,u:'MT',cat:'BIT',f:'10-31 17:15',t:'11-01 17:00',note:'in o/c after Sea Gautam (day signal 31 Oct, Capt Pathak; made fast ~17:15 est); sails 1 Nov 17:00 per programme'},
- {b:'4',n:'Eva Bright',nm:11500,p:[23.5,31.5],c:'Polyhalite fertiliser',q:25000,u:'MT',cat:'GOV',f:'10-29 16:05',t:'10-31 22:15'},
- {b:'5',n:'Aya',p:[32.5,39.75],c:'Rice bags',q:25100,u:'MT',cat:'GEN',f:'10-28 17:05',t:'11-04 00:45'},
+ {b:'4',n:'Eva Bright',nm:11500,p:[23.5,31.5],c:'Polyhalite fertiliser',q:25000,u:'MT',cat:'GOV',f:'10-29 16:05',t:'11-02 05:00',note:'programme for 02.11: NIGHT SAILING 05:00, outward draft 7.2 m — list ETC was 31 Oct 22:15 (about 31 h past ETC)'},
+ {b:'5',n:'Aya',p:[32.5,39.75],c:'Rice bags',q:25100,u:'MT',cat:'GEN',f:'10-28 17:05',t:'11-02 05:30',est:1,note:'programme for 02.11: NIGHT SHIFTING CJ-5 → CJ-4 a/c of Genesis (to make CJ-5 free for Yuan Hang Wei Ye); shift time estimated right after Eva Bright sails'},
+ {b:'4',n:'Aya',p:[23.5,30.75],c:'Rice bags',q:25100,u:'MT',cat:'GEN',f:'11-02 06:30',t:'11-04 05:45',est:1,note:'programme for 02.11: shifted from CJ-5 to CJ-4 23½–30¾ (night shifting, a/c Genesis); ETC = earlier estimate + shift time'},
+ {b:'5',n:'Yuan Hang Wei Ye',nm:30000,p:[31.75,40],c:'Iron ore pellet feed',q:50540,u:'MT',cat:'24H',f:'11-02 07:00',t:'11-04 04:30',est:1,note:'programme for 02.11: 24HRS(30K) — 30k/25k vessel against the 24-hr slot, 30,000 MTPD quote, night starboard, sailing draft 12.5 m; made-fast time estimated after Aya\'s shift'},
  {b:'6',n:'Outrivaling 3',p:[42.75,48],c:'Soda ash J-bags / pipes',q:10341,u:'MT',cat:'GEN',f:'10-30 05:30',t:'11-01 09:00',est:1,note:'programme for 01.11: shifting CJ-6 → OTB at agent\'s a/c (time not given)'},
- {b:'6',n:'Rome Trader',p:[41.5,49.75],c:'Petcoke bulk',q:50010,u:'MT',cat:'SAAGAR',f:'11-01 11:00',t:'11-04 14:00',est:1,note:'programme for 01.11: in at CJ-6 41½–49¾ as SGR (SAAGAR bulk); ready 31 Oct 09:00'},
+ {b:'6',n:'Rome Trader',p:[41,49.25],c:'Petcoke bulk',q:50010,u:'MT',cat:'SAAGAR',f:'11-01 11:00',t:'11-04 14:00',est:1,note:'programme for 01.11: in at CJ-6 41½–49¾ as SGR (SAAGAR bulk); programme for 02.11: warping to 41–49¼ (makes room for Levante Spirit at 50¼)'},
  {b:'7',n:'Xanadu',nm:50000,p:[49,57.25],c:'Coal bulk',q:79219,u:'MT',cat:'HP',f:'10-28 16:05',t:'10-30 23:30',etc:'10-30 08:06'},
  {b:'7',n:'Fu Hai 16',nm:50000,p:[50.75,57.25],c:'Iron ore fines',q:53243,u:'MT',cat:'HP',f:'10-31 03:00',t:'11-01 06:30',note:'HP quote 50,000 MTPD; sails 1 Nov 06:30 per programme, outward draft 12.65 m at a 12.0 m berth (tidal benefit)'},
- {b:'7',n:'Meghna Venus',nm:50000,p:[50.75,57.25],c:'Clay / feldspar',q:55000,u:'MT',cat:'HP',f:'11-01 08:30',t:'11-02 16:00',est:1,note:'programme for 01.11: HP 50,000 MTPD quote; sailing draft 12.72 m'},
+ {b:'7',n:'Meghna Venus',nm:50000,p:[50.75,57.25],c:'Clay / feldspar',q:55000,u:'MT',cat:'HP',f:'11-01 08:30',t:'11-02 13:00',note:'programme for 02.11: sails 13:00, outward draft 12.72 m (HP 50,000 MTPD quote)'},
+ {b:'7',n:'Levante Spirit',p:[50.25,57.25],c:'MOP',q:57680,u:'MT',cat:'GOV',f:'11-02 15:00',t:'11-09 15:00',est:1,note:'programme for 02.11: GOV, in after Meghna Venus at 50¼–57¼ (made-fast ~15:00 est); ETC estimated at a Govt fertiliser norm ~8,000 MTPD'},
  {b:'8',n:'Ocean Camellia',nm:8050,p:[58.25,68],c:'Urea bulk',q:55040,u:'MT',cat:'GOV',f:'10-25 04:30',t:'10-31 21:30',note:'night signal 31 Oct: out 21:30 (Capt Goel); programme had 23:00'},
  {b:'8',n:'Vishva Preeti',nm:8050,p:[58.25,68],c:'Urea bulk',q:52500,u:'MT',cat:'GOV',f:'11-01 01:30',t:'11-07 20:00',est:1,note:'night signal 31 Oct: in 01:30 (Capt Sud), 58¼–68, Govt'},
  {b:'9',n:'Lacerta',nm:20000,p:[69.25,79.25],c:'US coal',q:78005,u:'MT',cat:'PPP',f:'10-28 04:50',t:'10-30 23:30'},
@@ -582,7 +589,8 @@ const V=[
  {b:'13',n:'Bauhinia',p:[113,121.25],c:'Project cargo',q:4292,u:'MT',cat:'STL',f:'10-29 01:06',t:'10-31 04:00'},
  {b:'13',n:'Rahma',p:[113,125],c:'Steel pipes',q:7216,u:'MT',cat:'STL',f:'10-31 05:20',t:'11-02 17:00',est:1},
  {b:'14',n:'AC Kathryn',p:[127,140.75],c:'JAS Aus. logs',q:29068,u:'CBM',cat:'SAAGAR',f:'10-25 06:36',t:'11-01 17:05',note:'readiness 1 Nov 17:05 per programme for 01.11 (list ETC was 2 Nov 18:48)'},
- {b:'14',n:'Feng Hai Da',p:[126,137],c:'Windmill blades (48)',q:1085,u:'MT',cat:'24H',f:'11-01 19:00',t:'11-02 17:00',est:1,note:'programme for 01.11: 24 HRS group, starboard, agent\'s request'},
+ {b:'14',n:'Feng Hai Da',p:[126,137],c:'Windmill blades (48)',q:1085,u:'MT',cat:'24H',f:'11-01 19:00',t:'11-02 16:30',note:'programme for 02.11: sails 16:30 (24 HRS group)'},
+ {b:'14',n:'Theometor',nm:3450,p:[127,141.5],c:'Rice bags',q:45000,u:'MT',cat:'GEN',f:'11-02 18:30',t:'11-15 23:30',est:1,note:'programme for 02.11: GEN, in after Feng Hai Da at 127–141½ ("MV THEOMETER"); ETC estimated at the bags norm 3,450 MTPD'},
  {b:'15',n:'African Predator',p:[146.75,158.75],c:'Windmill blades',q:38435,u:'CBM',cat:'COASTAL',f:'10-27 01:12',t:'11-01 09:00',note:'programme for 01.11: shifting CJ-15 → OTB 09:00 at agent\'s request, draft 10.1 m'},
  {b:'15',n:'Katong WW',p:[142.5,155],c:'Project cargo',q:1321,u:'MT',cat:'COASTAL',f:'11-01 11:00',t:'11-02 01:00',est:1,note:'programme for 01.11: CSTL(SGR) — SAAGAR project vessel against the Coastal slot, as the board expected'},
  {b:'15A',n:'Centurion Buyo',p:[159.75,169.5],c:'Pine logs',q:29852,u:'CBM',cat:'SAAGAR',f:'10-29 23:10',t:'11-05 12:55',nm:4600,note:'ETC corrected in the revised list 31.10 (afternoon): 5 Nov 12:54 at norm 4,600'},
@@ -590,7 +598,7 @@ const V=[
  {b:'16',n:'Maritime Harmony',nm:40000,p:[171.5,188],c:'Salt',q:74850,u:'MT',cat:'HP',f:'10-30 13:00',t:'11-01 17:00',note:'HP quote 40,000 MTPD; sails 1 Nov 17:00 per programme (list ETC 11:54), sailing draft 14.1 m'},
  {b:'16',n:'Alasia',nm:40000,p:[173.5,188],c:'Aggregates',q:59900,u:'MT',cat:'HP',f:'11-01 19:00',t:'11-03 12:00',est:1,note:'programme for 01.11: HP 40,000 MTPD quote; ETA 1 Nov 00:30, sailing draft 13.3 m'}
 ];
-const LOA={'Emmanouil':169.37,'Moonlit':170.7,'Karpathos Dawn':189.99,'Horizon Chaser':94.4,'Seagautam':109.8,'Rahma':180,'Cervia':229.2,'Eva Bright':179.9,'Aya':167,'Outrivaling 3':118.35,'Xanadu':228.99,'Fu Hai 16':189.99,'Ocean Camellia':229,'Lacerta':228.99,'Bauhinia':130.73,'AC Kathryn':177,'African Predator':199.98,'Centurion Buyo':182.94,'Agia Fevronia':199.85,'Maritime Harmony':224.94,'Rome Trader':189.99,'Meghna Venus':189.99,'Vishva Preeti':229,'Feng Hai Da':139.8,'Katong WW':177.5,'Alasia':199.98};
+const LOA={'Emmanouil':169.37,'Moonlit':170.7,'Karpathos Dawn':189.99,'Horizon Chaser':94.4,'Seagautam':109.8,'Rahma':180,'Cervia':229.2,'Eva Bright':179.9,'Aya':167,'Outrivaling 3':118.35,'Xanadu':228.99,'Fu Hai 16':189.99,'Ocean Camellia':229,'Lacerta':228.99,'Bauhinia':130.73,'AC Kathryn':177,'African Predator':199.98,'Centurion Buyo':182.94,'Agia Fevronia':199.85,'Maritime Harmony':224.94,'Rome Trader':189.99,'Meghna Venus':189.99,'Vishva Preeti':229,'Feng Hai Da':139.8,'Katong WW':177.5,'Alasia':199.98,'Theometor':187.88,'Levante Spirit':199.98,'Yuan Hang Wei Ye':190};
 V.forEach(v=>{v.F=h(v.f);v.T=h(v.t);v.g=grp(v.c);v.fixed=1;v.loa=LOA[v.n];});
 
 // waiting + expected. [name,cargo,qty,uom,loa,draft,readiness,{group:rank},extra]  — Berthing List 31.10.2026 (0700 hrs)
@@ -604,8 +612,6 @@ const WRAW=[
  ['Safi Alfa','Rice bags',26100,'MT',189.99,null,'10-19 11:00',{},'Working at midstream meanwhile'],
  ['KSL Ruiyang','DR pellets',24033,'MT',189.99,10.6,'10-21 01:06',{'24H':1},''],
  ['Deniz ID','Rice bags',25500,'MT',167,5.6,'10-21 11:00',{},''],
- ['Levante Spirit','MOP',57680,'MT',199.98,12.9,'10-22 23:18',{GOV:3},''],
- ['Theometor','Rice bags',45000,'MT',187.88,6.5,'10-23 11:00',{},''],
  ['Bao He Ling','Steel / project cargo',34217,'MT',189.9,9.1,'10-24 11:00',{'8K':2,STL:2},''],
  ['Tan Binh 267','Ball clay / feldspar bulk',56000,'MT',190,6.2,'10-24 15:17',{HP:2,'8K':3},''],
  ['Michelangelo','NPK',36500,'MT',229,13.45,'10-26 06:06',{GOV:4},''],
@@ -617,7 +623,6 @@ const WRAW=[
  ['Shen Hai Shou Xin','Iron ore pellets',51112,'MT',189.99,6,'10-28 11:00',{HP:5,'8K':7},''],
  ['Bristol','TSP + DAP',64706,'MT',189.5,13.5,'10-29 09:00',{GOV:5},''],
  ['Bomustafao O','Rice in bags',21945,'MT',157.26,5.8,'10-29 11:00',{},'Declared ready 29 Oct'],
- ['Yuan Hang Wei Ye','Iron ore pellet feed',50540,'MT',190,6.4,'10-29 11:00',{HP:1,'8K':1},'Declared ready 29 Oct · wants CJ-6 to 9'],
  ['Yara J','Rice bags',30000,'MT',199.99,9.85,'10-29 11:00',{},'Declared ready 29 Oct · at midstream'],
  ['Tai Knight','NAPP coal bulk',76785,'MT',229,14.2,'10-29 14:00',{},'Wants to discharge entire cargo at OTB'],
  ['African Peacock','JAS pine logs',36926,'CBM',182.93,10.6,'10-31 02:06',{SAAGAR:4},'Reported 31 Oct 02:06'],
@@ -700,7 +705,7 @@ const SHIFT_H=4, SHIFT_MIN_LEFT=0, SHIFT_MIN_STAY=0; // Mihir 31 Oct: the port s
 const LOGS_RATE=3450; // DPA norm for logs (CBM/day). The 4,800 CBM/day working assumption was withdrawn on 31 Oct — list ETCs and norms are used as printed
 const DIRTY=c=>/coal|petcoke|iron|pellet/i.test(c)&&!/mill ?scale/i.test(c); // millscale is allowed at CJ-13–16 (Mihir, 31 Oct)
 // ---- berth / cargo restrictions (Mihir, 31 Oct 22:30) ----
-const IRON=c=>/iron|pellet/i.test(c);           // iron ore: NOT at CJ-1–5
+const IRON=c=>/iron|pellet/i.test(c);           // iron ore: NOT at CJ-1–4 (CJ-5 observed OK, programme 02.11)
 const FERT=c=>/urea|mop|npk|dap|tsp|fert|sulphate|potash|phos/i.test(c); // fertiliser: NOT at CJ-13–16
 const COAL=c=>/coal/i.test(c);                  // coal: only CJ-5–8 (petcoke is not restricted to coal berths — Rome Trader at CJ-6)
 const BAGB=['1','2','3','4'].concat(CLEAN);      // bags: only CJ-1–4 and CJ-13–16
@@ -718,7 +723,7 @@ const PROJ=c=>/project|windmill/i.test(c||''); // project cargo by name: no disc
 const PROJV=v=>PROJ(v.c)||(v.cat==='STL'&&!v.nm);
 function allowedBerths(w){
   const c=w.c||''; let A=POOL.slice();
-  if(IRON(c))A=A.filter(b=>!['1','2','3','4','5'].includes(b));
+  if(IRON(c))A=A.filter(b=>!['1','2','3','4'].includes(b)); // programme 02.11 berthed Yuan Hang Wei Ye (iron ore pellet feed) at CJ-5 31¾–40 — so only CJ-1–4 barred (to confirm with Mihir)
   if(isLogs(c))A=A.filter(b=>!NOTIMBER.includes(b));
   if(FERT(c))A=A.filter(b=>!CLEAN.includes(b));
   if(COAL(c))A=A.filter(b=>COALB2.includes(b));
@@ -819,7 +824,7 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
       if(need){
         // shiftable vessel on a clean berth: logs / bags, can use this berth, and its own berth has no programmed inward vessel (that programme stands);
         // prefer the one with the most work left (shifting a vessel about to finish gains nothing)
-        const mov=o.filter(x=>CLEAN.includes(x.b)&&SHIFTABLE(x.c)&&x.T>e.t+SHIFT_MIN_LEFT&&!x.shifted&&!(x.loa&&BM&&x.loa>BM)&&okBerth({n:x.n,c:x.c,loa:x.loa,x:''},e.b)&&!V.some(v=>v.b===x.b&&v.n!==x.n&&v.F>e.t)).sort((a,z)=>(z.T-e.t)-(a.T-e.t))[0];
+        const mov=o.filter(x=>CLEAN.includes(x.b)&&SHIFTABLE(x.c)&&x.F<=e.t&&x.T>e.t+SHIFT_MIN_LEFT&&!x.shifted&&!((x.loa||LOA[x.n])&&BM&&(x.loa||LOA[x.n])>BM)&&okBerth({n:x.n,c:x.c,loa:x.loa||LOA[x.n],x:''},e.b)&&!V.some(v=>v.b===x.b&&v.n!==x.n&&v.F>e.t)).sort((a,z)=>(z.T-e.t)-(a.T-e.t))[0]; // only a vessel actually alongside now; a programmed vessel not yet berthed is never 'shifted'
         // "if required": not required when a clean berth the vessel can use frees inside the window anyway on a declared / programmable sailing
         const cleanComing=o.filter(x=>CLEAN.includes(x.b)&&x.T>=need.when-6&&x.T<=WE&&!(x.est&&!x.nm&&x.cat!=='24H')&&allowedBerths(need.w).includes(x.b)&&!((BERTHS.find(bb=>bb.id===x.b)||{}).maxLoa<need.w.loa)&&!V.some(v=>v.b===x.b&&v.n!==x.n&&v.F>x.T-0.01)).sort((a,z)=>a.T-z.T)[0];
         // demand vs supply inside the window: priority vessels needing a clean berth vs clean berths freeing on a programmable sailing (or idle)
@@ -1105,7 +1110,7 @@ function mine(){
   const hist=n=>{
     const L=(MYLOG[n]||[]).slice(); const sp=S.find(x=>x.n===n), v=V.filter(x=>x.n===n).sort((a,z)=>z.F-a.F)[0];
     const nowExp=v?v.F:(sp?sp.F:null);
-    const rowsH=L.map(e=>({...e,t:h(e.exp)}));
+    const rowsH=L.filter(e=>/^\d\d-\d\d \d\d:\d\d$/.test(e.exp||'')).map(e=>({...e,t:h(e.exp)}));
     if(nowExp!=null){const last=rowsH[rowsH.length-1];if(!last||Math.abs(last.t-nowExp)>0.5)rowsH.push({d:'Now · '+UPDATED.replace(/ IST$/,''),t:nowExp,b:v?v.b:sp.b,slot:v?(CL[v.cat]||v.cat)+(v.F<=NOW?' · at berth':' · fixed'):(CL[sp.cat]||sp.cat)+(sp.via?' slot as '+sp.via:''),why:v?(v.F<=NOW?'Alongside.':'Fixed by programme / signal.'):'Current projection under today\'s list and rules.',live:1});else{last.live=1;last.d+=' → unchanged now';}}
     if(!rowsH.length)return '';
     return `<tr class="hist"><td colspan="2"><div class="ht">Projection history · why the date moved</div><ol class="hl">${rowsH.map((e,i)=>{const prev=rowsH[i-1];const dd=prev?Math.round((e.t-prev.t)/24*10)/10:null;const tag=dd==null?'<span class="dl same">first estimate</span>':Math.abs(dd)<0.25?'<span class="dl same">same</span>':dd>0?`<span class="dl late">+${dd} d later</span>`:`<span class="dl early">${dd} d earlier</span>`;return `<li class="${e.live?'live':''}"><div class="hh"><span class="hd">${e.d}</span><b>${fday(e.t)} ~${fmt(e.t,false)} · CJ-${e.b}</b>${tag}</div><div class="hs">${e.slot}</div><div class="hw">${e.why}</div></li>`;}).join('')}</ol></td></tr>`;};
@@ -1232,6 +1237,7 @@ function groups(){
 }
 
 const MV=[
+ ['Programme for 2 Nov (berthing meeting 1 Nov 11:00, TF/SH/2102 dt 1 Nov, mailed 15:10)',[['05:00','OUT','Eva Bright','CJ-4 · 23½–31½','—','11-02 05:00','night sailing · outward draft 7.2 m · ~31 h past list ETC'],['night','WARP','Aya','CJ-5 → CJ-4 · 23½–30¾','—','11-02 06:30','night shifting a/c of Genesis'],['o/c','IN','Yuan Hang Wei Ye','CJ-5 · 31¾–40','—','11-02 07:00','24HRS(30K) · 30,000 MTPD · night starboard · sailing draft 12.5 m'],['13:00','OUT','Meghna Venus','CJ-7 · 50¾–57¼','—','11-02 13:00','outward draft 12.72 m'],['—','WARP','Rome Trader','CJ-6 · → 41–49¼','—','11-02 13:30','warping at panels'],['o/c','IN','Levante Spirit','CJ-7 · 50¼–57¼','—','11-02 15:00','GOV'],['16:30','OUT','Feng Hai Da','CJ-14 · 126–137','—','11-02 16:30','24 HRS group'],['o/c','IN','Theometor','CJ-14 · 127–141½','—','11-02 18:30','GEN'],['07:20','OUT','Lisbon','CJ-12 (container, not tracked)','—','11-02 07:20','→ Folk Dammam in']]],
  ['Day signal · 30 Oct (final, disp 2300 + amendments)',[['06:00','OUT','Agia Fevronia','CJ-16 · 173½–188','Karan','10-30 06:00','done'],['09:45','WARP','African Predator','CJ-15 · → 146¾–158¾','Sandeep','10-30 09:45',''],['10:15','WARP','Centurion Buyo','CJ-15A · → 159¾–169½','Pathak','10-30 10:15',''],['o/c','IN','Maritime Harmony','CJ-16 · 171½–188','Yadav','10-30 11:30',''],['14:00','OUT','Xanadu','CJ-7 · 49–57¼','Bali','','PP CANCELLED — delay in cargo operation'],['o/c','IN','Fu Hai 16','CJ-7 · 50¾–57¼','Bali','','PP CANCELLED — berth not vacant'],['13:30','IN','Horizon Chaser','CJ-3 · 17–21¼','Bali','','PP CANCELLED — vessel ETA delayed']]],
  ['Day signal · 30 Oct (new, disp 1400)',[['15:45','WARP','Aya','CJ-5 · 31½–38¾ → 32½–39¾','Bali','10-30 15:45',''],['16:15','WARP','Eva Bright','CJ-4 · 22½–30½ → 23½–31½','Bali','10-30 16:15',''],['16:45','IN','Sea Gautam','CJ-3 · 17¾–22½','Omesh','10-30 17:45','Coastal · speed 6 kts']]],
  ['Night signal · 30/31 Oct (disp 1640/1705, amended to 2115)',[['23:30','OUT','Xanadu','CJ-7 · 49–57¼','Goel','10-30 23:30','RT · was 2200'],['o/c','IN','Fu Hai 16','CJ-7 · 50¾–57¼','Sud','10-31 01:00','flood'],['23:30','OUT','Lacerta','CJ-9 · 69¼–79¼ (PPP)','Deepak','10-30 23:30',''],['04:00','IN','Cervia','CJ-9 · 69¼–79¼ (PPP)','Sud','10-31 04:00','ebb'],['o/c','OUT','Bauhinia','CJ-13 · 113–121¼','Deepak','10-31 04:00','was 0400'],['o/c','IN','Rahma','CJ-13 · 113–125','Goel','10-31 04:30','after Shamim out 0230']]],
@@ -1250,6 +1256,10 @@ function moves(){
 }
 
 const RULES=[
+ {v:'Eva Bright',b:'CJ-4',cat:'Govt priority',etc:'10-31 22:15',end:'11-02 05:00',plan:'list ETC 31 Oct 22:15 → programme for 02.11: night sailing 2 Nov 05:00',
+  what:'Still alongside about 31 h past the list ETC; the 1 Nov meeting programmed her sailing for 2 Nov 05:00 (night sailing, outward draft 7.2 m).',
+  rule:'Govt priority vessel at norm 11,500 MTPD (25,000 MT polyhalite). Beyond the permissible time penal berth hire applies (Circular 21.05.26); reason for the overrun not stated in the programme.',
+  knock:'CJ-4 stays blocked through 1 Nov; Aya is shifted into CJ-4 only after she sails, which in turn frees CJ-5 for Yuan Hang Wei Ye. Any General vessel hoping for CJ-4 (Mak 1) is pushed on.'},
  {v:'Xanadu',b:'CJ-7',cat:'Higher productivity',etc:'10-30 08:06',end:'10-30 23:30',plan:'30 Oct 10:30 → 14:00 → 22:00 → sailed 23:30 (Capt Goel)',
   what:'Sailing postponed from 10:30 to 14:00, then CANCELLED ("delay in cargo operation"), re-fixed 22:00, finally sailed 23:30. About 15½ h past ETC.',
   rule:'Committed 50,000 MTPD → permissible time ends at ETC 30 Oct 08:06. Beyond that: penal berth hire ₹10,000/hr (Circular 21.05.26); an HP vessel missing its productivity is liable to be shifted to OTB at agent\'s cost (Policy 4(7)).',
