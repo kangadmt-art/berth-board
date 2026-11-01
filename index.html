@@ -190,7 +190,6 @@ table{border-collapse:collapse;width:100%}
 .bgc{border:1px solid var(--line2);border-left:4px solid var(--ok);border-radius:6px;padding:9px 11px;background:var(--panel2);display:flex;flex-direction:column;gap:3px;font-size:12.5px}
 .bgc.tight{border-left-color:var(--warn)}
 .bgc.proj{border-style:dashed;border-left-style:solid;background:transparent}
-.bgc.part{border-left-color:var(--warn)}
 .bgc .tag.pj{font-family:var(--f-mono);font-size:10px;border:1px dashed var(--line2);color:var(--muted);border-radius:3px;padding:0 5px;margin-left:4px}
 .bgc .pjn{color:var(--warn);font-size:12px}
 .bgc .r{font-family:var(--f-disp);font-size:22px;font-weight:800;line-height:1}
@@ -422,7 +421,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-01 15:10');
 const PROG_END=h('11-02 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 22:01 IST';
+const UPDATED='1 Nov 2026 · 22:11 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
@@ -1113,8 +1112,15 @@ function side(){
 const BARGE_MIN_M=90, CLEAR_M=20; // gap in metres (quay geometry from the port drawing) that a 2,100–2,500 DWT barge needs
 const gapM=(a,z)=>PM(z)-PM(a);
 const BARGE_MIN=1; // legacy panel threshold, superseded by BARGE_MIN_M
-function bargeGaps(t){
-  const present=ALL.filter(v=>v.F<=t&&t<v.T&&!['9','10','11','12'].includes(v.b)).sort((a,z)=>a.p[0]-z.p[0]);
+// Programme-only view of the quay for barge purposes (Mihir, 1 Nov): list/signal/programme vessels only — no board projections,
+// no board-projected shifts. A vessel whose sailing is only a board estimate (est:1, no programmed OUT/shift) is taken as
+// staying till the programme end: the programme would name her sailing if the port intended it inside its period.
+const mvDep=(n,t)=>MV.some(([g,rows])=>rows.some(r=>r[2]===n&&/OUT|WARP|SHIFT/i.test(r[1])&&r[5]&&Math.abs(h(r[5])-t)<=3&&!/^PP/.test(r[6]||'')));
+const laterEntry=v=>V.some(x=>x!==v&&x.n===v.n&&x.F>=v.T-1&&x.F<=v.T+6);
+const bargeFleet=()=>V.filter(v=>!['9','10','11','12'].includes(v.b)).map(v=>{const prog=!v.est||mvDep(v.n,v.T)||laterEntry(v);const T=prog?v.T:Math.max(v.T,PROG_END);return Object.assign({},v,{T,stays:!prog&&v.T<PROG_END,progDep:prog});});
+function bargeGaps(t,FL){
+  FL=FL||bargeFleet();
+  const present=FL.filter(v=>v.F<=t&&t<v.T).sort((a,z)=>a.p[0]-z.p[0]);
   const excl=BERTHS.filter(b=>b.ppp||b.mnt||b.kict).map(b=>b.p); // ranges not available to barges
   const occ=present.map(v=>v.p).concat(excl).sort((a,z)=>a[0]-z[0]);
   const gaps=[];let cur=0;
@@ -1123,7 +1129,7 @@ function bargeGaps(t){
   return gaps.map(([a,z])=>{
     const m=gapM(a,z), maxLoa=Math.floor(m-CLEAR_M);
     const berths=BERTHS.filter(b=>b.p[0]<z&&b.p[1]>a&&!b.ppp&&!b.mnt&&!b.kict).map(b=>'CJ-'+b.id);
-    const nxt=ALL.filter(v=>v.F>t&&v.p[0]<z&&v.p[1]>a&&!['9','10','11','12'].includes(v.b)).sort((x,y)=>x.F-y.F)[0];
+    const nxt=FL.filter(v=>v.F>t&&v.p[0]<z&&v.p[1]>a).sort((x,y)=>x.F-y.F)[0];
     const left=present.filter(v=>Math.abs(v.p[1]-a)<0.01)[0], right=present.filter(v=>Math.abs(v.p[0]-z)<0.01)[0];
     const hrs=nxt?nxt.F-t:240;
     // Mihir (1 Nov): spaces beside a PROJECTED vessel count too — they are shown, but marked, because the exact panels depend on
@@ -1133,10 +1139,10 @@ function bargeGaps(t){
     return {a,z,m,maxLoa,berths,nxt,left,right,tight:maxLoa<70,hrs,firm,projN};
   }).sort((x,y)=>y.hrs-x.hrs);
 }
-const BARGE_MIN_H=24; // Mihir (1 Nov): a barge needs about a day alongside — a usable barge window is 24 h, shorter gaps are listed only as a note
+const BARGE_MIN_H=4; // gaps shorter than this (a berth swap) are not listed
 const BARGE_SPLIT_H=4; // a narrower remainder is listed separately only if it outlasts the wider space by this much
-// look-ahead: exactly as far as the port's own movement programme goes (18:00 of the day it is for) — beyond that no data.
-// Spaces beside a PROJECTED vessel inside that horizon are counted too, but marked (Mihir, 1 Nov).
+// Mihir (1 Nov): the barge window IS the berthing meeting's programme period — today 18:00 → next day 18:00 (24 h). Spaces are
+// read panel-wise from the programme's allotments (vessels alongside + programmed inward / shifting). No prediction beyond it.
 const bargeEnd=t0=>PROG_END;
 function bargeWindows(t0){
   // Windows = maximal free rectangles in (quay metres × time): a stretch of quay that stays free, in full, from `start` to `end`.
@@ -1144,8 +1150,9 @@ function bargeWindows(t0){
   // window closes there and the narrower remainder is followed on (it was free from the same start). Rectangles contained in
   // another (same or wider space, same or longer time) are dropped, so the list shows each space once, at its longest.
   const t1=bargeEnd(t0); if(t0>=t1-0.01)return [];
-  const times=[t0].concat(ALL.flatMap(v=>[v.F,v.T]).filter(x=>x>t0&&x<t1)).concat([t1]).sort((a,b)=>a-b).filter((x,i,a)=>i===0||x-a[i-1]>0.01);
-  const G=times.map(t=>bargeGaps(t)); // gaps at each event time (last entry = horizon, unused for starts)
+  const FL=bargeFleet();
+  const times=[t0].concat(FL.flatMap(v=>[v.F,v.T]).filter(x=>x>t0&&x<t1)).concat([t1]).sort((a,b)=>a-b).filter((x,i,a)=>i===0||x-a[i-1]>0.01);
+  const G=times.map(t=>bargeGaps(t,FL)); // gaps at each event time (last entry = horizon, unused for starts)
   const rects=[];
   for(let i=0;i<times.length-1;i++){
     for(const g0 of G[i]){
@@ -1167,37 +1174,35 @@ function bargeWindows(t0){
   const eps=0.01;
   const dedup=arr=>arr.filter((r,k)=>!arr.some((o,m)=>m!==k&&o.start<=r.start+eps&&o.a<=r.a+eps&&o.z>=r.z-eps&&o.end>=r.end-BARGE_SPLIT_H+eps&&(o.end>r.end+eps||gapM(o.a,o.z)>gapM(r.a,r.z)+eps||o.start<r.start-eps||m<k)));
   const all=dedup(rects.filter(r=>r.end-r.start>=BARGE_SPLIT_H));
-  const kept=all.filter(r=>r.open||r.end-r.start>=BARGE_MIN_H-eps);
-  bargeWindows.short=all.filter(r=>!(r.open||r.end-r.start>=BARGE_MIN_H-eps)).map(r=>({...r,m:gapM(r.a,r.z),hrs:r.end-r.start,berths:BERTHS.filter(b=>b.p[0]<r.z&&b.p[1]>r.a&&!b.ppp&&!b.mnt&&!b.kict).map(b=>'CJ-'+b.id)}));
+  const kept=all;
   return kept.map(w=>{const m=gapM(w.a,w.z);const berths=BERTHS.filter(b=>b.p[0]<w.z&&b.p[1]>w.a&&!b.ppp&&!b.mnt&&!b.kict).map(b=>'CJ-'+b.id);
-    const closer=w.open?null:ALL.filter(v=>Math.abs(v.F-w.end)<0.01&&v.p[0]<w.z&&v.p[1]>w.a)[0];
-    const after=w.open?ALL.filter(v=>v.F>=w.end-0.01&&v.F<=w.end+12&&v.p[0]<w.z&&v.p[1]>w.a).sort((x,y)=>x.F-y.F)[0]:null; // what the board expects here just past the horizon
-    const opener=w.start>t0+0.01?ALL.filter(v=>Math.abs(v.T-w.start)<0.01&&v.p[0]<w.z&&v.p[1]>w.a)[0]:null; // the sailing that opens it
+    const closer=w.open?null:FL.filter(v=>Math.abs(v.F-w.end)<0.01&&v.p[0]<w.z&&v.p[1]>w.a)[0];
+    const whole=BERTHS.filter(b=>!b.ppp&&!b.mnt&&!b.kict&&(Math.min(b.p[1],w.z)-Math.max(b.p[0],w.a))>=0.8*(b.p[1]-b.p[0])).map(b=>'CJ-'+b.id); // berths (almost) entirely inside the space = vacant berths, not allotted in the programme
+    const opener=w.start>t0+0.01?FL.filter(v=>Math.abs(v.T-w.start)<0.01&&v.p[0]<w.z&&v.p[1]>w.a)[0]:null; // the programmed sailing / shift that opens it
     const beyond=w.start>=PROG_END-0.01; // starts after the programme's coverage — projected only
     const projEnd=!!(closer&&closer.proj); // the space is firm, but what closes it is the board's projection
-    const estStart=!!(opener&&(opener.est||opener.proj)); // opens on an estimated / projected sailing, not a declared one
+    const estStart=false; // estimated sailings no longer open windows — they are taken as staying (see bargeFleet)
     [w.lb2,w.rb2].forEach(v=>{if(v&&v.proj&&!w.projN.includes(v.n))w.projN.push(v.n);});
-    const hrs=w.end-w.start, full=hrs>=BARGE_MIN_H-0.01; // full = 24 h confirmed inside the programme's coverage
-    return {...w,hrs,full,m,maxLoa:Math.floor(m-CLEAR_M),berths,closer,after,opener,tight:m-CLEAR_M<70,openEnd:!!w.open,pastProg:w.end>PROG_END+0.01,beyond,projEnd,estStart,proj:(w.projN.length||beyond||projEnd||estStart)?1:0};})
-   .sort((x,y)=>(y.full-x.full)||(x.start-y.start)||(y.m-x.m));
+    const hrs=w.end-w.start;
+    return {...w,hrs,m,maxLoa:Math.floor(m-CLEAR_M),berths,whole,closer,opener,tight:m-CLEAR_M<70,openEnd:!!w.open,pastProg:w.end>PROG_END+0.01,beyond,projEnd,estStart,proj:(w.projN.length||beyond||projEnd||estStart)?1:0};})
+   .sort((x,y)=>(x.start-y.start)||(y.m-x.m));
 }
 function barge(){
   const el=document.getElementById('barge'); const tEnd=bargeEnd(T);
   if(T>=tEnd-0.01){el.innerHTML=`<div class="bh"><h3>Barge windows</h3><small>Programme coverage ends ${fmt(tEnd)}.</small></div><div class="m" style="color:var(--muted)">No data — the port's movement programme runs only till ${fmt(tEnd)}. Barge windows after that will appear once the next berthing-meeting programme is loaded.</div>`;return;}
-  const W=bargeWindows(T), SH=bargeWindows.short||[];
-  const side=(v,x,end)=>!v?end:`${v.n} (${v.c})${v.proj?' <span class="tag pj">projected</span>':''}${v.T<=x.end+0.01&&v.T>x.start+0.01?` <small style="color:var(--dim)">sails ${fmt(v.T,false)}${v.est?' est':''}</small>`:''}`;
-  const dur=x=>x.full?`<b style="color:var(--ok)">${Math.floor(x.hrs)} h${x.openEnd?'+':''} · 24 h ✓</b>`:`<b style="color:var(--warn)">${Math.floor(x.hrs)} h confirmed till programme end</b> · 24 h needs the next programme`;
-  const card=(x,i)=>`<div class="bgc ${x.tight?'tight':''} ${x.proj?'proj':''} ${x.full?'':'part'}">
-     <div class="r"><span class="sn">${i+1}</span>${fmt(x.start,false)} → ${x.openEnd?fmt(tEnd)+'+':(dt(x.end).getUTCDate()!==dt(x.start).getUTCDate()?fmt(x.end):fmt(x.end,false))}<small>${x.start<T+0.01?'open now':fday(x.start)} · ${dur(x)}${x.proj?' · <span class="tag pj">projected</span>':''}</small></div>
-     <div class="m">Panels <b>${pr([x.a,x.z])}</b> · ${x.berths.join(' / ')} · ~${Math.round(x.m)} m · fits barge up to <b>~${x.maxLoa} m LOA</b>${x.tight?' · tight, 2,100 DWT class only':''}</div>
+  const W=bargeWindows(T);
+  const side=(v,x,end)=>!v?end:`${v.n} (${v.c})${v.stays?' <small style="color:var(--warn)">no programmed sailing — taken as staying</small>':''}${!v.stays&&v.T<=x.end+0.01&&v.T>x.start+0.01?` <small style="color:var(--dim)">sails ${fmt(v.T,false)}${v.est?' (time est.)':''}</small>`:''}`;
+  const dur=x=>`<b style="color:var(--fg)">${Math.floor(x.hrs)} h</b>${x.openEnd?' till programme end':''}`;
+  const card=(x,i)=>`<div class="bgc ${x.tight?'tight':''} ${x.proj?'proj':''}">
+     <div class="r"><span class="sn">${i+1}</span>${fmt(x.start,false)} → ${x.openEnd?fmt(tEnd):(dt(x.end).getUTCDate()!==dt(x.start).getUTCDate()?fmt(x.end):fmt(x.end,false))}<small>${x.start<T+0.01?'open now':fday(x.start)} · ${dur(x)}${x.proj?' · <span class="tag pj">projected</span>':''}</small></div>
+     <div class="m">Panels <b>${pr([x.a,x.z])}</b> · ${x.berths.join(' / ')} · ~${Math.round(x.m)} m · fits barge up to <b>~${x.maxLoa} m LOA</b>${x.tight?' · tight, 2,100 DWT class only':''}${x.whole&&x.whole.length?` · <span class="tag pj" style="border-style:solid;color:var(--brass);border-color:var(--brass2)">${x.whole.join(' / ')} vacant — not allotted in the programme</span>`:''}</div>
      <div class="m">Beside: ${side(x.lb,x,'north end')}${x.lb2?' → '+side(x.lb2,x,'')+' from '+fmt(x.lb2.F,false):''} · ${side(x.rb,x,'south end')}${x.rb2?' → '+side(x.rb2,x,'')+' from '+fmt(x.rb2.F,false):''}</div>
      ${x.projN&&x.projN.length?`<div class="m pjn">Depends on where ${x.projN.join(' / ')} actually berth${x.projN.length>1?'':'s'} — placed by the board's projection; confirm the panels from the signal / programme.</div>`:''}
-     ${x.estStart?`<div class="m pjn">Opens on ${x.opener.n}'s sailing ~${fmt(x.opener.T)} — ${x.opener.proj?'a projected vessel':'board estimate, no declared ETC'}; the start can move.</div>`:''}
+     ${x.opener?`<div class="m">Opens when <b>${x.opener.n}</b> ${x.opener.shiftedTo||laterEntry(x.opener)?'shifts':'sails'} ${fmt(x.opener.T,false)}${x.opener.est?' (programme movement, time estimated)':' (programme)'}</div>`:''}
      ${x.projEnd?`<div class="m pjn">Its end is the board's projection of ${x.closer.n}'s berthing (~${fmt(x.closer.F)}) — if the port places her elsewhere, it stays open longer.</div>`:''}
-     <div class="w">${x.openEnd?'Still open at programme end '+fmt(tEnd)+' — beyond that no data'+(x.after?`<small style="display:block;color:var(--muted)">Board's projection for the next meeting: ${x.after.n} berths here ~${fmt(x.after.F)}${x.after.proj?'':' (programme)'}</small>`:''):x.closer?`Closes when ${x.closer.n} berths${x.closer.proj?' (projected)':''}`:'Closes on the next movement'}</div></div>`;
-  el.innerHTML=`<div class="bh"><h3>Barge windows · till programme end</h3><small>From ${fmt(T)} to <b>${fmt(tEnd)}</b> (end of the port's movement programme — beyond that no data): quay spaces of ≥${BARGE_MIN_M} m (metres from the DPA port drawing). A barge needs about <b>${BARGE_MIN_H} h</b> alongside, so a window counts when the space stays free for ${BARGE_MIN_H} h — or is still open at the programme end, in which case the hours confirmed so far are shown. Max barge LOA = space − ${CLEAR_M} m clearance. Spaces beside a <b>projected</b> vessel are counted too, but marked.</small></div>
-   ${W.length?`<div class="bg">${W.map(card).join('')}</div>`:`<div class="m" style="color:var(--muted)">No barge space of ${BARGE_MIN_H} h (or open at programme end) till ${fmt(tEnd)}.</div>`}
-   ${SH.length?`<div class="m" style="color:var(--dim);font-size:12px;margin-top:4px">Shorter gaps, under ${BARGE_MIN_H} h (not usable for a barge): ${SH.sort((a,b)=>a.start-b.start).map(x=>`${x.berths.join('/')} ${pr([x.a,x.z])} ~${Math.round(x.m)} m · ${fmt(x.start,false)}–${fmt(x.end,false)} (${Math.floor(x.hrs)} h)`).join(' · ')}</div>`:''}`;
+     <div class="w">${x.openEnd?'Free till programme end '+fmt(tEnd)+' — beyond that no data (next meeting decides)':x.closer?`Closes when ${x.closer.n} berths${x.closer.proj?' (projected)':' (programme)'}`:'Closes on the next movement'}</div></div>`;
+  el.innerHTML=`<div class="bh"><h3>Barge windows · programme period</h3><small>From ${fmt(T)} to <b>${fmt(tEnd)}</b> — the 24 h that today's berthing meeting has programmed (18:00 → 18:00). Free quay is read panel-wise from the programme's allotments only: vessels alongside, programmed sailings, inward berthings and shifts — no board projections. A vessel with no programmed sailing (e.g. a project vessel without ETC) is taken as staying for the whole period. Spaces of ≥${BARGE_MIN_M} m (metres from the DPA port drawing) free for ≥${BARGE_MIN_H} h; max barge LOA = space − ${CLEAR_M} m clearance. Beyond ${fmt(tEnd,false)} nothing is predicted — the next meeting's programme fills that in.</small></div>
+   ${W.length?`<div class="bg">${W.map(card).join('')}</div>`:`<div class="m" style="color:var(--muted)">No barge space of ${BARGE_MIN_H} h or more till ${fmt(tEnd)}.</div>`}`;
 }
 function openList(title,arr){
   arr=arr.slice().sort((a,z)=>{const fa=(S.find(q=>q.n===a.n)||{}).F??(a.rdy==null?1e9:1e8),fz=(S.find(q=>q.n===z.n)||{}).F??(z.rdy==null?1e9:1e8);return fa-fz;});
@@ -1259,7 +1264,7 @@ slider.addEventListener('input',()=>{T=T0+Number(slider.value);render();});
 
 document.querySelectorAll('.qhelp').forEach(p=>p.addEventListener('click',()=>p.classList.toggle('open')));
 document.getElementById('legend').innerHTML=Object.values(GROUPS).map(g=>`<span><i style="background:${g.c}"></i>${g.l}</span>`).join('')+
- `<span><i style="border:1.5px dotted var(--fg)"></i>Projected</span><span><i style="border:1.5px dashed var(--ok);background:rgba(95,191,127,.08)"></i>Barge space (24 h, or open at programme end)</span><span><i style="border:1px dashed var(--ok);opacity:.7"></i>Barge space · projected</span><span><i style="background:var(--brass);outline:2px solid #fff"></i>Your selected vessel</span><span><i style="background:var(--ppp)"></i>PPP berth (outside DPA queue)</span><span><i style="background:repeating-linear-gradient(135deg,#3a2a1a 0 3px,#5a4020 3px 6px)"></i>Maintenance</span>`;
+ `<span><i style="border:1.5px dotted var(--fg)"></i>Projected</span><span><i style="border:1.5px dashed var(--ok);background:rgba(95,191,127,.08)"></i>Barge space (within the programme period)</span><span><i style="border:1px dashed var(--ok);opacity:.7"></i>Barge space · projected</span><span><i style="background:var(--brass);outline:2px solid #fff"></i>Your selected vessel</span><span><i style="background:var(--ppp)"></i>PPP berth (outside DPA queue)</span><span><i style="background:repeating-linear-gradient(135deg,#3a2a1a 0 3px,#5a4020 3px 6px)"></i>Maintenance</span>`;
 
 const NS='http://www.w3.org/2000/svg';
 function el(tag,a,p,txt){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;if(p)p.appendChild(e);return e;}
@@ -1291,7 +1296,7 @@ function strip(svg,p0,p1){
     el('line',{x1:X(p),x2:X(p),y1:100,y2:100+(mj?10:f?7:4),stroke:mj?'var(--brass)':'#6b7b90','stroke-width':mj?1.3:1},svg);
     if(mj)el('text',{x:X(p),y:119,'text-anchor':'middle','font-family':FM,'font-size':9.5,fill:'var(--brass)'},svg,String(p));}
   if(SHOW_BARGE){const BW=bargeWindows(T).filter(w=>w.start<=T+0.01&&w.end>T+0.01);BW.filter(x=>!BW.some(o=>o!==x&&o.a<=x.a+0.01&&o.z>=x.z-0.01&&gapM(o.a,o.z)>gapM(x.a,x.z)+0.01)).forEach(x=>{const a=Math.max(x.a,p0),z=Math.min(x.z,p1);if(z<=a)return;const soft=x.beyond||(x.projN&&x.projN.length); // space itself depends on a projected vessel
-    el('rect',{x:X(a)+2,y:34,width:(X(z)-X(a))-4,height:44,rx:4,fill:soft?'rgba(95,191,127,.04)':'rgba(95,191,127,.08)',stroke:x.tight?'var(--warn)':'var(--ok)','stroke-width':soft?1:1.2,'stroke-dasharray':soft?'2 3':'4 3',opacity:soft?.8:1},svg);el('text',{x:X((a+z)/2),y:60,'text-anchor':'middle','font-family':FM,'font-size':9.5,fill:x.tight?'var(--warn)':'var(--ok)'},svg,fit((soft?'BARGE (proj.) · ~':'BARGE · ~')+Math.round(x.m)+' m · '+(x.full?Math.floor(x.end-T)+' h left':Math.floor(x.end-T)+' h to prog. end'),(X(z)-X(a))-8,5.8));});}
+    el('rect',{x:X(a)+2,y:34,width:(X(z)-X(a))-4,height:44,rx:4,fill:soft?'rgba(95,191,127,.04)':'rgba(95,191,127,.08)',stroke:x.tight?'var(--warn)':'var(--ok)','stroke-width':soft?1:1.2,'stroke-dasharray':soft?'2 3':'4 3',opacity:soft?.8:1},svg);el('text',{x:X((a+z)/2),y:60,'text-anchor':'middle','font-family':FM,'font-size':9.5,fill:x.tight?'var(--warn)':'var(--ok)'},svg,fit((soft?'BARGE (proj.) · ~':'BARGE · ~')+Math.round(x.m)+' m · '+Math.floor(x.end-T)+' h'+(x.openEnd?' to prog. end':' left'),(X(z)-X(a))-8,5.8));});}
   const here=ALL.filter(v=>v.p[1]>p0&&v.p[0]<p1&&v.F<=T&&T<v.T);
   // maintenance label in the part of the berth no hull covers (a PPP vessel on CJ-9 can overhang into CJ-10)
   BERTHS.filter(b=>b.mnt&&b.p[1]>p0&&b.p[0]<p1).forEach(b=>{let a=Math.max(b.p[0],p0),z=Math.min(b.p[1],p1);
