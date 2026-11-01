@@ -280,6 +280,9 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
  .mpt:not(.tmb) td.w b{display:inline;font-size:15px;margin-right:6px}
  .mpt:not(.tmb) td.pk::before,.mpt:not(.tmb) td.al::before,.mpt:not(.tmb) td.fl::before{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:6px 0 2px}
  .mpt:not(.tmb) td.pk::before{content:"Board's pick"}
+ .spt td.pk:nth-of-type(2)::before{content:"In the slot now" !important}
+ .spt td.al::before{content:"Sails in the window?" !important}
+ .spt td.pk:nth-of-type(4)::before{content:"Next berthing vessel" !important}
  .mpt:not(.tmb) td.al::before{content:"Next in line"}
  .mpt:not(.tmb) td.fl::before{content:"What could overturn it"}
  .mpt:not(.tmb) tr.chk,.mpt:not(.tmb) tr.sh,.mpt:not(.tmb) tr.me{border-left:3px solid var(--prj);padding-left:0}
@@ -314,8 +317,12 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="sechead"><h2 id="mh">Mihir &amp; Company · our vessels</h2><p>Every vessel in the berthing list with agent Mihir &amp; Company, with where it stands today and when it berths.</p></div>
     <div id="mine"></div>
   </section>
+  <section class="card" aria-labelledby="sp">
+    <div class="sechead"><h2 id="sp">Next-day prospects · slot-wise</h2><p id="spsub"></p></div>
+    <div class="scroll"><table class="mpt spt" id="spt"></table></div>
+  </section>
   <section class="card" aria-labelledby="mp">
-    <div class="sechead"><h2 id="mp">Meeting preview</h2><p>The 11:00 berthing meeting programmes movements up to 18:00 of the next day. For each DPA berth the board expects to free up in that window: who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated here. Compare with the programme when it comes.</p></div>
+    <div class="sechead"><h2 id="mp">Meeting preview</h2><p>Berth-wise view of the same window (18:00 on the meeting day → 18:00 next day): for each DPA berth expected to free up, who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated.</p></div>
     <div class="scroll"><table class="mpt" id="mpt"></table></div>
   </section>
   <section class="card" aria-labelledby="rh">
@@ -390,7 +397,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-01 15:10');
 const PROG_END=h('11-02 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 21:20 IST';
+const UPDATED='1 Nov 2026 · 22:40 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
@@ -431,6 +438,7 @@ const NOTICES=[
 // Expected-vs-actual log. {d:'date', v:'vessel', exp:'what the board expected', act:'what the port did', why:'reason / hypothesis', fix:'rule change', st:'open'|'adopted'|'ok'}
 // st: open = waiting for Mihir to confirm the reason; adopted = folded into the rules; ok = matched, nothing to learn
 const LEARN=[
+ {d:'1 Nov night',v:'Berthing-meeting regulation applied (Mihir)',exp:'Board: Govt fallback straight to 30k/25k; SAAGAR cross-fill both ways; window counted from the 11:00 meeting; Steel slot falling back to General; General ordered by reporting time.',act:'Regulation: window 18:00 meeting day → 18:00 next day; eligible = waiting vessels that are ready + ETA vessels arriving by the evening HW; Govt 2 (else Project SAAGAR, else 30k/25k) · Coastal 1 (same) · HP 2 · SAAGAR 1 bulk + 1 break bulk (bulk slot may go to break bulk, not the reverse) · 24 hrs 1 (else 30k/25k) · 8k/6.5k 1 by seniority · Steel/Project 1 · Bitumen 1 (else senior General) · General 3 by seniority.',why:'The written order of allotment, as read out at the meeting.',fix:'Coded exactly so, and a slot-wise "Next-day prospects" table added in the same 14-row sequence (vessel in the slot at 18:00 · sails in the window? · next berthing vessel). Re-check of the 1 Nov meeting against the programme for 02.11: Govt → Levante Spirit ✓; 24-hr fallback → senior 30k vessel Yuan Hang Wei Ye ✓ (the port made CJ-5 for her by shifting Aya); HP left vacant (no 50k taker) ✓; General #1 Theometor → CJ-14 ✓. Only the within-CJ-1–10 shift of a bags vessel at the beneficiary\'s cost is not modelled yet.',st:'adopted'},
  {d:'1 Nov pm',v:'CJ-14 · Theometor (General) over Orion',exp:'Board: CJ-14 after Feng Hai Da → Orion, 30k/25k against the 24-hr slot (~2 Nov 19:00); General vessels only after the priority groups.',act:'Programme for 02.11: Feng Hai Da sails 16:30 → Theometor (rice bags, GEN) at 127–141½. Orion not programmed; the 24-hr (30K) slot went to Yuan Hang Wei Ye at CJ-5 instead.',why:'The one 30k/25k slot open in the window (against 24-hr) went to the senior 30k vessel, Yuan Hang Wei Ye — the port made a berth for her at CJ-5 by shifting Aya. With that slot used and the HP slot needing a 50k commitment nobody took, CJ-14 went to General. Theometor over Mak 1: the list\'s GEN column ranks Theometor 1 and Mak 1 14 (Mak 1 re-anchored 20 Oct, and her remark is REQ 13 TO 16) — the board was ordering General by reporting time instead of the printed GEN rank.',fix:'Coded: General queue = the GEN rank printed in the list (fallback: reporting time); list remarks like "REQ 13 TO 16" / "REQ CJ 01 TO CJ 03 & CJ 13 TO 16" now parsed as berth requirements.',st:'adopted'},
  {d:'1 Nov pm',v:'CJ-5 · Yuan Hang Wei Ye (iron ore) under 24HRS(30K) · Aya shifted to CJ-4',exp:'Board had iron ore barred from CJ-1–5 (Mihir, 31 Oct) → Yuan Hang Wei Ye at CJ-6 on 4 Nov after Rome Trader; CJ-4 → Mak 1 / Centurion Buyo shift.',act:'Programme for 02.11: Eva Bright sails 05:00 (night), Aya shifted CJ-5 → CJ-4 23½–30¾ a/c of Genesis (Yuan Hang\'s agent), Yuan Hang Wei Ye in at CJ-5 31¾–40 as 24HRS(30K), 30,000 MTPD, night starboard.',why:'Iron ore pellet feed is evidently acceptable at CJ-5 (206 m berth, draught 10.5 m, arrival 6.4 m). The 30k/25k slot against 24-hr goes to the senior vessel; the agent paid for a shift of the bags vessel to the shorter CJ-4 (183 m) so the 190 m vessel gets the 206 m berth.',fix:'Mihir (1 Nov): an iron-ore vessel can berth at CJ-5, but stevedores normally take it only when berthing under 30k/25k, not under HP. Coded: iron ore barred at CJ-1–4; at CJ-5 allowed only as a 30k/25k (fallback) berthing, not for the HP slot. Still open: the within-CJ-1–10 shift of a bags vessel at the beneficiary agent\'s cost (Aya → CJ-4) is not modelled yet.',st:'adopted'},
  {d:'1 Nov pm',v:'Mettle Star · HP slot left vacant · no Centurion Buyo shift',exp:'Mihir / board: Centurion Buyo shifted CJ-15A → CJ-4, Mettle Star (ETA 1 Nov 06:00, HP Y) under HP at CJ-15A once Meghna Venus sails; Orion 30k/25k against 24-hr at CJ-14.',act:'Programme for 02.11 has no HP berthing and no port-convenience shift; the HP slot Meghna Venus vacates at 13:00 stays empty in the window. Mettle Star and Orion not programmed.',why:'Mihir (1 Nov): Mettle Star was not ready. The shift is only made when a priority vessel is actually ready to use the freed berth; Orion did not take HP at a 50k commitment.',fix:'Rule withdrawn: an expected (ETA) vessel is NOT assumed to declare at the meeting — it counts only once the list shows readiness. Mettle Star and Star Fighter are out of the projection until then.',st:'adopted'},
@@ -458,8 +466,49 @@ const LEARN=[
 ];
 // Snapshot of the board's own projection at publish time (next 48 h), so tomorrow's run can compare it with the list
 const PRED=[
- ['Aya','4','2 Nov 06:30','programme 02.11 · shift from CJ-5'],['Yuan Hang Wei Ye','5','2 Nov 07:00','programme 02.11 · 24HRS(30K)'],['Levante Spirit','7','2 Nov 15:00','programme 02.11 · GOV'],['Theometor','14','2 Nov 18:30','programme 02.11 · GEN'],['Orion','15','2 Nov 13:00','projected · 30k/25k quote (Sr No 7)'],['Nord Newport','13','2 Nov 19:00','projected'],['Lakmos','16','3 Nov 20:00','projected'],['Tan Binh 267','5','4 Nov 06:30','projected'],['Suvari Bey','4','4 Nov 07:45','projected'],['Shen Hai Shou Xin','6','4 Nov 16:00','projected']
+ ['Aya','4','2 Nov 06:30','programme 02.11 · shift from CJ-5'],['Yuan Hang Wei Ye','5','2 Nov 07:00','programme 02.11 · 24HRS(30K)'],['Levante Spirit','7','2 Nov 15:00','programme 02.11 · GOV'],['Theometor','14','2 Nov 18:30','programme 02.11 · GEN'],['Orion','15','2 Nov 18:00','projected · 30k/25k quote (Sr No 7) · check'],['Nord Newport','16','3 Nov 14:00','projected'],['Lakmos','13','3 Nov 20:00','projected · check'],['Tan Binh 267','5','4 Nov 06:30','projected'],['Suvari Bey','4','4 Nov 07:45','projected'],['Shen Hai Shou Xin','6','4 Nov 16:00','projected'],['African Quail','15A','5 Nov 14:55','projected'],['Lanna Naree','15','5 Nov 17:16','projected']
 ];
+// ---- Next-day prospects in the regulation's slot order (Mihir, 1 Nov): for each slot — the vessel in it at the start of the window,
+// whether it sails inside the window, and the next berthing vessel the board expects for that slot.
+const SLOTS=[['GOV','Government priority',2],['COASTAL','Coastal priority',1],['HP','High productivity',2],['SAAGAR','Saagar priority',2],['24H','24 hrs priority',1],['8K','8k / 6.5k priority',1],['STL','Steel / project priority',1],['BIT','Bitumen priority',1],['GEN','General',3]];
+function prospects(){
+  const el=document.getElementById('spt'), sub=document.getElementById('spsub'); if(!el)return;
+  const d=dt(T);const hod=d.getUTCHours()+d.getUTCMinutes()/60;const day0=T-hod;
+  const meet=hod<11?day0+11:day0+24+11, ws=meet+7, we=ws+24;
+  sub.innerHTML=`Meeting of <b>${fday(meet)} 11:00</b> programmes <b>${fday(ws)} 18:00 → ${fday(we)} 18:00</b>. Eligible: waiting vessels that are ready; ETA vessels arriving by the ${fday(ws)} evening high water. Slot order as per the regulation — Govt 2 (else Project SAAGAR, else 30k/25k) · Coastal 1 (same fallback) · HP 2 · SAAGAR 1 bulk + 1 break bulk (bulk slot may go to break bulk) · 24 hrs 1 (else 30k/25k) · 8k/6.5k 1 · Steel/Project 1 · Bitumen 1 (else senior General) · General 3 by seniority.`;
+  // occupants of each group at the start of the window (alongside or already allotted), including vessels sitting in the slot as a fallback (via)
+  const start=x=>x.proj?(x.prevAt!=null?x.prevAt:x.F):Math.min(x.F,NOW);
+  const soft=x=>x.est&&!x.nm&&x.cat!=='24H'&&!x.proj; // alongside with no ETC / norm: the meeting treats it as staying
+  const occ=ALL.filter(x=>POOL.includes(x.b)&&start(x)<ws-0.01&&(x.T>ws||(soft(x)&&x.T>meet))&&!x.shifted);
+  const inWin=ALL.filter(x=>x.proj&&!x.shifted&&x.prevAt!=null&&x.prevAt>=ws-0.01&&x.prevAt<=we&&x.F>ws-0.01).concat(V.filter(v=>v.F>ws&&v.F<=we&&POOL.includes(v.b))).sort((a,z)=>a.F-z.F);
+  const tag=x=>x.via?`<span class="tag src team">as ${x.via}</span>`:'';
+  const shifts=ALL.filter(x=>x.shifted&&x.prevAt>=ws-0.01&&x.prevAt<=we);
+  let rows='',n=0;
+  SLOTS.forEach(([k,l,max])=>{
+    const here=occ.filter(x=>x.cat===k).sort((a,z)=>a.T-z.T);
+    const next=inWin.filter(x=>x.cat===k&&!here.includes(x));
+    let ni=0;
+    for(let i=0;i<max;i++){ n++;
+      const v=here[i];
+      let nowCell='',sailCell='',nextCell='';
+      if(v){
+        nowCell=`<b>${v.n}</b>${tag(v)}<small>CJ-${v.b} · ${v.c}${v.n!==v.n?'':''}</small>`;
+        const sails=v.T<=we&&!soft(v); const softIn=soft(v)&&v.T<=we;
+        sailCell=sails?`<b class="dl late">sails ${fmt(v.T)}</b><small>${v.proj?'projected':'ETC / programme'}</small>`:softIn?`<span class="dl same">stays</span><small style="color:var(--prj)">no declared ETC${PROJV(v)?' (project cargo)':''} — board estimate ${fmt(v.T)}; ⚠ check at meeting</small>`:`<span class="dl same">stays</span><small>ETC ${fmt(v.T)}${v.est?' (est)':''}</small>`;
+        if(sails){const nx=next[ni++];nextCell=nx?`<b>${nx.n}</b>${tag(nx)}<small>CJ-${nx.b} · ${nx.c} · ~${fmt(nx.F)}${nx.proj?' · projected':' · programme'}${nx.projChk?' · ⚠ check':''}</small>`:'<span style="color:var(--muted)">no eligible vessel for this slot</span>';}
+        else nextCell='<span style="color:var(--dim)">—</span>';
+      } else {
+        nowCell='<span style="color:var(--muted)">vacant</span>';
+        sailCell='<span style="color:var(--dim)">—</span>';
+        const nx=next[ni++];nextCell=nx?`<b>${nx.n}</b>${tag(nx)}<small>CJ-${nx.b} · ${nx.c} · ~${fmt(nx.F)}${nx.proj?' · projected':' · programme'}</small>`:'<span style="color:var(--muted)">no eligible vessel for this slot</span>';
+      }
+      const me=(v&&isMine(v.n))||(next[ni-1]&&isMine(next[ni-1].n));
+      rows+=`<tr class="${me?'me':''}"><td class="w"><b><span class="sn">${n}</span>${l}</b>${max>1?`<small>slot ${i+1} of ${max}</small>`:''}</td><td class="pk">${nowCell}</td><td class="al">${sailCell}</td><td class="pk">${nextCell}</td></tr>`;
+    }
+  });
+  if(shifts.length)rows+=`<tr class="sh"><td class="w"><b>Port-convenience shift</b></td><td class="pk" colspan="3">${shifts.map(x=>`<b>${x.n}</b> CJ-${x.fromB} → CJ-${x.b} ~${fmt(x.F)} · frees CJ-${x.fromB} for ${x.forWho}`).join('<br>')}</td></tr>`;
+  el.innerHTML='<tr><th style="width:190px">Slot</th><th>Vessel in the slot at '+fmt(ws,false)+'</th><th>Sails in the window?</th><th>Next berthing vessel</th></tr>'+rows;
+}
 function preview(){
   // The 11:00 berthing meeting programmes movements up to 18:00 of the next day. Preview covers the NEXT meeting's window:
   // meeting today 11:00 (if we are before it) or tomorrow 11:00, and berths freeing from now until 18:00 of the day after that meeting.
@@ -468,10 +517,10 @@ function preview(){
   const fa=x=>x.freeAt!=null?x.freeAt:x.prevAt;
   const rows=S.filter(x=>x.proj&&x.prevAt!=null&&fa(x)>=T-12&&fa(x)<=end).sort((a,z)=>fa(a)-fa(z));
   const el=document.getElementById('mpt');
-  const hd=document.querySelector('#mp');if(hd)hd.innerHTML=`Meeting preview · meeting of ${fday(meet)} 11:00 → movements till ${fday(end)} 18:00`;
+  const hd=document.querySelector('#mp');if(hd)hd.innerHTML=`Meeting preview · berth-wise · meeting of ${fday(meet)} 11:00 → ${fday(meet)} 18:00 → ${fday(end)} 18:00`;
   if(!rows.length){el.innerHTML=`<tr><td class="fl">No DPA berth is projected to free up before ${fday(end)} 18:00 beyond what the programme already fixes.</td></tr>`;return;}
   el.innerHTML='<tr><th style="width:200px">Berth frees</th><th>Board\'s pick</th><th>Next in line</th><th>What could overturn it at the meeting</th></tr>'+rows.map((x,i)=>`<tr class="${isMine(x.n)?'me':''} ${x.projChk?'chk':''} ${x.shifted?'sh':''}">
-   <td class="w"><b><span class="sn">${i+1}</span>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev}${(()=>{const pv=V.find(v=>v.n===x.prev)||S.find(v=>v.n===x.prev);return pv?' · '+pv.c+(pv.cat?' · '+(CL[pv.cat]||pv.cat):''):'';})()}${/shifted out/.test(x.prev)?'':' sails'}${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(Math.abs(x.prevAt-nextMeet(NOW))<0.01?'not in today\'s programme → decided at the '+fmt(x.prevAt,false)+' meeting':x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
+   <td class="w"><b><span class="sn">${i+1}</span>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev}${(()=>{const pv=V.find(v=>v.n===x.prev)||S.find(v=>v.n===x.prev);return pv?' · '+pv.c+(pv.cat?' · '+(CL[pv.cat]||pv.cat):''):'';})()}${/shifted out/.test(x.prev)?'':' sails'}${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(x.softWait?'no declared ETC → cannot be programmed in this window; next meeting from '+fmt(x.prevAt)+' unless the vessel confirms sailing':Math.abs(x.prevAt-(nextMeet(NOW)+7))<0.01?'not in the current programme → next meeting, berthing from '+fmt(x.prevAt):x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
    <td class="pk"><b>${x.n}</b>${isMine(x.n)?'<span class="tag">Mihir &amp; Co</span>':''}${x.shifted?'<span class="tag shift">SHIFT · port convenience</span>':''}<small>${x.c} · ${nf.format(x.q)} ${x.u}${agTxt(x.n)}</small><small>${x.shifted?`shifted from CJ-${x.fromB} (${CL[x.cat]||x.cat}, slot unchanged) · frees CJ-${x.fromB} for <b>${x.forWho}</b> (${CL[x.forCat]||x.forCat}) · alongside ~${fmt(x.F)}`:`${CL[x.cat]||x.cat}${x.via?' slot · as '+x.via:''} · alongside ~${fmt(x.F)}${x.tide?' · '+x.tide:''}`}</small></td>
    <td class="al">${x.alt?`<b>${x.alt.n}</b><small>${x.alt.c} · ${CL[x.alt.cat]||x.alt.cat}${x.alt.via?' as '+x.alt.via:''}${x.alt.same?' · same group, next rank':''}</small>`:'<span style="color:var(--dim)">nobody else eligible</span>'}</td>
    <td class="fl">${x.flips&&x.flips.length?'<ul>'+x.flips.map(f=>`<li>${f}</li>`).join('')+'</ul>':'—'}</td></tr>`).join('');
@@ -666,13 +715,13 @@ const MINE={has:isMine};
 
 // slot order as practised at the berthing meeting (fb = who gets the slot when nobody of that group is ready)
 const CATS=[
- {k:'GOV',l:'Govt priority',s:'2 berths · else 30k/25k (Sr No 7); a Sr No 7 vessel in a Govt slot never blocks a Govt vessel',max:2,fb:'HPQ'},
+ {k:'GOV',l:'Govt priority',s:'2 slots · else Project SAAGAR · else 30k/25k (Sr No 7); a Sr No 7 vessel in a Govt slot never blocks a Govt vessel',max:2,fb:'WIND,HPQ'},
  {k:'COASTAL',l:'Coastal',s:'1 berth · else SAAGAR project (windmill / project) · else 30k/25k',max:1,fb:'WIND,HPQ'},
  {k:'HP',l:'Higher productivity',s:'2 berths · highest MTPD quote',max:2},
  {k:'SAAGAR',l:'SAAGAR',s:'1 bulk + 1 break bulk · cross-fill · project vessels go against Coastal',max:2},
  {k:'24H',l:'24-hour',s:'1 berth · else 30k/25k quote',max:1,fb:'HPQ'},
  {k:'8K',l:'8,000 / 6,500 MTPD',s:'1 berth · commodity group',max:1},
- {k:'STL',l:'Steel / project',s:'1 berth · else General',max:1,fb:'GENQ'},
+ {k:'STL',l:'Steel / project',s:'1 slot · no fallback in the regulation',max:1},
  {k:'BIT',l:'Bitumen',s:'1 berth · else General',max:1,fb:'GENQ'},
  {k:'GEN',l:'General',s:'3 berths · FCFS · bagged max 3',max:3}
 ];
@@ -779,7 +828,14 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
   let guard=0;
   while(ev.length&&guard++<400){
     ev.sort((a,z)=>(a.t-z.t)||((a.prevSoft?1:0)-(z.prevSoft?1:0))); const e=ev.shift(); if(e.t>HZ)break; // same time: berths with a declared sailing first (the port programmes those)
-    const NM=nextMeet(NOW); if(e.t<NM&&!e.gated){e.gated=1;e.freeAt=e.t;e.t=NM;ev.push(e);continue;} // nothing unprogrammed berths before the next 11:00 meeting; slots are judged at the meeting
+    const NM=nextMeet(NOW), WS=NM+7, WEn=NM+31;
+    if(!e.gated){
+      // a vessel still alongside at the meeting with no declared ETC / norm (project cargo) cannot be programmed out in this window:
+      // her berth is dealt with at the following meeting (unless she confirms sailing at the meeting — flagged "check")
+      if(e.prevSoft&&e.t>NM&&e.t<=WEn){e.gated=1;e.freeAt=e.t;e.t=WEn;e.softWait=1;ev.push(e);continue;}
+      // regulation: the 11:00 meeting programmes 18:00 today → 18:00 tomorrow, so nothing unprogrammed berths before 18:00 of the meeting day
+      if(e.t<WS){e.gated=1;e.freeAt=e.t;e.t=WS;ev.push(e);continue;}
+    }
     // Mihir (31 Oct): a project vessel has no discharge norm and sails when it is done — the sailing time is only known when it is ready.
     // The board keeps its estimate but marks the row in the meeting preview: check at the meeting, then consider.
     if(e.prevEst&&e.prevProj)e.projChk=1;
@@ -883,7 +939,12 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
           // SAAGAR has three types: bulk, break bulk, project. The 1 bulk + 1 break-bulk slots are for bulk / break bulk; project vessels
           // go against the Coastal slot, and take a SAAGAR slot only if no bulk / break-bulk SAAGAR vessel is ready.
           const np=cand.filter(w=>!isProj(w)); if(np.length)cand=np;
-          const other=o.filter(x=>x.cat==='SAAGAR')[0];if(other){const want=!isBreak(other.c);const alt=cand.find(w=>isBreak(w.c)===want);if(alt)cand=[alt];}}
+          // Regulation (Mihir, 1 Nov): 1 slot bulk, 1 slot break bulk (logs); a free BULK slot may be given to break bulk, not the reverse.
+          const occS=o.filter(x=>x.cat==='SAAGAR');
+          if(occS.length===1){const occBreak=isBreak(occS[0].c);
+            if(occBreak){const bulk=cand.filter(w=>!isBreak(w.c));cand=bulk.length?bulk:cand.filter(w=>isBreak(w.c));} // bulk slot free: bulk first, else cross-fill with break bulk
+            else{cand=cand.filter(w=>isBreak(w.c));}}                                                                // break-bulk slot free: break bulk only
+          else if(occS.length===0){const bulk=cand.filter(w=>!isBreak(w.c));cand=bulk.concat(cand.filter(w=>isBreak(w.c)));}}
       }
       cand=cand.filter(w=>!ranked.some(r=>r.w===w));
       if(cand.length){ranked.push({w:cand[0],cat:C.k,via:null});if(cand[1])ranked.push({w:cand[1],cat:C.k,via:null,same:1});continue;}
@@ -891,7 +952,7 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
     }
     if(ranked.length){pick=ranked[0].w;cat=ranked[0].cat;via=ranked[0].via;}
     if(e.forName&&pick&&pick.n===e.forName&&e.forCat&&cat!==e.forCat){pick=null;} // the berth was freed for this vessel under a specific slot — wait for that slot
-    if(!pick){const nx=o.map(x=>x.T).filter(t=>t>e.t+0.01).sort((a,z)=>a-z)[0];const nt=e.forName&&nx?Math.min(nx,e.t+6):e.t+6;ev.push({b:e.b,t:nt,prev:e.prev,prevEst:e.prevEst,prevSoft:e.prevSoft,prevProj:e.prevProj,idle:true,gated:1,freeAt:e.freeAt||e.t,forName:e.forName,forCat:e.forCat});continue;}
+    if(!pick){const nx=o.map(x=>x.T).filter(t=>t>e.t+0.01).sort((a,z)=>a-z)[0];const nt=e.forName&&nx?Math.min(nx,e.t+6):e.t+6;ev.push({b:e.b,t:nt,prev:e.prev,prevEst:e.prevEst,prevSoft:e.prevSoft,prevProj:e.prevProj,idle:true,gated:1,freeAt:e.freeAt||e.t,forName:e.forName,forCat:e.forCat,softWait:e.softWait});continue;}
     const alt=ranked[1]?{n:ranked[1].w.n,c:ranked[1].w.c,cat:ranked[1].cat,via:ranked[1].via,same:!!ranked[1].same}:null;
     // what could overturn this pick at the berthing meeting
     const flips=[];
@@ -910,9 +971,9 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
     if(cat==='HP'&&!via){const sr=hpAll.filter(w=>rkv(w,'HP')<rkv(pick,'HP')&&okBerth(w,e.b,o)).map(w=>w.n);if(sr.length)flips.push('HP = 50k commitment: the junior vessel takes it, the senior ('+sr.join(', ')+') goes to the comfortable 30k/25k slot — swaps if the senior quotes high');}
     if(e.forName&&pick.n===e.forName)flips.unshift('SHIFT: berth freed by moving '+e.prev.replace(/ \(shifted out.*$/,'')+' under port convenience so that '+pick.n+' ('+(CL[cat]||cat)+') gets a clean berth — at the port\'s discretion');
     done.add(pick.n);
-    const F=e.t+2, T=F+stayH(pick,via==='30k/25k quote'?'HP':(via==='General'?'GEN':cat)), B=BERTHS.find(x=>x.id===e.b);
+    const F=e.gated&&Math.abs(e.t-(nextMeet(NOW)+7))<0.01?e.t:e.t+2, T=F+stayH(pick,via==='30k/25k quote'?'HP':(via==='General'?'GEN':cat)), B=BERTHS.find(x=>x.id===e.b); // a berth already free at 18:00 is used from 18:00
     const tide=tideFlag(pick,B);
-    const s={b:e.b,n:pick.n,c:pick.c,q:pick.q,u:pick.u,cat,via,F,T,g:pick.g,proj:1,w:pick,loa:pick.loa,nm:pick.nm||null,prev:e.prev,prevAt:e.t,freeAt:e.freeAt||e.t,prevEst:e.prevEst,projChk:e.projChk,tide,alt,flips,
+    const s={b:e.b,n:pick.n,c:pick.c,q:pick.q,u:pick.u,cat,via,F,T,g:pick.g,proj:1,w:pick,loa:pick.loa,nm:pick.nm||null,prev:e.prev,prevAt:e.t,freeAt:e.freeAt||e.t,prevEst:e.prevEst,projChk:e.projChk,softWait:e.softWait,tide,alt,flips,
       p:[B.p[0]+0.5,Math.min(B.p[0]+0.5+pick.loa/MPP(B),B.p[1]+3)]};
     S.push(s); ev.push({b:e.b,t:T,prev:pick.n,prevEst:cat!=='24H',prevProj:PROJ(pick.c)&&cat!=='24H'});
   }
@@ -1282,7 +1343,7 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();learn();timber();tideLine();preview();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();learn();timber();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
   if(scroll)document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});
 }
 // open at the focused vessel's berthing time if projected
