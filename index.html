@@ -44,7 +44,7 @@ section.card{background:var(--panel);border:1px solid var(--line);border-radius:
 .card.closed .sechead .ssum{display:block}
 .card.closed .sechead .tgl svg{transform:rotate(-90deg)}
 .secbody{display:flex;flex-direction:column;gap:12px;min-width:0}
-.secctl{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 8px;font-family:var(--f-mono);font-size:11px;color:var(--muted);margin:-6px 0 -8px}
+.secctl{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 8px;font-family:var(--f-mono);font-size:11px;color:var(--muted);margin:-8px 0 -10px}
 .secctl span{margin-right:auto}
 @media (max-width:640px){.sechead h2{font-size:20px}.sechead .ssum::after{content:" · tap to open";color:var(--dim)}.secctl span{display:none}}
 
@@ -270,6 +270,8 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 .mpt td.w{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);line-height:1.5}
 .mpt td.w b{color:var(--fg);display:block;font-size:12.5px}
 .mpt .pk b{font-size:13.5px}
+.ntt .pk b.ref{font-family:var(--f-mono);font-size:11.5px;font-weight:500;color:var(--brass);letter-spacing:.01em}
+.ntt td.w{white-space:normal}
 .mpt .pk small,.mpt .al small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px}
 .mpt .fl{color:var(--muted);font-size:12px}
 .mpt .fl li{margin:0 0 3px 14px}
@@ -296,6 +298,9 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
  .spt td.al::before{content:"Sails in the window?" !important}
  .spt td.pk:nth-of-type(4)::before{content:"Next berthing vessel" !important}
  .mpt:not(.tmb) td.al::before{content:"Next in line"}
+ .ntt td.pk::before{content:"Circular / reference" !important}
+ .ntt td.al::before{content:"Subject" !important}
+ .ntt td.fl::before{content:"Bearing on berthing" !important}
  .mpt:not(.tmb) td.fl::before{content:"What could overturn it"}
  .mpt:not(.tmb) tr.chk,.mpt:not(.tmb) tr.sh,.mpt:not(.tmb) tr.me{border-left:3px solid var(--prj);padding-left:0}
  .mpt:not(.tmb) tr.sh{border-left-color:var(--warn)}.mpt:not(.tmb) tr.me{border-left-color:var(--brass)}
@@ -313,10 +318,13 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     </div>
     <div class="asof"><span class="upd" id="upd"></span><br>Berthing List <b>31.10.26 · 0700</b> (KPSAA mail)<br>Signals up to <b>31 Oct night (disp 1919)</b> · Programme <b>02.11 (meeting 01.11, TF/SH/2102, mailed 15:10)</b> · no 0700 list on Sun 1 Nov<br>Policy <b>24.03.25 + 4 amendments</b><br><span id="tide"></span></div>
   </header>
-  <div class="notices" id="notices"></div>
+  <div class="secctl" id="secctl"><span>Sections open on tap · detail only when you want it</span><button type="button" class="qb" id="openAll">Open all</button><button type="button" class="qb" id="closeAll">Close all</button></div>
+  <section class="card" data-sec="notices" aria-labelledby="nh">
+    <div class="sechead"><h2 id="nh">Circulars &amp; notices</h2><p>DPA trade notices and circulars received on the KPSAA mail, plus the reference documents the board is built on — with the circular number and date, and what each means for berthing.</p></div>
+    <div class="scroll"><table class="mpt ntt" id="notices"></table></div>
+  </section>
 
   <div class="stats" id="stats" aria-label="Waiting at Kandla"></div>
-  <div class="secctl" id="secctl"><span>Sections below open on tap · detail only when you want it</span><button type="button" class="qb" id="openAll">Open all</button><button type="button" class="qb" id="closeAll">Close all</button></div>
   <section class="card finder" data-sec="finder" aria-labelledby="fh">
     <div class="sechead"><h2 id="fh">Kab berth milega?</h2><p>Pick any waiting or expected vessel. The board runs today's queue forward under the berthing policy and shows when that vessel's turn is likely to come.</p></div>
     <div class="pick">
@@ -393,7 +401,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
     <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
   </section>
-  <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · signals to 31 Oct 1919 · movement programmes TF/SH/2102 for 31.10, 01.11 and 02.11 (mailed 1 Nov 15:10; no Sunday 0700 list) · timber desk position report 30.10 (updated to 31.10 1800).</footer>
+  <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · signals to 31 Oct 1919 · movement programmes TF/SH/2102 for 31.10, 01.11 and 02.11 (mailed 1 Nov 15:10; no Sunday 0700 list) · timber desk position report 30.10 (updated to 31.10 1800) · DPA trade notices 1695–1698 dt 28.10.2026 (KPSAA mail 29.10) · DC circular MR/SH/1120/2026.</footer>
 </div>
 
 <script>
@@ -410,7 +418,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-01 15:10');
 const PROG_END=h('11-02 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 21:30 IST';
+const UPDATED='1 Nov 2026 · 21:45 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
@@ -445,8 +453,13 @@ const MYLOG={
  ]
 };
 const NOTICES=[
- {d:'31 Oct',t:'Berth reference data loaded: Civil Engg "Cargo Berth Details" (lengths, live load), DC permissible-draught circular MR/SH/1120/2026 (Oct–Dec HW & channel draught, berth-wise draught), DPA port layout drawing',s:'Used for the quay strip, draught checks and barge windows. Base for berth lengths = Civil Engg sheet; vessels placed by the HM panel marks the berthing list uses.',src:'Mihir, 31 Oct'},
- {d:'29 Oct',t:'Rebates / concessions on wharfage of bagged cargo; railway terminal charge waiver & concession; vessel-related charge rebates for coastal & foreign container vessels',s:'Four DPA circulars circulated by KPSAA on 29 Oct. Tariff only; no change to berthing order. Details on request.',src:'KPSAA mail 29.10.26'}
+ // Circulars / references on the board. {d: received, src: how it reached us, ref: circular no., rd: circular date, kind, t: subject, s: gist, eff: bearing on berthing / the board}
+ {d:'29 Oct',src:'KPSAA mail ~13:00',ref:'Traffic/Traffic/5583/RebateBaggedCargo/2026/1695',rd:'28.10.2026',kind:'DPA trade notice',t:'Rebates / concessions on wharfage charges of bagged cargo',s:'20% discount on wharfage (per prevailing SOR) when a vessel loads its entire cargo mid-stream through barges, using the Zero Panel area beside Cargo Jetty 1, IKLL barge jetty or Bunder Basin. Continues TN Traffic/Traffic/426/Tradepromotion/2023/327 dt 08.05.2025; valid up to 31.03.2027, subject to review.',eff:'Tariff only — no change to berthing order. Relevant to bagged-cargo loaders choosing mid-stream over a berth.'},
+ {d:'29 Oct',src:'KPSAA mail ~13:00',ref:'Traffic/BDC/5544/VRCContainervessels/2026/1696',rd:'28.10.2026',kind:'DPA trade notice',t:'Rebates / concessions on vessel-related charges (VRC) — coastal & foreign container vessels',s:'Pilotage, port dues and berth hire rebates for container vessels calling at DPA continue. Continues TN Traffic/Traffic/1358/KICTVRC/2023/616 dt 21.08.2025; valid till 31.03.2027.',eff:'Container berths (CJ-11/12) only — outside the dry cargo queue.'},
+ {d:'29 Oct',src:'KPSAA mail ~13:00',ref:'Traffic/BDC/5525/RailwayTerminalCharges/2026/1697',rd:'28.10.2026',kind:'DPA trade notice',t:'Concession in railway terminal charges',s:'50% concession in railway terminal charges for rakes carrying all commodities incl. containers, within KPRK and DDPS stations. Continues TN Traffic/Rented Plot/2947/861 dt 01.10.2025; valid up to 31.03.2027.',eff:'Rail evacuation cost — no bearing on berthing.'},
+ {d:'29 Oct',src:'KPSAA mail ~13:00',ref:'Traffic/BDC/5525/RailwayTerminalCharges/2026/1698',rd:'28.10.2026',kind:'DPA trade notice',t:'Waiver in railway terminal charges',s:'100% waiver for short-haul container rakes (up to 120 km from KPRK station) handled at KPRK. Continues TN Traffic/Traffic/4407/KICT/20205/1801 dt 07.04.2026; applies retrospectively from 23.08.2026 until 31.03.2027.',eff:'Containers only — no bearing on berthing.'},
+ {d:'31 Oct',src:'Mihir',ref:'MR/SH/1120/2026',rd:'Oct–Dec 2026',kind:'DC permissible-draught circular',t:'High water times, channel draught and berth-wise permissible draught',s:'Daily HW times and channel draught for Oct–Dec; berth-wise permissible draught (CJ-6 to CJ-10 up to 14 m with tidal benefit when the channel exceeds 14 m at HW).',eff:'Used for the draught checks, the 14 m tide rule and the HW line in the header.'},
+ {d:'31 Oct',src:'Mihir',ref:'Civil Engg "Cargo Berth Details" sheet · DPA port layout drawing',rd:'—',kind:'Reference data',t:'Berth lengths, live load, panel marks',s:'Berth lengths from the Civil Engg sheet; vessels placed by the HM panel marks the berthing list uses.',eff:'Base for the quay strip, fit checks and barge windows.'}
 ];
 // Expected-vs-actual log. {d:'date', v:'vessel', exp:'what the board expected', act:'what the port did', why:'reason / hypothesis', fix:'rule change', st:'open'|'adopted'|'ok'}
 // st: open = waiting for Mihir to confirm the reason; adopted = folded into the rules; ok = matched, nothing to learn
@@ -571,7 +584,8 @@ function timber(){
       <td class="d">${board}</td><td class="d">${dl}</td></tr>`;};
   el.innerHTML='<tr><th style="width:34px">#</th><th>Vessel</th><th>Qty</th><th>Arrival</th><th>Team</th><th>Board</th><th>Δ</th></tr>'+TIMBER.rows.map((r,i)=>{const g=r.st!==last?`<tr class="grp"><td colspan="7">${G[r.st]}</td></tr>`:'';last=r.st;return g+row(r,i+1);}).join('');
 }
-function notices(){const el=document.getElementById('notices');el.innerHTML=NOTICES.map((n,i)=>`<div class="nt"><span class="d"><span class="sn">${i+1}</span>${n.d}</span><div><b>${n.t}</b><small>${n.s}${n.src?' · '+n.src:''}</small></div></div>`).join('');}
+function notices(){const el=document.getElementById('notices');if(!NOTICES.length){el.innerHTML='<tr><td class="fl">No circular on the board yet.</td></tr>';return;}
+  el.innerHTML='<tr><th style="width:120px">Received</th><th style="width:26%">Circular / reference</th><th>Subject</th><th style="width:24%">Bearing on berthing</th></tr>'+NOTICES.map((n,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${n.d}</b>${n.src||''}</td><td class="pk"><b class="ref">${n.ref.replace(/\//g,'/<wbr>')}</b><small>${n.rd&&n.rd!=='—'?'dt '+n.rd+' · ':''}${n.kind||''}</small></td><td class="al"><b>${n.t}</b><small>${n.s}</small></td><td class="fl">${n.eff||'—'}</td></tr>`).join('');}
 function learn(){const el=document.getElementById('learn');if(!LEARN.length){el.innerHTML='<div class="empty">No variance recorded yet.</div>';return;}
   const L={open:'open · confirm?',adopted:'adopted in rules',ok:'matched'};
   const openAll=window.innerWidth>640;
@@ -1391,6 +1405,9 @@ function summaries(){
   // finder: the vessel in focus and the board's answer
   const rq=document.querySelector('#result .answer .q'), rd=document.querySelector('#result .answer .d');
   setSum('finder',`<b>${focus}</b>${rd?' · '+txt(rq).replace(/\?$/,'').toLowerCase()+': <b>'+txt(rd)+'</b>':''}`);
+  // circulars
+  const nd=NOTICES[0]?NOTICES.filter(n=>n.d===NOTICES[0].d).length:0;
+  setSum('notices',NOTICES.length?`<b>${pl(NOTICES.length,'reference')}</b>${nd?' · latest '+NOTICES[0].d+': <b>'+NOTICES[0].t+'</b>'+(nd>1?' + '+(nd-1)+' more ('+(NOTICES[0].kind||'')+')':''):''}`:'No circular on the board yet');
   // Mihir & Co
   const names=[...new Set(V.map(v=>v.n).concat(W.map(w=>w.n)))].filter(isMine);
   const sts=names.map(n=>statusOf(n)).filter(s=>s&&s.k!=='sailed');
