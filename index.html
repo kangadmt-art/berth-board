@@ -142,6 +142,11 @@ table{border-collapse:collapse;width:100%}
 .stat .comm .cc{font-size:12px;padding:3px 8px 3px 7px}
 .stat .comm .cc b{font-size:15px}
 .stat.wide{grid-column:1/-1}
+.stat.total{border-top-color:var(--brass);background:linear-gradient(180deg,#132339,#161d24)}
+.tot2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 28px}
+.tot2 .v{font-size:40px}
+.stat .plink{color:var(--brass);text-decoration:none;border-bottom:1px dotted var(--brass2)}.stat .plink:hover{color:var(--fg)}
+.cc[data-go]{cursor:pointer}
 .stat{cursor:pointer}.stat:hover{border-color:var(--line2)}
 .stat .last{font-family:var(--f-mono);font-size:11px;color:var(--brass);margin-top:8px}
 .stat .last b{color:var(--fg);font-weight:500}
@@ -408,17 +413,21 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 
   <section class="card" data-sec="tuna" aria-labelledby="tth">
     <div class="sechead"><h2 id="tth">Tuna · TT-1 to TT-4 (Adani PPP)</h2><p id="ttsub"></p></div>
+    <div class="striplabel"><a class="plink" id="tunalink" target="_blank" rel="noopener" style="color:var(--brass);text-decoration:none;border-bottom:1px dotted var(--brass2)">Open the full Tuna board ↗</a></div>
     <div class="scroll"><svg class="tmap" id="tmap" role="img" aria-label="Tuna terminal berths"></svg></div>
     <div class="scroll"><table class="mpt lqt" id="tuna"></table></div>
   </section>
   <section class="card" data-sec="liquid" aria-labelledby="lqh">
     <div class="sechead"><h2 id="lqh">Liquid berths · OJ-1 to OJ-7</h2><p id="lqsub"></p></div>
+    <div class="striplabel"><a class="plink" id="liqlink" target="_blank" rel="noopener" style="color:var(--brass);text-decoration:none;border-bottom:1px dotted var(--brass2)">Open the full liquid board ↗</a></div>
     <div class="scroll"><svg class="tmap" id="lmap" role="img" aria-label="Oil jetties"></svg></div>
     <div class="scroll"><table class="mpt lqt" id="liquid"></table></div>
     <div class="striplabel" style="margin-top:6px">Waiting liquid vessels · queue letters as printed in the list (E = edible oils, C = chemicals, O = POL)</div>
     <div class="scroll"><table class="mpt lqt" id="liqwait"></table></div>
     <div class="striplabel" style="margin-top:6px">Expected liquid vessels (ETA sheet)</div>
     <div class="scroll"><table class="mpt lqt" id="liqeta"></table></div>
+    <div class="striplabel" style="margin-top:6px">Oil-jetty movements · HM signals</div>
+    <div id="liqmoves"></div>
   </section>
   <section class="card timber" data-sec="timber" aria-labelledby="th">
     <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
@@ -441,9 +450,12 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-01 22:00');
 const PROG_END=h('11-02 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 22:35 IST';
+const PAGE_URLS={tuna:'https://claude.ai/artifact/5L9uVeizEcfhXo65sKM5Ub',liquid:'https://claude.ai/artifact/J7C1MtZdb6Rn5zEaaf2MJj'}; // stand-alone pages (filled in when published); on GitHub Pages the relative files are used
+const pageHref=k=>/github\.io$/.test(location.hostname)?k+'.html':(PAGE_URLS[k]||'#'+k);
+const UPDATED='1 Nov 2026 · 22:50 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
+/*@@TLDATA@@*/
 // ---- Tuna Tekra (TT-1 to TT-4): PPP terminal inside DPA, run by Adani — outside the DPA berthing queue. The list prints no norms / ETC
 // for TT vessels, so the board shows status only (no projection); the order comes from the list's own remarks ("TT-03 followed by …").
 // Layout from Mihir's sketch (1 Nov): finger pier running N–S; TT-1 (north) and TT-3 (south) on the west face, TT-2 and TT-4 on the east
@@ -526,7 +538,15 @@ const LIQ={src:'DPA berthing list 31.10.26 (0700, revised 15:09) · HM signals 1
   {n:'Zao Galaxy',c:'Chemicals',q:6000,u:'MT',ie:'IMP',loa:159.03,dr:6,eta:'11-07 00:00',rdy:null,ag:'GAC Shg',rem:''},
   {n:'Ginga Cheetah',c:'CDSBO + CDSFO',q:24270,u:'MT',ie:'IMP',loa:159.98,dr:10,eta:'11-08 00:00',rdy:null,ag:'Interocean',rem:''},
   {n:'Silver Gertrude',c:'CDSBO',q:22500,u:'MT',ie:'IMP',loa:175.27,dr:12.9,eta:'11-08 00:00',rdy:null,ag:'Interocean',rem:''}
+ ],
+ // oil-jetty movements from the HM signals (cargo-jetty rows are in MV on the main board) — [time,'IN'|'OUT'|'SHIFT',vessel,'from → to',pilot,'MM-DD HH:MM',note]
+ moves:[
+  ['Night signal · 1/2 Nov (amendment & new, disp 2155)',[['02:30','OUT','MC Calypso','OJ-7 → OTB','Yadav','11-02 02:30','RT · earlier sheets 00:48 / 02:30'],['01:50','OUT','Lila Ace','OJ-1 → OTB','Sandeep','11-02 01:50',''],['o/c','IN','Dank Silver','OTB → OJ-1','Sandeep','11-02 04:30','flood · 1E'],['04:00','OUT','CNC Bull','OJ-2 → OTB','Goel','11-02 04:00','RT · preponed from the 2 Nov day signal (10:00)'],['o/c','IN','Torm Supreme','OTB → OJ-7','Goel','11-02 05:30','flood · 2E · REQ OJ-07'],['02:15','IN','No. 6 Ocean Pioneer','OTB → OJ-2','Sud','11-02 05:00','2C · preponed from the 2 Nov day signal (08:30)']]],
+  ['Day signal · 2 Nov (disp 2110 / 2153 on 1 Nov)',[['05:45','OUT','Stolt Maple','OJ-3 → OTB','Pankaj','11-02 05:45','RT · marked OUT/SHIFT'],['o/c','IN','Hatnyanawati','OTB → OJ-3','Pankaj','11-02 08:00','chemicals exp · list had readiness N/A']]],
+  ['Night signal · 1 Nov (disp 1400 → 1630/1800 → 1755/1815)',[['18:12','OUT','MC Metis','OJ-4 → OTB','Goel','11-01 18:12','earlier 17:30'],['o/c','IN','Avyaan','OTB → OJ-4','Sud','11-01 20:30','HSD · 1O'],['21:30','OUT','Roan Teresa','OJ-5 → OTB','Sud','11-01 21:30','RT · earlier 02:00 (2 Nov)']]],
+  ['Day signal · 1 Nov (disp 0715 → 1400)',[['11:15','SHIFT','Roan Teresa','OJ-2 → OJ-5','Madaan','11-01 11:15','RT · first written OJ-2 → OTB'],['o/c','IN','Kestrel','OTB → OJ-6','Madaan','11-01 13:30','flood · VLSFO exp · after Hari Anand']]]
  ]};
+/*@@/TLDATA@@*/
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
  {n:'AC Kathryn',cbm:29066,from:'Australia',c:'Pine logs',arr:'10-09 17:00',b:'10-25 06:36',pri:'SAAGAR',st:'berth'},
  {n:'Centurion Buyo',cbm:29852,from:'Australia',c:'Pine logs',arr:'10-20 06:24',b:'10-30 01:45',pri:'SAAGAR',st:'berth'},
@@ -660,12 +680,14 @@ function preview(){
    <td class="al">${x.alt?`<b>${x.alt.n}</b><small>${x.alt.c} · ${CL[x.alt.cat]||x.alt.cat}${x.alt.via?' as '+x.alt.via:''}${x.alt.same?' · same group, next rank':''}</small>`:'<span style="color:var(--dim)">nobody else eligible</span>'}</td>
    <td class="fl">${x.flips&&x.flips.length?'<ul>'+x.flips.map(f=>`<li>${f}</li>`).join('')+'</ul>':'—'}</td></tr>`).join('');
 }
+/*@@TLCODE@@*/
 // ---- Tuna (TT-1..4) and liquid berths (OJ-1..7): status-only sections (no berthing rules modelled)
 const el2=(n,a,pnt,txt)=>el(n,a,pnt,txt);
 const dayN=x=>Math.max(0,Math.round((NOW-x)/24*10)/10);
 const qty=(q,u)=>nf.format(Math.round(q))+' '+(u||'MT');
 function tuna(){
   const el=document.getElementById('tuna'), sub=document.getElementById('ttsub'), svg=document.getElementById('tmap'); if(!el)return;
+  const tl=document.getElementById('tunalink'); if(tl)tl.href=pageHref('tuna');
   sub.innerHTML=`Tuna Tekra is a PPP terminal (Adani) inside DPA — outside the DPA berthing queue. The list prints no norms or ETC for TT vessels, so this is <b>status only</b>: who is alongside since when, and who the list says follows at each berth. Source: ${TUNA.src}.`;
   // map — Mihir's sketch: pier N–S, TT-1 & TT-3 on the west face, TT-2 & TT-4 on the east face, trestle from the east
   svg.innerHTML='';svg.setAttribute('viewBox','0 0 760 300');
@@ -690,6 +712,7 @@ function tuna(){
 }
 function liquid(){
   const el=document.getElementById('liquid'), sub=document.getElementById('lqsub'), svg=document.getElementById('lmap'), ew=document.getElementById('liqwait'), ee=document.getElementById('liqeta'); if(!el)return;
+  const ll=document.getElementById('liqlink'); if(ll)ll.href=pageHref('liquid');
   const occ=LIQ.berths.filter(b=>b.now).length;
   sub.innerHTML=`Oil jetties as at <b>${fmt(h(LIQ.asOf))}</b>: ${occ} of ${LIQ.berths.length} occupied. <b>Status only</b> — the board has no berthing rules for liquid cargo, so nothing is projected; tonight's movements are from the HM signals. Queue letters are as the list prints them: E = edible oils (CDSBO, CPO), C = chemicals, O = POL. IFFCO's ammonia / phosphoric-acid vessels appear under OJ in the list. Source: ${LIQ.src}.`;
   // map — schematic row of jetties, not geographic
@@ -716,7 +739,9 @@ function liquid(){
     rows+=`<tr><td class="w"><b><span class="sn">${k}</span>${r.rank?'<span class="rk">'+r.rank+'</span>':''}</b></td><td class="pk"><b>${r.n}</b>${r.st?`<small class="st">${r.st}</small>`:''}</td><td class="al">${r.c} · ${qty(r.q,r.u)} · ${r.ie}<small>LOA ${r.loa} m · draft ${r.dr} m · agent ${r.ag}</small></td><td class="fl">reported ${fmt(h(r.rep))} · ${r.rdy==null?'<span style="color:var(--warn)">readiness N/A</span>':r.rdy==='RDY'?'ready':'ready '+fmt(h(r.rdy))}${r.rem?'<br>'+r.rem:''}</td></tr>`;});
   ew.innerHTML='<tr><th style="width:110px">Rank</th><th>Vessel</th><th>Cargo · agent</th><th style="width:40%">Reported · readiness · requirement</th></tr>'+rows;
   ee.innerHTML='<tr><th style="width:110px">ETA</th><th>Vessel</th><th>Cargo · agent</th><th style="width:40%">Readiness · remark</th></tr>'+LIQ.eta.slice().sort((a,b)=>h(a.eta)-h(b.eta)).map((r,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${fday(h(r.eta))}</b>${fmt(h(r.eta),false)}</td><td class="pk"><b>${r.n}</b></td><td class="al">${r.c} · ${qty(r.q,r.u)} · ${r.ie}<small>LOA ${r.loa} m${r.dr?' · draft '+r.dr+' m':''} · agent ${r.ag}</small></td><td class="fl">${r.rdy?'ready '+fmt(h(r.rdy)):'readiness N/A'}${r.rem?' · '+r.rem:''}</td></tr>`).join('');
+  const em=document.getElementById('liqmoves'); if(em&&LIQ.moves)em.innerHTML=LIQ.moves.map(([g,rows])=>`<div class="eyebrow" style="margin:6px 0 2px">${g}</div><table class="mv"><tbody>${rows.map(r=>{const tm=r[5]?h(r[5]):null;const st=tm!=null&&tm<=NOW?'<span class="st st-done">done</span>':'<span class="st st-sch">scheduled</span>';const ty=r[1]==='IN'?'t-in':r[1]==='OUT'?'t-out':'t-shift';return `<tr><td class="tm">${r[0]}</td><td><span class="ty ${ty}">${r[1]}</span></td><td class="vn"><b>${r[2]}</b><small>${r[3]}${r[4]&&r[4]!=='—'?' · Capt '+r[4]:''}${r[6]?' · '+r[6]:''}</small></td><td>${st}</td></tr>`;}).join('')}</tbody></table>`).join('');
 }
+/*@@/TLCODE@@*/
 function timber(){
   const el=document.getElementById('timber'); const sub=document.getElementById('tsub');
   sub.innerHTML=`Timber vessels from the DPA list, plus the ones our timber desk tracks before they reach the list ("<b>Kandla Timber Vessel's Position</b>", dated ${TIMBER.d}, updated to ${TIMBER.upto}). Where the board has DPA data it is shown; where it has none, the team's figures are shown and marked <i>team report</i>. Team ETB = the desk's own estimate; Board = list / programme / projection.`;
@@ -1250,7 +1275,20 @@ function stats(){
   const lastLine=arr=>{const r=arr.filter(w=>w.rdy!=null);if(!r.length)return'';let maxF=-1,beyond=0;r.forEach(w=>{const x=S.find(q=>q.n===w.n);if(x)maxF=Math.max(maxF,x.F);else beyond++;});if(beyond)return `<div class="last">Last ready vessel: <b>beyond ${fday(HZ)}</b> (${beyond} not reached in 3-week projection)</div>`;if(maxF<0)return'';return `<div class="last">Last ready vessel berths <b>${fday(maxF)}</b> · in <b>${Math.ceil((maxF-NOW)/24)} days</b></div>`;};
   tiles[0].push(chips,lastLine(wait),'all');tiles[1].push(byKind('bulk'),lastLine(wait.filter(w=>kind(w.c)==='bulk')),'bulk');tiles[2].push(byKind('bag'),lastLine(wait.filter(w=>kind(w.c)==='bag')),'bag');tiles[3].push(byKind('brk'),lastLine(wait.filter(w=>kind(w.c)==='brk')),'brk');tiles[4].push(chipsFor(exp),lastLine(exp),'exp');
   const [t0,...rest]=tiles;
-  document.getElementById('stats').innerHTML=`<div class="stat wide" data-k="all" style="--sc:${t0[0]}"><div class="top"><div class="v">${t0[1]}</div><div class="l" style="margin:0">${t0[3]}</div></div><div class="comm">${chips}</div>${t0[5]}</div>`+rest.map(([c,v,sm,l,ch,ln,k])=>`<div class="stat" ${k?`data-k="${k}"`:''} style="--sc:${c}"><div class="v">${v}${sm}</div><div class="l">${l}</div>${ch?`<div class="comm">${ch}</div>`:''}${ln||''}</div>`).join('');
+  // port-wide totals: dry cargo (CJ queue) + liquid (OJ) + Tuna (TT), waiting and expected
+  const lqW=LIQ.wait.filter(w=>!/at OJ|berthed/.test(w.st||'')).length, lqE=LIQ.eta.length, ttW=TUNA.wait.length, ttE=TUNA.eta.length;
+  const totW=wait.length+lqW+ttW, totE=exp.length+lqE+ttE;
+  const chip=(l,n,c,k)=>`<span class="cc" ${k?`data-go="${k}"`:''} style="--sc:${c}"><b>${n}</b><span>${l}</span></span>`;
+  const total=`<div class="stat wide total" style="--sc:var(--brass)"><div class="tot2">
+     <div><div class="top"><div class="v">${totW}</div><div class="l" style="margin:0"><b>Vessels waiting at Kandla</b> · all berths, reported and not yet berthed</div></div><div class="comm">${chip('Dry cargo · CJ queue',wait.length,'var(--brass)','all')}${chip('Liquid · oil jetties',lqW,'var(--dry)','liquid')}${chip('Tuna · TT (Adani)',ttW,'var(--brk)','tuna')}</div></div>
+     <div><div class="top"><div class="v">${totE}</div><div class="l" style="margin:0"><b>Expected</b> · ETA given, not yet reported</div></div><div class="comm">${chip('Dry cargo · CJ',exp.length,'var(--brass)','exp')}${chip('Liquid · OJ',lqE,'var(--dry)','liquid')}${chip('Tuna · TT',ttE,'var(--brk)','tuna')}</div></div>
+    </div><div class="last" style="margin-top:6px">Dry cargo berths CJ-1–16 run under the berthing policy (projected below) · liquid and Tuna are status only — their own pages: <a class="plink" href="${pageHref('liquid')}" target="_blank" rel="noopener">Liquid board ↗</a> · <a class="plink" href="${pageHref('tuna')}" target="_blank" rel="noopener">Tuna board ↗</a></div></div>`;
+  const lqOcc=LIQ.berths.filter(b=>b.now).length, lqMv=LIQ.berths.filter(b=>b.out&&h(b.out)>NOW).length, ttOcc=TUNA.berths.length;
+  const extra=`<div class="stat" data-go="liquid" style="--sc:var(--dry)"><div class="v">${lqOcc}<small>/${LIQ.berths.length}</small></div><div class="l"><b>Oil jetties occupied</b> · ${lqW} waiting · ${lqE} expected${lqMv?' · '+lqMv+' sailing'+(lqMv>1?'s':'')+' signalled tonight':''}</div><div class="last"><a class="plink" href="${pageHref('liquid')}" target="_blank" rel="noopener">Open the liquid board ↗</a> · tap tile for the section</div></div>
+   <div class="stat" data-go="tuna" style="--sc:var(--brk)"><div class="v">${ttOcc}<small>/4</small></div><div class="l"><b>Tuna berths occupied</b> (Adani PPP) · ${ttW} waiting · ${ttE} expected</div><div class="last"><a class="plink" href="${pageHref('tuna')}" target="_blank" rel="noopener">Open the Tuna board ↗</a> · tap tile for the section</div></div>`;
+  document.getElementById('stats').innerHTML=total+`<div class="stat wide" data-k="all" style="--sc:${t0[0]}"><div class="top"><div class="v">${t0[1]}</div><div class="l" style="margin:0">${t0[3]}</div></div><div class="comm">${chips}</div>${t0[5]}</div>`+rest.map(([c,v,sm,l,ch,ln,k])=>`<div class="stat" ${k?`data-k="${k}"`:''} style="--sc:${c}"><div class="v">${v}${sm}</div><div class="l">${l}</div>${ch?`<div class="comm">${ch}</div>`:''}${ln||''}</div>`).join('')+extra;
+  // tiles / chips that jump to a section (liquid, tuna) or to the dry-cargo tiles
+  document.querySelectorAll('#stats [data-go]').forEach(t=>t.onclick=e=>{if(e.target.closest('a'))return;const k=t.dataset.go;if(k==='liquid'||k==='tuna'){setSec(k,true);document.querySelector(`section[data-sec="${k}"]`).scrollIntoView({behavior:'smooth',block:'start'});}else{const tile=document.querySelector(`#stats .stat[data-k="${k}"]`);if(tile)tile.click();}e.stopPropagation();});
   // click handlers: tile → all vessels of that kind; chip → that commodity within the tile
   document.querySelectorAll('#stats .stat[data-k]').forEach(t=>t.onclick=e=>{const chip=e.target.closest('.cc');const k=t.dataset.k;const base=k==='exp'?exp:k==='all'?wait:wait.filter(w=>kind(w.c)===k);
     if(chip){const re=COM.find(c=>c[0]===chip.dataset.com)[1];openList(chip.dataset.com+(k==='exp'?' · expected':' · waiting'),base.filter(w=>re.test(w.c)));}
