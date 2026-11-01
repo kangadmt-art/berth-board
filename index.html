@@ -32,9 +32,21 @@ header.top h1 span{color:var(--brass)}
 @media (max-width:640px){.asof{text-align:left}.qhelp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}.qhelp.open{display:block;-webkit-line-clamp:unset}.qhelp::after{content:''}}
 
 section.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.sechead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 16px}
+.sechead{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .sechead h2{font-family:var(--f-disp);font-weight:600;font-size:24px;letter-spacing:.02em;text-transform:uppercase}
-.sechead p{margin:0;color:var(--muted);font-size:12.5px;max-width:72ch}
+.sechead p{margin:0;color:var(--muted);font-size:12.5px;max-width:90ch;grid-column:1/-1;cursor:auto}
+.sechead .tgl{grid-column:2;grid-row:1;align-self:center;background:transparent;border:1px solid var(--line2);color:var(--muted);border-radius:6px;width:36px;height:32px;display:grid;place-items:center;cursor:pointer;flex:none}
+.sechead .tgl svg{transition:transform .18s ease}
+.sechead .tgl:hover{border-color:var(--brass2);color:var(--fg)}
+.sechead .ssum{grid-column:1/-1;display:none;color:var(--muted);font-size:12.5px;line-height:1.45}
+.sechead .ssum b{color:var(--fg);font-weight:600}
+.card.closed .sechead p,.card.closed .secbody{display:none}
+.card.closed .sechead .ssum{display:block}
+.card.closed .sechead .tgl svg{transform:rotate(-90deg)}
+.secbody{display:flex;flex-direction:column;gap:12px;min-width:0}
+.secctl{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 8px;font-family:var(--f-mono);font-size:11px;color:var(--muted);margin:-6px 0 -8px}
+.secctl span{margin-right:auto}
+@media (max-width:640px){.sechead h2{font-size:20px}.sechead .ssum::after{content:" · tap to open";color:var(--dim)}.secctl span{display:none}}
 
 /* finder */
 .finder{border-color:var(--brass2);background:linear-gradient(180deg,#132339,#0f1c2e)}
@@ -304,7 +316,8 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   <div class="notices" id="notices"></div>
 
   <div class="stats" id="stats" aria-label="Waiting at Kandla"></div>
-  <section class="card finder" aria-labelledby="fh">
+  <div class="secctl" id="secctl"><span>Sections below open on tap · detail only when you want it</span><button type="button" class="qb" id="openAll">Open all</button><button type="button" class="qb" id="closeAll">Close all</button></div>
+  <section class="card finder" data-sec="finder" aria-labelledby="fh">
     <div class="sechead"><h2 id="fh">Kab berth milega?</h2><p>Pick any waiting or expected vessel. The board runs today's queue forward under the berthing policy and shows when that vessel's turn is likely to come.</p></div>
     <div class="pick">
       <label for="vsel">Vessel</label>
@@ -313,26 +326,26 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="quick" id="quick"></div>
     <div class="result" id="result"></div>
   </section>
-  <section class="card mine" aria-labelledby="mh">
+  <section class="card mine" data-sec="mine" aria-labelledby="mh">
     <div class="sechead"><h2 id="mh">Mihir &amp; Company · our vessels</h2><p>Every vessel in the berthing list with agent Mihir &amp; Company, with where it stands today and when it berths.</p></div>
     <div id="mine"></div>
   </section>
-  <section class="card" aria-labelledby="sp">
+  <section class="card" data-sec="spt" aria-labelledby="sp">
     <div class="sechead"><h2 id="sp">Next-day prospects · slot-wise</h2><p id="spsub"></p></div>
     <div class="scroll"><table class="mpt spt" id="spt"></table></div>
   </section>
-  <section class="card" aria-labelledby="mp">
-    <div class="sechead"><h2 id="mp">Meeting preview</h2><p>Berth-wise view of the same window (18:00 on the meeting day → 18:00 next day): for each DPA berth expected to free up, who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated.</p></div>
+  <section class="card" data-sec="mpt" aria-labelledby="mp">
+    <div class="sechead"><h2 id="mp">Meeting preview · berth-wise</h2><p id="mpsub">Berth-wise view of the same window (18:00 on the meeting day → 18:00 next day): for each DPA berth expected to free up, who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated.</p></div>
     <div class="scroll"><table class="mpt" id="mpt"></table></div>
   </section>
-  <section class="card" aria-labelledby="rh">
+  <section class="card" data-sec="rules" aria-labelledby="rh">
     <div class="sechead"><h2 id="rh">Routine se hat ke · not sailing on time</h2><p>Only vessels still alongside past their ETC, or whose sailing was postponed, show up here. Vessels finishing on or before ETC are not listed.</p></div>
     <div class="rsum" id="rsum" role="group" aria-label="Filter checks"></div>
     <div class="rules" id="rules"></div>
     <div class="oklist" id="oklist"></div>
   </section>
 
-  <section class="card">
+  <section class="card" data-sec="quay">
     <div class="sechead">
       <h2>Quay by panel number</h2>
       <p class="qhelp">North end (CJ-1) left, south (CJ-16) right. Solid hull = at berth as per list/signal. Dotted hull = projected by the board. Click a hull to look it up above. Drawn to scale in metres from the Civil Engg "Cargo Berth Details" sheet (CJ-1–4 182.93 m, CJ-5–6 205.79, CJ-7 238.64, CJ-8 213.64, CJ-9 182.93, CJ-10 209.14, CJ-13–16 300 each); permissible draught from the Deputy Conservator's chart. Panel marks are not equal: ~22.9 m on CJ-1–6, ~34 m on CJ-7, ~21 m on CJ-8–10, and on CJ-13–16 the HM's marks 111–189 run ~15.4 m apart over the 1,200 m (the Civil sheet counts 20 m structural panels there, 131–145 / 146–159 / 160–174). Tidal benefit applies at CJ-6–10 only. Quay live load (Civil Engg sheet): 3.3 t/m² at CJ-1–5 and CJ-6 panels 42–45, 3.5 t/m² quay-side at CJ-7–9, 5 t/m² at CJ-10–16 and in the transit areas behind CJ-6–9 (IIT Mumbai report), which is why heavy stacking stays off the north berths. CJ-13–16 are shown as the operational slots the DPA list uses (13 · 14 · 15 · 15A · 16).</p>
@@ -355,28 +368,28 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="side" id="side"></div>
   </section>
 
-  <section class="card">
+  <section class="card" data-sec="gantt">
     <div class="sechead"><h2>Berth timeline · next 10 days</h2><p>Solid = at berth till ETC from the list. Hatched = ETC estimated (qty ÷ norm). Dotted outline = projected next vessel. Only DPA queue berths shown; CJ-9 (PPP), CJ-10 (maintenance) and container berths CJ-11/12 are left out.</p></div>
     <div class="scroll"><svg id="gantt" class="strip" role="img" aria-label="Berth timeline"></svg></div>
   </section>
 
   <div class="two">
-    <section class="card">
+    <section class="card" data-sec="groups">
       <div class="sechead"><h2>Who's next, by group</h2><p>Projected berthing date for the next vessels in each priority group.</p></div>
       <div id="groups"></div>
     </section>
-    <section class="card">
+    <section class="card" data-sec="moves">
       <div class="sechead"><h2>Signal movements · cargo berths</h2><p>From the Harbour Master's signal sheets, red-ink corrections included.</p></div>
       <div id="moves"></div>
     </section>
   </div>
 
-  <section class="card" aria-labelledby="lh">
+  <section class="card" data-sec="learn" aria-labelledby="lh">
     <div class="sechead"><h2 id="lh">Expected vs actual · logic check</h2><p>Every day the board's projection is compared with what the port actually did. Where the port moved differently, the reason is noted and, once confirmed, folded back into the rules. The policy is the framework; this log is how the board learns the practice.</p></div>
     <div class="learn" id="learn"></div>
   </section>
 
-  <section class="card timber" aria-labelledby="th">
+  <section class="card timber" data-sec="timber" aria-labelledby="th">
     <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
     <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
   </section>
@@ -397,7 +410,7 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-01 15:10');
 const PROG_END=h('11-02 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const UPDATED='1 Nov 2026 · 22:40 IST';
+const UPDATED='1 Nov 2026 · 21:30 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'30 Oct 1200',upto:'31 Oct 1800, after the berthing meeting',rows:[
@@ -517,7 +530,7 @@ function preview(){
   const fa=x=>x.freeAt!=null?x.freeAt:x.prevAt;
   const rows=S.filter(x=>x.proj&&x.prevAt!=null&&fa(x)>=T-12&&fa(x)<=end).sort((a,z)=>fa(a)-fa(z));
   const el=document.getElementById('mpt');
-  const hd=document.querySelector('#mp');if(hd)hd.innerHTML=`Meeting preview · berth-wise · meeting of ${fday(meet)} 11:00 → ${fday(meet)} 18:00 → ${fday(end)} 18:00`;
+  const hd=document.getElementById('mpsub');if(hd)hd.innerHTML=`Meeting of <b id="mpwin">${fday(meet)} 11:00</b> programmes <b>${fday(meet)} 18:00 → ${fday(end)} 18:00</b>. For each DPA berth expected to free up in that window: who the board thinks gets it, who is next in line, and what could overturn it at the meeting.`;
   if(!rows.length){el.innerHTML=`<tr><td class="fl">No DPA berth is projected to free up before ${fday(end)} 18:00 beyond what the programme already fixes.</td></tr>`;return;}
   el.innerHTML='<tr><th style="width:200px">Berth frees</th><th>Board\'s pick</th><th>Next in line</th><th>What could overturn it at the meeting</th></tr>'+rows.map((x,i)=>`<tr class="${isMine(x.n)?'me':''} ${x.projChk?'chk':''} ${x.shifted?'sh':''}">
    <td class="w"><b><span class="sn">${i+1}</span>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev}${(()=>{const pv=V.find(v=>v.n===x.prev)||S.find(v=>v.n===x.prev);return pv?' · '+pv.c+(pv.cat?' · '+(CL[pv.cat]||pv.cat):''):'';})()}${/shifted out/.test(x.prev)?'':' sails'}${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(x.softWait?'no declared ETC → cannot be programmed in this window; next meeting from '+fmt(x.prevAt)+' unless the vessel confirms sailing':Math.abs(x.prevAt-(nextMeet(NOW)+7))<0.01?'not in the current programme → next meeting, berthing from '+fmt(x.prevAt):x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
@@ -1135,9 +1148,9 @@ function barge(){
 }
 function openList(title,arr){
   arr=arr.slice().sort((a,z)=>{const fa=(S.find(q=>q.n===a.n)||{}).F??(a.rdy==null?1e9:1e8),fz=(S.find(q=>q.n===z.n)||{}).F??(z.rdy==null?1e9:1e8);return fa-fz;});
-  const rows=arr.map(w=>{const st=statusOf(w.n)||{};const x=S.find(q=>q.n===w.n);
+  const rows=arr.map((w,i)=>{const st=statusOf(w.n)||{};const x=S.find(q=>q.n===w.n);
     const when=x?`<td class="d">${fday(x.F)}<small>~${fmt(x.F,false)} · CJ-${x.b} · ${CL[x.cat]}${x.via?' (as '+x.via+')':''}</small></td>`:(w.rdy==null?`<td class="d na">not ready<small>${st.d&&st.d!=='—'?'if ready today: '+st.d:'readiness N/A'}</small></td>`:`<td class="d na">beyond ${fday(HZ)}</td>`);
-    return `<tr class="${isMine(w.n)?'me':''}" data-n="${w.n}"><td class="n">${w.n}${isMine(w.n)?' <span class="tag" style="color:var(--brass)">Mihir &amp; Co</span>':''}<small>${w.c} · ${nf.format(w.q)} ${w.u}${agTxt(w.n)}</small></td><td class="hide">${w.loa} m${w.dr?' · '+w.dr+' m':''}</td><td class="hide">${fmt(w.rep)}<br><small style="color:var(--muted)">${w.rdy!=null?'ready '+fmt(w.rdy):'readiness N/A'}</small></td><td class="hide">${groupLine(w)}</td>${when}</tr>`;}).join('');
+    return `<tr class="${isMine(w.n)?'me':''}" data-n="${w.n}"><td class="n"><span class="sn">${i+1}</span>${w.n}${isMine(w.n)?' <span class="tag" style="color:var(--brass)">Mihir &amp; Co</span>':''}<small>${w.c} · ${nf.format(w.q)} ${w.u}${agTxt(w.n)}</small></td><td class="hide">${w.loa} m${w.dr?' · '+w.dr+' m':''}</td><td class="hide">${fmt(w.rep)}<br><small style="color:var(--muted)">${w.rdy!=null?'ready '+fmt(w.rdy):'readiness N/A'}</small></td><td class="hide">${groupLine(w)}</td>${when}</tr>`;}).join('');
   const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mbox" role="dialog" aria-label="${title}"><div class="mh"><div><h3>${title}</h3><small>${arr.length} vessels · tap a row to open it in the finder</small></div><button type="button" class="mclose">Close ✕</button></div><div class="scroll"><table class="mt"><thead><tr><th>Vessel</th><th class="hide">LOA · draft</th><th class="hide">Reported · ready</th><th class="hide">Group / rank</th><th>Likely berthing</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
   const close=()=>m.remove();m.onclick=e=>{if(e.target===m)close();};m.querySelector('.mclose').onclick=close;
   m.querySelectorAll('tbody tr').forEach(r=>r.onclick=()=>{focus=r.dataset.n;close();render(true);});
@@ -1344,10 +1357,80 @@ function render(scroll){
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
   stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();learn();timber();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
-  if(scroll)document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});
+  summaries();
+  if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
+}
+// ---- collapsible sections: every card opens on tap; closed cards show a one-line summary. State is remembered per viewer (localStorage, best effort).
+const SEC_OPEN_DEFAULT=new Set(['finder','mine']);
+let SECST={};try{SECST=JSON.parse(localStorage.getItem('bb.sec')||'{}')||{};}catch(e){SECST={};}
+function saveSec(){try{localStorage.setItem('bb.sec',JSON.stringify(SECST));}catch(e){}}
+function setSec(id,open,save){const sec=document.querySelector(`section.card[data-sec="${id}"]`);if(!sec)return;sec.classList.toggle('closed',!open);const b=sec.querySelector('.tgl');if(b)b.setAttribute('aria-expanded',open?'true':'false');if(save!==false){SECST[id]=open?1:0;saveSec();}}
+function initSections(){
+  document.querySelectorAll('section.card[data-sec]').forEach(sec=>{
+    const id=sec.dataset.sec, head=sec.querySelector('.sechead'); if(!head)return;
+    const body=document.createElement('div');body.className='secbody';body.id='body-'+id;
+    let n=head.nextSibling;while(n){const nx=n.nextSibling;body.appendChild(n);n=nx;}
+    sec.appendChild(body);
+    const h2=head.querySelector('h2');
+    const btn=document.createElement('button');btn.type='button';btn.className='tgl';btn.setAttribute('aria-controls',body.id);btn.setAttribute('aria-label','Show or hide this section');
+    btn.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const sum=document.createElement('div');sum.className='ssum';sum.id='sum-'+id;
+    if(h2)h2.insertAdjacentElement('afterend',btn);else head.appendChild(btn);
+    head.appendChild(sum);
+    head.addEventListener('click',e=>{ if(e.target.closest('p,a,select,input,label')||(e.target.closest('button')&&!e.target.closest('.tgl')))return; setSec(id,sec.classList.contains('closed')); });
+    const open=(id in SECST)?!!SECST[id]:SEC_OPEN_DEFAULT.has(id);
+    setSec(id,open,false);
+  });
+  const all=o=>{document.querySelectorAll('section.card[data-sec]').forEach(s=>setSec(s.dataset.sec,o));};
+  const oa=document.getElementById('openAll'),ca=document.getElementById('closeAll');if(oa)oa.onclick=()=>all(true);if(ca)ca.onclick=()=>all(false);
+}
+function setSum(id,html){const el=document.getElementById('sum-'+id);if(el)el.innerHTML=html;}
+function summaries(){
+  const txt=el=>el?el.textContent.replace(/\s+/g,' ').trim():'';
+  const pl=(n,w)=>n+' '+w+(n===1?'':'s');
+  // finder: the vessel in focus and the board's answer
+  const rq=document.querySelector('#result .answer .q'), rd=document.querySelector('#result .answer .d');
+  setSum('finder',`<b>${focus}</b>${rd?' · '+txt(rq).replace(/\?$/,'').toLowerCase()+': <b>'+txt(rd)+'</b>':''}`);
+  // Mihir & Co
+  const names=[...new Set(V.map(v=>v.n).concat(W.map(w=>w.n)))].filter(isMine);
+  const sts=names.map(n=>statusOf(n)).filter(s=>s&&s.k!=='sailed');
+  const atB=sts.filter(s=>s.k==='at').length;
+  const nx=sts.filter(s=>s.k==='proj'||s.k==='today').map(s=>s.o).sort((a,z)=>a.F-z.F)[0];
+  setSum('mine',sts.length?`<b>${pl(sts.length,'vessel')}</b>${atB?' · '+atB+' at berth':''}${nx?' · next berthing: <b>'+nx.n+'</b> '+fday(nx.F)+' ~'+fmt(nx.F,false)+' CJ-'+nx.b:''}`:'No Mihir &amp; Co vessel in the list today');
+  // slot-wise prospects: count slots with a next vessel / vacant
+  const sr=[...document.querySelectorAll('#spt tr')].filter(r=>r.querySelector('td.w .sn'));
+  const nxt=sr.filter(r=>r.querySelector('td.pk:last-child b')).length, vac=sr.filter(r=>/vacant/.test(txt(r.querySelector('td.pk')))).length;
+  const sp=document.querySelector('#spsub b');
+  setSum('spt',`Meeting <b>${txt(sp)}</b> · ${sr.length} slots · <b>${pl(nxt,'berthing')}</b> projected in the window${vac?' · '+pl(vac,'slot')+' vacant now':''}`);
+  // meeting preview: berths freeing in the window
+  const mr=[...document.querySelectorAll('#mpt tr')].filter(r=>r.querySelector('td.w .sn'));
+  const sh=mr.filter(r=>r.classList.contains('sh')).length, chk=mr.filter(r=>r.classList.contains('chk')).length, mine_=mr.filter(r=>r.classList.contains('me')).length;
+  const mw=document.querySelectorAll('#mpsub b')[1];
+  setSum('mpt',(mw?'Window <b>'+txt(mw)+'</b> · ':'')+(mr.length?`<b>${pl(mr.length,'berth')}</b> expected to free in the window${mine_?' · <b>'+mine_+' ours</b>':''}${sh?' · '+pl(sh,'port-convenience shift'):''}${chk?' · '+chk+' project vessel to check':''}`:'No DPA berth projected to free in the window beyond the programme'));
+  // rules
+  const rc=document.querySelectorAll('#rules .rc').length;
+  setSum('rules',rc?`<b>${pl(rc,'vessel')}</b> not sailing on time (past ETC or postponed)`:'All vessels sailing on schedule');
+  // quay at slider time
+  const atT=V.filter(v=>v.F<=T&&T<v.T&&POOL.includes(v.b)).length, prT=S.filter(x=>x.proj&&x.F<=T&&T<x.T&&POOL.includes(x.b)).length;
+  setSum('quay',`At <b>${fmt(T)}</b>: <b>${atT}</b> alongside per list/signal${prT?' · '+prT+' projected':''} · ${POOL.length} DPA berths · drag the slider inside`);
+  // gantt
+  const g0=T0, g1=T0+240; const gv=V.filter(v=>POOL.includes(v.b)&&v.T>g0&&v.F<g1).length, gs=S.filter(x=>x.proj&&POOL.includes(x.b)&&x.T>g0&&x.F<g1).length;
+  setSum('gantt',`${fday(g0)} → ${fday(g1)} · <b>${gv}</b> at berth / fixed · <b>${gs}</b> projected`);
+  // groups
+  setSum('groups',`Next vessel in each of the <b>${SLOTS.length}</b> priority groups`);
+  // moves
+  const mvN=MV.reduce((a,[g,rows])=>a+rows.length,0);
+  setSum('moves',`<b>${pl(mvN,'movement')}</b> · latest: ${MV[0][0].replace(/\s*\(.*$/,'')}`);
+  // learn
+  const lo=LEARN.filter(x=>x.st==='open').length, la=LEARN.filter(x=>x.st==='adopted').length, lk=LEARN.filter(x=>x.st==='ok').length;
+  setSum('learn',`<b>${LEARN.length}</b> checks · <b>${lo} open</b> · ${la} adopted · ${lk} matched`);
+  // timber
+  const tb=TIMBER.rows.filter(r=>r.st==='berth').length, tw=TIMBER.rows.filter(r=>r.st==='wait').length, te=TIMBER.rows.filter(r=>r.st==='eta').length;
+  setSum('timber',`<b>${TIMBER.rows.length}</b> vessels · ${tb} at berth · ${tw} waiting · ${te} expected · team report ${TIMBER.d}`);
 }
 // open at the focused vessel's berthing time if projected
 const s0=S.find(x=>x.n===focus);
+initSections();
 render(false);
 })();
 </script>
