@@ -123,6 +123,9 @@ table{border-collapse:collapse;width:100%}
 .mv td.vn{font-weight:600}
 .mv td.vn small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
 .tag{display:inline-block;font-family:var(--f-mono);font-size:10px;padding:1px 5px;border-radius:3px;border:1px solid currentColor;white-space:nowrap}
+.ie{display:inline-block;font-family:var(--f-mono);font-size:9.5px;font-weight:600;letter-spacing:.06em;padding:0 4px;border-radius:3px;margin-left:5px;line-height:15px;vertical-align:1px;white-space:nowrap}
+.ie.imp{color:#8fd0ff;border:1px solid rgba(92,200,255,.45);background:rgba(92,200,255,.10)}.ie.exp{color:#f3b86a;border:1px solid rgba(207,143,63,.6);background:rgba(207,143,63,.13)}.ie.ix{color:var(--muted);border:1px solid var(--line2)}
+.stat .v .iev{font-family:var(--f-disp);font-weight:800}.stat .v .iev.imp{color:#8fd0ff}.stat .v .iev.exp{color:#f3b86a}.stat .v .iesep{color:var(--dim);font-weight:400;margin:0 6px}
 .t-in{color:var(--ok)} .t-out{color:#e9a07a} .t-shift{color:var(--box)}
 .st{font-family:var(--f-mono);font-size:10px;padding:1px 6px;border-radius:10px;white-space:nowrap}
 .st-done{background:#18352a;color:var(--ok)} .st-sch{background:#2a2f3f;color:var(--muted)} .st-pp{background:#3d2020;color:var(--bad)}
@@ -514,7 +517,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='3 Nov 2026 · 01:40 IST';
+const UPDATED='3 Nov 2026 · 02:05 IST';
 const BOARD_SRC='list 02.11 (0700 + revised pm) · programme 03.11 · signals to 1 Nov night';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -779,12 +782,12 @@ function prospects(){
         nowCell=`<b>${v.n}</b>${tag(v)}<small>CJ-${v.b} · ${v.c}${v.n!==v.n?'':''}</small>`;
         const sails=v.T<=we&&!soft(v); const softIn=soft(v)&&v.T<=we;
         sailCell=sails?`<b class="dl late">sails ${fmt(v.T)}</b><small>${v.proj?'projected':'ETC / programme'}</small>`:softIn?`<span class="dl same">stays</span><small style="color:var(--prj)">no declared ETC${PROJV(v)?' (project cargo)':''} — board estimate ${fmt(v.T)}; ⚠ check at meeting</small>`:`<span class="dl same">stays</span><small>ETC ${v.dpr?fmt(v.T)+' (DPR-based; list '+fmt(v.listT)+')':fmt(v.T)+(v.est?' (est)':'')}</small>`;
-        if(sails){const nx=next[ni++];nextCell=nx?`<b>${nx.n}</b>${tag(nx)}<small>CJ-${nx.b} · ${nx.c} · ~${fmt(nx.F)}${nx.proj?' · projected':' · programme'}${nx.projChk?' · ⚠ check':''}</small>`:noneCell(k);}
+        if(sails){const nx=next[ni++];nextCell=nx?`<b>${nx.n}</b>${tag(nx)}<small>CJ-${nx.b} · ${cg(nx)} · ~${fmt(nx.F)}${nx.proj?' · projected':' · programme'}${nx.projChk?' · ⚠ check':''}</small>`:noneCell(k);}
         else nextCell=(k==='GEN'&&i===max-1&&genReady.length)?genNone():'<span style="color:var(--dim)">—</span>';
       } else {
         nowCell='<span style="color:var(--muted)">vacant</span>';
         sailCell='<span style="color:var(--dim)">—</span>';
-        const nx=next[ni++];nextCell=nx?`<b>${nx.n}</b>${tag(nx)}<small>CJ-${nx.b} · ${nx.c} · ~${fmt(nx.F)}${nx.proj?' · projected':' · programme'}</small>`:noneCell(k);
+        const nx=next[ni++];nextCell=nx?`<b>${nx.n}</b>${tag(nx)}<small>CJ-${nx.b} · ${cg(nx)} · ~${fmt(nx.F)}${nx.proj?' · projected':' · programme'}</small>`:noneCell(k);
       }
       const me=(v&&isMine(v.n))||(next[ni-1]&&isMine(next[ni-1].n));
       rows+=`<tr class="${me?'me':''}"><td class="w"><b><span class="sn">${n}</span>${l}</b>${max>1?`<small>slot ${i+1} of ${max}</small>`:''}</td><td class="pk">${nowCell}</td><td class="al">${sailCell}</td><td class="pk">${nextCell}</td></tr>`;
@@ -805,7 +808,7 @@ function preview(){
   if(!rows.length){el.innerHTML=`<tr><td class="fl">No DPA berth is projected to free up before ${fday(end)} 18:00 beyond what the programme already fixes.</td></tr>`;return;}
   el.innerHTML='<tr><th style="width:200px">Berth frees</th><th>Board\'s pick</th><th>Next in line</th><th>What could overturn it at the meeting</th></tr>'+rows.map((x,i)=>`<tr class="${isMine(x.n)?'me':''} ${x.projChk?'chk':''} ${x.shifted?'sh':''}">
    <td class="w"><b><span class="sn">${i+1}</span>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev}${(()=>{const pv=V.find(v=>v.n===x.prev)||S.find(v=>v.n===x.prev);return pv?' · '+pv.c+(pv.cat?' · '+(CL[pv.cat]||pv.cat):''):'';})()}${/shifted out/.test(x.prev)?'':' sails'}${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(x.softWait?'no declared ETC → cannot be programmed in this window; next meeting from '+fmt(x.prevAt)+' unless the vessel confirms sailing':Math.abs(x.prevAt-(nextMeet(NOW)+7))<0.01?'not in the current programme → next meeting, berthing from '+fmt(x.prevAt):x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
-   <td class="pk"><b>${x.n}</b>${isMine(x.n)?'<span class="tag">Mihir &amp; Co</span>':''}${x.shifted?'<span class="tag shift">SHIFT · port convenience</span>':''}<small>${x.c} · ${nf.format(x.q)} ${x.u}${agTxt(x.n)}</small><small>${x.shifted?`shifted from CJ-${x.fromB} (${CL[x.cat]||x.cat}, slot unchanged) · frees CJ-${x.fromB} for <b>${x.forWho}</b> (${CL[x.forCat]||x.forCat}) · alongside ~${fmt(x.F)}`:`${CL[x.cat]||x.cat}${x.via?' slot · as '+x.via:''} · alongside ~${fmt(x.F)}${x.tide?' · '+x.tide:''}`}</small></td>
+   <td class="pk"><b>${x.n}</b>${isMine(x.n)?'<span class="tag">Mihir &amp; Co</span>':''}${x.shifted?'<span class="tag shift">SHIFT · port convenience</span>':''}<small>${cg(x)} · ${nf.format(x.q)} ${x.u}${agTxt(x.n)}</small><small>${x.shifted?`shifted from CJ-${x.fromB} (${CL[x.cat]||x.cat}, slot unchanged) · frees CJ-${x.fromB} for <b>${x.forWho}</b> (${CL[x.forCat]||x.forCat}) · alongside ~${fmt(x.F)}`:`${CL[x.cat]||x.cat}${x.via?' slot · as '+x.via:''} · alongside ~${fmt(x.F)}${x.tide?' · '+x.tide:''}`}</small></td>
    <td class="al">${x.alt?`<b>${x.alt.n}</b><small>${x.alt.c} · ${CL[x.alt.cat]||x.alt.cat}${x.alt.via?' as '+x.alt.via:''}${x.alt.same?' · same group, next rank':''}</small>`:'<span style="color:var(--dim)">nobody else eligible</span>'}</td>
    <td class="fl">${x.flips&&x.flips.length?'<ul>'+x.flips.map(f=>`<li>${f}</li>`).join('')+'</ul>':'—'}</td></tr>`).join('');
 }
@@ -821,7 +824,7 @@ function tunaTiles(){
   const days=TUNA.berths.map(b=>Math.round((NOW-h(b.f))/24*10)/10); const mx=days.length?Math.max(...days):0, mi=days.indexOf(mx);
   el.innerHTML=tileHtml([
    ['var(--brk)',occ+'<small>/4</small>','<b>Tuna berths occupied</b>'+(est?' · '+est+' berthing not yet confirmed':''),TUNA.berths.map(b=>`<span class="cc" style="--sc:var(--brk)"><b>${b.b}</b><span>${b.n}<small> · ${b.c}</small></span></span>`).join('')],
-   ['var(--brass)',TUNA.wait.length,'<b>Waiting for a Tuna berth</b> · reported, not yet berthed',TUNA.wait.map(w=>`<span class="cc" style="--sc:var(--brass)"><b>${w.n}</b><span>${w.c}<small> · ${w.rem||''}</small></span></span>`).join('')],
+   ['var(--brass)',TUNA.wait.length,'<b>Waiting for a Tuna berth</b> · reported, not yet berthed',TUNA.wait.map(w=>`<span class="cc" style="--sc:var(--brass)"><b>${w.n}</b><span>${w.c}${ieTag(w.ie)}<small> · ${w.rem||''}</small></span></span>`).join('')],
    ['var(--box)',TUNA.eta.length,'<b>Expected</b> · ETA given, not yet reported',TUNA.eta.slice().sort((a,b)=>h(a.eta)-h(b.eta)).map(w=>`<span class="cc" style="--sc:var(--box)"><b>${fday(h(w.eta)).slice(4)}</b><span>${w.n}<small> · ${w.c}</small></span></span>`).join('')],
    ['var(--line2)',mx+'<small> d</small>','<b>Longest stay alongside</b>'+(mi>=0?' · '+TUNA.berths[mi].n+' at '+TUNA.berths[mi].b:''),'']
   ]);
@@ -834,7 +837,7 @@ function liquidTiles(){
   const cnt=k=>W.filter(w=>grp(w)===k).length;
   const mv=LIQ.berths.filter(b=>b.out&&h(b.out)>NOW), inn=LIQ.berths.filter(b=>b.next);
   el.innerHTML=tileHtml([
-   ['var(--dry)',occ+'<small>/'+LIQ.berths.length+'</small>','<b>Oil jetties occupied</b>'+(vac.length?' · vacant: '+vac.join(', '):''),LIQ.berths.map(b=>`<span class="cc" style="--sc:${b.now?'var(--dry)':'var(--line2)'}"><b>${b.b}</b><span>${b.now?b.now.n+'<small> · '+b.now.c+'</small>':'<small>vacant</small>'}</span></span>`).join('')],
+   ['var(--dry)',occ+'<small>/'+LIQ.berths.length+'</small>','<b>Oil jetties occupied</b>'+(vac.length?' · vacant: '+vac.join(', '):''),LIQ.berths.map(b=>`<span class="cc" style="--sc:${b.now?'var(--dry)':'var(--line2)'}"><b>${b.b}</b><span>${b.now?b.now.n+'<small> · '+b.now.c+(b.now.ie?' · '+b.now.ie:'')+'</small>':'<small>vacant</small>'}</span></span>`).join('')],
    ['var(--brass)',W.length,'<b>Waiting</b> · reported, not yet berthed · by the list\'s queue letter',[['E','Edible oils'],['C','Chemicals'],['O','POL'],['Z','no letter']].filter(([k])=>cnt(k)).map(([k,l])=>`<span class="cc" style="--sc:var(--brass)"><b>${cnt(k)}</b><span>${l}<small> (${k})</small></span></span>`).join('')],
    ['var(--box)',LIQ.eta.length,'<b>Expected</b> · ETA given, not yet reported',(()=>{const d={};LIQ.eta.slice().sort((a,b)=>h(a.eta)-h(b.eta)).forEach(e=>{const k=fday(h(e.eta)).slice(4);d[k]=(d[k]||0)+1;});return Object.entries(d).map(([k,n])=>`<span class="cc" style="--sc:var(--box)"><b>${n}</b><span>${k}</span></span>`).join('');})()],
    ['var(--warn)',mv.length,'<b>Sailings signalled</b> after '+fmt(NOW)+' · '+inn.length+' berthings to follow',mv.map(b=>`<span class="cc" style="--sc:var(--warn)"><b>${fmt(h(b.out),false)}</b><span>${b.now?b.now.n:''} out of ${b.b}${b.next?'<small> → '+b.next.n+'</small>':''}</span></span>`).join('')]
@@ -859,9 +862,9 @@ function tuna(){
   el2('text',{x:555,y:155,'text-anchor':'middle','font-family':FM,'font-size':10,fill:'var(--dim)','letter-spacing':'.1em'},svg,'APPROACH TRESTLE · TO SHORE →');
   box(100,30,196,100,'TT-1');box(100,170,196,100,'TT-3');box(364,30,196,100,'TT-2');box(364,170,196,100,'TT-4');
   el2('text',{x:20,y:20,'font-family':FM,'font-size':10,fill:'var(--dim)'},svg,'N ↑ · schematic from Mihir\'s sketch, not to scale');
-  const rowB=(v,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${v.b}</b></td><td class="pk"><b>${v.n}</b>${v.est?'<span class="tag" style="color:var(--warn);border-color:var(--warn)">berthing not confirmed</span>':''}<small>${v.prev?'before: '+v.prev:''}</small></td><td class="al">${v.c} · ${qty(v.q,v.u)} · ${v.ie}<small>LOA ${v.loa} m · agent ${v.ag}</small></td><td class="fl">made fast ${fmt(h(v.f))}${v.est?' (est)':''} · ${dayN(h(v.f))} days alongside<br>${v.next?'next per list: '+v.next:'next: not stated in the list'}${v.note?'<br><span style="color:var(--warn)">'+v.note+'</span>':''}${dprLine(v.n)}</td></tr>`;
-  const rowW=(v,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>waiting</b></td><td class="pk"><b>${v.n}</b></td><td class="al">${v.c} · ${qty(v.q,v.u)} · ${v.ie}<small>LOA ${v.loa} m · draft ${v.dr} m · agent ${v.ag}</small></td><td class="fl">reported ${fmt(h(v.rep))} · ${v.rdy?(v.rdy==='RDY'?'ready':'ready '+fmt(h(v.rdy))):'readiness N/A'}<br>${v.rem}</td></tr>`;
-  const rowE=(v,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>ETA</b></td><td class="pk"><b>${v.n}</b></td><td class="al">${v.c} · ${qty(v.q,v.u)} · ${v.ie}<small>LOA ${v.loa} m${v.dr?' · draft '+v.dr+' m':''} · agent ${v.ag}</small></td><td class="fl">ETA ${fmt(h(v.eta))}${v.rem?' · '+v.rem:''}</td></tr>`;
+  const rowB=(v,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${v.b}</b></td><td class="pk"><b>${v.n}</b>${v.est?'<span class="tag" style="color:var(--warn);border-color:var(--warn)">berthing not confirmed</span>':''}<small>${v.prev?'before: '+v.prev:''}</small></td><td class="al">${v.c} · ${qty(v.q,v.u)}${ieTag(v.ie)}<small>LOA ${v.loa} m · agent ${v.ag}</small></td><td class="fl">made fast ${fmt(h(v.f))}${v.est?' (est)':''} · ${dayN(h(v.f))} days alongside<br>${v.next?'next per list: '+v.next:'next: not stated in the list'}${v.note?'<br><span style="color:var(--warn)">'+v.note+'</span>':''}${dprLine(v.n)}</td></tr>`;
+  const rowW=(v,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>waiting</b></td><td class="pk"><b>${v.n}</b></td><td class="al">${v.c} · ${qty(v.q,v.u)}${ieTag(v.ie)}<small>LOA ${v.loa} m · draft ${v.dr} m · agent ${v.ag}</small></td><td class="fl">reported ${fmt(h(v.rep))} · ${v.rdy?(v.rdy==='RDY'?'ready':'ready '+fmt(h(v.rdy))):'readiness N/A'}<br>${v.rem}</td></tr>`;
+  const rowE=(v,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>ETA</b></td><td class="pk"><b>${v.n}</b></td><td class="al">${v.c} · ${qty(v.q,v.u)}${ieTag(v.ie)}<small>LOA ${v.loa} m${v.dr?' · draft '+v.dr+' m':''} · agent ${v.ag}</small></td><td class="fl">ETA ${fmt(h(v.eta))}${v.rem?' · '+v.rem:''}</td></tr>`;
   const hd=t=>`<tr class="sub"><td colspan="4" class="w"><b>${t}</b></td></tr>`;
   el.innerHTML='<tr><th style="width:110px">Berth</th><th>Vessel</th><th>Cargo · agent</th><th style="width:38%">Status</th></tr>'+TUNA.berths.map(rowB).join('')+hd('Waiting for Tuna berths (list)')+TUNA.wait.map(rowW).join('')+hd('Expected (ETA sheet)')+TUNA.eta.map(rowE).join('');
 }
@@ -878,12 +881,12 @@ function liquid(){
     el2('rect',{x,y:14,width:w,height:104,rx:6,fill:v?'var(--panel2)':'none',stroke:v?(v.est?'var(--warn)':'var(--brass)'):'var(--line2)','stroke-width':1.4,'stroke-dasharray':v&&v.est?'5 3':(v?'none':'3 3')},g);
     el2('text',{x:x+8,y:32,'font-family':FM,'font-size':11,fill:'var(--brass)','letter-spacing':'.08em'},g,b.b);
     if(v){el2('text',{x:x+8,y:54,'font-family':'var(--f-disp)','font-size':15,'font-weight':800,fill:'var(--fg)'},g,fit(v.n.toUpperCase(),w-14,8.4));
-      el2('text',{x:x+8,y:70,'font-family':FM,'font-size':9.5,fill:'var(--muted)'},g,fit(v.c+' · '+nf.format(Math.round(v.q/1000))+'k',w-14,5.6));
+      el2('text',{x:x+8,y:70,'font-family':FM,'font-size':9.5,fill:'var(--muted)'},g,fit((v.ie?v.ie+' ':'')+v.c+' · '+nf.format(Math.round(v.q/1000))+'k',w-14,5.6));
       el2('text',{x:x+8,y:86,'font-family':FM,'font-size':9.5,fill:'var(--muted)'},g,fit('since '+fmt(h(v.f),false)+' '+fday(h(v.f)).slice(4),w-14,5.6));
       if(b.out)el2('text',{x:x+8,y:104,'font-family':FM,'font-size':9.5,fill:'var(--warn)'},g,fit('out '+fmt(h(b.out)),w-14,5.6));}
     else {el2('text',{x:x+8,y:54,'font-family':FM,'font-size':11,fill:'var(--muted)'},g,'vacant');if(b.prev&&b.prev.out)el2('text',{x:x+8,y:72,'font-family':FM,'font-size':9.5,fill:'var(--dim)'},g,fit('since '+fmt(h(b.prev.out),false),w-14,5.6));}
     if(b.next)el2('text',{x:x+8,y:132,'font-family':FM,'font-size':9.5,fill:'var(--ok)'},g,fit('→ '+b.next.n,w-14,5.6));});
-  const rowB=(b,i)=>{const v=b.now;return `<tr><td class="w"><b><span class="sn">${i+1}</span>${b.b}</b></td><td class="pk">${v?`<b>${v.n}</b>${v.rank?'<span class="rk">'+v.rank+'</span>':''}${v.est?'<span class="tag" style="color:var(--warn);border-color:var(--warn)">time est.</span>':''}`:'<span style="color:var(--muted)">vacant</span>'}${b.prev?`<small>before: ${b.prev.n} (${b.prev.c}${b.prev.q?' · '+qty(b.prev.q,b.prev.u):''}) — ${b.prev.out?'out '+fmt(h(b.prev.out)):'out'}${b.prev.outBy?' · '+b.prev.outBy:''}</small>`:''}</td><td class="al">${v?`${v.c} · ${qty(v.q,v.u)} · ${v.ie}<small>LOA ${v.loa} m${v.nm?' · norm '+v.nm+' MT/h (list)':''} · agent ${v.ag}</small>`:'—'}</td><td class="fl">${v?`made fast ${fmt(h(v.f))}${v.est?' (est)':''} · ${dayN(h(v.f))} d${v.etc?' · list ETC '+fmt(h(v.etc)):''}${v.note?'<br>'+v.note:''}`:''}${b.out?`<br><b style="color:var(--warn)">OUT ${fmt(h(b.out))}</b> · ${b.outBy}`:''}${b.next?`<br><b style="color:var(--ok)">→ ${b.next.n}</b>${b.next.rank?' <span class="rk">'+b.next.rank+'</span>':''} ${b.next.c} · ${qty(b.next.q,b.next.u)} · ${b.next.ag} · ${b.next.how}`:''}${v?dprLine(v.n):''}</td></tr>`;};
+  const rowB=(b,i)=>{const v=b.now;return `<tr><td class="w"><b><span class="sn">${i+1}</span>${b.b}</b></td><td class="pk">${v?`<b>${v.n}</b>${v.rank?'<span class="rk">'+v.rank+'</span>':''}${v.est?'<span class="tag" style="color:var(--warn);border-color:var(--warn)">time est.</span>':''}`:'<span style="color:var(--muted)">vacant</span>'}${b.prev?`<small>before: ${b.prev.n} (${b.prev.c}${b.prev.q?' · '+qty(b.prev.q,b.prev.u):''}) — ${b.prev.out?'out '+fmt(h(b.prev.out)):'out'}${b.prev.outBy?' · '+b.prev.outBy:''}</small>`:''}</td><td class="al">${v?`${v.c} · ${qty(v.q,v.u)}${ieTag(v.ie)}<small>LOA ${v.loa} m${v.nm?' · norm '+v.nm+' MT/h (list)':''} · agent ${v.ag}</small>`:'—'}</td><td class="fl">${v?`made fast ${fmt(h(v.f))}${v.est?' (est)':''} · ${dayN(h(v.f))} d${v.etc?' · list ETC '+fmt(h(v.etc)):''}${v.note?'<br>'+v.note:''}`:''}${b.out?`<br><b style="color:var(--warn)">OUT ${fmt(h(b.out))}</b> · ${b.outBy}`:''}${b.next?`<br><b style="color:var(--ok)">→ ${b.next.n}</b>${b.next.rank?' <span class="rk">'+b.next.rank+'</span>':''} ${b.next.c} · ${qty(b.next.q,b.next.u)} · ${b.next.ag} · ${b.next.how}`:''}${v?dprLine(v.n):''}</td></tr>`;};
   el.innerHTML='<tr><th style="width:110px">Berth</th><th>Vessel now</th><th>Cargo · agent</th><th style="width:40%">Status · tonight\'s movement (signal)</th></tr>'+LIQ.berths.map(rowB).join('');
   const grp=r=>/E$/.test(r.rank)?'E':/C$/.test(r.rank)?'C':/O$/.test(r.rank)?'O':'Z';
   const GL={E:'Edible oils (E) — CDSBO, CPO',C:'Chemicals (C)',O:'POL (O) — HSD, MS, VLSFO · "1O" = first in the POL queue',Z:'No queue letter in the list'};
@@ -891,9 +894,9 @@ function liquid(){
   const W=LIQ.wait.slice().sort((a,b)=>(GO[grp(a)]-GO[grp(b)])||(parseInt(a.rank)||99)-(parseInt(b.rank)||99)||h(a.rep)-h(b.rep));
   let g0='',rows='',k=0;
   W.forEach(r=>{const g=grp(r);if(g!==g0){rows+=`<tr class="sub"><td colspan="4" class="w"><b>${GL[g]}</b></td></tr>`;g0=g;}k++;
-    rows+=`<tr><td class="w"><b><span class="sn">${k}</span>${r.rank?'<span class="rk">'+r.rank+'</span>':''}</b></td><td class="pk"><b>${r.n}</b>${r.st?`<small class="st">${r.st}</small>`:''}</td><td class="al">${r.c} · ${qty(r.q,r.u)} · ${r.ie}<small>LOA ${r.loa} m · draft ${r.dr} m · agent ${r.ag}</small></td><td class="fl">reported ${fmt(h(r.rep))} · ${r.rdy==null?'<span style="color:var(--warn)">readiness N/A</span>':r.rdy==='RDY'?'ready':'ready '+fmt(h(r.rdy))}${r.rem?'<br>'+r.rem:''}</td></tr>`;});
+    rows+=`<tr><td class="w"><b><span class="sn">${k}</span>${r.rank?'<span class="rk">'+r.rank+'</span>':''}</b></td><td class="pk"><b>${r.n}</b>${r.st?`<small class="st">${r.st}</small>`:''}</td><td class="al">${r.c} · ${qty(r.q,r.u)}${ieTag(r.ie)}<small>LOA ${r.loa} m · draft ${r.dr} m · agent ${r.ag}</small></td><td class="fl">reported ${fmt(h(r.rep))} · ${r.rdy==null?'<span style="color:var(--warn)">readiness N/A</span>':r.rdy==='RDY'?'ready':'ready '+fmt(h(r.rdy))}${r.rem?'<br>'+r.rem:''}</td></tr>`;});
   ew.innerHTML='<tr><th style="width:110px">Rank</th><th>Vessel</th><th>Cargo · agent</th><th style="width:40%">Reported · readiness · requirement</th></tr>'+rows;
-  ee.innerHTML='<tr><th style="width:110px">ETA</th><th>Vessel</th><th>Cargo · agent</th><th style="width:40%">Readiness · remark</th></tr>'+LIQ.eta.slice().sort((a,b)=>h(a.eta)-h(b.eta)).map((r,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${fday(h(r.eta))}</b>${fmt(h(r.eta),false)}</td><td class="pk"><b>${r.n}</b></td><td class="al">${r.c} · ${qty(r.q,r.u)} · ${r.ie}<small>LOA ${r.loa} m${r.dr?' · draft '+r.dr+' m':''} · agent ${r.ag}</small></td><td class="fl">${r.rdy?(r.rdy==='RDY'?'ready':'ready '+fmt(h(r.rdy))):'readiness N/A'}${r.rem?' · '+r.rem:''}</td></tr>`).join('');
+  ee.innerHTML='<tr><th style="width:110px">ETA</th><th>Vessel</th><th>Cargo · agent</th><th style="width:40%">Readiness · remark</th></tr>'+LIQ.eta.slice().sort((a,b)=>h(a.eta)-h(b.eta)).map((r,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${fday(h(r.eta))}</b>${fmt(h(r.eta),false)}</td><td class="pk"><b>${r.n}</b></td><td class="al">${r.c} · ${qty(r.q,r.u)}${ieTag(r.ie)}<small>LOA ${r.loa} m${r.dr?' · draft '+r.dr+' m':''} · agent ${r.ag}</small></td><td class="fl">${r.rdy?(r.rdy==='RDY'?'ready':'ready '+fmt(h(r.rdy))):'readiness N/A'}${r.rem?' · '+r.rem:''}</td></tr>`).join('');
   const em=document.getElementById('liqmoves'); if(em&&LIQ.moves)em.innerHTML=LIQ.moves.map(([g,rows])=>`<div class="eyebrow" style="margin:6px 0 2px">${g}</div><table class="mv"><tbody>${rows.map(r=>{const tm=r[5]?h(r[5]):null;const st=tm!=null&&tm<=NOW?'<span class="st st-done">done</span>':'<span class="st st-sch">scheduled</span>';const ty=r[1]==='IN'?'t-in':r[1]==='OUT'?'t-out':'t-shift';return `<tr><td class="tm">${r[0]}</td><td><span class="ty ${ty}">${r[1]}</span></td><td class="vn"><b>${r[2]}</b><small>${r[3]}${r[4]&&r[4]!=='—'?' · Capt '+r[4]:''}${r[6]?' · '+r[6]:''}</small></td><td>${st}</td></tr>`;}).join('')}</tbody></table>`).join('');
 }
 /*@@/TLCODE@@*/
@@ -926,7 +929,7 @@ function timber(){
     let dl='—';
     if(r.etb&&bt!=null){const dd=Math.round((bt-hd(r.etb))/24);dl=dd===0?'<span class="dl same">same day</span>':dd>0?`<span class="dl late">board +${dd} d later</span>`:`<span class="dl early">board ${dd} d earlier</span>`;}
     else if(r.st==='berth')dl='<span class="dl same">at berth</span>';
-    return `<tr class="${isMine(r.n)?'me':''} ${inDPA?'':'teamonly'}"><td class="d" style="color:var(--brk);font-weight:700">${i}</td><td class="n">${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${(v&&v.c)||(w&&w.c)||r.c} · ${r.from} · ${srcTag}${r.note?' · '+r.note:''}</small></td>
+    return `<tr class="${isMine(r.n)?'me':''} ${inDPA?'':'teamonly'}"><td class="d" style="color:var(--brk);font-weight:700">${i}</td><td class="n">${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${cg({n:r.n,c:(v&&v.c)||(w&&w.c)||r.c})} · ${r.from} · ${srcTag}${r.note?' · '+r.note:''}</small></td>
       <td class="d">${qty}</td>
       <td class="d">${arrival}</td>
       <td class="d">${r.b?'<b>berthed '+fmt(h(r.b))+'</b>'+(r.pri?'under '+(CL[r.pri]||r.pri):''):r.etb?'<b>ETB '+fd(r.etb)+'</b>team estimate':'—'}</td>
@@ -1132,6 +1135,14 @@ const AG={'African Quail':'Mihir & Company','Rahma':'Parekh Marine','Cervia':'Da
 // The daily runs add a name here when a vessel withdraws HP at the meeting (programme shows no HP berthing while HP-ranked vessels are ready).
 const NOHP=new Set(['Orion','Mettle Star']);
 W.forEach(w=>{w.noHP=NOHP.has(w.n);});
+// Import / export per vessel, from the list's I/E (Imp/Exp) column (AT BERTH col 9, WAITING / ETA col 7) — Mihir (3 Nov): show it next to the
+// commodity and count how many vessels are for import vs export. Keys are the board's vessel names; the daily runs refresh it from the list.
+const IE={'AC Kathryn':'IMP','Adam A':'EXP','African Peacock':'IMP','African Predator':'EXP','African Quail':'IMP','Alasia':'EXP','Amazing Salute':'IMP','Andreas Petrakis':'IMP','Artigo':'IMP','Atlantic Guard':'IMP','Avyaan':'IMP','Aya':'EXP','Bao He Ling':'IMP','Begonia':'IMP','Belasitza':'IMP','Blue Ionian':'IMP','Blue Shark':'EXP','Bomustafao O':'EXP','Bow Caroline':'IMP','Bow Gemini':'IMP','Bow Neptune':'IMP','Bristol':'IMP','CL Xiangxi':'IMP','CNC Bull':'IMP','Caribbean 1':'IMP','Centurion Buyo':'IMP','Cervia':'IMP','Chemroad Zenith':'IMP','Crystal Land':'EXP','Crystal O':'EXP','DM Bea':'IMP','DSM London':'EXP','Dank Silver':'IMP','Defne':'EXP','Deniz ID':'EXP','Doukato':'IMP','Ege-M':'EXP','Emmanouil':'EXP','Enshi':'IMP','Europa Graeca (GL)':'IMP','Eva Bright':'IMP','Fareeda 5':'EXP','Farsana':'IMP','Feng Hai Da':'IMP','Fortune Glory':'IMP','Fortunelit':'EXP','Fu Hai 16':'EXP','Gas Ammon (LPG/C)':'IMP','Gautham B Star II':'IMP','Ginga Cheetah':'IMP','HN Doris':'IMP','Hai Long 1':'EXP','Haj Abdullah T':'EXP','Hari Anand':'IMP','Hatnyanawati':'EXP','Horizon Chaser':'IMP','JKT Miracle':'IMP','Jag Pushpa':'IMP','KSL Ruiyang':'EXP','Karpathos Dawn':'EXP','Katong WW':'IMP','Kestrel':'EXP','Lady Naeima':'EXP','Lakmos':'EXP','Lanna Naree':'IMP','Levante Spirit':'IMP','Leya':'EXP','Libra':'EXP','Lila Ace':'IMP','Lujain':'IMP','MC Calypso':'IMP','MC Metis':'IMP','Mak 1':'EXP','Malbec Heritage':'IMP','Manitoba (LPG/C)':'IMP','Manta Sena':'EXP','Marigold':'IMP','Maritime Harmony':'EXP','Meghna Venus':'EXP','Mettle Star':'EXP','Michelangelo':'IMP','Moonlit':'EXP','New Bliss':'EXP','No. 6 Ocean Pioneer':'IMP','Nord Newport':'EXP','North Gate':'EXP','Ocean Camellia':'IMP','Ocean Pioneer':'IMP','Orion':'EXP','Outlander':'EXP','Outrivaling 3':'EXP','Pacific Era':'IMP','Rahma':'EXP','Rome Trader':'IMP','SC Amber':'IMP','SC Larimar':'IMP','SY Forward':'IMP','Saehan Kostar':'IMP','Safi Alfa':'EXP','Saga Viking':'IMP','Sandream':'IMP','Seagautam':'EXP','Searay':'IMP','Seychelles Pioneer':'IMP','Shanaya':'IMP','Shen Hai Shou Xin':'EXP','Silver Gertrude':'IMP','Sky Dream':'IMP','Songa Neptune':'EXP','Spring Link':'EXP','Star Fighter':'EXP','Stolt Maple':'EXP','Suvari Bey':'EXP','Tai Keystone':'IMP','Tai Knight':'IMP','Tan Binh 267':'EXP','Theometor':'EXP','Torm Supreme':'IMP','Unity Melody':'EXP','Valentina Sea':'EXP','Vishva Preeti':'IMP','Western Bergenia':'IMP','XT Prosperity':'IMP','Yara J':'IMP','Yasa Eagle':'IMP','Yuan Hang Wei Ye':'EXP','Zao Galaxy':'IMP','Zheng Rong':'EXP','Alacrity 666 (barge)':'IMP'};
+const ieOf=n=>IE[n]||'';
+const ieTag=k=>k?` <span class="ie ${k==='IMP'?'imp':k==='EXP'?'exp':'ix'}" title="${k==='IMP'?'Import — discharging':k==='EXP'?'Export — loading':'Import and export'}">${k==='I/E'?'IMP/EXP':k}</span>`:'';
+const ieChip=n=>ieTag(ieOf(n));
+const cg=o=>(o.c||'')+ieChip(o.n);                       // commodity + IMP/EXP chip (HTML)
+const cgT=o=>(ieOf(o.n)?ieOf(o.n)+' ':'')+(o.c||'');     // plain text for SVG labels
 const agOf=n=>AG[n]||'—';
 const agTxt=n=>AG[n]?' · agent '+AG[n]:'';
 const isMine=n=>/mihir/i.test(agOf(n)); // our vessels = agent Mihir & Company
@@ -1430,7 +1441,7 @@ function result(){
   const fixed=V.find(v=>v.n===focus); const s=S.find(x=>x.n===focus); const w=W.find(x=>x.n===focus);
   if(fixed){
     const at=fixed.F<=NOW;
-    r.innerHTML=`<div class="big"><div class="vn">${fixed.n}</div><div class="meta">${fixed.c} · ${nf.format(fixed.q)} ${fixed.u} · ${CL[fixed.cat]||fixed.cat}${agTxt(fixed.n)}</div>
+    r.innerHTML=`<div class="big"><div class="vn">${fixed.n}</div><div class="meta">${cg(fixed)} · ${nf.format(fixed.q)} ${fixed.u} · ${CL[fixed.cat]||fixed.cat}${agTxt(fixed.n)}</div>
       <div class="answer"><div class="q">${at?'At berth':'Berthing per signal'}</div><div class="d">CJ-${fixed.b} <small>panels ${pr(fixed.p)}</small></div>
       <div class="s">${at?'Made fast '+fmt(fixed.F):'Due alongside ~'+fmt(fixed.F)} · ${(()=>{const sh=S.find(x=>x.shifted&&x.n===fixed.n);return sh?`<b style="color:var(--warn)">Projected shift</b> to CJ-${sh.b} ~${fmt(sh.F)} under port convenience (clean berth needed for a merit vessel) · then sails ~${fmt(sh.T)}`:`Expected to sail <b>${fmt(fixed.T)}</b>${fixed.dpr?' (DPR-based — '+fixed.dprNote+'; list ETC '+fmt(fixed.listT)+')':fixed.est?' (estimate)':' (ETC from list)'}`;})()}</div></div></div>
       <div class="why"><h3>Who takes CJ-${fixed.b} next</h3>${nextOn(fixed.b,fixed.T)}</div>`;
@@ -1439,19 +1450,19 @@ function result(){
   if(!w){r.innerHTML='';return;}
   if(w.rdy==null){
     const hs=simulate(w.n,S0).find(x=>x.n===w.n);
-    r.innerHTML=`<div class="big"><div class="vn">${w.n}</div><div class="meta">${w.c} · ${nf.format(w.q)} ${w.u} · LOA ${w.loa}${w.dr?' · dr '+w.dr:''} · ${w.x}</div>
+    r.innerHTML=`<div class="big"><div class="vn">${w.n}</div><div class="meta">${cg(w)} · ${nf.format(w.q)} ${w.u} · LOA ${w.loa}${w.dr?' · dr '+w.dr:''} · ${w.x}</div>
       <div class="answer"><div class="q">Agar aaj ready ho jaaye</div><div class="d">${hs?fday(hs.F):'Beyond 3 weeks'} <small>${hs?part(hs.F)+' · CJ-'+hs.b:''}</small></div>
       <div class="s">Readiness is <b>N/A</b> in the list. Seniority counts from reporting (<b>${fmt(w.rep)}</b>), so the day it declares ready it takes its place by reporting time — ahead of vessels that reported later.</div><span class="conf c-na">Depends on readiness</span></div></div>
       <div class="why"><h3>How this date is worked out</h3><ol><li>Board assumes it declares ready today and re-runs the whole queue.</li><li>Group: <b>${groupLine(w)}</b>.${isBag(w.c)?' Bagged cargo — General has max 3 bag berths at a time.':''}</li><li>Each day it stays not ready, its turn passes to the next ready vessel and this date moves out.</li></ol></div>`;
     return;
   }
   if(!s){
-    r.innerHTML=`<div class="big"><div class="vn">${w.n}</div><div class="meta">${w.c} · ${groupLine(w)}</div><div class="answer"><div class="q">Kab berth milega?</div><div class="d">After ${fday(HZ)}</div><div class="s">Not reached within the 3-week projection.</div><span class="conf c-rough">Beyond horizon</span></div></div><div class="why"></div>`;return;
+    r.innerHTML=`<div class="big"><div class="vn">${w.n}</div><div class="meta">${cg(w)} · ${groupLine(w)}</div><div class="answer"><div class="q">Kab berth milega?</div><div class="d">After ${fday(HZ)}</div><div class="s">Not reached within the 3-week projection.</div><span class="conf c-rough">Beyond horizon</span></div></div><div class="why"></div>`;return;
   }
   const [cc,cl]=conf(s);
   const ahead=S.filter(x=>x.cat===s.cat&&x.F<=s.F).sort((a,z)=>a.F-z.F).slice(-5);
   const waitD=((s.F-w.rep)/24).toFixed(0);
-  r.innerHTML=`<div class="big"><div class="vn">${w.n}</div><div class="meta">${w.c} · ${nf.format(w.q)} ${w.u} · LOA ${w.loa}${w.dr?' · draft '+w.dr+' m':''}${agTxt(w.n)}${w.x?' · '+w.x:''}</div>
+  r.innerHTML=`<div class="big"><div class="vn">${w.n}</div><div class="meta">${cg(w)} · ${nf.format(w.q)} ${w.u} · LOA ${w.loa}${w.dr?' · draft '+w.dr+' m':''}${agTxt(w.n)}${w.x?' · '+w.x:''}</div>
     <div class="answer"><div class="q">Likely berthing</div><div class="d">${fday(s.F)} <small>${part(s.F)} · ~${fmt(s.F,false)}</small></div>
     <div class="s">at <b>CJ-${s.b}</b> under <b>${CL[s.cat]}</b>${s.via?' slot (as '+s.via+')':''} · likely to sail around ${fmt(s.T)}</div>
     <span class="conf ${cc}">${cl}</span></div></div>
@@ -1484,6 +1495,16 @@ function stats(){
   const lastLine=arr=>{const r=arr.filter(w=>w.rdy!=null);if(!r.length)return'';let maxF=-1,beyond=0;r.forEach(w=>{const x=S.find(q=>q.n===w.n);if(x)maxF=Math.max(maxF,x.F);else beyond++;});if(beyond)return `<div class="last">Last ready vessel: <b>beyond ${fday(HZ)}</b> (${beyond} not reached in 3-week projection)</div>`;if(maxF<0)return'';return `<div class="last">Last ready vessel berths <b>${fday(maxF)}</b> · in <b>${Math.ceil((maxF-NOW)/24)} days</b></div>`;};
   tiles[0].push(chips,lastLine(wait),'all');tiles[1].push(byKind('bulk'),lastLine(wait.filter(w=>kind(w.c)==='bulk')),'bulk');tiles[2].push(byKind('bag'),lastLine(wait.filter(w=>kind(w.c)==='bag')),'bag');tiles[3].push(byKind('brk'),lastLine(wait.filter(w=>kind(w.c)==='brk')),'brk');tiles[4].push(chipsFor(exp),lastLine(exp),'exp');
   const [t0,...rest]=tiles;
+  // Import / export split (Mihir, 3 Nov): dry cargo waiting / at berth / expected from IE, liquid and Tuna from their own ie fields
+  const atV=V.filter(v=>v.F<=NOW&&NOW<v.T&&POOL.includes(v.b));
+  const nIE=(arr,k)=>arr.filter(x=>ieOf(x.n)===k).length, tMT=(arr,k)=>arr.filter(x=>ieOf(x.n)===k&&x.u==='MT').reduce((a,x)=>a+x.q,0), tCBM=(arr,k)=>arr.filter(x=>ieOf(x.n)===k&&x.u==='CBM').reduce((a,x)=>a+x.q,0);
+  const unk=wait.filter(w=>!ieOf(w.n)).length;
+  const lqN=k=>LIQ.berths.filter(b=>b.now&&b.now.ie===k).length+LIQ.wait.filter(w=>w.ie===k&&!/at OJ|berthed/.test(w.st||'')).length, ttN=k=>TUNA.berths.filter(b=>b.ie===k).length+TUNA.wait.filter(w=>w.ie===k).length;
+  const vol=(arr,k)=>{const m=tMT(arr,k),c=tCBM(arr,k);return (m?nf.format(Math.round(m/1000))+'k MT':'')+(m&&c?' + ':'')+(c?nf.format(Math.round(c/1000))+'k CBM':'')||'—';};
+  const ieChipT=(k,l,arr,key)=>`<span class="cc" data-ie="${k}" data-set="${key}" style="--sc:${k==='IMP'?'#8fd0ff':'#f3b86a'}"><b>${nIE(arr,k)}</b><span>${l}<small> · ${vol(arr,k)}</small></span></span>`;
+  const ieTile=`<div class="stat wide" style="--sc:var(--brass)"><div class="top"><div class="v"><span class="iev imp">${nIE(wait,'IMP')}</span><small> imp</small><span class="iesep">/</span><span class="iev exp">${nIE(wait,'EXP')}</span><small> exp</small></div><div class="l" style="margin:0"><b>Import / export</b> · dry cargo vessels waiting (${wait.length}${unk?', '+unk+' not printed':''}) · at berth now ${nIE(atV,'IMP')} imp · ${nIE(atV,'EXP')} exp · expected ${nIE(exp,'IMP')} imp · ${nIE(exp,'EXP')} exp</div></div>
+     <div class="comm">${ieChipT('IMP','Import · waiting',wait,'wait')}${ieChipT('EXP','Export · waiting',wait,'wait')}${ieChipT('IMP','Import · at berth',atV,'at')}${ieChipT('EXP','Export · at berth',atV,'at')}${ieChipT('IMP','Import · expected',exp,'exp')}${ieChipT('EXP','Export · expected',exp,'exp')}</div>
+     <div class="last">Liquid (OJ, alongside + waiting): <b>${lqN('IMP')}</b> imp · <b>${lqN('EXP')}</b> exp · Tuna (TT): <b>${ttN('IMP')}</b> imp · <b>${ttN('EXP')}</b> exp · IMP = discharging, EXP = loading, as printed in the list's Imp/Exp column; every vessel carries the same chip beside its commodity</div></div>`;
   // port-wide totals: dry cargo (CJ queue) + liquid (OJ) + Tuna (TT), waiting and expected
   const lqW=LIQ.wait.filter(w=>!/at OJ|berthed/.test(w.st||'')).length, lqE=LIQ.eta.length, ttW=TUNA.wait.length, ttE=TUNA.eta.length;
   const totW=wait.length+lqW+ttW, totE=exp.length+lqE+ttE;
@@ -1495,7 +1516,7 @@ function stats(){
   const lqOcc=LIQ.berths.filter(b=>b.now).length, lqMv=LIQ.berths.filter(b=>b.out&&h(b.out)>NOW).length, ttOcc=TUNA.berths.length;
   const extra=`<div class="stat" data-go="liquid" style="--sc:var(--dry)"><div class="v">${lqOcc}<small>/${LIQ.berths.length}</small></div><div class="l"><b>Oil jetties occupied</b> · ${lqW} waiting · ${lqE} expected${lqMv?' · '+lqMv+' sailing'+(lqMv>1?'s':'')+' signalled tonight':''}</div><div class="last"><a class="plink" href="${pageHref('liquid')}" data-view="liquid">Open the Liquid board →</a> · same page, Liquid tab</div></div>
    <div class="stat" data-go="tuna" style="--sc:var(--brk)"><div class="v">${ttOcc}<small>/4</small></div><div class="l"><b>Tuna berths occupied</b> (Adani PPP) · ${ttW} waiting · ${ttE} expected</div><div class="last"><a class="plink" href="${pageHref('tuna')}" data-view="tuna">Open the Tuna board →</a> · same page, Tuna tab</div></div>`;
-  document.getElementById('stats').innerHTML=total+`<div class="stat wide" data-k="all" style="--sc:${t0[0]}"><div class="top"><div class="v">${t0[1]}</div><div class="l" style="margin:0">${t0[3]}</div></div><div class="comm">${chips}</div>${t0[5]}</div>`+rest.map(([c,v,sm,l,ch,ln,k])=>`<div class="stat" ${k?`data-k="${k}"`:''} style="--sc:${c}"><div class="v">${v}${sm}</div><div class="l">${l}</div>${ch?`<div class="comm">${ch}</div>`:''}${ln||''}</div>`).join('')+extra;
+  document.getElementById('stats').innerHTML=total+`<div class="stat wide" data-k="all" style="--sc:${t0[0]}"><div class="top"><div class="v">${t0[1]}</div><div class="l" style="margin:0">${t0[3]}</div></div><div class="comm">${chips}</div>${t0[5]}</div>`+ieTile+rest.map(([c,v,sm,l,ch,ln,k])=>`<div class="stat" ${k?`data-k="${k}"`:''} style="--sc:${c}"><div class="v">${v}${sm}</div><div class="l">${l}</div>${ch?`<div class="comm">${ch}</div>`:''}${ln||''}</div>`).join('')+extra;
   // tab badges: one line of numbers under each board's name
   const vb=(k,html)=>{const b=document.getElementById('vb-'+k);if(b)b.innerHTML=html;};
   vb('cargo',`<b>${wait.length}</b> waiting · <b>${at}</b>/${POOL.length} berths`);
@@ -1504,6 +1525,8 @@ function stats(){
   // tiles / chips / links that open another board (liquid, tuna) or jump to the dry-cargo tiles
   document.querySelectorAll('#stats a.plink[data-view]').forEach(a=>a.onclick=e=>{e.preventDefault();e.stopPropagation();setView(a.dataset.view,{top:true});});
   document.querySelectorAll('#stats [data-go]').forEach(t=>t.onclick=e=>{if(e.target.closest('a'))return;const k=t.dataset.go;if(k==='liquid'||k==='tuna'){setView(k,{top:true});}else{const tile=document.querySelector(`#stats .stat[data-k="${k}"]`);if(tile)tile.click();}e.stopPropagation();});
+  // import / export chips → the vessels behind the number
+  document.querySelectorAll('#stats [data-ie]').forEach(c=>c.onclick=e=>{e.stopPropagation();const k=c.dataset.ie,set=c.dataset.set;const base=set==='at'?atV:set==='exp'?exp:wait;openList((k==='IMP'?'Import':'Export')+' vessels · '+(set==='at'?'at berth now':set==='exp'?'expected (ETA)':'waiting'),base.filter(x=>ieOf(x.n)===k));});
   // click handlers: tile → all vessels of that kind; chip → that commodity within the tile
   document.querySelectorAll('#stats .stat[data-k]').forEach(t=>t.onclick=e=>{const chip=e.target.closest('.cc');const k=t.dataset.k;const base=k==='exp'?exp:k==='all'?wait:wait.filter(w=>kind(w.c)===k);
     if(chip){const re=COM.find(c=>c[0]===chip.dataset.com)[1];openList(chip.dataset.com+(k==='exp'?' · expected':' · waiting'),base.filter(w=>re.test(w.c)));}
@@ -1514,10 +1537,10 @@ function side(){
   const nxt=V.filter(v=>v.b==='9'&&v.F>T).sort((a,z)=>a.F-z.F)[0];
   const last=V.filter(v=>v.b==='9'&&v.T<=T).sort((a,z)=>z.T-a.T)[0];
   let c9;
-  if(cur) c9=`<div class="n">${cur.n}<small>${cur.c} · ${nf.format(cur.q)} ${cur.u} · agent ${agOf(cur.n)}</small></div>
+  if(cur) c9=`<div class="n">${cur.n}<small>${cg(cur)} · ${nf.format(cur.q)} ${cur.u} · agent ${agOf(cur.n)}</small></div>
      <div class="s">Made fast ${fmt(cur.F)} · panels ${pr(cur.p)} · LOA ${cur.loa||'—'} m</div>
-     <div class="s">Berth vacant from <b>${fmt(cur.T)}</b>${cur.est?' (estimate — no ETC in list)':' (ETC in list)'}${nxt?` · next: ${nxt.n} (${nxt.c} · ${nf.format(nxt.q)} ${nxt.u}) ~${fmt(nxt.F)}`:''}</div>`;
-  else c9=`<div class="n">Vacant<small>${last?'since '+last.n+' ('+last.c+' · '+nf.format(last.q)+' '+last.u+') sailed '+fmt(last.T):''}</small></div><div class="s">${nxt?`Next: <b>${nxt.n}</b> · ${nxt.c} · <b>${nf.format(nxt.q)} ${nxt.u}</b> · LOA ${nxt.loa||'—'} m · berthing ~${fmt(nxt.F)} · expected to vacate ~${fmt(nxt.T)}${nxt.est?' (est)':''}`:'No vessel fixed on signal'}</div>`;
+     <div class="s">Berth vacant from <b>${fmt(cur.T)}</b>${cur.est?' (estimate — no ETC in list)':' (ETC in list)'}${nxt?` · next: ${nxt.n} (${cg(nxt)} · ${nf.format(nxt.q)} ${nxt.u}) ~${fmt(nxt.F)}`:''}</div>`;
+  else c9=`<div class="n">Vacant<small>${last?'since '+last.n+' ('+cgT(last)+' · '+nf.format(last.q)+' '+last.u+') sailed '+fmt(last.T):''}</small></div><div class="s">${nxt?`Next: <b>${nxt.n}</b> · ${cg(nxt)} · <b>${nf.format(nxt.q)} ${nxt.u}</b> · LOA ${nxt.loa||'—'} m · berthing ~${fmt(nxt.F)} · expected to vacate ~${fmt(nxt.T)}${nxt.est?' (est)':''}`:'No vessel fixed on signal'}</div>`;
   document.getElementById('side').innerHTML=`
    <div class="sb"><div class="h"><b>CJ-9 · panels 68½–79</b><span>PPP · Gautam Freight</span></div>${c9}
      <div class="s">Allotted by the operator, not from the DPA queue. Vessels here are not counted in the projection.</div></div>
@@ -1624,8 +1647,8 @@ function barge(){
 function openList(title,arr){
   arr=arr.slice().sort((a,z)=>{const fa=(S.find(q=>q.n===a.n)||{}).F??(a.rdy==null?1e9:1e8),fz=(S.find(q=>q.n===z.n)||{}).F??(z.rdy==null?1e9:1e8);return fa-fz;});
   const rows=arr.map((w,i)=>{const st=statusOf(w.n)||{};const x=S.find(q=>q.n===w.n);
-    const when=x?`<td class="d">${fday(x.F)}<small>~${fmt(x.F,false)} · CJ-${x.b} · ${CL[x.cat]}${x.via?' (as '+x.via+')':''}</small></td>`:(w.rdy==null?`<td class="d na">not ready<small>${st.d&&st.d!=='—'?'if ready today: '+st.d:'readiness N/A'}</small></td>`:`<td class="d na">beyond ${fday(HZ)}</td>`);
-    return `<tr class="${isMine(w.n)?'me':''}" data-n="${w.n}"><td class="n"><span class="sn">${i+1}</span>${w.n}${isMine(w.n)?' <span class="tag" style="color:var(--brass)">Mihir &amp; Co</span>':''}<small>${w.c} · ${nf.format(w.q)} ${w.u}${agTxt(w.n)}</small></td><td class="hide">${w.loa} m${w.dr?' · '+w.dr+' m':''}</td><td class="hide">${fmt(w.rep)}<br><small style="color:var(--muted)">${w.rdy!=null?'ready '+fmt(w.rdy):'readiness N/A'}</small></td><td class="hide">${groupLine(w)}</td>${when}</tr>`;}).join('');
+    const when=w.F!=null&&w.rep==null?`<td class="d">at berth<small>CJ-${w.b} · ${CL[w.cat]||w.cat}</small></td>`:x?`<td class="d">${fday(x.F)}<small>~${fmt(x.F,false)} · CJ-${x.b} · ${CL[x.cat]}${x.via?' (as '+x.via+')':''}</small></td>`:(w.rdy==null?`<td class="d na">not ready<small>${st.d&&st.d!=='—'?'if ready today: '+st.d:'readiness N/A'}</small></td>`:`<td class="d na">beyond ${fday(HZ)}</td>`);
+    return `<tr class="${isMine(w.n)?'me':''}" data-n="${w.n}"><td class="n"><span class="sn">${i+1}</span>${w.n}${isMine(w.n)?' <span class="tag" style="color:var(--brass)">Mihir &amp; Co</span>':''}<small>${cg(w)} · ${nf.format(w.q)} ${w.u}${agTxt(w.n)}</small></td><td class="hide">${w.loa||LOA[w.n]||'—'} m${w.dr?' · '+w.dr+' m':''}</td><td class="hide">${w.rep!=null?fmt(w.rep):w.F!=null?'made fast '+fmt(w.F):'—'}<br><small style="color:var(--muted)">${w.rep!=null?(w.rdy!=null?'ready '+fmt(w.rdy):'readiness N/A'):w.T!=null?'ETC '+fmt((V.filter(x=>x.n===w.n).sort((a,z)=>z.T-a.T)[0]||w).T):''}</small></td><td class="hide">${w.rk?groupLine(w):(CL[w.cat]||w.cat||'')}</td>${when}</tr>`;}).join('');
   const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="mbox" role="dialog" aria-label="${title}"><div class="mh"><div><h3>${title}</h3><small>${arr.length} vessels · tap a row to open it in the finder</small></div><button type="button" class="mclose">Close ✕</button></div><div class="scroll"><table class="mt"><thead><tr><th>Vessel</th><th class="hide">LOA · draft</th><th class="hide">Reported · ready</th><th class="hide">Group / rank</th><th>Likely berthing</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
   const close=()=>m.remove();m.onclick=e=>{if(e.target===m)close();};m.querySelector('.mclose').onclick=close;
   m.querySelectorAll('tbody tr').forEach(r=>r.onclick=()=>{focus=r.dataset.n;close();render(true);});
@@ -1647,12 +1670,12 @@ function qdetail(){
   if(!v){d.innerHTML='<div class="nxt" style="border:0;padding:0">Click any hull on the quay or any bar in the timeline to see the vessel here.</div>';return;}
   const st=v.proj?'Projected':(v.T<=T?'Sailed':(v.F<=T?'At berth':'Berthing per signal'));
   const Bv=BERTHS.find(x=>x.id===v.b)||{};
-  const kv=[['Berth','CJ-'+v.b+(Bv.len?' · '+Math.round(Bv.len)+' m · draft '+Bv.dr+' m'+(Bv.tide?' (+tide)':'')+(Bv.ll?' · live load '+Bv.ll+' t/m²':''):'')],['Panels',pr(v.p)],['Cargo',v.c],['Qty',nf.format(v.q)+' '+v.u],['Group',CL[v.cat]||v.cat],['LOA',(v.loa||(w&&w.loa)||'—')+(v.loa||(w&&w.loa)?' m':'')],['Agent',agOf(n)],...(v.tide?[['Draught',v.tide]]:[]),[v.proj?'Likely alongside':'Made fast',fmt(v.F)],[(()=>{const sh=S.find(x=>x.shifted&&x.n===v.n&&!v.proj);return sh?'Shift out (projected)':(v.est||v.proj?'ETC (estimate)':'ETC (list)');})(),fmt(v.T)],(v.proj||v.F>T)?['Planned stay (by norm)',((v.T-v.F)/24).toFixed(1)+' days']:['Days at berth so far',Math.max(0,(Math.min(T,v.T)-v.F)/24).toFixed(1)]];
+  const kv=[['Berth','CJ-'+v.b+(Bv.len?' · '+Math.round(Bv.len)+' m · draft '+Bv.dr+' m'+(Bv.tide?' (+tide)':'')+(Bv.ll?' · live load '+Bv.ll+' t/m²':''):'')],['Panels',pr(v.p)],['Cargo',cg(v)],['Qty',nf.format(v.q)+' '+v.u],['Group',CL[v.cat]||v.cat],['LOA',(v.loa||(w&&w.loa)||'—')+(v.loa||(w&&w.loa)?' m':'')],['Agent',agOf(n)],...(v.tide?[['Draught',v.tide]]:[]),[v.proj?'Likely alongside':'Made fast',fmt(v.F)],[(()=>{const sh=S.find(x=>x.shifted&&x.n===v.n&&!v.proj);return sh?'Shift out (projected)':(v.est||v.proj?'ETC (estimate)':'ETC (list)');})(),fmt(v.T)],(v.proj||v.F>T)?['Planned stay (by norm)',((v.T-v.F)/24).toFixed(1)+' days']:['Days at berth so far',Math.max(0,(Math.min(T,v.T)-v.F)/24).toFixed(1)]];
   const nx=S.filter(x=>x.b===v.b&&x.F>=v.T).sort((a,z)=>a.F-z.F)[0];
   d.innerHTML=`<div class="top"><h3>${n}</h3><span class="st st-sch">${st}</span>${MINE.has(n)?'<span class="tag" style="color:var(--brass)">Mihir &amp; Co</span>':''}</div>
    <div class="kvs">${kv.map(([k,x])=>`<div class="kv"><span>${k}</span><b class="${k==='Agent'&&x!=='—'?'hl':''}">${x}</b></div>`).join('')}</div>
    ${v.note?`<div class="nxt" style="border:0;padding:0;color:var(--warn)">ETC basis: ${v.note}</div>`:''}
-   <div class="nxt">Next on CJ-${v.b}: ${nx?`<b>${nx.n}</b> · ${nx.c} · ${nf.format(nx.q)} ${nx.u}${agTxt(nx.n)} · ${CL[nx.cat]} · likely ~${fmt(nx.F)}`:'no ready vessel projected'}</div>`;
+   <div class="nxt">Next on CJ-${v.b}: ${nx?`<b>${nx.n}</b> · ${cg(nx)} · ${nf.format(nx.q)} ${nx.u}${agTxt(nx.n)} · ${CL[nx.cat]} · likely ~${fmt(nx.F)}`:'no ready vessel projected'}</div>`;
   // highlight our vessels on the quay via the tag already shown
 }
 function mine(){
@@ -1666,10 +1689,10 @@ function mine(){
     if(nowExp!=null){const last=rowsH[rowsH.length-1];if(!last||Math.abs(last.t-nowExp)>0.5)rowsH.push({d:'Now · '+UPDATED.replace(/ IST$/,''),t:nowExp,b:v?v.b:sp.b,slot:v?(CL[v.cat]||v.cat)+(v.F<=NOW?' · at berth':' · fixed'):(CL[sp.cat]||sp.cat)+(sp.via?' slot as '+sp.via:''),why:v?(v.F<=NOW?'Alongside.':'Fixed by programme / signal.'):'Current projection under today\'s list and rules.',live:1});else{last.live=1;last.d+=' → unchanged now';}}
     if(!rowsH.length)return '';
     return `<tr class="hist"><td colspan="2"><div class="ht">Projection history · why the date moved</div><ol class="hl">${rowsH.map((e,i)=>{const prev=rowsH[i-1];const dd=prev?Math.round((e.t-prev.t)/24*10)/10:null;const tag=dd==null?'<span class="dl same">first estimate</span>':Math.abs(dd)<0.25?'<span class="dl same">same</span>':dd>0?`<span class="dl late">+${dd} d later</span>`:`<span class="dl early">${dd} d earlier</span>`;return `<li class="${e.live?'live':''}"><div class="hh"><span class="hd">${e.d}</span><b>${fday(e.t)} ~${fmt(e.t,false)} · CJ-${e.b}</b>${tag}</div><div class="hs">${e.slot}</div><div class="hw">${e.why}</div></li>`;}).join('')}</ol></td></tr>`;};
-  m.innerHTML=`<table><tbody>${rows.map(({n,s},i)=>{const o=s.o;return `<tr><td class="n"><span class="sn">${i+1}</span><button type="button" class="link" data-n="${n}">${n}</button><small>${o.c} · ${nf.format(o.q)} ${o.u} · ${CL[o.cat]||groupLine(o)}</small></td><td class="w">${s.d}<small>${s.sub}</small></td></tr>`+hist(n);}).join('')}</tbody></table>`;
+  m.innerHTML=`<table><tbody>${rows.map(({n,s},i)=>{const o=s.o;return `<tr><td class="n"><span class="sn">${i+1}</span><button type="button" class="link" data-n="${n}">${n}</button><small>${cg(o)} · ${nf.format(o.q)} ${o.u} · ${CL[o.cat]||groupLine(o)}</small></td><td class="w">${s.d}<small>${s.sub}</small></td></tr>`+hist(n);}).join('')}</tbody></table>`;
   m.querySelectorAll('.link').forEach(b=>b.onclick=()=>{focus=b.dataset.n;sel=b.dataset.n;render(true);});
 }
-function nextOn(b,t){const n=S.filter(x=>x.b===b&&x.F>=t).sort((a,z)=>a.F-z.F)[0];return n?`<ol><li><b>${n.n}</b> (${n.c}) under ${CL[n.cat]}, likely ~${fmt(n.F)}.</li></ol>`:'<ol><li>No ready vessel projected.</li></ol>';}
+function nextOn(b,t){const n=S.filter(x=>x.b===b&&x.F>=t).sort((a,z)=>a.F-z.F)[0];return n?`<ol><li><b>${n.n}</b> (${cg(n)}) under ${CL[n.cat]}, likely ~${fmt(n.F)}.</li></ol>`:'<ol><li>No ready vessel projected.</li></ol>';}
 
 // ---- time controls
 const T0=h('10-30 12:00'),T1=h('11-09 12:00');
@@ -1729,7 +1752,7 @@ function strip(svg,p0,p1){
     else el('path',{d,fill:col,stroke:me?'#fff':'rgba(0,0,0,.35)','stroke-width':me?2.5:1},g);
     const tc=v.proj?'var(--fg)':'#0b1420';
     el('text',{x:x1+6,y:y+17,'font-family':FB,'font-size':12.5,'font-weight':700,fill:v.proj&&me?'var(--brass)':tc},g,fit(v.n.toUpperCase(),w-16,7.2));
-    el('text',{x:x1+6,y:y+31,'font-family':FM,'font-size':9.5,fill:tc},g,fit(v.c+' · '+nf.format(v.q)+(v.u==='MT'?'':' '+v.u),w-16,5.9));
+    el('text',{x:x1+6,y:y+31,'font-family':FM,'font-size':9.5,fill:tc},g,fit(cgT(v)+' · '+nf.format(v.q)+(v.u==='MT'?'':' '+v.u),w-16,5.9));
     el('text',{x:x1+6,y:y+43,'font-family':FM,'font-size':9,fill:tc,opacity:.8},g,fit((v.proj?'projected · ':'')+(()=>{const nx=V.find(x=>x!==v&&x.n===v.n&&x.F>=v.T-1&&x.F<=v.T+6);return nx?(nx.b===v.b?'warps ':'shifts to CJ-'+nx.b+' '):(v.shiftedTo?'shifts to CJ-'+v.shiftedTo+' ':'sails ');})()+fmt(v.T),w-16,5.6));
     el('text',{x:x1+1,y:y-5,'font-family':FM,'font-size':9.5,fill:me?'var(--brass)':'var(--muted)'},g,fit((v.shifted?'SHIFTED · ':'')+(CL[v.cat]||v.cat),w+10,6));
     if(v.etc&&T>h(v.etc)){const oh=Math.round(T-h(v.etc));el('path',{d,fill:'none',stroke:'#ff6a5a','stroke-width':2.4},g);el('text',{x:x2-2,y:y-5,'text-anchor':'end','font-family':FM,'font-size':9.5,'font-weight':600,fill:'#ff8a7a'},g,'OVER ETC +'+oh+'h');}
@@ -1766,7 +1789,7 @@ function gantt(){
 }
 
 function groups(){
-  const row=(C,nx,lbl,sub)=>`<tr><td class="c"><b>${lbl}</b><small>${sub}</small></td><td><div class="nx">${nx.length?nx.map((s,j)=>`<span><span><span class="sn">${j+1}</span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${s.c} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready with a SAAGAR rank</span>'}</div></td></tr>`;
+  const row=(C,nx,lbl,sub)=>`<tr><td class="c"><b>${lbl}</b><small>${sub}</small></td><td><div class="nx">${nx.length?nx.map((s,j)=>`<span><span><span class="sn">${j+1}</span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${cg(s)} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready with a SAAGAR rank</span>'}</div></td></tr>`;
   const out=CATS.map(C=>{
     const all=S.filter(s=>s.cat===C.k).sort((a,z)=>a.F-z.F);
     if(C.k==='SAAGAR'){
@@ -1779,14 +1802,14 @@ function groups(){
       const nowAt=V.filter(v=>v.cat==='SAAGAR'&&v.F<=T&&T<v.T);
       const nowNote=nowAt.length===2&&nowAt.every(v=>isBreak(v.c))?`<div style="color:var(--warn);font-size:12px;margin-bottom:4px">Now: ${nowAt.map(v=>v.n).join(' + ')} — both break bulk, so the bulk berth is already cross-filled.</div>`:'';
       const bulkRow=bulk.length?row(C,bulk.slice(0,3),'SAAGAR · bulk','1 berth · dry bulk under SAAGAR')
-        :`<tr><td class="c"><b>SAAGAR · bulk</b><small>1 berth · no bulk vessel ready → goes to break bulk</small></td><td>${nowNote}<div class="nx"><span style="color:var(--warn)">No SAAGAR bulk vessel ready, so this berth cross-fills to break bulk:</span>${cross.length?cross.slice(0,3).map(s=>`<span><span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${s.c} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b} · cross-fill</em></span>`).join(''):'<span style="color:var(--dim)">no second break-bulk vessel projected</span>'}</div></td></tr>`;
+        :`<tr><td class="c"><b>SAAGAR · bulk</b><small>1 berth · no bulk vessel ready → goes to break bulk</small></td><td>${nowNote}<div class="nx"><span style="color:var(--warn)">No SAAGAR bulk vessel ready, so this berth cross-fills to break bulk:</span>${cross.length?cross.slice(0,3).map(s=>`<span><span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${cg(s)} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b} · cross-fill</em></span>`).join(''):'<span style="color:var(--dim)">no second break-bulk vessel projected</span>'}</div></td></tr>`;
       return bulkRow+row(C,own.slice(0,3),'SAAGAR · break bulk','1 berth · logs, steel, project');
     }
     const nx=all.slice(0,3);
     let extra='';
     if(C.k==='GEN'){const taken=new Set(S.map(x=>x.n));const prio=w=>['GOV','COASTAL','SAAGAR','24H','8K','STL'].some(k=>w.rk[k])||(w.rk.HP&&!w.noHP);const rdyG=W.filter(w=>w.rdy!=null&&w.rep<=T&&!taken.has(w.n)&&!prio(w)&&!V.some(v=>v.n===w.n&&v.F<=T&&v.T>T)).sort((a,z)=>(a.rk.GEN||900+(a.rep||0)/1e4)-(z.rk.GEN||900+(z.rep||0)/1e4));if(rdyG.length)extra=`<span><span style="color:var(--warn)">Ready but no berth slot open (${rdyG.length}):</span><small>${rdyG.map(w=>w.n+(w.rk.GEN?' (GEN '+w.rk.GEN+')':'')).join(' · ')}</small></span>`;}
     if(C.k==='HP'){const wd=[...NOHP].filter(n=>W.some(w=>w.n===n&&w.rdy!=null));if(wd.length)extra=`<span><span style="color:var(--muted)">HP priority withdrawn at the meeting:</span><small>${wd.join(' · ')} — 30k/25k (Sr No 7) only; the HP berth goes down the order, lastly to General</small></span>`;}
-    return `<tr><td class="c"><b>${C.l}</b><small>${C.s}</small></td><td><div class="nx">${extra}${nx.length?nx.map((s,j)=>`<span><span><span class="sn">${j+1}</span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${s.c} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready</span>'}</div></td></tr>`;
+    return `<tr><td class="c"><b>${C.l}</b><small>${C.s}</small></td><td><div class="nx">${extra}${nx.length?nx.map((s,j)=>`<span><span><span class="sn">${j+1}</span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${cg(s)} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready</span>'}</div></td></tr>`;
   }).join('');
   document.getElementById('groups').innerHTML=`<table class="grp"><tbody>${out}</tbody></table>`;
   document.querySelectorAll('#groups .link').forEach(b=>b.onclick=()=>{focus=b.dataset.n;render(true);});
