@@ -63,6 +63,9 @@ section.card{background:var(--panel);border:1px solid var(--line);border-radius:
 .view:not([data-view="cargo"]) .stat,.view:not([data-view="cargo"]) .cc{cursor:default}.view:not([data-view="cargo"]) .stat:hover{border-color:var(--line)}
 .note{font-size:12.5px;color:var(--muted);border-left:3px solid var(--brass2);padding:4px 0 4px 12px;line-height:1.5}
 .note b{color:var(--fg)}
+.pbar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:5px;max-width:220px}.pbar i{display:block;height:100%;background:var(--brk)}
+.dprt .dl{font-family:var(--f-mono);font-size:11px;font-weight:700}.dprt .dl.late{color:var(--warn)}.dprt .dl.early{color:var(--ok)}.dprt .dl.same{color:var(--muted)}
+.tsrc{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:var(--f-mono);font-size:11px;color:var(--muted)}.tsrc b{color:var(--fg);font-weight:500}
 @media (max-width:640px){.views{gap:6px}.views a{flex:1 1 0;padding:8px 9px 7px}.views a b{font-size:13.5px}.views a small{display:none}.views a .vb{font-size:10px}}
 
 /* finder */
@@ -262,7 +265,7 @@ table{border-collapse:collapse;width:100%}
 .sn{display:inline-block;min-width:18px;height:18px;line-height:18px;padding:0 5px;margin-right:6px;border-radius:9px;background:rgba(92,200,255,.14);color:var(--brass);font-family:var(--f-mono);font-size:10.5px;font-weight:700;text-align:center;vertical-align:middle}
 .tmb .tag.src{border-color:var(--brk);color:var(--brk);margin-left:0}.tmb .tag.src.team{border-color:var(--muted);color:var(--muted)}
 .tmb tr.teamonly td{color:var(--muted)}.tmb tr.teamonly td.n{color:var(--fg)}
-@media (max-width:640px){.tmb{min-width:760px;table-layout:fixed}.tmb td.n{width:150px}.tmap{min-width:640px}.lqt tr.sub td b{font-size:11px !important}}
+@media (max-width:640px){.tmb{min-width:900px;table-layout:fixed}.tmb td.n{width:150px}.tmap{min-width:640px}.lqt tr.sub td b{font-size:11px !important}}
 .grp .nx small{display:block;color:var(--muted);font-size:11.5px;font-weight:400}
 footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   .upd{display:inline-block;margin-bottom:6px;padding:4px 10px;border:1px solid var(--brass,#c9a24c);border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--brass,#c9a24c)} .upd b{color:inherit;font-weight:700}
@@ -332,6 +335,9 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
  .ntt td.pk::before{content:"Circular / reference" !important}
  .ntt td.al::before{content:"Subject" !important}
  .ntt td.fl::before{content:"Bearing on berthing" !important}
+ .dprt td.pk::before{content:"Progress (last 24 h · up to date · balance)" !important}
+ .dprt td.al::before{content:"At yesterday's rate" !important}
+ .dprt td.fl::before{content:"Gangs I/II/III · hooks" !important}
  .mpt:not(.tmb) td.fl::before{content:"What could overturn it"}
  .mpt:not(.tmb) tr.chk,.mpt:not(.tmb) tr.sh,.mpt:not(.tmb) tr.me{border-left:3px solid var(--prj);padding-left:0}
  .mpt:not(.tmb) tr.sh{border-left-color:var(--warn)}.mpt:not(.tmb) tr.me{border-left-color:var(--brass)}
@@ -388,6 +394,12 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="rsum" id="rsum" role="group" aria-label="Filter checks"></div>
     <div class="rules" id="rules"></div>
     <div class="oklist" id="oklist"></div>
+  </section>
+
+  <section class="card" data-sec="dpr" aria-labelledby="dh">
+    <div class="sechead"><h2 id="dh">Cargo progress · DPR</h2><p id="dsub"></p></div>
+    <div class="stats" id="dstats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"></div>
+    <div class="scroll"><table class="mpt dprt" id="dpr"></table></div>
   </section>
 
   <section class="card" data-sec="quay">
@@ -498,7 +510,8 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='3 Nov 2026 · 00:35 IST';
+const UPDATED='3 Nov 2026 · 01:10 IST';
+const BOARD_SRC='list 02.11 (0700 + revised pm) · programme 03.11 · signals to 1 Nov night';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 /*@@TLDATA@@*/
@@ -601,6 +614,57 @@ const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:
  {n:'African Pheasant',cbm:null,from:'New Zealand',c:'Logs',eta:'11-23',etb:'12-11',st:'eta'},
  {n:'Paiwan Wisdom',cbm:null,from:'USA',c:'Logs',eta:'11-26',etb:'12-13',st:'eta'}
 ]};
+// ---- DPR: DPA Traffic Dept "Daily Performance Report", position as at 0700 hrs — last 24 h cargo, up-to-date, balance, gangs per shift, hooks.
+// Used as a CHECK beside the list ETC (balance ÷ yesterday's rate), never to replace it. loc = where the vessel is (berth / MS midstream / BA Bunder area / OP / IFFCO jetty / MRG mooring).
+const DPR={d:'02.11.2026',asOf:'11-02 07:00',src:'DPA Traffic Dept Daily Performance Report, position 0700 hrs 2 Nov (from Mihir, 3 Nov 00:49)',
+ tot:{dry:157140,dryL:83307,dryU:73833,ms:26841,kict:20293,tuna:39129,oj:39065,vad:394689,all:677157,gangs:'42 demanded / 42 supplied (PR 21, TR 2)',rakes:'indent 3 · released 4 · balance 3',wb:894,sail:'AC Kathryn · CJ-14 · 10:15'},
+ rows:[
+  {loc:'CJ-1',n:'Emmanouil',ie:'EXP',c:'Rice bags',l24:4163,upto:18770,bal:7940,g:'5/4/4',hk:13},
+  {loc:'CJ-2',n:'Karpathos Dawn',ie:'EXP',c:'Rice bags',l24:4665,upto:6575,bal:43425,g:'4/4/4',hk:12},
+  {loc:'CJ-3',n:'Horizon Chaser',ie:'IMP',c:'Bitumen',l24:1611,upto:3902,bal:0,g:'0/0/0',hk:0},
+  {loc:'CJ-4',n:'Eva Bright',ie:'IMP',c:'Dihydrate polyhalite',l24:3300,upto:25000,bal:0,g:'2/2/0',hk:4},
+  {loc:'CJ-4',n:'Aya',ie:'EXP',c:'Rice bags',l24:1838,upto:12259,bal:13141,g:'0/0/0',hk:0,note:'after the shift from CJ-5 (CJ-5 line: up to date 10,421, balance 14,979, gangs 3/3/3)'},
+  {loc:'CJ-5',n:'Yuan Hang Wei Ye',ie:'EXP',c:'Iron ore pellets',l24:4250,upto:4250,bal:46290,g:'0/0/0',hk:0},
+  {loc:'CJ-6',n:'Outrivaling 3',ie:'EXP',c:'Soda ash J-bags',l24:198,upto:4096,bal:5924,g:'2/0/0',hk:2,note:'+ bend pipes: balance 321 MT'},
+  {loc:'CJ-6',n:'Rome Trader',ie:'IMP',c:'Petcoke bulk',l24:6382,upto:6382,bal:18618,g:'0/5/4',hk:9},
+  {loc:'CJ-7',n:'Meghna Venus',ie:'EXP',c:'Clay / feldspar bulk',l24:50500,upto:50500,bal:3800,g:'7/7/7',hk:21},
+  {loc:'CJ-8',n:'Vishva Preeti',ie:'IMP',c:'Urea bulk',l24:9381,upto:9481,bal:43019,g:'3/3/3',hk:9},
+  {loc:'CJ-9',n:'Cervia',ie:'IMP',c:'Coal bulk',l24:20100,upto:40100,bal:42290,g:'2/2/2',hk:6},
+  {loc:'CJ-13',n:'Rahma',ie:'EXP',c:'Steel pipes',l24:2759,upto:3577,bal:7877,u24:2309,uup:2953,ubal:6657,g:'3/3/3',hk:9,note:'balance includes a second parcel (gang sheet: "S pipes / sodium S J-bags")'},
+  {loc:'CJ-14',n:'Feng Hai Da',ie:'IMP',c:'Windmill blades',l24:646,upto:646,bal:439,u24:25,uup:25,ubal:17,g:'0/2/2',hk:4},
+  {loc:'CJ-15',n:'Katong WW',ie:'IMP',c:'Project cargo',l24:1137,upto:1137,bal:184,u24:54,uup:54,ubal:11,g:'4/4/4',hk:12},
+  {loc:'CJ-15A',n:'Centurion Buyo',ie:'IMP',c:'Pine logs',l24:7749,upto:20913,bal:8939,u24:22278,uup:60127,ubal:25685,g:'4/4/4',hk:12,unit:'CBM'},
+  {loc:'CJ-16',n:'Maritime Harmony',ie:'EXP',c:'Salt in bulk',l24:1200,upto:74750,bal:0,g:'1/0/0',hk:1},
+  {loc:'CJ-16',n:'Alasia',ie:'EXP',c:'Aggregates',l24:9700,upto:9700,bal:50200,g:'0/4/6',hk:10},
+  {loc:'MS',n:'Tai Knight',ie:'IMP',c:'Coal bulk',l24:20000,upto:27500,bal:49285,g:'2/2/2',hk:6,note:'also at BA: 8,000 in 24 h, up to date 15,000, balance 61,785'},
+  {loc:'MS',n:'Bristol',ie:'IMP',c:'DAP + TSP',l24:3000,upto:7821,bal:53899,g:'1/1/1',hk:3,note:'also at BA: 5,077 in 24 h, balance 56,643'},
+  {loc:'MS',n:'Yara J',ie:'IMP',c:'Rice bags',l24:1200,upto:6234,bal:23766,g:'2/2/2',hk:6,note:'also at OP: 1,250 in 24 h, balance 28,169'},
+  {loc:'MS',n:'Mak 1',ie:'EXP',c:'Rice in J-bags',l24:850,upto:15263,bal:6625,g:'1/1/1',hk:3,note:'also at OP: 161 in 24 h, balance 7,033'},
+  {loc:'MS',n:'Fortunelit',ie:'EXP',c:'Sugar / rice bags',l24:1270,upto:2920,bal:24580,g:'0/2/2',hk:4,note:'also at IFFCO: 3,873 in 24 h, balance 21,977'},
+  {loc:'MS',n:'Crystal O',ie:'EXP',c:'Sugar bags',l24:0,upto:8395,bal:22805,g:'0/0/0',hk:0,note:'also at OP: balance 25,371'},
+  {loc:'MS',n:'Suvari Bey',ie:'EXP',c:'Rice / sugar bags',l24:0,upto:23075,bal:425,g:'0/0/0',hk:0,note:'rice 10,500 done; sugar 12,575 done, 425 balance'},
+  {loc:'MS',n:'Safi Alfa',ie:'EXP',c:'Rice bags',l24:0,upto:1350,bal:24750,g:'0/0/0',hk:0,note:'also at IFFCO: same figures'},
+  {loc:'MRG-3',n:'North Gate',ie:'EXP',c:'Chick peas / rice J-bags',l24:521,upto:1456,bal:25544,g:'1/1/0',hk:2,note:'IFFCO line: up to date 1,450, balance 25,550'},
+  {loc:'BA',n:'Tao Treasure',ie:'IMP',c:'Ferro nickel J-bags',l24:1200,upto:10250,bal:0,g:'2/0/0',hk:2},
+  {loc:'BA',n:'BBG Kuantan',ie:'IMP',c:'Coal bulk',l24:8000,upto:45000,bal:0,g:'',hk:0},
+  {loc:'TT-1',n:'CL Xiangxi',ie:'IMP',c:'Sugar bulk',l24:10999,upto:36199,bal:36153},
+  {loc:'TT-2',n:'Spring Link',ie:'EXP',c:'Wheat bulk',l24:4730,upto:4730,bal:26409},
+  {loc:'TT-3',n:'Amazing Salute',ie:'IMP',c:'Coal bulk',l24:11400,upto:11400,bal:91950},
+  {loc:'TT-4',n:'Adam A',ie:'EXP',c:'Coal bulk',l24:12000,upto:15400,bal:9600},
+  {loc:'OJ-1',n:'Lila Ace',ie:'IMP',c:'CPO',l24:3765,upto:12524,bal:0},
+  {loc:'OJ-1',n:'Dank Silver',ie:'IMP',c:'CDSBO',l24:0,upto:0,bal:19900},
+  {loc:'OJ-2',n:'Roan Teresa',ie:'IMP',c:'Chemicals',l24:1977,upto:11656,bal:0,note:'OJ-2 line 9,679 + OJ-5 line 1,977'},
+  {loc:'OJ-2',n:'CNC Bull',ie:'IMP',c:'Chemicals',l24:4000,upto:4000,bal:0},
+  {loc:'OJ-2',n:'Hatnyanawati',ie:'EXP',c:'Chemicals',l24:0,upto:0,bal:9200},
+  {loc:'OJ-3',n:'Stolt Maple',ie:'EXP',c:'Chemicals',l24:4827,upto:14270,bal:0},
+  {loc:'OJ-4',n:'MC Metis',ie:'IMP',c:'Chemicals',l24:2101,upto:4449,bal:0},
+  {loc:'OJ-4',n:'Avyaan',ie:'IMP',c:'HSD',l24:5336,upto:5336,bal:29664},
+  {loc:'OJ-6',n:'Kestrel',ie:'EXP',c:'VLSFO',l24:9211,upto:9211,bal:14789},
+  {loc:'OJ-7',n:'MC Calypso',ie:'IMP',c:'CDSBO',l24:7848,upto:32500,bal:0},
+  {loc:'OJ-7',n:'Torm Supreme',ie:'IMP',c:'CDSBO',l24:0,upto:0,bal:41000}
+ ]};
+const dprOf=n=>DPR.rows.find(r=>r.n===n);
+const dprEtc=r=>(r&&r.l24>0&&r.bal>0)?h(DPR.asOf)+r.bal/r.l24*24:null; // at yesterday's rate, from the DPR's 0700 position
 const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomorrow horizon
 
 // Circulars / notices from DPA via KPSAA mail (newest first). {d:'31 Oct',t:'title',s:'one-line gist',src:'circular no.'}
@@ -784,7 +848,7 @@ function tuna(){
   el2('text',{x:555,y:155,'text-anchor':'middle','font-family':FM,'font-size':10,fill:'var(--dim)','letter-spacing':'.1em'},svg,'APPROACH TRESTLE · TO SHORE →');
   box(100,30,196,100,'TT-1');box(100,170,196,100,'TT-3');box(364,30,196,100,'TT-2');box(364,170,196,100,'TT-4');
   el2('text',{x:20,y:20,'font-family':FM,'font-size':10,fill:'var(--dim)'},svg,'N ↑ · schematic from Mihir\'s sketch, not to scale');
-  const rowB=(v,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${v.b}</b></td><td class="pk"><b>${v.n}</b>${v.est?'<span class="tag" style="color:var(--warn);border-color:var(--warn)">berthing not confirmed</span>':''}<small>${v.prev?'before: '+v.prev:''}</small></td><td class="al">${v.c} · ${qty(v.q,v.u)} · ${v.ie}<small>LOA ${v.loa} m · agent ${v.ag}</small></td><td class="fl">made fast ${fmt(h(v.f))}${v.est?' (est)':''} · ${dayN(h(v.f))} days alongside<br>${v.next?'next per list: '+v.next:'next: not stated in the list'}${v.note?'<br><span style="color:var(--warn)">'+v.note+'</span>':''}</td></tr>`;
+  const rowB=(v,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${v.b}</b></td><td class="pk"><b>${v.n}</b>${v.est?'<span class="tag" style="color:var(--warn);border-color:var(--warn)">berthing not confirmed</span>':''}<small>${v.prev?'before: '+v.prev:''}</small></td><td class="al">${v.c} · ${qty(v.q,v.u)} · ${v.ie}<small>LOA ${v.loa} m · agent ${v.ag}</small></td><td class="fl">made fast ${fmt(h(v.f))}${v.est?' (est)':''} · ${dayN(h(v.f))} days alongside<br>${v.next?'next per list: '+v.next:'next: not stated in the list'}${v.note?'<br><span style="color:var(--warn)">'+v.note+'</span>':''}${dprLine(v.n)}</td></tr>`;
   const rowW=(v,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>waiting</b></td><td class="pk"><b>${v.n}</b></td><td class="al">${v.c} · ${qty(v.q,v.u)} · ${v.ie}<small>LOA ${v.loa} m · draft ${v.dr} m · agent ${v.ag}</small></td><td class="fl">reported ${fmt(h(v.rep))} · ${v.rdy?(v.rdy==='RDY'?'ready':'ready '+fmt(h(v.rdy))):'readiness N/A'}<br>${v.rem}</td></tr>`;
   const rowE=(v,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>ETA</b></td><td class="pk"><b>${v.n}</b></td><td class="al">${v.c} · ${qty(v.q,v.u)} · ${v.ie}<small>LOA ${v.loa} m${v.dr?' · draft '+v.dr+' m':''} · agent ${v.ag}</small></td><td class="fl">ETA ${fmt(h(v.eta))}${v.rem?' · '+v.rem:''}</td></tr>`;
   const hd=t=>`<tr class="sub"><td colspan="4" class="w"><b>${t}</b></td></tr>`;
@@ -808,7 +872,7 @@ function liquid(){
       if(b.out)el2('text',{x:x+8,y:104,'font-family':FM,'font-size':9.5,fill:'var(--warn)'},g,fit('out '+fmt(h(b.out)),w-14,5.6));}
     else {el2('text',{x:x+8,y:54,'font-family':FM,'font-size':11,fill:'var(--muted)'},g,'vacant');if(b.prev&&b.prev.out)el2('text',{x:x+8,y:72,'font-family':FM,'font-size':9.5,fill:'var(--dim)'},g,fit('since '+fmt(h(b.prev.out),false),w-14,5.6));}
     if(b.next)el2('text',{x:x+8,y:132,'font-family':FM,'font-size':9.5,fill:'var(--ok)'},g,fit('→ '+b.next.n,w-14,5.6));});
-  const rowB=(b,i)=>{const v=b.now;return `<tr><td class="w"><b><span class="sn">${i+1}</span>${b.b}</b></td><td class="pk">${v?`<b>${v.n}</b>${v.rank?'<span class="rk">'+v.rank+'</span>':''}${v.est?'<span class="tag" style="color:var(--warn);border-color:var(--warn)">time est.</span>':''}`:'<span style="color:var(--muted)">vacant</span>'}${b.prev?`<small>before: ${b.prev.n} (${b.prev.c}${b.prev.q?' · '+qty(b.prev.q,b.prev.u):''}) — ${b.prev.out?'out '+fmt(h(b.prev.out)):'out'}${b.prev.outBy?' · '+b.prev.outBy:''}</small>`:''}</td><td class="al">${v?`${v.c} · ${qty(v.q,v.u)} · ${v.ie}<small>LOA ${v.loa} m${v.nm?' · norm '+v.nm+' MT/h (list)':''} · agent ${v.ag}</small>`:'—'}</td><td class="fl">${v?`made fast ${fmt(h(v.f))}${v.est?' (est)':''} · ${dayN(h(v.f))} d${v.etc?' · list ETC '+fmt(h(v.etc)):''}${v.note?'<br>'+v.note:''}`:''}${b.out?`<br><b style="color:var(--warn)">OUT ${fmt(h(b.out))}</b> · ${b.outBy}`:''}${b.next?`<br><b style="color:var(--ok)">→ ${b.next.n}</b>${b.next.rank?' <span class="rk">'+b.next.rank+'</span>':''} ${b.next.c} · ${qty(b.next.q,b.next.u)} · ${b.next.ag} · ${b.next.how}`:''}</td></tr>`;};
+  const rowB=(b,i)=>{const v=b.now;return `<tr><td class="w"><b><span class="sn">${i+1}</span>${b.b}</b></td><td class="pk">${v?`<b>${v.n}</b>${v.rank?'<span class="rk">'+v.rank+'</span>':''}${v.est?'<span class="tag" style="color:var(--warn);border-color:var(--warn)">time est.</span>':''}`:'<span style="color:var(--muted)">vacant</span>'}${b.prev?`<small>before: ${b.prev.n} (${b.prev.c}${b.prev.q?' · '+qty(b.prev.q,b.prev.u):''}) — ${b.prev.out?'out '+fmt(h(b.prev.out)):'out'}${b.prev.outBy?' · '+b.prev.outBy:''}</small>`:''}</td><td class="al">${v?`${v.c} · ${qty(v.q,v.u)} · ${v.ie}<small>LOA ${v.loa} m${v.nm?' · norm '+v.nm+' MT/h (list)':''} · agent ${v.ag}</small>`:'—'}</td><td class="fl">${v?`made fast ${fmt(h(v.f))}${v.est?' (est)':''} · ${dayN(h(v.f))} d${v.etc?' · list ETC '+fmt(h(v.etc)):''}${v.note?'<br>'+v.note:''}`:''}${b.out?`<br><b style="color:var(--warn)">OUT ${fmt(h(b.out))}</b> · ${b.outBy}`:''}${b.next?`<br><b style="color:var(--ok)">→ ${b.next.n}</b>${b.next.rank?' <span class="rk">'+b.next.rank+'</span>':''} ${b.next.c} · ${qty(b.next.q,b.next.u)} · ${b.next.ag} · ${b.next.how}`:''}${v?dprLine(v.n):''}</td></tr>`;};
   el.innerHTML='<tr><th style="width:110px">Berth</th><th>Vessel now</th><th>Cargo · agent</th><th style="width:40%">Status · tonight\'s movement (signal)</th></tr>'+LIQ.berths.map(rowB).join('');
   const grp=r=>/E$/.test(r.rank)?'E':/C$/.test(r.rank)?'C':/O$/.test(r.rank)?'O':'Z';
   const GL={E:'Edible oils (E) — CDSBO, CPO',C:'Chemicals (C)',O:'POL (O) — HSD, MS, VLSFO · "1O" = first in the POL queue',Z:'No queue letter in the list'};
@@ -824,13 +888,13 @@ function liquid(){
 /*@@/TLCODE@@*/
 function timber(){
   const el=document.getElementById('timber'); const sub=document.getElementById('tsub');
-  sub.innerHTML=`Timber vessels from the DPA list, plus the ones our timber desk tracks before they reach the list ("<b>Kandla Timber Vessel's Position</b>", dated ${TIMBER.d}, updated to ${TIMBER.upto}). Where the board has DPA data it is shown; where it has none, the team's figures are shown and marked <i>team report</i>. Team ETB = the desk's own estimate; Board = list / programme / projection.`;
+  sub.innerHTML=`<span class="tsrc"><span>Team message updated: <b>${TIMBER.upto}</b> (report dated ${TIMBER.d})</span><span>DPR added up to: <b>${DPR.d} · 0700 hrs</b></span><span>Board: <b>${BOARD_SRC}</b></span></span>Timber vessels from the DPA list, plus the ones our timber desk tracks before they reach the list ("<b>Kandla Timber Vessel's Position</b>"). Board = the actual: DPA list made-fast / ETC, programme, signal, or the board's projection; Team ETB = the desk's own estimate; DPR = last 24 h and balance from the port's performance report, with the finish at that rate.`;
   const hd=x=>x?(x.length===5?h(x+' 12:00'):h(x)):null;
   const fd=x=>x?(x.length===5?fday(h(x+' 12:00')):fmt(h(x))):'—';
   const G={berth:'Working at berth',wait:'Waiting for berth',eta:'Expected'};
   let last=null;
   const row=(r,i)=>{
-    const v=V.filter(x=>x.n===r.n).sort((a,z)=>z.F-a.F)[0], sp=S.find(x=>x.n===r.n), w=W.find(x=>x.n===r.n);
+    const vs=V.filter(x=>x.n===r.n).sort((a,z)=>a.F-z.F), v=vs[vs.length-1], cur=vs.find(x=>x.F<=NOW&&NOW<x.T), sp=S.find(x=>x.n===r.n), w=W.find(x=>x.n===r.n);
     const inDPA=!!(v||w); const listQ=(v&&v.q)||(w&&w.q);
     // board data first (DPA list), team data only where the board has none
     const qty=listQ?`${nf.format(listQ)} ${(v&&v.u)||(w&&w.u)||'CBM'}`+(r.cbm&&Math.abs(listQ-r.cbm)>1?` <span style="color:var(--muted)">· team ${nf.format(r.cbm)}</span>`:''):r.cbm?`${nf.format(r.cbm)} CBM <span style="color:var(--muted)">· team</span>`:'<span style="color:var(--muted)">CBM n/a</span>';
@@ -839,12 +903,15 @@ function timber(){
     const srcTag=inDPA?'<span class="tag src">DPA list</span>':'<span class="tag src team">team report</span>';
     let board='', bt=null;
     if(v&&v.T<=NOW)board=`<b>sailed</b>CJ-${v.b} · ${fmt(v.T)}`;
-    else if(v&&v.F<=NOW)board=`<b>CJ-${v.b} · at berth</b>ETC ${fmt(v.T)}${v.est?' (est)':''}${v.shiftedTo?' · shift → CJ-'+v.shiftedTo:''}`;
+    else if(cur&&v!==cur)board=`<b>CJ-${cur.b} · at berth</b>${cur.p&&v.p&&cur.b===v.b?'warps':'shifts'} ${fmt(cur.T)} → CJ-${v.b} ${v.p?pr(v.p):''} (programme) · ETC ${fmt(v.T)}${v.est?' (est)':''}`;
+    else if(v&&v.F<=NOW)board=`<b>CJ-${v.b} · at berth</b>made fast ${fmt(v.F)} · ETC ${fmt(v.T)}${v.est?' (est)':''}`;
     else if(v)board=`<b>CJ-${v.b} · ${fmt(v.F)}</b>fixed by programme / signal`;
     else if(sp){bt=sp.F;board=`<b>CJ-${sp.b} · ${fday(sp.F)} ~${fmt(sp.F,false)}</b>${CL[sp.cat]||sp.cat}${sp.via?' slot as '+sp.via:''} · projected`;}
     else if(w&&w.rdy==null)board=`<b>readiness N/A</b>${w.x||'in DPA list, not ready'}`;
     else if(w)board=`<b>beyond projection</b>in DPA list · ${CL[Object.keys(w.rk)[0]]||'no group rank'}`;
     else board=`<b style="color:var(--muted)">not in DPA list yet</b>${r.eta?'ETA '+fd(r.eta):''}`;
+    const dr=dprOf(r.n); let dprCell='<span style="color:var(--dim)">—</span>';
+    if(dr){const e=dprEtc(dr),pct=dr.upto+dr.bal>0?Math.round(dr.upto/(dr.upto+dr.bal)*100):null;dprCell=`<b>${nf.format(dr.l24)} ${dr.unit||'MT'} / 24 h</b>balance ${nf.format(dr.bal)}${pct!=null?' · '+pct+'% done':''}${dr.ubal!=null?' · '+nf.format(dr.ubal)+' pcs left':''}<br>${dr.bal===0?'completed':e?'at this rate ~<b>'+fmt(e)+'</b>'+(v&&v.T>NOW?' <span class="dl '+((e-v.T)/24<-0.5?'early':(e-v.T)/24>0.5?'late':'same')+'">'+(Math.abs((e-v.T)/24)<0.5?'≈ list ETC':((e<v.T?'':'+')+((e-v.T)/24).toFixed(1)+' d vs list ETC'))+'</span>':''):'no work in 24 h'}`;}
     let dl='—';
     if(r.etb&&bt!=null){const dd=Math.round((bt-hd(r.etb))/24);dl=dd===0?'<span class="dl same">same day</span>':dd>0?`<span class="dl late">board +${dd} d later</span>`:`<span class="dl early">board ${dd} d earlier</span>`;}
     else if(r.st==='berth')dl='<span class="dl same">at berth</span>';
@@ -852,8 +919,33 @@ function timber(){
       <td class="d">${qty}</td>
       <td class="d">${arrival}</td>
       <td class="d">${r.b?'<b>berthed '+fmt(h(r.b))+'</b>'+(r.pri?'under '+(CL[r.pri]||r.pri):''):r.etb?'<b>ETB '+fd(r.etb)+'</b>team estimate':'—'}</td>
-      <td class="d">${board}</td><td class="d">${dl}</td></tr>`;};
-  el.innerHTML='<tr><th style="width:34px">#</th><th>Vessel</th><th>Qty</th><th>Arrival</th><th>Team</th><th>Board</th><th>Δ</th></tr>'+TIMBER.rows.map((r,i)=>{const g=r.st!==last?`<tr class="grp"><td colspan="7">${G[r.st]}</td></tr>`:'';last=r.st;return g+row(r,i+1);}).join('');
+      <td class="d">${board}</td><td class="d">${dprCell}</td><td class="d">${dl}</td></tr>`;};
+  el.innerHTML='<tr><th style="width:34px">#</th><th>Vessel</th><th>Qty</th><th>Arrival</th><th>Team</th><th>Board (actual)</th><th>DPR '+DPR.d+'</th><th>Δ</th></tr>'+TIMBER.rows.map((r,i)=>{const g=r.st!==last?`<tr class="grp"><td colspan="8">${G[r.st]}</td></tr>`:'';last=r.st;return g+row(r,i+1);}).join('');
+}
+function dprLine(n){const r=dprOf(n);if(!r)return '';const e=dprEtc(r);const pct=r.upto+r.bal>0?Math.round(r.upto/(r.upto+r.bal)*100):null;return `<small style="color:var(--brk)">DPR ${DPR.d} 0700: 24 h ${nf.format(r.l24)} · balance ${nf.format(r.bal)}${pct!=null?' · '+pct+'% done':''}${e?' · at this rate ~'+fmt(e):(r.bal===0?' · completed':'')}</small>`;}
+function dpr(){
+  const el=document.getElementById('dpr'), sub=document.getElementById('dsub'), st=document.getElementById('dstats'); if(!el)return;
+  const T0=DPR.tot;
+  sub.innerHTML=`DPA Traffic Department's <b>Daily Performance Report</b> for <b>${DPR.d}</b> (position 0700 hrs — the 24 hours before it). Per vessel: cargo handled in the last 24 h, up to date, balance, gangs per shift (I/II/III) and hooks. The board does <b>not</b> replace the list ETC with this; it shows beside it what the balance ÷ yesterday's rate gives, so a vessel finishing early or late is visible before the list says so. Source: ${DPR.src}.`;
+  const tile=(c,v,l)=>`<div class="stat" style="--sc:${c};cursor:default"><div class="v" style="font-size:26px">${v}</div><div class="l">${l}</div></div>`;
+  st.innerHTML=tile('var(--brass)',nf.format(T0.dry)+'<small> MT</small>','<b>Dry cargo jetties</b> · '+nf.format(T0.dryL)+' loaded + '+nf.format(T0.dryU)+' unloaded')+tile('var(--line2)',nf.format(T0.ms)+'<small> MT</small>','<b>Midstream</b>')+tile('var(--brk)',nf.format(T0.tuna)+'<small> MT</small>','<b>Tuna Tekra</b>')+tile('var(--dry)',nf.format(T0.oj)+'<small> MT</small>','<b>Oil jetties</b>')+tile('var(--box)',nf.format(T0.kict)+'<small> MT</small>','<b>KICT containers</b>')+tile('var(--fg)',nf.format(T0.all)+'<small> MT</small>','<b>Port total</b> incl. Vadinar '+nf.format(T0.vad))+tile('var(--brass)',T0.gangs.split(' ')[0]+'<small> / '+T0.gangs.split(' / ')[1].split(' ')[0]+'</small>','<b>Gangs</b> demanded / supplied · '+T0.gangs.replace(/^.*\(/,'(')+' · weighbridge trips '+nf.format(T0.wb)+' · rakes: '+T0.rakes+' · sailed: '+T0.sail);
+  const grpOf=r=>/^CJ/.test(r.loc)?'Cargo jetties':/^TT/.test(r.loc)?'Tuna Tekra':/^OJ/.test(r.loc)?'Oil jetties':'Midstream · Bunder area · OP · IFFCO · mooring';
+  let g0='',k=0,rows='';
+  DPR.rows.forEach(r=>{const g=grpOf(r);if(g!==g0){rows+=`<tr class="sub"><td colspan="4" class="w"><b>${g}</b></td></tr>`;g0=g;}k++;
+    const v=V.filter(x=>x.n===r.n).sort((a,z)=>z.T-a.T)[0], v0=V.filter(x=>x.n===r.n).sort((a,z)=>a.F-z.F)[0];
+    const pct=r.upto+r.bal>0?Math.round(r.upto/(r.upto+r.bal)*100):null;
+    const e=dprEtc(r); const unit=r.unit||'MT';
+    let rate='';
+    if(r.bal===0)rate='<span class="dl same">completed</span><small>cargo finished in the DPR</small>';
+    else if(r.l24<=0)rate='<span class="dl late">no work in 24 h</span><small>balance '+nf.format(r.bal)+' '+unit+'</small>';
+    else{const d=r.bal/r.l24;const partial=v0&&v0.F>h(DPR.asOf)-24;rate=`<b>~${fmt(e)}</b><small>${d.toFixed(1)} days of work at ${nf.format(r.l24)} ${unit}/day${partial?' — <span style="color:var(--warn)">partial day (alongside only from '+fmt(Math.min(v0.F,h(DPR.asOf)))+'), rate understated</span>':''}</small>`;
+      if(v&&v.T>NOW&&/^CJ/.test(r.loc)&&!partial){const dd=(e-v.T)/24;const tag=Math.abs(dd)<0.5?'<span class="dl same">≈ list ETC</span>':dd<0?`<span class="dl early">${Math.abs(dd).toFixed(1)} d before list ETC</span>`:`<span class="dl late">${dd.toFixed(1)} d after list ETC</span>`;rate+=`<small>${tag} (list / programme ${fmt(v.T)}${v.est?' est':''})</small>`;}}
+    const units=r.u24!=null?`<small>pieces: ${nf.format(r.u24)} · ${nf.format(r.uup)} · ${nf.format(r.ubal)}</small>`:'';
+    rows+=`<tr class="${isMine(r.n)?'me':''}"><td class="w"><b><span class="sn">${k}</span>${r.loc}</b>${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<br><small>${r.c} · ${r.ie}${agTxt(r.n)}</small></td>
+      <td class="pk"><b>${nf.format(r.l24)}</b> ${unit} in 24 h<small>up to date ${nf.format(r.upto)} · balance <b>${nf.format(r.bal)}</b>${pct!=null?' · '+pct+'% done':''}</small>${pct!=null?`<div class="pbar"><i style="width:${pct}%"></i></div>`:''}${units}${r.note?'<small>'+r.note+'</small>':''}</td>
+      <td class="al">${rate}</td>
+      <td class="fl">${r.g?'gangs '+r.g+(r.hk!=null?' · hooks '+r.hk:''):'—'}</td></tr>`;});
+  el.innerHTML='<tr><th style="width:170px">Where · vessel</th><th>Progress (last 24 h · up to date · balance)</th><th style="width:30%">At yesterday\'s rate</th><th style="width:130px">Gangs I/II/III · hooks</th></tr>'+rows;
 }
 function notices(){const el=document.getElementById('notices');if(!NOTICES.length){el.innerHTML='<tr><td class="fl">No circular on the board yet.</td></tr>';return;}
   el.innerHTML='<tr><th style="width:120px">Received</th><th style="width:26%">Circular / reference</th><th>Subject</th><th style="width:24%">Bearing on berthing</th></tr>'+NOTICES.map((n,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${n.d}</b>${n.src||''}</td><td class="pk"><b class="ref">${n.ref.replace(/\//g,'/<wbr>')}</b><small>${n.rd&&n.rd!=='—'?'dt '+n.rd+' · ':''}${n.kind||''}</small></td><td class="al"><b>${n.t}</b><small>${n.s}</small></td><td class="fl">${n.eff||'—'}</td></tr>`).join('');}
@@ -1728,7 +1820,7 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();learn();timber();tuna();liquid();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();learn();dpr();timber();tuna();liquid();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
   summaries();
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }
@@ -1800,6 +1892,9 @@ function summaries(){
   // learn
   const lo=LEARN.filter(x=>x.st==='open').length, la=LEARN.filter(x=>x.st==='adopted').length, lk=LEARN.filter(x=>x.st==='ok').length;
   setSum('learn',`<b>${LEARN.length}</b> checks · <b>${lo} open</b> · ${la} adopted · ${lk} matched`);
+  // DPR
+  {const cj=DPR.rows.filter(r=>/^CJ/.test(r.loc)&&r.bal>0&&r.l24>0);const vv=r=>V.filter(x=>x.n===r.n).sort((a,z)=>z.T-a.T)[0];const full=r=>{const v=vv(r),v0=V.filter(x=>x.n===r.n).sort((a,z)=>a.F-z.F)[0];return v&&v.T>NOW&&!(v0.F>h(DPR.asOf)-24);};const early=cj.filter(r=>{const v=vv(r);const e=dprEtc(r);return full(r)&&e&&(e-v.T)/24<-0.5;}).map(r=>r.n);const late=cj.filter(r=>{const v=vv(r);const e=dprEtc(r);return full(r)&&e&&(e-v.T)/24>0.5;}).map(r=>r.n);
+   setSum('dpr',`DPR <b>${DPR.d}</b> · dry cargo jetties <b>${nf.format(DPR.tot.dry)} MT</b> in 24 h · port ${nf.format(DPR.tot.all)} MT${early.length?' · finishing before list ETC: <b>'+early.join(', ')+'</b>':''}${late.length?' · slower than list ETC: '+late.join(', '):''}`);}
   // (tuna / liquid are their own tabs now — no collapsible summary)
   // timber
   const tb=TIMBER.rows.filter(r=>r.st==='berth').length, tw=TIMBER.rows.filter(r=>r.st==='wait').length, te=TIMBER.rows.filter(r=>r.st==='eta').length;
