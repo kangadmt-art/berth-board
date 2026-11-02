@@ -1,6 +1,4 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DPA Berth Board · 1 Nov 2026 night</title></head><body>
-<title>DPA Berth Board</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DPA Berth Board · 2 Nov 2026</title></head><body><title>DPA Berth Board</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,6 +45,25 @@ section.card{background:var(--panel);border:1px solid var(--line);border-radius:
 .secctl{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 8px;font-family:var(--f-mono);font-size:11px;color:var(--muted);margin:-8px 0 -10px}
 .secctl span{margin-right:auto}
 @media (max-width:640px){.sechead h2{font-size:20px}.sechead .ssum::after{content:" · tap to open";color:var(--dim)}.secctl span{display:none}}
+
+/* boards inside the one page: Cargo jetties · Tuna · Liquid (tabs, hash #cargo / #tuna / #liquid) */
+.views{display:flex;flex-wrap:wrap;gap:8px;margin:-6px 0 -8px}
+.views a{flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--line2);border-radius:8px;padding:10px 14px 9px;-webkit-tap-highlight-color:transparent}
+.views a[data-view="cargo"]{--sc:var(--brass)}.views a[data-view="tuna"]{--sc:var(--brk)}.views a[data-view="liquid"]{--sc:var(--dry)}
+.views a b{font-family:var(--f-disp);font-weight:700;font-size:17px;letter-spacing:.04em;text-transform:uppercase;color:var(--fg);line-height:1.1}
+.views a small{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.04em;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.views a .vb{font-family:var(--f-mono);font-size:11px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.views a .vb b{font:inherit;color:var(--fg);text-transform:none;letter-spacing:0}
+.views a:hover{border-color:var(--brass2)}
+.views a.on{border-color:var(--brass2);border-top-color:var(--sc);background:linear-gradient(180deg,#132339,#0f1c2e)}
+.views a.on b{color:var(--sc)}
+.view{display:none;flex-direction:column;gap:20px;min-width:0}
+.view.on{display:flex}
+.view:not([data-view="cargo"]) .sechead{cursor:default}
+.view:not([data-view="cargo"]) .stat,.view:not([data-view="cargo"]) .cc{cursor:default}.view:not([data-view="cargo"]) .stat:hover{border-color:var(--line)}
+.note{font-size:12.5px;color:var(--muted);border-left:3px solid var(--brass2);padding:4px 0 4px 12px;line-height:1.5}
+.note b{color:var(--fg)}
+@media (max-width:640px){.views{gap:6px}.views a{flex:1 1 0;padding:8px 9px 7px}.views a b{font-size:13.5px}.views a small{display:none}.views a .vb{font-size:10px}}
 
 /* finder */
 .finder{border-color:var(--brass2);background:linear-gradient(180deg,#132339,#0f1c2e)}
@@ -327,11 +344,17 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 <div class="wrap">
   <header class="top">
     <div>
-      <div class="eyebrow">Deendayal Port · Kandla · Dry cargo jetty</div>
+      <div class="eyebrow" id="eyebrow">Deendayal Port · Kandla · Dry cargo jetty</div>
       <h1>Berth <span>Board</span><span class="draft">1 NOV 2026</span></h1>
     </div>
     <div class="asof"><span class="upd" id="upd"></span><br>Berthing List <b>31.10.26 · 0700</b> (KPSAA mail)<br>Signals up to <b>1 Nov night (amendment disp 2155)</b> · Programme <b>02.11 (meeting 01.11, TF/SH/2102, mailed 15:10)</b> · no 0700 list on Sun 1 Nov<br>Policy <b>24.03.25 + 4 amendments</b><br><span id="tide"></span></div>
   </header>
+  <nav class="views" id="views" aria-label="Boards on this page">
+    <a href="#cargo" data-view="cargo"><b>Cargo jetties</b><small>CJ-1 to CJ-16 · dry cargo · berthing policy &amp; projection</small><span class="vb" id="vb-cargo"></span></a>
+    <a href="#tuna" data-view="tuna"><b>Tuna</b><small>TT-1 to TT-4 · Adani PPP terminal · status only</small><span class="vb" id="vb-tuna"></span></a>
+    <a href="#liquid" data-view="liquid"><b>Liquid</b><small>OJ-1 to OJ-7 · oil jetties · status only</small><span class="vb" id="vb-liquid"></span></a>
+  </nav>
+  <div class="view" data-view="cargo" id="view-cargo">
   <div class="secctl" id="secctl"><span>Sections open on tap · detail only when you want it</span><button type="button" class="qb" id="openAll">Open all</button><button type="button" class="qb" id="closeAll">Close all</button></div>
   <section class="card" data-sec="notices" aria-labelledby="nh">
     <div class="sechead"><h2 id="nh">Circulars &amp; notices</h2><p>DPA trade notices and circulars received on the KPSAA mail, plus the reference documents the board is built on — with the circular number and date, and what each means for berthing.</p></div>
@@ -411,17 +434,30 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="learn" id="learn"></div>
   </section>
 
-  <section class="card" data-sec="tuna" aria-labelledby="tth">
-    <div class="sechead"><h2 id="tth">Tuna · TT-1 to TT-4 (Adani PPP)</h2><p id="ttsub"></p></div>
-    <div class="striplabel"><a class="plink" id="tunalink" target="_blank" rel="noopener" style="color:var(--brass);text-decoration:none;border-bottom:1px dotted var(--brass2)">Open the full Tuna board ↗</a></div>
-    <div class="scroll"><svg class="tmap" id="tmap" role="img" aria-label="Tuna terminal berths"></svg></div>
-    <div class="scroll"><table class="mpt lqt" id="tuna"></table></div>
+  <section class="card timber" data-sec="timber" aria-labelledby="th">
+    <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
+    <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
   </section>
-  <section class="card" data-sec="liquid" aria-labelledby="lqh">
+  </div><!-- /view cargo -->
+
+  <div class="view" data-view="tuna" id="view-tuna">
+  <div class="stats" id="tstats" aria-label="Tuna terminal"></div>
+  <section class="card" aria-labelledby="tth">
+    <div class="sechead"><h2 id="tth">Tuna · TT-1 to TT-4 (Adani PPP)</h2><p id="ttsub"></p></div>
+    <div class="scroll"><svg class="tmap" id="tmap" role="img" aria-label="Tuna terminal berths"></svg></div>
+    <div class="scroll"><table class="mpt lqt" id="tunatbl"></table></div>
+  </section>
+  <section class="card"><div class="sechead"><h2>How to read this board</h2></div>
+    <div class="note">Tuna Tekra is a PPP terminal run by Adani inside Deendayal Port. Its berths are <b>not</b> in the DPA berthing-policy queue, so the board makes no projection here — the order of berthing is whatever the list's remarks say ("TT-03 followed by …"). The DPA list prints no discharge norm or ETC for TT vessels; "days alongside" is counted from the list's MADE FAST time. TT movements do not appear on the Harbour Master's cargo-jetty signals, so a berthing taken from a B'TODAY remark stays marked as not confirmed until a list prints it.</div>
+  </section>
+  </div><!-- /view tuna -->
+
+  <div class="view" data-view="liquid" id="view-liquid">
+  <div class="stats" id="lstats" aria-label="Oil jetties"></div>
+  <section class="card" aria-labelledby="lqh">
     <div class="sechead"><h2 id="lqh">Liquid berths · OJ-1 to OJ-7</h2><p id="lqsub"></p></div>
-    <div class="striplabel"><a class="plink" id="liqlink" target="_blank" rel="noopener" style="color:var(--brass);text-decoration:none;border-bottom:1px dotted var(--brass2)">Open the full liquid board ↗</a></div>
     <div class="scroll"><svg class="tmap" id="lmap" role="img" aria-label="Oil jetties"></svg></div>
-    <div class="scroll"><table class="mpt lqt" id="liquid"></table></div>
+    <div class="scroll"><table class="mpt lqt" id="liqtbl"></table></div>
     <div class="striplabel" style="margin-top:6px">Waiting liquid vessels · queue letters as printed in the list (E = edible oils, C = chemicals, O = POL)</div>
     <div class="scroll"><table class="mpt lqt" id="liqwait"></table></div>
     <div class="striplabel" style="margin-top:6px">Expected liquid vessels (ETA sheet)</div>
@@ -429,10 +465,10 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="striplabel" style="margin-top:6px">Oil-jetty movements · HM signals</div>
     <div id="liqmoves"></div>
   </section>
-  <section class="card timber" data-sec="timber" aria-labelledby="th">
-    <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
-    <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
+  <section class="card"><div class="sechead"><h2>How to read this board</h2></div>
+    <div class="note">The board has no berthing rules for liquid cargo, so nothing here is projected: occupancy is the DPA list plus the Harbour Master's signals, and the queue is shown exactly as the list prints it — the letter after the rank is the list's own category (<b>E</b> edible oils such as CDSBO / CPO, <b>C</b> chemicals, <b>O</b> POL such as HSD / MS / VLSFO); "REQ OJ 2, 3, 4" is the agent's berth requirement from the list remarks. IFFCO's ammonia and phosphoric-acid vessels appear under OJ in the list. "Made fast" times derived from an "o/c" (on completion) signal are estimates until a list prints them. The jetty map is a schematic row in OJ order, not the geographic layout.</div>
   </section>
+  </div><!-- /view liquid -->
   <footer><span id="updf"></span> · DPA berthing list 31.10.26 (0700 + revised 15:09, via KPSAA mail) · HM signals to 1 Nov night (amendment disp 2155) · movement programmes TF/SH/2102 for 31.10, 01.11 and 02.11 (mailed 1 Nov 15:10; no Sunday 0700 list) · timber desk position report 30.10 (updated to 31.10 1800) · Tuna (TT) and oil-jetty (OJ) status from the same list and signals · DPA trade notices 1695–1698 dt 28.10.2026 (KPSAA mail 29.10) · DC circular MR/SH/1120/2026.</footer>
 </div>
 
@@ -450,9 +486,19 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-01 22:00');
 const PROG_END=h('11-02 18:00'); // last movement programme covers till here (programme for 01.11, meeting 31.10) — barge windows end here; beyond it no data
-const PAGE_URLS={tuna:'https://claude.ai/artifact/5L9uVeizEcfhXo65sKM5Ub',liquid:'https://claude.ai/artifact/J7C1MtZdb6Rn5zEaaf2MJj'}; // stand-alone pages (filled in when published); on GitHub Pages the relative files are used
-const pageHref=k=>/github\.io$/.test(location.hostname)?k+'.html':(PAGE_URLS[k]||'#'+k);
-const UPDATED='1 Nov 2026 · 22:50 IST';
+// ---- the three boards live on this one page as views (tabs): cargo (dry cargo CJ-1–16, projected), tuna (TT-1–4) and liquid (OJ-1–7), status only.
+const VIEWS={cargo:'Deendayal Port · Kandla · Dry cargo jetty',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
+const VIEW_NAME={cargo:'Cargo jetties',tuna:'Tuna',liquid:'Liquid'};
+let VIEW='cargo';
+const pageHref=k=>'#'+k; // same page, just another tab
+function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.dataset.view===k));
+  document.querySelectorAll('#views a').forEach(a=>{const on=a.dataset.view===k;a.classList.toggle('on',on);if(on)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  const ey=document.getElementById('eyebrow');if(ey)ey.textContent=VIEWS[k];
+  try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
+  if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
+  if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
+const UPDATED='1 Nov 2026 · 23:20 IST';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 /*@@TLDATA@@*/
@@ -685,9 +731,35 @@ function preview(){
 const el2=(n,a,pnt,txt)=>el(n,a,pnt,txt);
 const dayN=x=>Math.max(0,Math.round((NOW-x)/24*10)/10);
 const qty=(q,u)=>nf.format(Math.round(q))+' '+(u||'MT');
+const tileHtml=tiles=>tiles.map(([c,v,l,ch])=>`<div class="stat" style="--sc:${c}"><div class="v">${v}</div><div class="l">${l}</div>${ch?`<div class="comm">${ch}</div>`:''}</div>`).join('');
+function tunaTiles(){
+  const el=document.getElementById('tstats'); if(!el)return;
+  const occ=TUNA.berths.length, est=TUNA.berths.filter(b=>b.est).length;
+  const days=TUNA.berths.map(b=>Math.round((NOW-h(b.f))/24*10)/10); const mx=days.length?Math.max(...days):0, mi=days.indexOf(mx);
+  el.innerHTML=tileHtml([
+   ['var(--brk)',occ+'<small>/4</small>','<b>Tuna berths occupied</b>'+(est?' · '+est+' berthing not yet confirmed':''),TUNA.berths.map(b=>`<span class="cc" style="--sc:var(--brk)"><b>${b.b}</b><span>${b.n}<small> · ${b.c}</small></span></span>`).join('')],
+   ['var(--brass)',TUNA.wait.length,'<b>Waiting for a Tuna berth</b> · reported, not yet berthed',TUNA.wait.map(w=>`<span class="cc" style="--sc:var(--brass)"><b>${w.n}</b><span>${w.c}<small> · ${w.rem||''}</small></span></span>`).join('')],
+   ['var(--box)',TUNA.eta.length,'<b>Expected</b> · ETA given, not yet reported',TUNA.eta.slice().sort((a,b)=>h(a.eta)-h(b.eta)).map(w=>`<span class="cc" style="--sc:var(--box)"><b>${fday(h(w.eta)).slice(4)}</b><span>${w.n}<small> · ${w.c}</small></span></span>`).join('')],
+   ['var(--line2)',mx+'<small> d</small>','<b>Longest stay alongside</b>'+(mi>=0?' · '+TUNA.berths[mi].n+' at '+TUNA.berths[mi].b:''),'']
+  ]);
+}
+function liquidTiles(){
+  const el=document.getElementById('lstats'); if(!el)return;
+  const occ=LIQ.berths.filter(b=>b.now).length, vac=LIQ.berths.filter(b=>!b.now).map(b=>b.b);
+  const W=LIQ.wait.filter(w=>!/at OJ|berthed/.test(w.st||''));
+  const grp=r=>/E$/.test(r.rank||'')?'E':/C$/.test(r.rank||'')?'C':/O$/.test(r.rank||'')?'O':'Z';
+  const cnt=k=>W.filter(w=>grp(w)===k).length;
+  const mv=LIQ.berths.filter(b=>b.out&&h(b.out)>NOW), inn=LIQ.berths.filter(b=>b.next);
+  el.innerHTML=tileHtml([
+   ['var(--dry)',occ+'<small>/'+LIQ.berths.length+'</small>','<b>Oil jetties occupied</b>'+(vac.length?' · vacant: '+vac.join(', '):''),LIQ.berths.map(b=>`<span class="cc" style="--sc:${b.now?'var(--dry)':'var(--line2)'}"><b>${b.b}</b><span>${b.now?b.now.n+'<small> · '+b.now.c+'</small>':'<small>vacant</small>'}</span></span>`).join('')],
+   ['var(--brass)',W.length,'<b>Waiting</b> · reported, not yet berthed · by the list\'s queue letter',[['E','Edible oils'],['C','Chemicals'],['O','POL'],['Z','no letter']].filter(([k])=>cnt(k)).map(([k,l])=>`<span class="cc" style="--sc:var(--brass)"><b>${cnt(k)}</b><span>${l}<small> (${k})</small></span></span>`).join('')],
+   ['var(--box)',LIQ.eta.length,'<b>Expected</b> · ETA given, not yet reported',(()=>{const d={};LIQ.eta.slice().sort((a,b)=>h(a.eta)-h(b.eta)).forEach(e=>{const k=fday(h(e.eta)).slice(4);d[k]=(d[k]||0)+1;});return Object.entries(d).map(([k,n])=>`<span class="cc" style="--sc:var(--box)"><b>${n}</b><span>${k}</span></span>`).join('');})()],
+   ['var(--warn)',mv.length,'<b>Sailings signalled</b> after '+fmt(NOW)+' · '+inn.length+' berthings to follow',mv.map(b=>`<span class="cc" style="--sc:var(--warn)"><b>${fmt(h(b.out),false)}</b><span>${b.now?b.now.n:''} out of ${b.b}${b.next?'<small> → '+b.next.n+'</small>':''}</span></span>`).join('')]
+  ]);
+}
 function tuna(){
-  const el=document.getElementById('tuna'), sub=document.getElementById('ttsub'), svg=document.getElementById('tmap'); if(!el)return;
-  const tl=document.getElementById('tunalink'); if(tl)tl.href=pageHref('tuna');
+  const el=document.getElementById('tunatbl'), sub=document.getElementById('ttsub'), svg=document.getElementById('tmap'); if(!el)return;
+  tunaTiles();
   sub.innerHTML=`Tuna Tekra is a PPP terminal (Adani) inside DPA — outside the DPA berthing queue. The list prints no norms or ETC for TT vessels, so this is <b>status only</b>: who is alongside since when, and who the list says follows at each berth. Source: ${TUNA.src}.`;
   // map — Mihir's sketch: pier N–S, TT-1 & TT-3 on the west face, TT-2 & TT-4 on the east face, trestle from the east
   svg.innerHTML='';svg.setAttribute('viewBox','0 0 760 300');
@@ -711,8 +783,8 @@ function tuna(){
   el.innerHTML='<tr><th style="width:110px">Berth</th><th>Vessel</th><th>Cargo · agent</th><th style="width:38%">Status</th></tr>'+TUNA.berths.map(rowB).join('')+hd('Waiting for Tuna berths (list 31 Oct)')+TUNA.wait.map(rowW).join('')+hd('Expected (ETA sheet)')+TUNA.eta.map(rowE).join('');
 }
 function liquid(){
-  const el=document.getElementById('liquid'), sub=document.getElementById('lqsub'), svg=document.getElementById('lmap'), ew=document.getElementById('liqwait'), ee=document.getElementById('liqeta'); if(!el)return;
-  const ll=document.getElementById('liqlink'); if(ll)ll.href=pageHref('liquid');
+  const el=document.getElementById('liqtbl'), sub=document.getElementById('lqsub'), svg=document.getElementById('lmap'), ew=document.getElementById('liqwait'), ee=document.getElementById('liqeta'); if(!el)return;
+  liquidTiles();
   const occ=LIQ.berths.filter(b=>b.now).length;
   sub.innerHTML=`Oil jetties as at <b>${fmt(h(LIQ.asOf))}</b>: ${occ} of ${LIQ.berths.length} occupied. <b>Status only</b> — the board has no berthing rules for liquid cargo, so nothing is projected; tonight's movements are from the HM signals. Queue letters are as the list prints them: E = edible oils (CDSBO, CPO), C = chemicals, O = POL. IFFCO's ammonia / phosphoric-acid vessels appear under OJ in the list. Source: ${LIQ.src}.`;
   // map — schematic row of jetties, not geographic
@@ -1282,13 +1354,19 @@ function stats(){
   const total=`<div class="stat wide total" style="--sc:var(--brass)"><div class="tot2">
      <div><div class="top"><div class="v">${totW}</div><div class="l" style="margin:0"><b>Vessels waiting at Kandla</b> · all berths, reported and not yet berthed</div></div><div class="comm">${chip('Dry cargo · CJ queue',wait.length,'var(--brass)','all')}${chip('Liquid · oil jetties',lqW,'var(--dry)','liquid')}${chip('Tuna · TT (Adani)',ttW,'var(--brk)','tuna')}</div></div>
      <div><div class="top"><div class="v">${totE}</div><div class="l" style="margin:0"><b>Expected</b> · ETA given, not yet reported</div></div><div class="comm">${chip('Dry cargo · CJ',exp.length,'var(--brass)','exp')}${chip('Liquid · OJ',lqE,'var(--dry)','liquid')}${chip('Tuna · TT',ttE,'var(--brk)','tuna')}</div></div>
-    </div><div class="last" style="margin-top:6px">Dry cargo berths CJ-1–16 run under the berthing policy (projected below) · liquid and Tuna are status only — their own pages: <a class="plink" href="${pageHref('liquid')}" target="_blank" rel="noopener">Liquid board ↗</a> · <a class="plink" href="${pageHref('tuna')}" target="_blank" rel="noopener">Tuna board ↗</a></div></div>`;
+    </div><div class="last" style="margin-top:6px">Dry cargo berths CJ-1–16 run under the berthing policy (projected below) · liquid and Tuna are status only — their own tabs above: <a class="plink" href="${pageHref('liquid')}" data-view="liquid">Liquid board →</a> · <a class="plink" href="${pageHref('tuna')}" data-view="tuna">Tuna board →</a></div></div>`;
   const lqOcc=LIQ.berths.filter(b=>b.now).length, lqMv=LIQ.berths.filter(b=>b.out&&h(b.out)>NOW).length, ttOcc=TUNA.berths.length;
-  const extra=`<div class="stat" data-go="liquid" style="--sc:var(--dry)"><div class="v">${lqOcc}<small>/${LIQ.berths.length}</small></div><div class="l"><b>Oil jetties occupied</b> · ${lqW} waiting · ${lqE} expected${lqMv?' · '+lqMv+' sailing'+(lqMv>1?'s':'')+' signalled tonight':''}</div><div class="last"><a class="plink" href="${pageHref('liquid')}" target="_blank" rel="noopener">Open the liquid board ↗</a> · tap tile for the section</div></div>
-   <div class="stat" data-go="tuna" style="--sc:var(--brk)"><div class="v">${ttOcc}<small>/4</small></div><div class="l"><b>Tuna berths occupied</b> (Adani PPP) · ${ttW} waiting · ${ttE} expected</div><div class="last"><a class="plink" href="${pageHref('tuna')}" target="_blank" rel="noopener">Open the Tuna board ↗</a> · tap tile for the section</div></div>`;
+  const extra=`<div class="stat" data-go="liquid" style="--sc:var(--dry)"><div class="v">${lqOcc}<small>/${LIQ.berths.length}</small></div><div class="l"><b>Oil jetties occupied</b> · ${lqW} waiting · ${lqE} expected${lqMv?' · '+lqMv+' sailing'+(lqMv>1?'s':'')+' signalled tonight':''}</div><div class="last"><a class="plink" href="${pageHref('liquid')}" data-view="liquid">Open the Liquid board →</a> · same page, Liquid tab</div></div>
+   <div class="stat" data-go="tuna" style="--sc:var(--brk)"><div class="v">${ttOcc}<small>/4</small></div><div class="l"><b>Tuna berths occupied</b> (Adani PPP) · ${ttW} waiting · ${ttE} expected</div><div class="last"><a class="plink" href="${pageHref('tuna')}" data-view="tuna">Open the Tuna board →</a> · same page, Tuna tab</div></div>`;
   document.getElementById('stats').innerHTML=total+`<div class="stat wide" data-k="all" style="--sc:${t0[0]}"><div class="top"><div class="v">${t0[1]}</div><div class="l" style="margin:0">${t0[3]}</div></div><div class="comm">${chips}</div>${t0[5]}</div>`+rest.map(([c,v,sm,l,ch,ln,k])=>`<div class="stat" ${k?`data-k="${k}"`:''} style="--sc:${c}"><div class="v">${v}${sm}</div><div class="l">${l}</div>${ch?`<div class="comm">${ch}</div>`:''}${ln||''}</div>`).join('')+extra;
-  // tiles / chips that jump to a section (liquid, tuna) or to the dry-cargo tiles
-  document.querySelectorAll('#stats [data-go]').forEach(t=>t.onclick=e=>{if(e.target.closest('a'))return;const k=t.dataset.go;if(k==='liquid'||k==='tuna'){setSec(k,true);document.querySelector(`section[data-sec="${k}"]`).scrollIntoView({behavior:'smooth',block:'start'});}else{const tile=document.querySelector(`#stats .stat[data-k="${k}"]`);if(tile)tile.click();}e.stopPropagation();});
+  // tab badges: one line of numbers under each board's name
+  const vb=(k,html)=>{const b=document.getElementById('vb-'+k);if(b)b.innerHTML=html;};
+  vb('cargo',`<b>${wait.length}</b> waiting · <b>${at}</b>/${POOL.length} berths`);
+  vb('tuna',`<b>${ttOcc}</b>/4 berths · <b>${ttW}</b> waiting`);
+  vb('liquid',`<b>${lqOcc}</b>/${LIQ.berths.length} jetties · <b>${lqW}</b> waiting`);
+  // tiles / chips / links that open another board (liquid, tuna) or jump to the dry-cargo tiles
+  document.querySelectorAll('#stats a.plink[data-view]').forEach(a=>a.onclick=e=>{e.preventDefault();e.stopPropagation();setView(a.dataset.view,{top:true});});
+  document.querySelectorAll('#stats [data-go]').forEach(t=>t.onclick=e=>{if(e.target.closest('a'))return;const k=t.dataset.go;if(k==='liquid'||k==='tuna'){setView(k,{top:true});}else{const tile=document.querySelector(`#stats .stat[data-k="${k}"]`);if(tile)tile.click();}e.stopPropagation();});
   // click handlers: tile → all vessels of that kind; chip → that commodity within the tile
   document.querySelectorAll('#stats .stat[data-k]').forEach(t=>t.onclick=e=>{const chip=e.target.closest('.cc');const k=t.dataset.k;const base=k==='exp'?exp:k==='all'?wait:wait.filter(w=>kind(w.c)===k);
     if(chip){const re=COM.find(c=>c[0]===chip.dataset.com)[1];openList(chip.dataset.com+(k==='exp'?' · expected':' · waiting'),base.filter(w=>re.test(w.c)));}
@@ -1692,10 +1770,7 @@ function summaries(){
   // learn
   const lo=LEARN.filter(x=>x.st==='open').length, la=LEARN.filter(x=>x.st==='adopted').length, lk=LEARN.filter(x=>x.st==='ok').length;
   setSum('learn',`<b>${LEARN.length}</b> checks · <b>${lo} open</b> · ${la} adopted · ${lk} matched`);
-  // tuna / liquid
-  setSum('tuna',TUNA.berths.map(b=>`<b>${b.b}</b> ${b.n}${b.est?' (est)':''}`).join(' · ')+` · ${pl(TUNA.wait.length,'vessel')} waiting · ${TUNA.eta.length} expected · status only`);
-  const lqo=LIQ.berths.filter(b=>b.now).length, lqm=LIQ.berths.filter(b=>b.out&&h(b.out)>NOW).length;
-  setSum('liquid',`<b>${lqo} of ${LIQ.berths.length}</b> oil jetties occupied${LIQ.berths.filter(b=>!b.now).length?' ('+LIQ.berths.filter(b=>!b.now).map(b=>b.b).join(', ')+' vacant)':''} · <b>${pl(lqm,'sailing')}</b> signalled tonight · ${LIQ.wait.filter(w=>!/at OJ|berthed/.test(w.st)).length} waiting · ${LIQ.eta.length} expected · status only`);
+  // (tuna / liquid are their own tabs now — no collapsible summary)
   // timber
   const tb=TIMBER.rows.filter(r=>r.st==='berth').length, tw=TIMBER.rows.filter(r=>r.st==='wait').length, te=TIMBER.rows.filter(r=>r.st==='eta').length;
   setSum('timber',`<b>${TIMBER.rows.length}</b> vessels · ${tb} at berth · ${tw} waiting · ${te} expected · team report ${TIMBER.d}`);
@@ -1703,8 +1778,11 @@ function summaries(){
 // open at the focused vessel's berthing time if projected
 const s0=S.find(x=>x.n===focus);
 initSections();
+// tabs: Cargo jetties · Tuna · Liquid — same page, hash remembers the open board (#cargo / #tuna / #liquid)
+document.querySelectorAll('#views a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setView(a.dataset.view,{top:true});}));
+window.addEventListener('hashchange',()=>{const k=location.hash.replace('#','');if(VIEWS[k]&&k!==VIEW)setView(k,{hash:false,top:true});});
+setView((location.hash||'').replace('#',''),{hash:false});
 render(false);
 })();
 </script>
-
 </body></html>
