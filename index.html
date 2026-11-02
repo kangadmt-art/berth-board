@@ -366,6 +366,10 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="sechead"><h2 id="nh">Circulars &amp; notices</h2><p>DPA trade notices and circulars received on the KPSAA mail, plus the reference documents the board is built on — with the circular number and date, and what each means for berthing.</p></div>
     <div class="scroll"><table class="mpt ntt" id="notices"></table></div>
   </section>
+  <section class="card" data-sec="news" aria-labelledby="nwh">
+    <div class="sechead"><h2 id="nwh">DPA news</h2><p>Important news on Deendayal Port and Kandla trade — from the port's site and the trade press (LinkedIn cannot be read by the board). Newest first, with what it means for berthing.</p></div>
+    <div class="scroll"><table class="mpt ntt" id="news"></table></div>
+  </section>
 
   <div class="stats" id="stats" aria-label="Waiting at Kandla"></div>
   <section class="card finder" data-sec="finder" aria-labelledby="fh">
@@ -510,7 +514,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='3 Nov 2026 · 01:25 IST';
+const UPDATED='3 Nov 2026 · 01:40 IST';
 const BOARD_SRC='list 02.11 (0700 + revised pm) · programme 03.11 · signals to 1 Nov night';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -683,6 +687,12 @@ const MYLOG={
   {d:'3 Nov 01:25 · DPR 02.11 applied',exp:'11-04 06:46',b:'16',slot:'SAAGAR break bulk · SGR 1',why:'The port\'s DPR shows Centurion Buyo working at 7,749 CBM/day — her balance of 8,939 CBM finishes around 3 Nov midday, not 5 Nov as the list ETC says. The SAAGAR break-bulk slot therefore frees on 3 Nov. The first clean berth after that is CJ-16, where Emmanouil (shifted there from CJ-1 by the programme) has 7,940 MT left at 4,163 MT/day → ~4 Nov 05:00. So Quail ~4 Nov 06:46 at CJ-16 — about a day earlier than the list-ETC reading. Hinges on Centurion keeping yesterday\'s rate and on the port actually shifting Emmanouil; the 3 Nov meeting will show.'}
  ]
 };
+// ---- DPA news (port & trade press; LinkedIn cannot be read from here, so the daily run searches the trade press and DPA's site). {d:'DD Mon YYYY', t:title, s:gist, src:publication, url, eff:bearing on berthing / Kandla trade}
+const NEWS=[
+ {d:'26 Oct 2026',t:'Essar Ports wins the Tuna-Tekra multipurpose terminal — ₹2,276 crore',s:'Contract awarded 21 Oct 2026: 18.33 MTPA capacity, four 300 m berths, 18 m draught, Capesize up to 170,000 DWT. Adani Ports and Vedanta had also bid. No construction timeline given.',src:'The Week · Port Report #36',url:'https://www.theweek.in/news/maritime/2026/10/26/indias-indian-rupee2276-crore-port-expansion-takes-shape-at-deendayal-or-the-port-report-36.html',eff:'Future Tuna capacity (4 more deep berths) — nothing changes at the cargo jetties for now.'},
+ {d:'26 Oct 2026',t:'Record day: 10.96 lakh MT handled on 21 Oct 2026',s:'Deendayal Port crossed one million tonnes in a day for the fourth time in October 2026.',src:'The Week · Port Report #36',url:'https://www.theweek.in/news/maritime/2026/10/26/indias-indian-rupee2276-crore-port-expansion-takes-shape-at-deendayal-or-the-port-report-36.html',eff:'Context for the DPR totals (6.8 lakh MT on 1–2 Nov).'},
+ {d:'8 Oct 2026',t:'100 million tonnes for FY 2026-27 reached on 6 Oct — 51 days earlier than last year',s:'Fastest the port has ever reached the mark; credited to cargo-handling productivity and capacity additions.',src:'Maritime Gateway',url:'https://www.maritimegateway.com/deendayal-port-crosses-100-million-tonnes-of-cargo-throughput-51-days-ahead-of-schedule/',eff:'Throughput milestone — no change to berthing.'}
+];
 const NOTICES=[
  // Circulars / references on the board. {d: received, src: how it reached us, ref: circular no., rd: circular date, kind, t: subject, s: gist, eff: bearing on berthing / the board}
  {d:'29 Oct',src:'KPSAA mail ~13:00',ref:'Traffic/Traffic/5583/RebateBaggedCargo/2026/1695',rd:'28.10.2026',kind:'DPA trade notice',t:'Rebates / concessions on wharfage charges of bagged cargo',s:'20% discount on wharfage (per prevailing SOR) when a vessel loads its entire cargo mid-stream through barges, using the Zero Panel area beside Cargo Jetty 1, IKLL barge jetty or Bunder Basin. Continues TN Traffic/Traffic/426/Tradepromotion/2023/327 dt 08.05.2025; valid up to 31.03.2027, subject to review.',eff:'Tariff only — no change to berthing order. Relevant to bagged-cargo loaders choosing mid-stream over a berth.'},
@@ -948,6 +958,8 @@ function dpr(){
       <td class="fl">${r.g?'gangs '+r.g+(r.hk!=null?' · hooks '+r.hk:''):'—'}</td></tr>`;});
   el.innerHTML='<tr><th style="width:170px">Where · vessel</th><th>Progress (last 24 h · up to date · balance)</th><th style="width:30%">At yesterday\'s rate</th><th style="width:130px">Gangs I/II/III · hooks</th></tr>'+rows;
 }
+function news(){const el=document.getElementById('news');if(!el)return;if(!NEWS.length){el.innerHTML='<tr><td class="fl">No news on the board yet.</td></tr>';return;}
+  el.innerHTML='<tr><th style="width:120px">Date</th><th>News</th><th>Gist</th><th style="width:28%">Bearing on berthing</th></tr>'+NEWS.map((x,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${x.d}</b>${x.src}</td><td class="pk"><b>${x.t}</b>${x.url?`<small><a href="${x.url}" target="_blank" rel="noopener" style="color:var(--brass)">source ↗</a></small>`:''}</td><td class="al">${x.s}</td><td class="fl">${x.eff||'—'}</td></tr>`).join('');}
 function notices(){const el=document.getElementById('notices');if(!NOTICES.length){el.innerHTML='<tr><td class="fl">No circular on the board yet.</td></tr>';return;}
   el.innerHTML='<tr><th style="width:120px">Received</th><th style="width:26%">Circular / reference</th><th>Subject</th><th style="width:24%">Bearing on berthing</th></tr>'+NOTICES.map((n,i)=>`<tr><td class="w"><b><span class="sn">${i+1}</span>${n.d}</b>${n.src||''}</td><td class="pk"><b class="ref">${n.ref.replace(/\//g,'/<wbr>')}</b><small>${n.rd&&n.rd!=='—'?'dt '+n.rd+' · ':''}${n.kind||''}</small></td><td class="al"><b>${n.t}</b><small>${n.s}</small></td><td class="fl">${n.eff||'—'}</td></tr>`).join('');}
 function learn(){const el=document.getElementById('learn');if(!LEARN.length){el.innerHTML='<div class="empty">No variance recorded yet.</div>';return;}
@@ -1827,7 +1839,7 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();learn();dpr();timber();tuna();liquid();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();news();learn();dpr();timber();tuna();liquid();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
   summaries();
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }
@@ -1899,6 +1911,8 @@ function summaries(){
   // learn
   const lo=LEARN.filter(x=>x.st==='open').length, la=LEARN.filter(x=>x.st==='adopted').length, lk=LEARN.filter(x=>x.st==='ok').length;
   setSum('learn',`<b>${LEARN.length}</b> checks · <b>${lo} open</b> · ${la} adopted · ${lk} matched`);
+  // news
+  setSum('news',NEWS.length?`<b>${NEWS.length}</b> items · latest ${NEWS[0].d}: <b>${NEWS[0].t}</b>`:'No news on the board yet');
   // DPR
   {const cj=DPR.rows.filter(r=>/^CJ/.test(r.loc)&&r.bal>0&&r.l24>0);const vv=r=>V.filter(x=>x.n===r.n).sort((a,z)=>z.T-a.T)[0];const full=r=>{const v=vv(r),v0=V.filter(x=>x.n===r.n).sort((a,z)=>a.F-z.F)[0];return v&&v.T>NOW&&!(v0.F>h(DPR.asOf)-24);};const early=cj.filter(r=>{const v=vv(r);const e=dprEtc(r);return full(r)&&e&&(e-(v.listT||v.T))/24<-0.5;}).map(r=>r.n);const late=cj.filter(r=>{const v=vv(r);const e=dprEtc(r);return full(r)&&e&&(e-(v.listT||v.T))/24>0.5;}).map(r=>r.n);
    setSum('dpr',`DPR <b>${DPR.d}</b> · dry cargo jetties <b>${nf.format(DPR.tot.dry)} MT</b> in 24 h · port ${nf.format(DPR.tot.all)} MT${early.length?' · finishing before list ETC: <b>'+early.join(', ')+'</b>':''}${late.length?' · slower than list ETC: '+late.join(', '):''}`);}
