@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DPA Berth Board · 3 Nov 2026 (signals)</title></head><body><title>DPA Berth Board</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DPA Berth Board · 3 Nov 2026 (line-up)</title></head><body><title>DPA Berth Board</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -307,6 +307,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 .stt{display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:0 5px;border-radius:3px;border:1px solid currentColor;margin-top:3px}.stt.ok{color:var(--ok)}.stt.bad{color:var(--bad)}.stt.dim{color:var(--dim)}.stt.warn{color:var(--warn)}.stt.ref{color:var(--brass2)}
 .ntt a.pdf{display:inline-block;font-family:var(--f-mono);font-size:11px;color:var(--brass);border:1px solid var(--brass2);border-radius:4px;padding:3px 8px;text-decoration:none;white-space:nowrap}.ntt a.pdf small{display:block;color:var(--muted);font-size:9.5px}.ntt a.pdf:hover{background:rgba(92,200,255,.1)}
 .tmap{display:block;width:100%;max-width:760px;height:auto;margin:0 auto}
+#lplan{max-width:none}@media (max-width:640px){#lplan{min-width:900px}}
 .lqt td.w{white-space:normal}.lqt tr.sub td{background:var(--panel2);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:5px 8px}.lqt .st{font-family:var(--f-mono);font-size:10.5px;color:var(--ok)}.lqt .st.off{color:var(--muted)}
 .lqt .rk{display:inline-block;min-width:22px;text-align:center;font-family:var(--f-mono);font-size:10.5px;border:1px solid var(--line2);border-radius:3px;padding:0 4px;color:var(--brass);margin-right:6px}
 .ntt td.w{white-space:normal}.ntt td.w small{display:block;margin-top:2px}
@@ -494,8 +495,20 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="note"><b>Allotment pattern (berthing policy, liquid appendix):</b> OJ-1 LPG carriers by inter-se seniority — and since 16.03.2026 every LPG vessel has priority berthing (MoPSW direction); OJ-1 to OJ-4 all compatible cargo by seniority (at most two edible-oil tankers at a time); OJ-5 IFFCO (ammonia / phosphoric acid) — a non-IFFCO vessel working there is shifted out at port convenience when an IFFCO tanker needs the jetty (circular 1646 dt 05.03.2026, valid to 31.03.2027); OJ-6 IOCL / BPCL (POL); OJ-7 the senior-most edible / vegetable-oil tanker. Norms printed in the list (MTPH): edible oil 275 / 415 / 525 / 650 and chemicals 225 / 360 / 475 / 550 by parcel size (≤ 5,250 / ≤ 10,500 / ≤ 21,000 / above — corrigendum 2394 dt 09.07.2026), export cargo 250, LPG 380 butane / 500 propane / 775 both. See the circulars library on the Cargo tab for the PDFs.</div>
     <div class="note">The board has no berthing rules for liquid cargo, so nothing here is projected: occupancy is the DPA list plus the Harbour Master's signals, and the queue is shown exactly as the list prints it — the letter after the rank is the list's own category (<b>E</b> edible oils such as CDSBO / CPO, <b>C</b> chemicals, <b>O</b> POL such as HSD / MS / VLSFO); "REQ OJ 2, 3, 4" is the agent's berth requirement from the list remarks. IFFCO's ammonia and phosphoric-acid vessels appear under OJ in the list. "Made fast" times derived from an "o/c" (on completion) signal are estimates until a list prints them. The jetty map is a schematic row in OJ order, not the geographic layout.</div>
   </section>
+  <section class="card" aria-labelledby="lph">
+    <div class="sechead"><h2 id="lph">Kandla tanker line-up · jetty plan OJ-1 to OJ-7</h2><p id="lpsub"></p></div>
+    <div class="stats" id="lpstats" aria-label="Berthing delays"></div>
+    <div class="scroll"><svg class="tmap" id="lplan" role="img" aria-label="Tanker line-up by jetty and day"></svg></div>
+    <div class="striplabel" id="lpleg" style="margin-top:4px"></div>
+    <div class="scroll"><table class="mpt lqt" id="lptbl"></table></div>
+    <div class="note" id="lpnotes"></div>
+  </section>
+  <section class="card" aria-labelledby="oph">
+    <div class="sechead"><h2 id="oph">Other ports · tanker positions (West &amp; East coast)</h2><p id="opsub"></p></div>
+    <div class="scroll"><table class="mpt lqt" id="optbl"></table></div>
+  </section>
   </div><!-- /view liquid -->
-  <footer><span id="updf"></span> · DPA berthing list 03.11.26 (0700 + revised pm, from Mihir) · HM signals to 3 Nov night (disp 1610, amended 2020 / 2200; 2 Nov day/night/liquid and 3 Nov day/liquid sheets from Mihir, 20:15) · movement programmes TF/SH/2102 for 31.10, 01.11, 02.11, 03.11 and 04.11 (received 3 Nov 19:11) · timber desk position report 02.11 (updated to 03.11 1800) · Tuna (TT) and oil-jetty (OJ) status from the same list and signals · DPA trade notices 1695–1698 dt 28.10.2026 (KPSAA mail 29.10) · DC circular MR/SH/1120/2026.</footer>
+  <footer><span id="updf"></span> · DPA berthing list 03.11.26 (0700 + revised pm, from Mihir) · HM signals to 3 Nov night (disp 1610, amended 2020 / 2200; 2 Nov day/night/liquid and 3 Nov day/liquid sheets from Mihir, 20:15) · movement programmes TF/SH/2102 for 31.10, 01.11, 02.11, 03.11 and 04.11 (received 3 Nov 19:11) · timber desk position report 02.11 (updated to 03.11 1800) · Tuna (TT) and oil-jetty (OJ) status from the same list and signals · Kandla tanker line-up 03.11 and West / East coast port positions 02.11 (Mihir & Co liquid desk) · DPA trade notices 1695–1698 dt 28.10.2026 (KPSAA mail 29.10) · DC circular MR/SH/1120/2026.</footer>
 </div>
 
 <script>
@@ -524,8 +537,8 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='3 Nov 2026 · 22:10 IST';
-const BOARD_SRC='list 03.11 (0700 + revised pm) · programme 04.11 · HM signals to 3 Nov night (disp 1610 → 2200) · timber position 03.11 1800';
+const UPDATED='3 Nov 2026 · 23:05 IST';
+const BOARD_SRC='list 03.11 (0700 + revised pm) · programme 04.11 · HM signals to 3 Nov night (disp 1610 → 2200) · timber 03.11 1800 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
 /*@@TLDATA@@*/
@@ -608,9 +621,64 @@ const LIQ={src:'DPA berthing list 03.11.26 (0700 + revised pm) · programme for 
  moves:[
   ['Liquid signal · 3 Nov (disp 1340) + night signal amendment (disp 2200), Capt Pathak',[['16:45','SHIFT','Dank Silver','OJ-1 → OJ-3','Sud + Nikhil','11-03 16:45','agent\'s a/c (revised list) · made fast ~18:00 est'],['17:15','OUT','No. 6 Ocean Pioneer','OJ-3 → OTB','Deepak','11-03 17:15','revised list ETC was 4 Nov 00:37'],['o/c','IN','Manitoba (LPG/C)','OTB → OJ-1','Deepak','11-03 19:00','flood · LPG priority · made fast ~19:00 est'],['07:00','OUT','Avyaan','OJ-4 → OTB','Goel ②','11-04 07:00','RT · night signal amendment 2200 · programme 07:00'],['07:15','IN','Ocean Pioneer','OTB → OJ-4','Sandeep','11-04 09:00','night signal amendment 2200 · 1C · made fast ~09:00 est']]],
   ['Day signal · 3 Nov (disp 2155 on 2 Nov → re-issued 0900, Capt Pathak) — oil-jetty rows',[['06:00','IN','Shanaya','OTB → OJ-6','Sud','11-03 06:00','HSD & MS · 1O · made fast ~08:30 est (after Kestrel)'],['07:15','OUT','Kestrel','OJ-6 → OTB','Omesh','11-03 07:15','the 04:15 night sailing was postponed (delay in cargo ops)'],['13:00','OUT','Hatnyanawati','OJ-2 → OTB','Pankaj','11-03 13:00','RT · list ETC was 21:48'],['o/c','IN','XT Prosperity','OTB → OJ-2','Pankaj','11-03 15:00','chemicals · norm 225 · made fast ~15:00 est']]],
-  ['Programme for 4 Nov (berthing meeting 3 Nov) + revised list 03.11 — oil jetties',[['00:37','OUT','No. 6 Ocean Pioneer','OJ-3 → sea','—','11-04 00:37','bracketed in the revised list · ETC 00:37'],['o/c','SHIFT','Dank Silver','OJ-1 → OJ-3','—','11-04 01:30','agent\'s a/c (revised list) · ~01:30 est'],['o/c','IN','Manitoba (LPG/C)','OTB → OJ-1','—','11-04 02:30','B\'TODAY (revised list) · propane & butane · ~02:30 est'],['07:00','OUT','Avyaan','OJ-4 → sea','—','11-04 07:00','programme · draft 8 m'],['o/c','IN','Ocean Pioneer','OTB → OJ-4','—','11-04 09:00','programme · 1C'],['17:00','OUT','XT Prosperity','OJ-2 → sea','—','11-04 17:00','programme · draft 6.5 m'],['o/c','IN','Farsana','OTB → OJ-2','—','11-04 19:00','programme · 2C'],['17:30','OUT','Dank Silver','OJ-3 → sea','—','11-04 17:30','programme · draft 8 m'],['o/c','IN','Lujain','OTB → OJ-3','—','11-04 19:30','programme · 1E · REQ OJ 3, 7']]]
+  ['Programme for 4 Nov (berthing meeting 3 Nov) — oil jetties (moves already signalled are under the signals above)',[['07:00','OUT','Avyaan','OJ-4 → sea','—','11-04 07:00','programme · draft 8 m'],['o/c','IN','Ocean Pioneer','OTB → OJ-4','—','11-04 09:00','programme · 1C'],['17:00','OUT','XT Prosperity','OJ-2 → sea','—','11-04 17:00','programme · draft 6.5 m'],['o/c','IN','Farsana','OTB → OJ-2','—','11-04 19:00','programme · 2C'],['17:30','OUT','Dank Silver','OJ-3 → sea','—','11-04 17:30','programme · draft 8 m'],['o/c','IN','Lujain','OTB → OJ-3','—','11-04 19:30','programme · 1E · REQ OJ 3, 7']]]
  ]};
 /*@@/TLDATA@@*/
+// ---- Kandla Tanker Line-up (Mihir & Co liquid desk, daily PDF to liquid clients): per-jetty ETB/ETD plan by seniority, berthing delays, tides.
+// A plan, not a projection of the board: "subject to timely completion / sailing of the presently working vessel; berthing / un-berthing on favourable tide only".
+const LINEUP={d:'03.11.2026',asOf:'11-03 09:00',src:'Kandla Tanker Line-up as on 03.11.2026 (Mihir & Co liquid desk)',file:'liq/2026-11-03_kandla-tanker-lineup.pdf',
+ delay:[['Edible tankers · arrived / arriving today–tomorrow, ullage ready','06–07 days'],['Edible tankers · expected','06–07 days'],['Chemical tankers · arrived / arriving today–tomorrow, ullage ready','05–06 days'],['Chemical tankers · expected','04–05 days']],
+ tides:[['3 Nov',[['03:09','LW'],['09:35','HW'],['16:24','LW'],['22:19','HW']]],['4 Nov',[['04:32','LW'],['10:40','HW'],['17:33','LW'],['23:38','HW']]],['5 Nov',[['05:48','LW'],['11:39','HW'],['18:32','LW']]]],
+ notes:['ETB / ETD are subject to timely completion and sailing of the presently working vessel.','Berthing / un-berthing is carried out during favourable tide only.','Night movements are decided by the port on seniority / priority of both dry and liquid cargo vessels.','The line-up is prepared on seniority and the declarations made in the port meeting, assuming readiness on arrival as per policy.','OJ-7 is allotted to edible / veg-oil tankers on seniority, subject to acceptance of the receivers / their terminals.'],
+ rows:[
+ {sec:'work',n:'Manitoba (LPG/C)',arr:'11-02 09:30',ie:'IMP',c:'Propane / butane',q:21768,nm:775,rdy:'',plan:[{oj:'OJ-1',etb:'11-03',etd:'11-05'}],rem:''},
+ {sec:'work',n:'XT Prosperity',arr:'10-29 08:30',ie:'IMP',c:'Chemicals',q:4919,nm:225,rdy:'',plan:[{oj:'OJ-2',etb:'11-03',etd:'11-04',etdT:'17:00'}],rem:''},
+ {sec:'work',n:'Dank Silver',arr:'10-26 03:36',ie:'IMP',c:'CDSBO',q:19900,nm:450,rdy:'',plan:[{oj:'OJ-1',etb:'11-02',etd:'11-03',etdT:'16:30'},{oj:'OJ-3',etb:'11-03',etd:'11-04',etdT:'17:30'}],rem:'SHIFTING FROM OJ-1 TO OJ-3'},
+ {sec:'work',n:'Avyaan',arr:'10-28 06:18',ie:'IMP',c:'HSD',q:35000,nm:550,rdy:'',plan:[{oj:'OJ-4',etb:'11-01',etd:'11-04',etdT:'07:00'}],rem:''},
+ {sec:'work',n:'Gas Ammon (LPG/C)',arr:'11-02 13:00',ie:'IMP',c:'Ammonia',q:23030,nm:550,rdy:'',plan:[{oj:'OJ-5',etb:'11-02',etd:'11-04'}],rem:''},
+ {sec:'work',n:'Shanaya',arr:'10-29 16:24',ie:'IMP',c:'HSD + MS',q:23000,nm:550,rdy:'',plan:[{oj:'OJ-6',etb:'11-03',etd:'11-05'}],rem:''},
+ {sec:'work',n:'Torm Supreme',arr:'10-26 09:36',ie:'IMP',c:'CDSBO',q:41000,nm:650,rdy:'',plan:[{oj:'OJ-7',etb:'11-02',etd:'11-05'}],rem:''},
+ {sec:'wait',n:'Lujain',arr:'10-26 17:06',ie:'IMP',c:'CDSBO',q:18000,nm:525,rdy:'ready 10-29 11:00',plan:[{oj:'OJ-3',etb:'11-04',etd:'11-06'}],rem:'REQ OJ-3/7'},
+ {sec:'wait',n:'Caribbean 1',arr:'10-28 13:10',ie:'IMP',c:'CPO',q:18150,nm:525,rdy:'on arrival',plan:[{oj:'OJ-1',etb:'11-05',etd:'11-07'}],rem:'REQ OJ-1/3/7'},
+ {sec:'wait',n:'Ocean Pioneer',arr:'10-29 12:00',ie:'IMP',c:'Chemicals',q:4401,nm:225,rdy:'on arrival',plan:[{oj:'OJ-4',etb:'11-04',etd:'11-05'}],rem:'REQ OJ-2/3/4'},
+ {sec:'wait',n:'Fortune Glory',arr:'10-29 15:00',ie:'IMP',c:'CPO',q:34001,nm:650,rdy:'ready 11-01 11:00',plan:[{oj:'OJ-1',etb:'11-07',etd:'11-08'},{oj:'OJ-7',etb:'11-05',etd:'11-07',shift:1}],rem:'REQ OJ-3/7'},
+ {sec:'wait',n:'Farsana',arr:'10-29 21:48',ie:'IMP',c:'Chemicals',q:6069,nm:360,rdy:'ready 10-30 11:00',plan:[{oj:'OJ-2',etb:'11-04',etd:'11-05'}],rem:'REQ OJ-2/3/4'},
+ {sec:'wait',n:'Fareeda 5',arr:'10-30 10:24',ie:'EXP',c:'Chemicals',q:2934,nm:250,rdy:'on arrival',plan:[{oj:'OJ-4',etb:'11-05',etd:'11-06'}],rem:'REQ OJ-2/3/4'},
+ {sec:'wait',n:'Saehan Kostar',arr:'10-30 16:45',ie:'IMP',c:'Chemicals',q:8090,nm:360,rdy:'on arrival',plan:[{oj:'OJ-2',etb:'11-05',etd:'11-06'}],rem:'REQ OJ-2/3/4'},
+ {sec:'wait',n:'Malbec Heritage',arr:'10-30 21:12',ie:'IMP',c:'Chemicals',q:20758,nm:550,rdy:'on arrival',plan:[{oj:'OJ-3',etb:'11-06',etd:'11-08'}],rem:'REQ OJ-2/3/4'},
+ {sec:'wait',n:'Begonia',arr:'11-01 00:12',ie:'IMP',c:'CDSBO',q:9710,nm:415,rdy:'not ready',plan:[{oj:'OJ-7',etb:'11-07',etd:'11-08'}],rem:'REQ OJ-3/7'},
+ {sec:'wait',n:'SC Larimar',arr:'11-01 02:18',ie:'IMP',c:'Chemicals',q:8453,nm:360,rdy:'on arrival',plan:[{oj:'OJ-4',etb:'11-06',etd:'11-07'}],rem:'REQ OJ-2/3/4'},
+ {sec:'wait',n:'Bow Neptune',arr:'11-01 05:30',ie:'IMP',c:'Chemicals',q:2850,nm:225,rdy:'on arrival',plan:[{oj:'OJ-2',etb:'11-06',etd:'11-07'}],rem:'REQ OJ-2/3/4'},
+ {sec:'wait',n:'Seychelles Pioneer',arr:'11-01 15:00',ie:'IMP',c:'CPO',q:35000,nm:650,rdy:'not ready',plan:[{oj:'OJ-1',etb:'11-09',etd:'11-11'},{oj:'OJ-7',etb:'11-08',etd:'11-09',shift:1}],rem:'REQ OJ-7'},
+ {sec:'wait',n:'Songa Neptune',arr:'11-01 21:24',ie:'EXP',c:'Chemicals',q:5700,nm:250,rdy:'on arrival',plan:[{oj:'OJ-2',etb:'11-07',etd:'11-08'}],rem:'REQ OJ-2/3'},
+ {sec:'wait',n:'Chemroad Zenith',arr:'11-02 15:30',ie:'IMP',c:'Chemicals',q:4539,nm:225,rdy:'on arrival',plan:[{oj:'OJ-4',etb:'11-07',etd:'11-08'}],rem:'REQ OJ-2/3/4'},
+ {sec:'wait',n:'Marigold',arr:'11-02 18:30',ie:'IMP',c:'Chemicals',q:4855,nm:225,rdy:'on arrival',plan:[{oj:'OJ-3',etb:'11-08',etd:'11-09'}],rem:'REQ OJ-2/3/4'},
+ {sec:'wait',n:'Jag Pushpa',arr:'11-02 21:36',ie:'IMP',c:'CDSBO',q:44252,nm:650,rdy:'not ready',plan:[{oj:'OJ-1',etb:'11-11',etd:'11-12'},{oj:'OJ-7',etb:'11-09',etd:'11-11',shift:1}],rem:'REQ OJ-7'},
+ {sec:'wait',n:'Searay',arr:'11-02 23:12',ie:'IMP',c:'CPO',q:30000,nm:650,rdy:'not ready',plan:[{oj:'OJ-1',etb:'11-12',etd:'11-13'},{oj:'OJ-7',etb:'11-11',etd:'11-12',shift:1}],rem:'REQ OJ-7'},
+ {sec:'wait',n:'JKT Miracle',arr:'11-03 01:54',ie:'IMP',c:'Chemicals',q:15550,nm:475,rdy:'not ready',plan:[{oj:'OJ-2',etb:'11-08',etd:'11-10'}],rem:'REQ OJ-2/3/4'},
+ {sec:'wait',n:'Atlantic Guard',arr:'11-03 08:00',ie:'IMP',c:'Naphtha',q:14964,nm:550,rdy:'not ready',plan:[{oj:'OJ-6',etb:'11-05',etd:'11-06'}],rem:'REQ OJ-6'},
+ {sec:'wait',n:'Bow Caroline',arr:'11-03 08:00',ie:'IMP',c:'Chemicals',q:10000,nm:360,rdy:'ready 11-03 11:00',plan:[{oj:'OJ-4',etb:'11-08',etd:'11-09'}],rem:'REQ OJ-2/3/4'},
+ {sec:'eta',n:'Western Bergenia',arr:'11-04 05:00',ie:'EXP',c:'Chemicals',q:5000,nm:250,rdy:'on arrival',plan:[{oj:'OJ-3',etb:'11-09',etd:'11-10'}],rem:'REQ OJ-2/3/4'},
+ {sec:'eta',n:'Sky Dream',arr:'11-04 19:00',ie:'IMP',c:'Chemicals',q:5000,nm:225,rdy:'not ready',plan:[{oj:'OJ-4',etb:'11-09',etd:'11-10'}],rem:'REQ OJ-2/3/4'},
+ {sec:'eta',n:'Pacific Era',arr:'11-05 AM',ie:'IMP',c:'CPO',q:15004,nm:525,rdy:'not ready',plan:[{oj:'OJ-3',etb:'11-11',etd:'11-12'}],rem:'REQ OJ-3/7'},
+ {sec:'eta',n:'SY Forward',arr:'11-05 10:00',ie:'IMP',c:'Phosphoric acid',q:25000,nm:550,rdy:'not ready',plan:[{oj:'OJ-5',etb:'11-05',etd:'11-07'}],rem:'REQ OJ-5'},
+ {sec:'eta',n:'DM Jade',arr:'11-05 14:30',ie:'IMP',c:'Chemicals',q:5000,nm:225,rdy:'not ready',plan:[{oj:'OJ-2',etb:'11-10',etd:'11-11'}],rem:'REQ OJ-2/3/4'},
+ {sec:'eta',n:'Bow Gemini',arr:'11-05 PM',ie:'IMP',c:'Chemicals',q:5000,nm:225,rdy:'not ready',plan:[{oj:'OJ-4',etb:'11-10',etd:'11-11'}],rem:'REQ OJ-2/3/4'},
+ {sec:'eta',n:'SC Amber',arr:'11-06',ie:'IMP',c:'Chemicals',q:5000,nm:225,rdy:'not ready',plan:[{oj:'OJ-3',etb:'11-10',etd:'11-11'}],rem:'REQ OJ-2/3/4'},
+ {sec:'eta',n:'Artigo',arr:'11-07 PM',ie:'IMP',c:'CPO',q:24000,nm:650,rdy:'not ready',plan:[{oj:'OJ-1',etb:'11-13',etd:'11-14'},{oj:'OJ-7',etb:'11-12',etd:'11-13',shift:1}],rem:'REQ OJ-3/7'},
+ {sec:'eta',n:'No. 2 Ocean Pioneer',arr:'11-07',ie:'IMP',c:'Chemicals',q:15352,nm:475,rdy:'not ready',plan:[],rem:'REQ OJ-2/3/4'},
+ {sec:'eta',n:'DM Bea',arr:'11-08 14:30',ie:'IMP',c:'Chemicals',q:5000,nm:225,rdy:'not ready',plan:[{oj:'OJ-2',etb:'11-11',etd:'11-12'}],rem:'REQ OJ-2/3/4'},
+ {sec:'eta',n:'Ginga Cheetah',arr:'11-08',ie:'IMP',c:'CDSBO + CDSFO',q:24270,nm:650,rdy:'not ready',plan:[{oj:'OJ-3',etb:'11-12',etd:'11-14'}],rem:'REQ OJ-3/7'},
+ {sec:'eta',n:'Silver Gertrude',arr:'11-08',ie:'IMP',c:'CDSBO',q:22500,nm:650,rdy:'not ready',plan:[{oj:'OJ-7',etb:'11-13',etd:'11-15'}],rem:'REQ OJ-7'},
+ {sec:'eta',n:'Zao Galaxy',arr:'11-08 PM',ie:'IMP',c:'Chemicals',q:5000,nm:225,rdy:'not ready',plan:[{oj:'OJ-4',etb:'11-11',etd:'11-12'}],rem:'REQ OJ-2/3/4'},
+ {sec:'eta',n:'Lumis',arr:'11-11',ie:'IMP',c:'CPO + PFAD',q:20000,nm:650,rdy:'not ready',plan:[{oj:'OJ-7',etb:'11-15',etd:'11-17'}],rem:'REQ OJ-7'},
+ {sec:'eta',n:'Jeil Crystal',arr:'11-12 14:30',ie:'IMP',c:'Chemicals',q:5000,nm:225,rdy:'not ready',plan:[{oj:'OJ-2',etb:'11-12',etd:'11-13'}],rem:'REQ OJ-2/3/4'}
+]};
+// ---- Other ports (same desk's daily West / East coast port positions): index to the PDFs served beside the page. Formats differ port to port, so no parsing — open the page.
+const PORTS=[
+ {coast:'West coast',d:'02.11.2026',file:'liq/2026-11-02_west-coast-port-position.pdf',ports:[['Mangalore','02.11.2026',1],['Mumbai','02.11.2026',3,'FCB / SCB / TCB chemical berths: berthing delay 00–01 day'],['JNPT','02.11.2026',5],['Kandla','02.11.2026',6,'edible arrived 06–07 d · edible expected 07–08 d · chemical arrived 05–06 d · chemical expected 04–05 d (the 03.11 line-up is on this page)'],['Mundra','02.11.2026',8],['Sikka','02.11.2026',9],['Sikka (GSFC)','02.11.2026',10],['Pipavav','02.11.2026',11],['Cochin','02.11.2026',12],['Goa','02.11.2026',14]]},
+ {coast:'East coast',d:'02.11.2026 / 31.10.2026',file:'liq/2026-11-02_east-coast-port-position.pdf',ports:[['Ennore','02.11.2026',1],['Chennai','31.10.2026',2],['Krishnapatnam','31.10.2026',3],['Kattupalli','31.10.2026',4],['Haldia (HOJ)','31.10.2026 (sheet prints 1.10.2026)',5],['Haldia (inside dock)','31.10.2026',6],['Paradip','31.10.2026',7],['Kakinada','31.10.2026',8],['Vizag','31.10.2026',9],['Budge Budge','31.10.2026',10],['Gangavaram','31.10.2026',11],['Tuticorin','31.10.2026',12]]}
+];
 const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'2 Nov 1200',upto:'3 Nov 1800, after the berthing meeting',rows:[
  {n:'AC Kathryn',cbm:29066,from:'Australia',c:'Pine logs',arr:'10-09 17:00',b:'10-25 06:36',pri:'SAAGAR',st:'berth',note:'team sheet still carries her under "working at berth" ("will sail 01.11 around 1400") — she shifted to OTB 1 Nov 10:00 (day signal) and is on the Tuna ETA sheet for RSM, ETA 4 Nov'},
  {n:'Centurion Buyo',cbm:29852,from:'Australia',c:'Pine logs',arr:'10-20 06:24',b:'10-30 01:45',pri:'SAAGAR',st:'berth',note:'sails tonight 23:15 (night signal 3 Nov)'},
@@ -952,6 +1020,60 @@ function liquid(){
   const em=document.getElementById('liqmoves'); if(em&&LIQ.moves)em.innerHTML=LIQ.moves.map(([g,rows])=>`<div class="eyebrow" style="margin:6px 0 2px">${g}</div><table class="mv"><tbody>${rows.map(r=>{const tm=r[5]?h(r[5]):null;const st=tm!=null&&tm<=NOW?'<span class="st st-done">done</span>':'<span class="st st-sch">scheduled</span>';const ty=r[1]==='IN'?'t-in':r[1]==='OUT'?'t-out':'t-shift';return `<tr><td class="tm">${r[0]}</td><td><span class="ty ${ty}">${r[1]}</span></td><td class="vn"><b>${r[2]}</b><small>${r[3]}${r[4]&&r[4]!=='—'?' · Capt '+r[4]:''}${r[6]?' · '+r[6]:''}</small></td><td>${st}</td></tr>`;}).join('')}</tbody></table>`).join('');
 }
 /*@@/TLCODE@@*/
+
+// ---- Kandla tanker line-up: jetty-wise plan (Gantt) + table + delays + tides. Day granularity as the sheet gives it; a working vessel's bar starts at the board's made-fast time.
+const lqClass=c=>/LPG|PROPANE|BUTANE/i.test(c)?'LPG':/AMMONIA|PHOS/i.test(c)?'IFFCO':/CDSBO|CPO|PFAD|CDSFO|PALM|SOYA|SUNFLOWER|VEG|EDIBLE/i.test(c)?'E':/CHEM|ACID|METHANOL|STYRENE/i.test(c)?'C':/HSD|\bMS\b|VLSFO|NAPHTHA|ATF|POL|CRUDE|\bFO\b/i.test(c)?'O':'Z';
+const LQC={E:['var(--brass)','Edible oils'],C:['var(--box)','Chemicals'],O:['var(--dry)','POL'],LPG:['var(--ok)','LPG'],IFFCO:['var(--brk)','IFFCO (ammonia / phos acid)'],Z:['var(--muted)','other']};
+function lineup(){
+  const svg=document.getElementById('lplan'), tb=document.getElementById('lptbl'), sub=document.getElementById('lpsub'), st=document.getElementById('lpstats'), leg=document.getElementById('lpleg'), nt=document.getElementById('lpnotes');
+  if(!svg||typeof LINEUP==='undefined')return;
+  const R=LINEUP.rows; const SEC={work:'Working',wait:'Waiting',eta:'Expected'};
+  sub.innerHTML=`<b>${LINEUP.src}</b> — the liquid desk's daily sheet to our tanker clients: for every tanker the jetty it is lined up for and its ETB / ETD, by seniority as declared at the port meeting. A <b>plan</b>, not a board projection: it assumes the working vessel completes on time and moves happen on the favourable tide. <a class="pdf" href="${LINEUP.file}" target="_blank" rel="noopener">open the sheet<small>PDF</small></a>`;
+  st.innerHTML=tileHtml(LINEUP.delay.map(([l,v],i)=>[i<2?'var(--brass)':'var(--box)',v.replace(' days','<small> days</small>'),'<b>Berthing delay</b> · '+l]));
+  // bars
+  const bars=[];
+  R.forEach(r=>r.plan.forEach(p=>{const b=LIQ.berths.find(x=>x.b===p.oj);const now=b&&b.now&&b.now.n===r.n;
+    let a=p.etb?h(p.etb+' 12:00'):null, z=p.etd?h(p.etd+(p.etdT?' '+p.etdT:' 12:00')):null; // sheet gives days: a bare ETB / ETD is drawn from / to midday
+    if(now&&b.now.f)a=h(b.now.f); if(a==null||z==null||z<=a)return;
+    bars.push({r,p,a,z,now,cls:lqClass(r.c)});}));
+  const T0=h('11-03 00:00'), days=15, dayW=60, x0=58, rowH=40, top=30;
+  const W=x0+days*dayW+8, H=top+7*rowH+10;
+  svg.innerHTML='';svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const X=t=>x0+(t-T0)/24*dayW;
+  for(let d=0;d<days;d++){const t=T0+d*24;const x=X(t);
+    el2('rect',{x,y:top-2,width:dayW,height:7*rowH+2,fill:d%2?'rgba(255,255,255,.025)':'none'},svg);
+    el2('text',{x:x+dayW/2,y:12,'text-anchor':'middle','font-family':FM,'font-size':9.5,fill:'var(--muted)'},svg,fday(t).slice(0,3));
+    el2('text',{x:x+dayW/2,y:24,'text-anchor':'middle','font-family':FM,'font-size':10.5,'font-weight':700,fill:'var(--fg)'},svg,String(parseInt(fday(t).slice(4))));}
+  ['OJ-1','OJ-2','OJ-3','OJ-4','OJ-5','OJ-6','OJ-7'].forEach((oj,i)=>{const y=top+i*rowH;
+    el2('line',{x1:x0,y1:y+rowH,x2:W-8,y2:y+rowH,stroke:'var(--line2)','stroke-width':.6},svg);
+    el2('text',{x:8,y:y+rowH/2+4,'font-family':FM,'font-size':11,fill:'var(--brass)','letter-spacing':'.06em'},svg,oj);
+    bars.filter(b=>b.p.oj===oj).sort((a,z)=>a.a-z.a).forEach(b=>{const xa=Math.max(X(b.a),x0),xz=Math.min(X(b.z),W-8);if(xz-xa<2)return;
+      const col=LQC[b.cls][0];const g=el2('g',{},svg);
+      el2('rect',{x:xa,y:y+6,width:xz-xa,height:rowH-12,rx:4,fill:col,'fill-opacity':b.now?.85:(b.r.sec==='eta'?.22:.4),stroke:col,'stroke-width':b.now?0:1.1,'stroke-dasharray':b.r.sec==='eta'?'4 3':'none'},g);
+      if(b.p.shift)el2('path',{d:`M${xz-1} ${y+rowH/2-6} l6 6 l-6 6`,fill:'none',stroke:col,'stroke-width':1.6},g);
+      const lbl=fit(b.r.n.toUpperCase(),xz-xa-6,6.3); if(lbl&&lbl.length>2)el2('text',{x:xa+4,y:y+rowH/2+4,'font-family':FM,'font-size':10,'font-weight':700,fill:b.now?'#0e141b':'var(--fg)'},g,lbl);
+      el2('title',{},g,`${b.r.n} · ${b.r.c} ${b.r.q?nf.format(b.r.q)+' T':''} · ${oj} ETB ${fday(h(b.p.etb+' 00:00'))}${b.p.etd?' → ETD '+fday(h(b.p.etd+' 00:00'))+(b.p.etdT?' '+b.p.etdT:'')+(b.p.shift?' (shifting)':''):''}${b.now?' · alongside now':''}`);});});
+  const xn=X(NOW); if(xn>x0&&xn<W-8){el2('line',{x1:xn,y1:top-2,x2:xn,y2:H-10,stroke:'var(--warn)','stroke-width':1.2,'stroke-dasharray':'3 3'},svg);el2('text',{x:xn+3,y:H-2,'font-family':FM,'font-size':9,fill:'var(--warn)'},svg,'now '+fmt(NOW,false));}
+  leg.innerHTML='Solid = alongside now (bar starts at the board\'s made-fast time) · outlined = waiting, lined up · dashed = expected, not yet reported · ▸ = shifts to another jetty · '+Object.entries(LQC).filter(([k])=>k!=='Z').map(([k,[c,l]])=>`<span class="cc" style="--sc:${c};display:inline-flex;margin:2px 6px 0 0"><b style="background:${c};width:10px;height:10px;border-radius:2px;display:inline-block"></b><span>${l}</span></span>`).join('');
+  // table
+  const inList=n=>{const b=LIQ.berths.find(x=>x.now&&x.now.n===n);if(b)return 'at '+b.b+' since '+fmt(h(b.now.f))+(b.now.est?' (est)':'');const w=LIQ.wait.find(x=>x.n===n);if(w)return w.rank?'list rank <span class="rk">'+w.rank+'</span>':'on the list, no letter';const e=LIQ.eta.find(x=>x.n===n);if(e)return 'ETA sheet';return '<span style="color:var(--warn)">not on the DPA list</span>';};
+  const arrTxt=a=>{const m=(a||'').match(/^(\d\d-\d\d)(?: (.*))?$/);if(!m)return a;return fday(h(m[1]+' 00:00')).slice(4)+(m[2]?' '+m[2]:'');};
+  const planTxt=r=>r.plan.length?r.plan.slice().sort((a,z)=>h((a.etb||'11-30')+' 00:00')-h((z.etb||'11-30')+' 00:00')).map(p=>`<b>${p.oj}</b> ${p.etb?fday(h(p.etb+' 00:00')).slice(4):'—'} → ${p.etd?fday(h(p.etd+' 00:00')).slice(4)+(p.etdT?' '+p.etdT:''):'—'}${p.shift?' <span style="color:var(--warn)">shifting</span>':''}`).join('<br>'):'<span style="color:var(--muted)">no jetty / date yet</span>';
+  let out='<tr><th style="width:120px">Line-up</th><th>Vessel</th><th>Cargo · norm · readiness</th><th style="width:40%">Jetty plan (ETB → ETD) · requirement</th></tr>',k=0,g0='';
+  R.forEach(r=>{if(r.sec!==g0){out+=`<tr class="sub"><td colspan="4" class="w"><b>${SEC[r.sec]}</b></td></tr>`;g0=r.sec;k=0;}k++;const c=LQC[lqClass(r.c)];
+    out+=`<tr><td class="w"><b><span class="sn">${k}</span><span class="cc" style="--sc:${c[0]}"><b style="background:${c[0]};width:9px;height:9px;border-radius:2px;display:inline-block"></b></span></b><small>${r.sec==='eta'?'ETA':'arrived'} ${arrTxt(r.arr)}</small></td><td class="pk"><b>${r.n}</b><small>${inList(r.n)}</small></td><td class="al">${r.c}${r.q?' · '+nf.format(r.q)+' T':''}${ieTag(r.ie)}<small>norm ${r.nm} MT/h${r.rdy?' · '+r.rdy:''}</small></td><td class="fl">${planTxt(r)}${r.rem?'<br><small>'+r.rem+'</small>':''}</td></tr>`;});
+  tb.innerHTML=out;
+  nt.innerHTML='<b>Tides (sheet):</b> '+LINEUP.tides.map(([d,t])=>`<b>${d}</b> ${t.map(([x,k])=>x+' '+k).join(' · ')}`).join(' &nbsp;|&nbsp; ')+'<br>'+LINEUP.notes.map(n=>'• '+n).join('<br>');
+  // cross-reference on the berth table: next per line-up
+  const tbl=document.getElementById('liqtbl'); if(tbl){const trs=[...tbl.querySelectorAll('tr')].filter(tr=>tr.children.length===4&&!tr.querySelector('th'));
+    LIQ.berths.forEach((b,i)=>{const tr=trs[i];if(!tr)return;const nx=bars.filter(x=>x.p.oj===b.b&&!x.now&&x.z>NOW).sort((a,z)=>a.a-z.a).slice(0,3);
+      if(nx.length)tr.children[3].insertAdjacentHTML('beforeend',`<br><small style="color:var(--brass)">line-up ${LINEUP.d}: ${nx.map(x=>x.r.n+' '+fday(x.a).slice(4)+(x.p.shift?' (then shifts)':'')).join(' → ')}</small>`);});}
+}
+function ports(){
+  const tb=document.getElementById('optbl'), sub=document.getElementById('opsub'); if(!tb||typeof PORTS==='undefined')return;
+  sub.innerHTML='The same desk\'s daily <b>West coast</b> and <b>East coast</b> port positions (working / waiting / expected vessels per port, berthing delays where the port states them). Every port prints its own format, so the board keeps them as pages: tap a port to open its page in the PDF.';
+  tb.innerHTML='<tr><th style="width:120px">Coast</th><th>Port</th><th>Position as on</th><th style="width:40%">Berthing delay / note</th></tr>'+PORTS.map(c=>c.ports.map((p,i)=>`<tr>${i===0?`<td class="w" rowspan="${c.ports.length}"><b>${c.coast}</b><small>sheet of ${c.d}</small><a class="pdf" href="${c.file}" target="_blank" rel="noopener" style="margin-top:6px">open<small>PDF</small></a></td>`:''}<td class="pk"><a href="${c.file}#page=${p[2]}" target="_blank" rel="noopener"><b>${p[0]}</b></a><small>page ${p[2]}</small></td><td class="al">${p[1]}</td><td class="fl">${p[3]||'<span style="color:var(--muted)">no delay figure printed</span>'}</td></tr>`).join('')).join('');
+}
 function timber(){
   const el=document.getElementById('timber'); const sub=document.getElementById('tsub');
   sub.innerHTML=`<span class="tsrc"><span class="tchip"><small>TEAM MESSAGE UPDATED</small><b>${TIMBER.upto}</b><small>report dated ${TIMBER.d}</small></span><span class="tchip"><small>DPR ADDED UP TO</small><b>${DPR.d} · 0700</b><small>port performance report</small></span><span class="tchip"><small>BOARD UPDATED</small><b>${UPDATED}</b><small>${BOARD_SRC}</small></span></span>Timber vessels from the DPA list, plus the ones our timber desk tracks before they reach the list ("<b>Kandla Timber Vessel's Position</b>"). Board = the actual: DPA list made-fast / ETC, programme, signal, or the board's projection; Team ETB = the desk's own estimate; DPR = last 24 h and balance from the port's performance report, with the finish at that rate.`;
@@ -1920,7 +2042,7 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();news();learn();dpr();timber();tuna();liquid();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();news();learn();dpr();timber();tuna();liquid();lineup();ports();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
   summaries();
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }
