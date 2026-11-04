@@ -433,6 +433,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="scroll"><svg class="strip" id="stripA" role="img" aria-label="Quay CJ-1 to CJ-10"></svg></div>
     <div class="striplabel">Panels 110 – 189 · CJ-13 to CJ-16 (CJ-11/12 container berths between, not shown)</div>
     <div class="scroll"><svg class="strip" id="stripB" role="img" aria-label="Quay CJ-13 to CJ-16"></svg></div>
+    <div class="barge" id="runs"></div>
     <div class="barge" id="barge"></div>
     <div class="qdetail" id="qdetail"></div>
     <div class="striplabel">Outside the DPA queue · CJ-9 (PPP) and CJ-10 (maintenance)</div>
@@ -537,7 +538,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='4 Nov 2026 · 11:20 IST';
+const UPDATED='4 Nov 2026 · 11:45 IST';
 const BOARD_SRC='list 04.11 (0700, from Mihir) · programme 04.11 · HM signals to 4 Nov day (disp 1025) · DPR 04.11 · timber 03.11 1800 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -815,7 +816,7 @@ const NOTICES=[
 // Expected-vs-actual log. {d:'date', v:'vessel', exp:'what the board expected', act:'what the port did', why:'reason / hypothesis', fix:'rule change', st:'open'|'adopted'|'ok'}
 // st: open = waiting for Mihir to confirm the reason; adopted = folded into the rules; ok = matched, nothing to learn
 const LEARN=[
- {d:'4 Nov',v:'African Quail · SAAGAR · berthed 4 Nov at 153–161¾ — a day earlier than the board\'s last reading',exp:'Board last night: 5 Nov ~13:00 at CJ-5 (after Tan Binh 267); before that 4 Nov 20:30 at CJ-15 only if the port shifted Outrivaling 3. Team ETB: 4 Nov.',act:'Day signal 4 Nov (disp 0825): African Quail IN o/c → 153–161¾ (Capt Madaan) after Gas Ammon\'s 10:00 sailing; list 04.11: B\'TODAY at "15A" under SAAGAR. Not in the programme for 04.11.',why:'The space was made last night and this morning: the 2200 amendment put Emmanouil at 163–173 (not 161¼–172) and the barge left 153–156¼ at 08:30 — between Outrivaling 3 (…150¾) and Emmanouil (163–) that is 12¼ panels, enough for a 180 m vessel. With Centurion Buyo gone the SAAGAR break-bulk slot was free, and Quail (SGR 1) took it. The board never looked at 150¾–163 as a berth because its slot map has CJ-15 ending at 159½ and Outrivaling 3 occupying "CJ-15" till today 14:16.',fix:'Model gap (noted): on CJ-13–16 a vessel can be berthed into any free run of panels ≥ its LOA, not only into a whole slot; the port moves neighbours by a panel or two to make such a run. Board to compute free panel runs on 13–16 for the SAAGAR / HP taker before falling back to the next whole slot — to code. Question for Mihir: was the berth given at yesterday\'s meeting (after the programme) or decided this morning by Traffic?',st:'open'},
+ {d:'4 Nov',v:'African Quail · SAAGAR · berthed 4 Nov at 153–161¾ — a day earlier than the board\'s last reading',exp:'Board last night: 5 Nov ~13:00 at CJ-5 (after Tan Binh 267); before that 4 Nov 20:30 at CJ-15 only if the port shifted Outrivaling 3. Team ETB: 4 Nov.',act:'Day signal 4 Nov (disp 0825): African Quail IN o/c → 153–161¾ (Capt Madaan) after Gas Ammon\'s 10:00 sailing; list 04.11: B\'TODAY at "15A" under SAAGAR. Not in the programme for 04.11.',why:'The space was made last night and this morning: the 2200 amendment put Emmanouil at 163–173 (not 161¼–172) and the barge left 153–156¼ at 08:30 — between Outrivaling 3 (…150¾) and Emmanouil (163–) that is 12¼ panels, enough for a 180 m vessel. With Centurion Buyo gone the SAAGAR break-bulk slot was free, and Quail (SGR 1) took it. The board never looked at 150¾–163 as a berth because its slot map has CJ-15 ending at 159½ and Outrivaling 3 occupying "CJ-15" till today 14:16.',fix:'Model gap (noted): on CJ-13–16 a vessel can be berthed into any free run of panels ≥ its LOA, not only into a whole slot; the port moves neighbours by a panel or two to make such a run. Mihir (4 Nov 10:52): yes — go by panels. Quail\'s berth was FINAL at the 3 Nov meeting; it was not in the programme only because the space did not exist yet — when the space was made she berthed. And barges have NO priority: a barge gets a space only when one happens to exist and a window is there; otherwise the port takes the berthed barge out and berths the vessel. Board now: (1) a "Free quay runs · CJ-13–16" card that reads the quay panel-wise (barges ignored) and names the ready vessels that fit, in slot order; (2) rule noted that a meeting allotment can exist without a programme line ("allotted, awaiting space"). The projection itself still berths by slot — moving it to panel runs is the next code change.',st:'adopted'},
  {d:'4 Nov',v:'Cervia (CJ-9) · 09:00 sailing postponed · KSL Ruiyang waits',exp:'Night signal amendment 2200: Cervia RT OUT 09:00, KSL Ruiyang in o/c on the flood.',act:'Amendment 0527 (Capt Mittal): Cervia postponed — delay in cargo operation; KSL Ruiyang postponed — berth not vacant. List 04.11: Cervia [9] ETC 11:12 (DPR balance 2,000 MT at 0700), KSL Ruiyang B\'TODAY.',why:'2,000 MT short at 0700; the HM re-times once she completes. Board carries ~13:00 est / KSL ~15:00 est.',fix:'none — PPP berth, outside the queue.',st:'ok'},
  {d:'4 Nov',v:'Nord Newport printed under "SR. NO. 07" (was General) · Safi Alfa 8K 1 · Haj Abdullah T declared',exp:'Board: Nord Newport counted as a General berthing (3 of 3 with Aya, Theometor; Outrivaling 3 sails today).',act:'List 04.11 groups her under Sr No 7 (30k/25k); Safi Alfa gets 8K 1 (rice bags 26,100 MT, working at midstream); Haj Abdullah T declares readiness for today 11:00 as GEN 1 (7,700 MT, needs a 2-shore-crane berth).',why:'A 30,000 MT bulk parcel is a Sr No 7 vessel — the list re-tags her so the General count is not used up; the 8K column takes any vessel at the 8,000 / 6,500 MTPD norm.',fix:'Board keeps her as General alongside (no effect on the count after Outrivaling 3 sails); ranks as printed.',st:'ok'},
  {d:'3 Nov 22:00',v:'Cervia (PPP, CJ-9) · sailing advanced · KSL Ruiyang in by day',exp:'Programme for 04.11: Cervia sails 16:30, KSL Ruiyang (24 HRS) in after her ~18:30.',act:'Night signal amendment (disp 2200): Cervia RT OUT 09:00 (Capt Mittal), KSL Ruiyang IN o/c on the morning flood (Capt Goel) — ~7 h earlier.',why:'Cervia completes ahead of the programme figure (list ETC 4 Nov 11:12); the HM moved the sailing to the morning tide and the next vessel follows on the same flood.',fix:'none — the board carries signal times over programme times; the PPP berth is outside the DPA queue anyway.',st:'ok'},
@@ -1771,6 +1772,31 @@ function bargeGaps(t,FL){
     return {a,z,m,maxLoa,berths,nxt,left,right,tight:maxLoa<70,hrs,firm,projN};
   }).sort((x,y)=>y.hrs-x.hrs);
 }
+// ---- Panel-run view of CJ-13–16 (Mihir, 4 Nov): the port berths a vessel into any free run of panels long enough for her, moving
+// neighbours by a panel or two (Emmanouil 161¼–172 → 163–173 made room for African Quail at 153–161¾). Barges have no priority:
+// they get a space only while nobody needs it and are taken out when a vessel does — so they never count as occupying quay here.
+const RUN_MIN_M=100, RUN_CLEAR_M=5;
+const runFleet=()=>V.filter(v=>CLEAN.includes(v.b)&&v.cat!=='SPACE');
+function quayRuns(t){
+  const FL=runFleet(); const present=FL.filter(v=>v.F<=t&&t<v.T).sort((a,z)=>a.p[0]-z.p[0]);
+  const gaps=[];let cur=110;
+  for(const v of present){const [a,z]=v.p;if(a>cur&&gapM(cur,a)>=RUN_MIN_M)gaps.push([cur,a]);cur=Math.max(cur,z);}
+  if(189>cur&&gapM(cur,189)>=RUN_MIN_M)gaps.push([cur,189]);
+  return gaps.map(([a,z])=>{const m=gapM(a,z);const left=present.filter(v=>Math.abs(v.p[1]-a)<0.01)[0],right=present.filter(v=>Math.abs(v.p[0]-z)<0.01)[0];
+    const nxt=FL.filter(v=>v.F>t&&v.p[0]<z&&v.p[1]>a).sort((x,y)=>x.F-y.F)[0];
+    return {a,z,m,maxLoa:Math.floor(m-RUN_CLEAR_M),left,right,nxt,berths:BERTHS.filter(b=>CLEAN.includes(b.id)&&b.p[0]<z&&b.p[1]>a).map(b=>'CJ-'+b.id)};});
+}
+function runs(){
+  const el=document.getElementById('runs'); if(!el)return;
+  const ORD=CATS.map(c=>c.k);
+  const key=w=>{const ks=Object.keys(w.rk||{}).filter(k=>(w.rk[k]||99)<90).sort((a,b)=>ORD.indexOf(a)-ORD.indexOf(b));return ks.length?[ORD.indexOf(ks[0]),w.rk[ks[0]]]:[99,99];};
+  const fits=(m,t)=>W.filter(w=>w.rdy!=null&&w.rdy<=t&&(w.loa||0)+RUN_CLEAR_M<=m&&allowedBerths(w).some(b=>CLEAN.includes(b))&&!V.some(v=>v.n===w.n&&v.F<=t&&t<v.T)).sort((x,y)=>{const a=key(x),b=key(y);return a[0]-b[0]||a[1]-b[1]||((REP[x.n]?h(REP[x.n]):0)-(REP[y.n]?h(REP[y.n]):0));});
+  const FL=runFleet(); const times=[...new Set([NOW].concat(FL.filter(v=>v.T>NOW&&v.T<=PROG_END+30).map(v=>v.T)).concat(FL.filter(v=>v.F>NOW&&v.F<=PROG_END+30).map(v=>v.F)))].sort((a,b)=>a-b).slice(0,6);
+  const gl=w=>{const k=key(w);return k[0]<99?(CL[ORD[k[0]]]||ORD[k[0]])+' #'+k[1]:'no rank';};
+  const col=t=>{const R=quayRuns(t);const ev=FL.filter(v=>Math.abs(v.T-t)<0.01).map(v=>v.n+' sails').concat(FL.filter(v=>Math.abs(v.F-t)<0.01).map(v=>v.n+' berths'));
+    return `<div class="bgc" style="border-left-color:var(--brass)"><div class="r"><b>${t<=NOW+0.01?'Now · ':''}${fmt(t)}</b><small>${ev.length?ev.join(' · '):'position'}</small></div>${R.length?R.map(x=>{const F=fits(x.m,t);return `<div class="m">Panels <b>${pr([x.a,x.z])}</b> · ${x.berths.join(' / ')} · <b>~${Math.round(x.m)} m</b> → vessel up to ~${x.maxLoa} m<br><small>between ${x.left?x.left.n:'CJ-13 north end'} and ${x.right?x.right.n:'CJ-16 south end'}${x.nxt?' · taken by '+x.nxt.n+' '+fmt(x.nxt.F,false)+' (programme / signal)':''}</small>${F.length?`<br><small>fits, in slot order: ${F.slice(0,4).map(w=>`<b>${w.n}</b> (${w.loa} m, ${gl(w)})`).join(' · ')}${F.length>4?' · +'+(F.length-4)+' more':''}</small>`:'<br><small style="color:var(--muted)">no ready clean-cargo vessel short enough</small>'}</div>`;}).join(''):'<div class="m" style="color:var(--muted)">no free run of '+RUN_MIN_M+' m or more</div>'}</div>`;};
+  el.innerHTML=`<div class="bh"><h3>Free quay runs · CJ-13 to CJ-16 · panel-wise</h3><small>Mihir (4 Nov): on the continuous quay the port berths a vessel wherever a run of free panels is long enough, moving neighbours a panel or two; barges have no priority and are taken out when a vessel needs the space — so they are ignored here. Runs of ≥ ${RUN_MIN_M} m from the list / signal / programme positions (no board projections), now and at each movement up to ${fmt(PROG_END+30)}; "fits" = ready vessels allowed on clean berths, LOA + ${RUN_CLEAR_M} m, in the regulation's slot order.</small></div><div class="bg">${times.map(col).join('')}</div>`;
+}
 const BARGE_MIN_H=4; // gaps shorter than this (a berth swap) are not listed
 const BARGE_SPLIT_H=4; // a narrower remainder is listed separately only if it outlasts the wider space by this much
 // Mihir (1 Nov): the barge window IS the berthing meeting's programme period — today 18:00 → next day 18:00 (24 h). Spaces are
@@ -2045,7 +2071,7 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);if(SHOW_BARGE)barge();notices();news();learn();dpr();timber();tuna();liquid();lineup();ports();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();dpr();timber();tuna();liquid();lineup();ports();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
   summaries();
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }
