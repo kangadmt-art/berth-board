@@ -457,7 +457,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   </div>
 
   <section class="card" data-sec="learn" aria-labelledby="lh">
-    <div class="sechead"><h2 id="lh">Expected vs actual · logic check</h2><p>Every day the board's projection is compared with what the port actually did. Where the port moved differently, the reason is noted and, once confirmed, folded back into the rules. The policy is the framework; this log is how the board learns the practice.</p></div>
+    <div class="sechead"><h2 id="lh">Expected vs actual · logic check</h2><p>Only the <b>open</b> questions are shown — where the port did something the board cannot yet explain. Once Mihir / the team confirm the reason it is folded into the rules and the entry moves to the closed list below.</p></div>
     <div class="learn" id="learn"></div>
   </section>
 
@@ -534,7 +534,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='5 Nov 2026 · 23:15 IST';
+const UPDATED='5 Nov 2026 · 23:30 IST';
 const BOARD_SRC='list 05.11 (0700, from Mihir) · programme 06.11 (no cargo-jetty moves) · DPR 05.11 · gang sheet 1st shift 05.11 · HM signals to 5 Nov night (disp 2110) · team answers 5 Nov 21:53 · timber 03.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1166,7 +1166,11 @@ function notices(){const el=document.getElementById('notices');const bar=documen
 function learn(){const el=document.getElementById('learn');if(!LEARN.length){el.innerHTML='<div class="empty">No variance recorded yet.</div>';return;}
   const L={open:'open · confirm?',adopted:'adopted in rules',ok:'matched'};
   const openAll=window.innerWidth>640;
-  el.innerHTML=LEARN.map((x,i)=>`<details class="lc ${x.st}" ${openAll?'open':''}><summary class="hd"><div><b><span class="sn">${i+1}</span>${x.v}</b><small>${x.d}</small></div><span class="st">${L[x.st]||x.st}</span></summary><dl><dt>Expected</dt><dd>${x.exp}</dd><dt>Actual</dt><dd>${x.act}</dd><dt>Reason</dt><dd>${x.why}</dd>${x.fix?`<dt>Rule</dt><dd>${x.fix}</dd>`:''}</dl></details>`).join('');}
+  // Mihir (5 Nov): show only the OPEN questions here; the matched / adopted entries stay in the log but behind a toggle
+  const card=(x,i)=>`<details class="lc ${x.st}" ${openAll?'open':''}><summary class="hd"><div><b><span class="sn">${i+1}</span>${x.v}</b><small>${x.d}</small></div><span class="st">${L[x.st]||x.st}</span></summary><dl><dt>Expected</dt><dd>${x.exp}</dd><dt>Actual</dt><dd>${x.act}</dd><dt>Reason</dt><dd>${x.why}</dd>${x.fix?`<dt>Rule</dt><dd>${x.fix}</dd>`:''}</dl></details>`;
+  const O=LEARN.filter(x=>x.st==='open'), C=LEARN.filter(x=>x.st!=='open');
+  el.innerHTML=(O.length?O.map(card).join(''):`<div class="empty">No open question — every variance so far is explained and folded into the rules.</div>`)
+    +(C.length?`<details class="lc" style="grid-column:1/-1;border-left-color:var(--line2)"><summary class="hd"><div><b>${C.length} closed entries</b><small>matched or adopted into the rules — open to read</small></div><span class="st">closed</span></summary><div style="margin-top:6px">${C.map((x,i)=>card(x,i).replace(' open','')).join('')}</div></details>`:'');}
  // last time the board data was refreshed (shown in header + footer)
 document.getElementById('upd').innerHTML='LAST UPDATED <b>'+UPDATED+'</b>';
 function tideLine(){const d=dt(NOW);const k=String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');const t=TIDES[k];const n=dt(NOW+24);const k2=String(n.getUTCMonth()+1).padStart(2,'0')+'-'+String(n.getUTCDate()).padStart(2,'0');const t2=TIDES[k2];
