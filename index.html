@@ -534,7 +534,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='6 Nov 2026 · 21:00 IST';
+const UPDATED='6 Nov 2026 · 21:20 IST';
 const BOARD_SRC='list 05.11 (0700) — 06.11 list / 07.11 programme / DPR 06.11 awaited · programme 06.11 · DPR 05.11 · HM signals to 6 Nov night (disp 1648) · Mihir notes 6 Nov 19:34 / 20:14 · timber 03.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -753,7 +753,7 @@ const SHOW_BARGE=true; // re-enabled 31 Oct with metre geometry and a today+tomo
 const MYLOG={
  'Drake Well':[
   {d:'5 Nov 0700 list',exp:'11-19 15:25',b:'16',slot:'General (cross-fill) · SAAGAR behind Peacock & Enishi',why:'First reading — board says ~19 Nov at CJ-16 (General, by seniority of reporting), team ETB 20 Nov. ETA sheet 05.11: ETA / readiness 5 Nov 23:30 (declared), SGR Y, 8K Y, Sr No 7 — 26,111 CBM pine logs, 169 m, 10.1 m. SAAGAR queue ahead of her when she reports tonight: African Peacock (SGR 1, reported 31 Oct), Enishi (SGR 2, reported 5 Nov 00:18); ML Egret ETA 6 Nov 15:00 (N/A) behind. No cargo-jetty berth is programmed for 6 Nov at all; the next SAAGAR break-bulk berth frees when Lanna Naree (CJ-5) or African Quail (CJ-15) finishes, or a clean berth opens for cross-fill. Team ETB 20 Nov (03.11 sheet).'},
-  {d:'6 Nov night',exp:'11-08 14:00',b:'14',slot:'8K (SGR Y · 8K Y · Sr No 7 — ranks from the 06.11 list)',why:'Projection on 5 Nov data + the 6 Nov signals, with the DPR 05.11 now stale (list ETCs back in force): Karpathos Dawn\'s list ETC 8 Nov 11:18 frees the 8K slot; Ege-M (not Mettle Star) took 15A, Mettle Star moves to CJ-13 after Lakmos, the board shifts Theometor CJ-14 → CJ-2 (port convenience) and gives CJ-14 to Drake Well under 8K ~8 Nov 14:00. SOFT: needs the 06.11 list (her SGR / 8K rank, readiness as printed), the 07.11 programme and DPR 06.11; the team\'s own ETB is 20 Nov.'}
+  {d:'6 Nov night',exp:'11-08 14:00',b:'14',slot:'8K — board error',why:'WRONG, withdrawn 21:20: the board let her "8K Y" (willing, no rank yet) count as a place in the 8K queue, and when the 05.11 DPR went stale Karpathos Dawn\'s list ETC (8 Nov 11:18) freed the 8K slot — so it put her at CJ-14 (after shifting Theometor) on 8 Nov. Mihir (6 Nov 20:23): she cannot berth on 8 Nov, about 9 vessels are senior in 8K/6.5K. Fixed: a "Y" flag is no queue place — she is General by reporting (5 Nov 23:30) until the 06.11 list ranks her in SAAGAR / 8K.'}
  ],
  'African Quail':[
   {d:'31 Oct 0700 list',exp:'11-01 14:30',b:'14',slot:'SAAGAR break bulk',why:'Next in SAAGAR after AC Kathryn (CJ-14, ETC 1 Nov ~12:30). Team ETB was also 1 Nov.'},
@@ -905,7 +905,7 @@ function prospects(){
   const shifts=ALL.filter(x=>x.shifted&&x.prevAt>=ws-0.01&&x.prevAt<=we);
   // Mihir (2 Nov): General vessels that are ready but have no berth slot open in the window are shown as such, in their GEN sequence
   const taken=new Set(occ.map(x=>x.n).concat(inWin.map(x=>x.n)));
-  const prio=w=>['GOV','COASTAL','SAAGAR','24H','8K','STL'].some(k=>w.rk[k])||(w.rk.HP&&!w.noHP);
+  const prio=w=>['GOV','COASTAL','SAAGAR','24H','8K','STL'].some(k=>RK(w,k))||(RK(w,'HP')&&!w.noHP);
   const genReady=W.filter(w=>w.rdy!=null&&w.rep<=ws&&!taken.has(w.n)&&!prio(w)&&!V.some(v=>v.n===w.n&&v.F<=ws&&v.T>ws)).sort((a,z)=>(a.rk.GEN||900+(a.rep||0)/1e4)-(z.rk.GEN||900+(z.rep||0)/1e4));
   const genNone=()=>genReady.length?`<span style="color:var(--warn)">ready but no berth slot open:</span><small>${genReady.slice(0,6).map(w=>`${w.n}${w.rk.GEN?' (GEN '+w.rk.GEN+')':''}`).join(' · ')}${genReady.length>6?' · +'+(genReady.length-6)+' more':''}</small>`:'<span style="color:var(--muted)">no eligible vessel for this slot</span>';
   const hpNone=()=>{const wd=[...NOHP].filter(n=>W.some(w=>w.n===n&&w.rdy!=null));return `<span style="color:var(--muted)">no HP taker${wd.length?' — HP priority withdrawn by '+wd.join(', ')+' (30k/25k only)':''}</span><small>berth goes down the order, lastly to General</small>`;};
@@ -1351,7 +1351,7 @@ const WRAW=[
  ['Mariblue','Aggregates',60000,'MT',189.99,6.1,'11-05 14:00',{HP:99,'8K':99},'ETA / readiness 5 Nov 14:00 (declared) · HP Y, 8K Y · 30K/25K Sr No 7 · LP Karachi, DD 13.00 · agent Scorpio Shg'],
  ['Katerina K','Kaolin / clay J-bags + soya bean meal',44150,'MT',199.9,6.61,null,{},'New on the ETA sheet: ETA 5 Nov 15:00 · 22,000 + 22,150 MT (J-bags) · N/A · agent Ambica'],
  ['JSW Mihirgad','Bentonite',7500,'MT',122,null,null,{COASTAL:99},'ETA 5 Nov 18:00 · CSTL Y · N/A · agent Atlantic Shg'],
- ['Drake Well','Pine logs',26111,'CBM',169.03,10.1,'11-05 23:30',{SAAGAR:98,'8K':98},'ETA / readiness 5 Nov 23:30 (declared on the ETA sheet) · SGR Y, 8K Y · Sr No 7 · Argentina · agent MIHIR — reports tonight behind African Peacock (SGR 1) and Enishi (SGR 2)'],
+ ['Drake Well','Pine logs',26111,'CBM',169.03,10.1,'11-05 23:30',{SAAGAR:98,'8K':98},'ETA / readiness 5 Nov 23:30 (declared on the ETA sheet) · SGR Y, 8K Y = willing, NOT yet ranked — about 9 vessels senior in 8K/6.5K (Mihir, 6 Nov); SAAGAR behind African Peacock (SGR 1) and Enishi (SGR 2) · Sr No 7 · Argentina · agent MIHIR — ranks from the 06.11 list'],
  ['Tai Keystone','Urea + transhipment',47250,'MT',228.41,12.7,'11-06 00:00',{},'ETA / readiness 6 Nov 00:00 · 22,617 MT transhipment cargo · no group rank printed · agent Interocean'],
  ['ML Egret','JAS pine logs',42885,'MT',199,null,null,{SAAGAR:98,'8K':98},'ETA 6 Nov 15:00 · SGR Y, 8K Y · N/A · agent Cross Trade'],
  ['Hai Long 1','Rice bags',17000,'MT',144.65,6.5,null,{},'ETA 7 Nov · N/A'],
@@ -1492,6 +1492,9 @@ const ETA={'Pioneer Fortune':'11-05 13:30','Mariblue':'11-05 14:00','Katerina K'
 // (()=>{const m=nextMeet(NOW),hw=firstHW(m);W.forEach(w=>{if(w.rdy==null&&ETA[w.n]&&Object.keys(w.rk).length){const e=h(ETA[w.n]);if(e<=hw){w.rdy=Math.max(e,m);w.rep=w.rep!=null?w.rep:w.rdy;w.assumed=1;}}});})();
 // group rank for ordering: printed rank first; an eligibility "Y" without a rank (99 / 98) queues after the ranked vessels, by reporting time
 const rkv=(w,k)=>{const r=w.rk[k];return r>=98?1000+(w.rep||0)/1e4:r;};
+// A rank of 98 / 99 is only a "Y" flag (willing, from the ETA sheet) — NOT a place in that queue until the list prints a number.
+// Mihir (6 Nov 20:23): Drake Well (8K Y) cannot berth on 8 Nov — about 9 vessels are senior in 8K/6.5K. The board had let the flag count as a queue place.
+const RK=(w,k)=>!!(w.rk&&w.rk[k]&&w.rk[k]<98);
 function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it berths inside the next meeting's window count as slot claims (two-pass)
   const R=w=>(ov&&w.n===ov)?NOW:w.rdy;
   const S=[]; const done=new Set();
@@ -1551,7 +1554,7 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
         const oc=o.filter(x=>x.cat===C.k), inUseC=oc.filter(x=>!(C.k==='GOV'&&x.via)).length;
         const freeNow=inUseC<C.max, freeInWindow=oc.some(x=>x.T>e.t&&x.T<=WE&&!(x.est&&!x.nm&&x.cat!=='24H'));
         if(!freeNow&&!freeInWindow)continue;
-        let q=readyAll.filter(w=>w.rk[C.k]&&!(C.k==='HP'&&w.noHP)).sort((a,z)=>rkv(a,C.k)-rkv(z,C.k));
+        let q=readyAll.filter(w=>RK(w,C.k)&&!(C.k==='HP'&&w.noHP)).sort((a,z)=>rkv(a,C.k)-rkv(z,C.k));
         if(C.k==='SAAGAR'){const np=q.filter(w=>!PROJ(w.c));if(np.length)q=np;}
         if(!q.length)continue;
         if(freeNow&&q.some(fitsHere))break;          // a vessel of this group takes this berth directly — no shift needed
@@ -1567,7 +1570,7 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
         // "if required": not required when a clean berth the vessel can use frees inside the window anyway on a declared / programmable sailing
         const cleanComing=o.filter(x=>CLEAN.includes(x.b)&&x.T>=need.when-6&&x.T<=WE&&!(x.est&&!x.nm&&x.cat!=='24H')&&allowedBerths(need.w).includes(x.b)&&!((BERTHS.find(bb=>bb.id===x.b)||{}).maxLoa<need.w.loa)&&!V.some(v=>v.b===x.b&&v.n!==x.n&&v.F>x.T-0.01)).sort((a,z)=>a.T-z.T)[0];
         // demand vs supply inside the window: priority vessels needing a clean berth vs clean berths freeing on a programmable sailing (or idle)
-        const cleanDemand=readyAll.filter(w=>CLEANONLY(w.c)&&!reserved.has(w.n)&&(w.rk.HP||w.rk.COASTAL||w.rk.SAAGAR||w.rk['24H']||w.rk.STL)).length;
+        const cleanDemand=readyAll.filter(w=>CLEANONLY(w.c)&&!reserved.has(w.n)&&['HP','COASTAL','SAAGAR','24H','STL'].some(k=>RK(w,k))).length;
         const cleanSupply=o.filter(x=>CLEAN.includes(x.b)&&x.T>e.t&&x.T<=WE&&!(x.est&&!x.nm&&x.cat!=='24H')&&!V.some(v=>v.b===x.b&&v.n!==x.n&&v.F>x.T-0.01)).length+CLEAN.filter(b=>!o.some(x=>x.b===b)).length;
         const required=!cleanComing||cleanDemand>cleanSupply;
         if(mov&&!required){shiftOpt={mov,need,alt:cleanComing};}
@@ -1592,13 +1595,13 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
     const bagsNow=o.filter(x=>(x.cat==='GEN'||x.cat==='BIT'||x.cat==='STL')&&isBag(x.c)).length;
     // General order = the GEN rank the list prints (1 Nov programme: Theometor GEN 1 took CJ-14 while Mak 1, reported earlier, is GEN 14 after re-anchoring); vessels without a printed GEN rank queue after them by reporting time
     const genQ=()=>baseUse.filter(w=>!(bagsNow>=3&&isBag(w.c))).sort((a,z)=>(a.rk.GEN||900+(a.rep||0)/1e4)-(z.rk.GEN||900+(z.rep||0)/1e4));
-    const rkQ=k=>{let l=baseUse.filter(w=>w.rk[k]).sort((a,z)=>rkv(a,k)-rkv(z,k));if(k==='HP'){l=l.filter(w=>!w.noHP&&!(e.b==='5'&&IRON(w.c)));l=hpOrder(l);}return l;}; // HP slot: a vessel that withdrew HP at the meeting is not a taker (Mihir, 2 Nov) — the slot then goes down the order, lastly to General // iron ore at CJ-5 only under 30k/25k, not under the HP slot (Mihir, 1 Nov)
+    const rkQ=k=>{let l=baseUse.filter(w=>RK(w,k)).sort((a,z)=>rkv(a,k)-rkv(z,k));if(k==='HP'){l=l.filter(w=>!w.noHP&&!(e.b==='5'&&IRON(w.c)));l=hpOrder(l);}return l;}; // HP slot: a vessel that withdrew HP at the meeting is not a taker (Mihir, 2 Nov) — the slot then goes down the order, lastly to General // iron ore at CJ-5 only under 30k/25k, not under the HP slot (Mihir, 1 Nov)
     const isProj=w=>/project|windmill/i.test(w.c);
     // COASTAL slot, when no coastal vessel: only SAAGAR *project* (windmill / project cargo) vessels, never SAAGAR bulk or break bulk
     // Mihir (31 Oct): the 30k/25k (Sr No 7) slot against Govt / Coastal / 24-hr goes to the group's senior-most ready vessel; if the senior cannot
     // use this particular berth (commodity / draught / LOA), the next 30k/25k vessel that can gets the movement — "any vessel under 30k/25k".
-    const hpAll=W.filter(w=>!done.has(w.n)&&R(w)!=null&&R(w)<=e.t&&w.rep<=e.t&&meetOK(w,e.t)&&w.rk.HP).sort((a,z)=>rkv(a,'HP')-rkv(z,'HP'));
-    const pools={HPQ:()=>baseUse.filter(w=>w.rk.HP||/30\s*K\s*\/\s*25\s*K/i.test(w.x||'')).sort((a,z)=>(a.rep||0)-(z.rep||0)) /* 30k/25k fallback (Sr No 7): every vessel that quoted 30k/25k — on the HP list or not — by reporting seniority (6 Nov: Ege-M, 27 Oct, took 15A ahead of Mettle Star, HP 5, 1 Nov; to confirm with Mihir) */,WIND:()=>baseUse.filter(w=>isProj(w)&&w.rk.SAAGAR).sort((a,z)=>a.rk.SAAGAR-z.rk.SAAGAR),GENQ:genQ};
+    const hpAll=W.filter(w=>!done.has(w.n)&&R(w)!=null&&R(w)<=e.t&&w.rep<=e.t&&meetOK(w,e.t)&&RK(w,'HP')).sort((a,z)=>rkv(a,'HP')-rkv(z,'HP'));
+    const pools={HPQ:()=>baseUse.filter(w=>RK(w,'HP')||/30\s*K\s*\/\s*25\s*K/i.test(w.x||'')).sort((a,z)=>(a.rep||0)-(z.rep||0)) /* 30k/25k fallback (Sr No 7): every vessel that quoted 30k/25k — on the HP list or not — by reporting seniority (6 Nov: Ege-M, 27 Oct, took 15A ahead of Mettle Star, HP 5, 1 Nov; to confirm with Mihir) */,WIND:()=>baseUse.filter(w=>isProj(w)&&w.rk.SAAGAR).sort((a,z)=>a.rk.SAAGAR-z.rk.SAAGAR),GENQ:genQ};
     const ranked=[]; // every group's first candidate in slot order → ranked[0] is the pick, ranked[1] the runner-up (for the meeting preview)
     for(const C of CATS){
       // Govt rule (Mihir, 31 Oct): a 30k/25k (Sr No 7) vessel berthed against a Govt slot is re-tagged to Sr No 7 day priority
@@ -1637,7 +1640,7 @@ function simulate(ov,PRE){ // PRE = a first-pass projection: group vessels it be
     const alt=ranked[1]?{n:ranked[1].w.n,c:ranked[1].w.c,cat:ranked[1].cat,via:ranked[1].via,same:!!ranked[1].same}:null;
     // what could overturn this pick at the berthing meeting
     const flips=[];
-    const notReady=k=>W.filter(w=>!done.has(w.n)&&w.n!==pick.n&&w.rdy==null&&w.rk[k]&&w.rk[k]!==99).slice(0,2).map(w=>w.n);
+    const notReady=k=>W.filter(w=>!done.has(w.n)&&w.n!==pick.n&&w.rdy==null&&RK(w,k)).slice(0,2).map(w=>w.n);
     if(cat!=='GOV'){const g=notReady('GOV');if(g.length)flips.push('a Govt vessel declares readiness ('+g.join(', ')+')');}
     // Mihir (3 Nov): readiness N/A in the list is not final — the agent can declare readiness at the berthing meeting, and seniority counts from reporting / ETA. So a senior N/A vessel of the same group that fits this berth can take the pick's place.
     {const gk=via==='General'?'GEN':cat; const senior=w=>(gk==='GEN'||w.rk[gk])&&w.rep!=null&&pick.rep!=null&&w.rep<pick.rep; // seniority by reporting / ETA (N/A vessels carry no printed rank)
@@ -2086,7 +2089,7 @@ function groups(){
     }
     const nx=all.slice(0,3);
     let extra='';
-    if(C.k==='GEN'){const taken=new Set(S.map(x=>x.n));const prio=w=>['GOV','COASTAL','SAAGAR','24H','8K','STL'].some(k=>w.rk[k])||(w.rk.HP&&!w.noHP);const rdyG=W.filter(w=>w.rdy!=null&&w.rep<=T&&!taken.has(w.n)&&!prio(w)&&!V.some(v=>v.n===w.n&&v.F<=T&&v.T>T)).sort((a,z)=>(a.rk.GEN||900+(a.rep||0)/1e4)-(z.rk.GEN||900+(z.rep||0)/1e4));if(rdyG.length)extra=`<span><span style="color:var(--warn)">Ready but no berth slot open (${rdyG.length}):</span><small>${rdyG.map(w=>w.n+(w.rk.GEN?' (GEN '+w.rk.GEN+')':'')).join(' · ')}</small></span>`;}
+    if(C.k==='GEN'){const taken=new Set(S.map(x=>x.n));const prio=w=>['GOV','COASTAL','SAAGAR','24H','8K','STL'].some(k=>RK(w,k))||(RK(w,'HP')&&!w.noHP);const rdyG=W.filter(w=>w.rdy!=null&&w.rep<=T&&!taken.has(w.n)&&!prio(w)&&!V.some(v=>v.n===w.n&&v.F<=T&&v.T>T)).sort((a,z)=>(a.rk.GEN||900+(a.rep||0)/1e4)-(z.rk.GEN||900+(z.rep||0)/1e4));if(rdyG.length)extra=`<span><span style="color:var(--warn)">Ready but no berth slot open (${rdyG.length}):</span><small>${rdyG.map(w=>w.n+(w.rk.GEN?' (GEN '+w.rk.GEN+')':'')).join(' · ')}</small></span>`;}
     if(C.k==='HP'){const wd=[...NOHP].filter(n=>W.some(w=>w.n===n&&w.rdy!=null));if(wd.length)extra=`<span><span style="color:var(--muted)">HP priority withdrawn at the meeting:</span><small>${wd.join(' · ')} — 30k/25k (Sr No 7) only; the HP berth goes down the order, lastly to General</small></span>`;}
     return `<tr><td class="c"><b>${C.l}</b><small>${C.s}</small></td><td><div class="nx">${extra}${nx.length?nx.map((s,j)=>`<span><span><span class="sn">${j+1}</span><button type="button" class="link" data-n="${s.n}">${s.n}</button><small>${cg(s)} · ${nf.format(s.q)} ${s.u}${agTxt(s.n)}</small></span><em>${fday(s.F)} · CJ-${s.b}${s.via?' · as '+s.via:''}</em></span>`).join(''):'<span style="color:var(--dim)">nobody ready</span>'}</div></td></tr>`;
   }).join('');
