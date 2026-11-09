@@ -2067,7 +2067,9 @@ function qdetail(){
 function mine(){
   const m=document.getElementById('mine'); const names=[...new Set(V.map(v=>v.n).concat(W.map(w=>w.n)))].filter(isMine);
   if(!names.length){m.innerHTML='<div class="empty">No vessel with agent Mihir &amp; Company in today\'s berthing list (at berth, waiting or expected).</div>';return;}
-  const rows=names.map(n=>({n,s:statusOf(n)})).filter(r=>r.s).sort((a,z)=>({at:0,today:1,proj:2,na:3,far:4,sailed:5}[a.s.k]-{at:0,today:1,proj:2,na:3,far:4,sailed:5}[z.s.k]));
+  // Mihir (10 Nov 01:09): once a vessel is alongside the detail is not needed — a berthed vessel shows one status line (no projection history), a sailed vessel is dropped from this card (her history stays in the Timber table / Learn card)
+  const rows=names.map(n=>({n,s:statusOf(n)})).filter(r=>r.s&&r.s.k!=='sailed').sort((a,z)=>({at:0,today:1,proj:2,na:3,far:4,sailed:5}[a.s.k]-{at:0,today:1,proj:2,na:3,far:4,sailed:5}[z.s.k]));
+  if(!rows.length){m.innerHTML='<div class="empty">No Mihir &amp; Company vessel waiting or expected — berthed and sailed vessels are not detailed here.</div>';return;}
   const hist=n=>{
     const L=(MYLOG[n]||[]).slice(); const sp=S.find(x=>x.n===n), v=V.filter(x=>x.n===n).sort((a,z)=>z.F-a.F)[0];
     const nowExp=v?v.F:(sp?sp.F:null);
@@ -2075,7 +2077,7 @@ function mine(){
     if(nowExp!=null){const last=rowsH[rowsH.length-1];if(!last||Math.abs(last.t-nowExp)>0.5)rowsH.push({d:'Now · '+UPDATED.replace(/ IST$/,''),t:nowExp,b:v?v.b:sp.b,slot:v?(CL[v.cat]||v.cat)+(v.F<=NOW?' · at berth':' · fixed'):(CL[sp.cat]||sp.cat)+(sp.via?' slot as '+sp.via:''),why:v?(v.F<=NOW?'Alongside.':'Fixed by programme / signal.'):'Current projection under today\'s list and rules.',live:1});else{last.live=1;last.d+=' → unchanged now';}}
     if(!rowsH.length)return '';
     return `<tr class="hist"><td colspan="2"><div class="ht">Projection history · why the date moved</div><ol class="hl">${rowsH.map((e,i)=>{const prev=rowsH[i-1];const dd=prev?Math.round((e.t-prev.t)/24*10)/10:null;const tag=dd==null?'<span class="dl same">first estimate</span>':Math.abs(dd)<0.25?'<span class="dl same">same</span>':dd>0?`<span class="dl late">+${dd} d later</span>`:`<span class="dl early">${dd} d earlier</span>`;return `<li class="${e.live?'live':''}"><div class="hh"><span class="hd">${e.d}</span><b>${fday(e.t)} ~${fmt(e.t,false)} · CJ-${e.b}</b>${tag}</div><div class="hs">${e.slot}</div><div class="hw">${e.why}</div></li>`;}).join('')}</ol></td></tr>`;};
-  m.innerHTML=`<table><tbody>${rows.map(({n,s},i)=>{const o=s.o;return `<tr><td class="n"><span class="sn">${i+1}</span><button type="button" class="link" data-n="${n}">${n}</button><small>${cg(o)} · ${nf.format(o.q)} ${o.u} · ${CL[o.cat]||groupLine(o)}</small></td><td class="w">${s.d}<small>${s.sub}</small></td></tr>`+hist(n);}).join('')}</tbody></table>`;
+  m.innerHTML=`<table><tbody>${rows.map(({n,s},i)=>{const o=s.o;return `<tr><td class="n"><span class="sn">${i+1}</span><button type="button" class="link" data-n="${n}">${n}</button><small>${cg(o)} · ${nf.format(o.q)} ${o.u} · ${CL[o.cat]||groupLine(o)}</small></td><td class="w">${s.d}<small>${s.sub}</small></td></tr>`+(s.k==='at'?'':hist(n));}).join('')}</tbody></table>`;
   m.querySelectorAll('.link').forEach(b=>b.onclick=()=>{focus=b.dataset.n;sel=b.dataset.n;render(true);});
 }
 function nextOn(b,t){const n=S.filter(x=>x.b===b&&x.F>=t).sort((a,z)=>a.F-z.F)[0];return n?`<ol><li><b>${n.n}</b> (${cg(n)}) under ${CL[n.cat]}, likely ~${fmt(n.F)}.</li></ol>`:'<ol><li>No ready vessel projected.</li></ol>';}
