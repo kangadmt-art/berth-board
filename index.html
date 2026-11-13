@@ -279,7 +279,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 .nt b{display:block;font-size:13px;margin-bottom:2px}
 .nt small{color:var(--muted)}
 .srcmore{margin-top:4px}.srcmore summary{cursor:pointer;color:var(--accent,#7cc4ff);font-size:12px;letter-spacing:.04em;text-transform:uppercase}.srcmore div{margin-top:6px;color:var(--muted);font-size:12.5px;line-height:1.5}
-.score-sum{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}.score-sum div{background:var(--panel2,rgba(255,255,255,.04));border:1px solid var(--line2);border-radius:8px;padding:8px 12px;min-width:120px}.score-sum b{display:block;font-family:var(--f-disp);font-size:22px}.score-sum small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}.score table{width:100%;border-collapse:collapse;font-size:12.5px}.score th,.score td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line2);vertical-align:top}.score th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}.score .hit{color:var(--ok,#5fbf7a)}.score .near{color:var(--warn)}.score .miss{color:var(--brk)}.score .pend{color:var(--muted)}.score td.n{white-space:nowrap}
+.score-sum{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}.score-sum div{background:var(--panel2,rgba(255,255,255,.04));border:1px solid var(--line2);border-radius:8px;padding:8px 12px;min-width:120px}.score-sum b{display:block;font-family:var(--f-disp);font-size:22px}.score-sum small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}.score table{width:100%;border-collapse:collapse;font-size:12.5px}.score th,.score td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line2);vertical-align:top}.score th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}.score .hit{color:var(--ok,#5fbf7a)}.score .near{color:var(--warn)}.score .miss{color:#e5636a}.score .pend{color:var(--muted)}.score td.n{white-space:nowrap}
 .learn{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
 .learn .empty{color:var(--muted);font-size:12.5px;grid-column:1/-1}
 .lc{border:1px solid var(--line);border-left:4px solid var(--warn,#e0a040);border-radius:6px;background:var(--panel2);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
@@ -464,7 +464,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   </section>
 
   <section class="card" data-sec="score" aria-labelledby="sch">
-    <div class="sechead"><h2 id="sch">Accuracy · track record</h2><p>Every berthing and sailing the board called, scored against the actual (signal / DPR) once it happened. <b>Last call</b> = what the board said at its last update before the event; <b>first call</b> = what it said when the vessel first appeared. Hit ≤ 2 h · near ≤ 6 h · miss &gt; 6 h or wrong berth. Record starts 11 Nov 12:30 (v135). Pending rows are scored when the actual comes in.</p></div>
+    <div class="sechead"><h2 id="sch">Accuracy · berthing predictions</h2><p><b>Mihir's measure (13 Nov):</b> each day, from that morning's DPR and the berthing policy, the board says <b>which berth</b> a waiting vessel gets and <b>when</b>. That call is frozen and scored against the actual berthing (DPR made-fast time) — <b>before</b> the port's programme or signal for it existed. A programme-based call is not a prediction and is not counted. Hit = right berth and within 6 h · near = right berth, within 12 h · miss = wrong berth, &gt; 12 h, or not predicted at all. Sailing times are not scored (a sailing two hours late is not important). Record starts with DPR 11.11.</p></div>
     <div id="score"></div>
   </section>
 
@@ -541,7 +541,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='13 Nov 2026 · 09:45 IST';
+const UPDATED='13 Nov 2026 · 10:05 IST';
 const BOARD_SRC='list 12.11 (0700) · programme 13.11 (TF/SH/2102, meeting 12.11) · DPR 13.11 (0700) · HM signals to the 13 Nov day sheet (disp 0725) · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1259,8 +1259,59 @@ const SCORE=[
  {v:'Karpathos Dawn',ev:'sails',b:'15',first:'11-14 08:00',fsrc:'24-hrs rule (12 Nov 18:15)',last:'11-14 06:00',lsrc:'24-hrs rule from the DPR berthing',act:'',asrc:'pending'},
  {v:'Merchia',ev:'berth',b:'8',first:'11-13 08:00',fsrc:'programme 13.11',last:'11-13 13:00',lsrc:'not signalled by the 13 Nov day sheet first issue',act:'',asrc:'pending'}
 ];
-function renderScore(){
+
+// ===== BERTHING PREDICTIONS — Mihir's accuracy measure (13 Nov 09:50) =====
+// One row per vessel per daily snapshot: what the board projected from that morning's DPR + policy, BEFORE any programme / signal named the berthing.
+// pb/pt = predicted berth / time (null = the board did not project a berthing inside its horizon) · ab/at = actual berth / made-fast (DPR) · src 'dpr' counts; 'prog' rows are programme readings, shown but not scored
+const PREDLOG=[
+ {v:'Drake Well',predAt:'11-11 12:30',pb:'16',pt:'11-12 01:00',ab:'1',at:'',note:'DPR 11.11 + policy: 8K slot into CJ-16 after Star Fighter — the port gave CJ-16 to Cape Diversity (pellets, HP) instead'},
+ {v:'Cape Diversity',predAt:'11-11 12:30',pb:null,pt:null,ab:'16',at:'11-12 05:48',note:'not projected — the board kept dirty bulk off CJ-13–16; the port decided that afternoon to allow pellets there'},
+ {v:'Leya',predAt:'11-11 12:30',pb:'7',pt:'11-13 05:00',ab:'9',at:'',note:'HP slot at CJ-7 after Alberta — the port sent her to the GFPL berth CJ-9 instead (not yet alongside)'},
+ {v:'Drake Well',predAt:'11-11 15:00',pb:'1',pt:'11-12 21:00',ab:'1',at:'',note:'after the port took CJ-16 for HP: CJ-1 at Nord Newport\'s permissible time — right berth, but the port let Nord Newport finish (readiness 13 Nov 11:10)'},
+ {v:'Drake Well',predAt:'11-12 11:30',pb:'15',pt:'11-12 18:00',ab:'1',at:'',note:'DPR 12.11: Bao He Ling finishing early → CJ-15 for the 8K slot — the port gave CJ-15 to Karpathos Dawn (24-hrs ranks above 8K) and Drake Well CJ-1 next day'},
+ {v:'Karpathos Dawn',predAt:'11-12 11:30',pb:null,pt:null,ab:'15',at:'11-13 06:00',note:'not projected — the board held the 24-hr vessel at rank \"Y\" and thought the single 24-hr slot taken; she is 24H 1 on the 12.11 list'},
+ {v:'Chang Hang',predAt:'11-12 11:30',pb:null,pt:null,ab:'7',at:'11-13 05:24',note:'not projected — she declared readiness 12 Nov 11:00 and appeared on the 12.11 list received 14:38, after the snapshot; HP 2 → CJ-7 after Alberta'},
+ {v:'Gokova-M',predAt:'11-12 11:30',pb:'7',pt:'11-14 10:00',ab:'',at:'',note:'pending — CJ-7 after Chang Hang (board then had Alberta → Gokova-M; Chang Hang came in between)'},
+ {v:'Saga Viking',predAt:'11-12 11:30',pb:'2',pt:'11-14 11:33',ab:'',at:'',note:'pending — General, CJ-2 at Bomustafao O\'s permissible time'},
+ {v:'Rahma',predAt:'11-13 09:30',pb:'15',pt:'11-14 08:00',ab:'',at:'',note:'pending — Steel slot, CJ-15 after Karpathos Dawn (24-hrs rule, out ~06:00)'},
+ {v:'Gokova-M',predAt:'11-13 09:30',pb:'7',pt:'11-14 11:00',ab:'',at:'',note:'pending — HP 3, CJ-7 after Chang Hang (42K norm)'},
+ {v:'CD Cherry',predAt:'11-13 09:30',pb:'5',pt:'11-14 12:00',ab:'',at:'',note:'pending — 24-hrs slot (24H 4), CJ-5 after Belasitza (DPR pace, let run past her permissible time)'},
+ {v:'Saga Viking',predAt:'11-13 09:30',pb:'2',pt:'11-14 13:30',ab:'',at:'',note:'pending — General, CJ-2 at Bomustafao O\'s permissible time 11:33 (shift)'},
+ {v:'Honor Star',predAt:'11-13 09:30',pb:'8',pt:'11-15 06:00',ab:'',at:'',note:'pending — 24-hrs slot after CD Cherry, CJ-8 after Merchia'},
+ {v:'AG Varvara',predAt:'11-13 09:30',pb:'5',pt:'11-15 12:00',ab:'',at:'',note:'pending — General, CJ-5 after CD Cherry'},
+ {v:'ML Egret',predAt:'11-13 09:30',pb:'7',pt:'11-15 16:30',ab:'',at:'',note:'pending — General cross-fill, CJ-7 after Gokova-M'},
+ {v:'Uni Blossom',predAt:'11-13 09:30',pb:'16',pt:'11-15 21:30',ab:'',at:'',note:'pending — SAAGAR, CJ-16 after Cape Diversity (DPR pace ~19:00)'},
+ {v:'Drake Well',predAt:'11-13 09:30',pb:'1',pt:'11-13 13:00',ab:'1',at:'',src:'prog',note:'programme 13.11 + day sheet — a reading, not a prediction (shown, not scored)'},
+ {v:'Leya',predAt:'11-13 09:30',pb:'9',pt:'11-13 13:00',ab:'',at:'',src:'prog',note:'programme 13.11 (GFPL) — reading, not scored'},
+ {v:'Merchia',predAt:'11-13 09:30',pb:'8',pt:'11-13 13:00',ab:'',at:'',src:'prog',note:'programme 13.11 — reading, not scored'}
+];
+function renderPredlog(){
   const el=document.getElementById('score'); if(!el) return;
+  const rows=PREDLOG.map(x=>{const done=!!x.at&&h(x.at)<=NOW; const dpr=x.src!=='prog';
+    let cls='pend',lab='pending',d=null,lead=null;
+    if(done){lead=h(x.at)-h(x.predAt); if(!x.pb){cls='miss';lab='not predicted';} else if(x.pb!==x.ab){cls='miss';lab='wrong berth';} else {d=h(x.at)-h(x.pt);const a=Math.abs(d);cls=a<=6?'hit':a<=12?'near':'miss';lab=cls==='hit'?'hit':cls==='near'?'near':'miss';}}
+    return {...x,done,dpr,cls,lab,d,lead};});
+  const D=rows.filter(r=>r.done&&r.dpr), H=D.filter(r=>r.cls==='hit').length, N=D.filter(r=>r.cls==='near').length, M=D.filter(r=>r.cls==='miss').length;
+  const BR=D.filter(r=>r.pb&&r.pb===r.ab).length, NP=D.filter(r=>!r.pb).length;
+  const pend=rows.filter(r=>!r.done&&r.dpr).length;
+  const sgn=x=>x==null?'—':(x>0?'+':'−')+(Math.abs(x)>=24?(Math.abs(x)/24).toFixed(1)+' d':Math.round(Math.abs(x)*10)/10+' h');
+  const bl=b=>b?(/^OJ|^TT/.test(b)?b:'CJ-'+b):'—';
+  el.innerHTML=`<div class="score-sum">
+    <div><b>${D.length}</b><small>berthings scored</small></div>
+    <div><b class="${H+N>M?'hit':'miss'}">${D.length?Math.round(100*(H+N)/D.length):0}%</b><small>right berth, within 12 h</small></div>
+    <div><b>${H}</b><small>hit · ≤ 6 h</small></div><div><b>${N}</b><small>near · ≤ 12 h</small></div><div><b class="miss">${M}</b><small>miss</small></div>
+    <div><b>${D.length?Math.round(100*BR/D.length):0}%</b><small>berth right (${BR}/${D.length})</small></div>
+    <div><b class="miss">${NP}</b><small>not predicted at all</small></div>
+    <div><b class="pend">${pend}</b><small>open predictions</small></div></div>
+  <div class="score"><table><thead><tr><th>Vessel</th><th>Predicted on</th><th>Board said</th><th>Actual (DPR)</th><th>Time error</th><th>Lead</th><th>Result</th><th>Why</th></tr></thead><tbody>
+  ${rows.map(r=>`<tr${r.dpr?'':' style="opacity:.55"'}><td><b>${r.v}</b>${r.dpr?'':'<br><small>programme reading</small>'}</td><td class="n">${fmt(h(r.predAt))}</td><td class="n">${r.pb?'<b>'+bl(r.pb)+'</b> · '+fmt(h(r.pt)):'<span class="miss">no berthing projected</span>'}</td><td class="n">${r.ab?'<b>'+bl(r.ab)+'</b>'+(r.at?' · '+fmt(h(r.at)):' · pending'):'—'}</td><td class="n ${r.cls}">${r.done&&r.pb===r.ab&&r.pb?sgn(r.d):'—'}</td><td class="n">${r.done?sgn(r.lead).replace('+',''):'—'}</td><td class="${r.cls}"><b>${r.dpr?r.lab:'—'}</b></td><td><small>${r.note}</small></td></tr>`).join('')}
+  </tbody></table></div>
+  <p style="color:var(--muted),font-size:12px;margin-top:8px"><small>Lead = how far ahead the prediction was made. Every daily snapshot adds a row per projected vessel; a vessel can have several rows (one per day) and each is scored. The secondary table below scores the timing of moves that were already on a programme or signal — useful for the night-sheet discipline, not for the model.</small></p>
+  <details style="margin-top:10px"><summary style="cursor:pointer;color:var(--muted);font-size:12px">Secondary · timing of programmed / signalled moves (berthings and sailings)</summary><div id="score2" style="margin-top:8px"></div></details>`;
+}
+
+function renderScore(){
+  const el=document.getElementById('score2'); if(!el) return;
   const rows=SCORE.map(x=>{const done=!!x.act&&h(x.act)<=NOW; const dl=done?h(x.act)-h(x.last):null, df=done?h(x.act)-h(x.first):null;
     const wrongB=done&&x.ev==='berth'&&x.ab&&x.ab!==x.b; const cls=!done?'pend':(wrongB||Math.abs(dl)>6)?'miss':(Math.abs(dl)>2?'near':'hit');
     const lab=!done?'pending':cls==='hit'?'hit':cls==='near'?'near':'miss'; return {...x,done,dl,df,wrongB,cls,lab};});
@@ -1282,7 +1333,7 @@ function renderScore(){
   </tbody></table></div>
   <p style="color:var(--muted);font-size:12px;margin-top:8px">Sign: + = later than called, − = earlier. A "miss" on the last call usually means the port moved a sailing that was already on a programme or signal (Yasa Eagle 17:45 → 02:15, Bao He Ling 12:00 → 06:00) — the first-call column shows how far the board\'s own estimate was before any programme existed.</p>`;
 }
-renderScore();
+renderPredlog();renderScore();
 
   const L={open:'open · confirm?',adopted:'adopted in rules',ok:'matched'};
   const openAll=window.innerWidth>640;
