@@ -278,6 +278,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 .nt .d{font-family:var(--f-mono);font-size:10.5px;color:var(--brass,#c9a24c);white-space:nowrap;padding-top:2px}
 .nt b{display:block;font-size:13px;margin-bottom:2px}
 .nt small{color:var(--muted)}
+.score-sum{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}.score-sum div{background:var(--panel2,rgba(255,255,255,.04));border:1px solid var(--line2);border-radius:8px;padding:8px 12px;min-width:120px}.score-sum b{display:block;font-family:var(--f-disp);font-size:22px}.score-sum small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}.score table{width:100%;border-collapse:collapse;font-size:12.5px}.score th,.score td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line2);vertical-align:top}.score th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}.score .hit{color:var(--ok,#5fbf7a)}.score .near{color:var(--warn)}.score .miss{color:var(--brk)}.score .pend{color:var(--muted)}.score td.n{white-space:nowrap}
 .learn{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
 .learn .empty{color:var(--muted);font-size:12.5px;grid-column:1/-1}
 .lc{border:1px solid var(--line);border-left:4px solid var(--warn,#e0a040);border-radius:6px;background:var(--panel2);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
@@ -461,6 +462,11 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="learn" id="learn"></div>
   </section>
 
+  <section class="card" data-sec="score" aria-labelledby="sch">
+    <div class="sechead"><h2 id="sch">Accuracy · track record</h2><p>Every berthing and sailing the board called, scored against the actual (signal / DPR) once it happened. <b>Last call</b> = what the board said at its last update before the event; <b>first call</b> = what it said when the vessel first appeared. Hit ≤ 2 h · near ≤ 6 h · miss &gt; 6 h or wrong berth. Record starts 11 Nov 12:30 (v135). Pending rows are scored when the actual comes in.</p></div>
+    <div id="score"></div>
+  </section>
+
   <section class="card timber" data-sec="timber" aria-labelledby="th">
     <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
     <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
@@ -534,7 +540,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='13 Nov 2026 · 08:40 IST';
+const UPDATED='13 Nov 2026 · 09:00 IST';
 const BOARD_SRC='list 12.11 (0700) · programme 13.11 (TF/SH/2102, meeting 12.11) · DPR 12.11 (0700) · HM signals to the 13 Nov day sheet (disp 0725) · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1222,6 +1228,60 @@ function notices(){const el=document.getElementById('notices');const bar=documen
   if(bar){bar.querySelectorAll('.fb').forEach(b=>b.onclick=e=>{e.stopPropagation();NFILT=b.dataset.k;notices();});const inp=bar.querySelector('#nq');if(inp){inp.oninput=()=>{NQ=inp.value;const pos=inp.selectionStart;notices();const n2=document.getElementById('nq');if(n2){n2.focus();try{n2.setSelectionRange(pos,pos);}catch(e){}}};inp.onclick=e=>e.stopPropagation();}}
 }
 function learn(){const el=document.getElementById('learn');if(!LEARN.length){el.innerHTML='<div class="empty">No variance recorded yet.</div>';return;}
+
+// ===== ACCURACY TRACK RECORD (Mihir, 13 Nov: "accuracy wala dal do") =====
+// ev: 'berth' | 'sails' · b: berth called (berth events) · first/last: the board's calls (date-time strings) · act: actual, '' = pending · ab: actual berth
+// Only events the board actually called are listed; containers are not tracked. Scored on the LAST call; the first call is shown for honesty.
+const SCORE=[
+ {v:'Star Fighter',ev:'sails',b:'16',first:'11-11 23:00',fsrc:'DPR pace (11 Nov 12:30)',last:'11-12 01:30',lsrc:'night sheet',act:'11-12 01:35',asrc:'DPR: let go 01:35'},
+ {v:'Cape Diversity',ev:'berth',b:'16',first:'11-12 03:30',fsrc:'programme 12.11 (11 Nov 15:00)',last:'11-12 03:30',lsrc:'night sheet',act:'11-12 05:48',ab:'16',asrc:'DPR: OTB 03:44, made fast 05:48'},
+ {v:'RM 7',ev:'sails',b:'OJ-2',first:'11-11 23:30',fsrc:'programme 12.11',last:'11-11 23:30',lsrc:'night sheet (first issue)',act:'11-12 03:00',asrc:'DPR: let go 03:00 (re-issue 03:00)'},
+ {v:'Zao Galaxy',ev:'sails',b:'OJ-4',first:'11-11 22:30',fsrc:'programme 12.11',last:'11-11 23:00',lsrc:'night sheet',act:'11-11 23:00',asrc:'night sheet 23:00 (DPR: completed 20:30)'},
+ {v:'Wisdom Star',ev:'berth',b:'OJ-4',first:'11-12 01:00',fsrc:'programme 12.11',last:'11-12 01:00',lsrc:'night sheet',act:'11-12 02:18',ab:'OJ-4',asrc:'DPR: made fast 02:18'},
+ {v:'Hari Priya',ev:'sails',b:'OJ-6',first:'11-12 02:00',fsrc:'programme 12.11',last:'11-12 02:00',lsrc:'night sheet',act:'11-12 02:25',asrc:'DPR: let go 02:25'},
+ {v:'Dawn Mansarovar',ev:'berth',b:'OJ-6',first:'11-12 04:30',fsrc:'programme 12.11',last:'11-12 04:30',lsrc:'night sheet',act:'11-12 04:48',ab:'OJ-6',asrc:'DPR: made fast 04:48'},
+ {v:'Pacific Era',ev:'sails',b:'OJ-7',first:'11-11 22:00',fsrc:'DPR pace (11 Nov 12:30)',last:'11-12 09:00',lsrc:'programme after the 22:30 postponement',act:'11-12 06:00',asrc:'re-issued night sheet RT OUT 06:00 (DPR: completed 03:54)'},
+ {v:'Eva Fuji',ev:'sails',b:'OJ-3',first:'11-12 15:00',fsrc:'programme 12.11',last:'11-12 15:00',lsrc:'programme 12.11',act:'11-12 11:00',asrc:'day sheet 12 Nov OUT 11:00 (DPR: completed 06:20)'},
+ {v:'Torero',ev:'berth',b:'OJ-2',first:'11-12 22:00',fsrc:'programme 13.11 (12 Nov 15:00)',last:'11-12 22:00',lsrc:'programme 13.11',act:'11-12 19:15',ab:'OJ-2',asrc:'night sheet 12 Nov IN 19:15'},
+ {v:'Wisdom Star',ev:'sails',b:'OJ-4',first:'11-12 21:00',fsrc:'DPR balance at the norm (12 Nov 11:30)',last:'11-12 21:00',lsrc:'night sheet',act:'11-12 21:00',asrc:'night sheet RT OUT 21:00'},
+ {v:'Yasa Eagle',ev:'sails',b:'9',first:'11-12 22:04',fsrc:'list ETC (11 Nov 12:30)',last:'11-12 17:45',lsrc:'programme 12.11 + day sheet re-issue',act:'11-13 02:15',asrc:'night sheet 12 Nov RT OUT 02:15'},
+ {v:'Haj Abdullah T',ev:'sails',b:'3',first:'11-13 00:00',fsrc:'DPR pace (12 Nov 11:30)',last:'11-13 09:00',lsrc:'programme 13.11',act:'11-13 01:00',asrc:'night sheet 12 Nov OUT 01:00'},
+ {v:'Alberta',ev:'sails',b:'7',first:'11-13 03:00',fsrc:'40K norm estimate (11 Nov 12:30)',last:'11-13 04:30',lsrc:'programme 13.11 + night sheet',act:'11-13 04:30',asrc:'night sheet 12 Nov OUT 04:30 (DPR 13.11 to confirm)'},
+ {v:'Zheng Rong',ev:'sails',b:'8',first:'11-14 00:00',fsrc:'30K quote (11 Nov 12:30)',last:'11-13 06:00',lsrc:'programme 13.11',act:'11-13 05:00',asrc:'night sheet 12 Nov OUT 05:00'},
+ {v:'Bao He Ling',ev:'sails',b:'15',first:'11-15 17:35',fsrc:'list ETC (11 Nov 12:30)',last:'11-13 12:00',lsrc:'programme 13.11',act:'11-13 06:00',asrc:'night sheet 12 Nov RT OUT 06:00'},
+ {v:'Nord Newport',ev:'sails',b:'1',first:'11-12 19:08',fsrc:'permissible time (11 Nov 12:30)',last:'11-13 11:10',lsrc:'programme 13.11',act:'',asrc:'day sheet 13 Nov: RT OUT 11:10 signalled — pending the actual'},
+ {v:'Leya',ev:'berth',b:'9',first:'11-13 05:00',fsrc:'CJ-7 after Alberta (11 Nov 12:30)',fb:'7',last:'11-13 04:30',lsrc:'night sheet 12 Nov (ebb after Yasa Eagle)',act:'',ab:'9',asrc:'pending DPR 13.11'},
+ {v:'Chang Hang',ev:'berth',b:'7',first:'11-13 06:30',fsrc:'programme 13.11',last:'11-13 06:30',lsrc:'night sheet 12 Nov',act:'',asrc:'pending DPR 13.11'},
+ {v:'Merchia',ev:'berth',b:'8',first:'11-13 08:00',fsrc:'programme 13.11',last:'11-13 07:00',lsrc:'after Zheng Rong 05:00',act:'',asrc:'pending'},
+ {v:'Karpathos Dawn',ev:'berth',b:'15',first:'11-13 14:00',fsrc:'programme 13.11',last:'11-13 08:00',lsrc:'night sheet 12 Nov',act:'',asrc:'pending'},
+ {v:'DRAKE WELL',ev:'berth',b:'1',first:'11-12 01:00',fsrc:'CJ-16 after Star Fighter, 8K slot (11 Nov 12:30)',fb:'16',last:'11-13 13:00',lsrc:'programme 13.11 + day sheet 13 Nov (flood after Nord Newport 11:10)',act:'',asrc:'pending — Mihir & Company'},
+ {v:'Karpathos Dawn',ev:'sails',b:'15',first:'11-14 08:00',fsrc:'24-hrs rule (12 Nov 18:15)',last:'11-14 08:00',lsrc:'24-hrs rule',act:'',asrc:'pending'}
+];
+function renderScore(){
+  const el=document.getElementById('score'); if(!el) return;
+  const rows=SCORE.map(x=>{const done=!!x.act&&h(x.act)<=NOW; const dl=done?h(x.act)-h(x.last):null, df=done?h(x.act)-h(x.first):null;
+    const wrongB=done&&x.ev==='berth'&&x.ab&&x.ab!==x.b; const cls=!done?'pend':(wrongB||Math.abs(dl)>6)?'miss':(Math.abs(dl)>2?'near':'hit');
+    const lab=!done?'pending':cls==='hit'?'hit':cls==='near'?'near':'miss'; return {...x,done,dl,df,wrongB,cls,lab};});
+  const D=rows.filter(r=>r.done), H=D.filter(r=>r.cls==='hit').length, N=D.filter(r=>r.cls==='near').length, M=D.filter(r=>r.cls==='miss').length;
+  const abs=D.map(r=>Math.abs(r.dl)).sort((a,b)=>a-b), med=abs.length?abs[Math.floor(abs.length/2)]:0;
+  const B=D.filter(r=>r.ev==='berth'), BR=B.filter(r=>!r.wrongB).length;
+  const firstIn6=D.filter(r=>Math.abs(r.df)<=6).length;
+  const sgn=x=>(x>0?'+':'−')+(Math.abs(x)>=24?(Math.abs(x)/24).toFixed(1)+' d':Math.round(Math.abs(x)*10)/10+' h');
+  el.innerHTML=`<div class="score-sum">
+    <div><b>${D.length}</b><small>events scored</small></div>
+    <div><b class="hit">${D.length?Math.round(100*(H+N)/D.length):0}%</b><small>within 6 h (last call)</small></div>
+    <div><b>${H}</b><small>hit ≤ 2 h</small></div><div><b>${N}</b><small>near ≤ 6 h</small></div><div><b class="miss">${M}</b><small>miss</small></div>
+    <div><b>${med.toFixed(1)} h</b><small>median error</small></div>
+    <div><b>${B.length?Math.round(100*BR/B.length):0}%</b><small>berth right (${BR}/${B.length})</small></div>
+    <div><b>${D.length?Math.round(100*firstIn6/D.length):0}%</b><small>first call within 6 h</small></div>
+    <div><b class="pend">${rows.length-D.length}</b><small>pending</small></div></div>
+  <div class="score"><table><thead><tr><th>Vessel</th><th>Event</th><th>First call</th><th>Last call</th><th>Actual</th><th>Error (last)</th><th>Error (first)</th><th>Result</th></tr></thead><tbody>
+  ${rows.map(r=>`<tr><td><b>${r.v}</b></td><td class="n">${(r.ev==='berth'?'berth ':'sails from ')+(/^OJ|^TT/.test(r.b)?r.b:'CJ-'+r.b)}</td><td class="n">${fmt(h(r.first))}${r.fb?' · <span class="miss">CJ-'+r.fb+'</span>':''}<br><small>${r.fsrc}</small></td><td class="n">${fmt(h(r.last))}<br><small>${r.lsrc}</small></td><td class="n">${r.done?fmt(h(r.act))+(r.ab&&r.ab!==r.b?' · <span class="miss">CJ-'+r.ab+'</span>':''):'—'}<br><small>${r.asrc}</small></td><td class="n ${r.cls}">${r.done?sgn(r.dl):'—'}</td><td class="n">${r.done?sgn(r.df):'—'}</td><td class="${r.cls}"><b>${r.lab}</b>${r.wrongB?' · wrong berth':''}</td></tr>`).join('')}
+  </tbody></table></div>
+  <p style="color:var(--muted);font-size:12px;margin-top:8px">Sign: + = later than called, − = earlier. A "miss" on the last call usually means the port moved a sailing that was already on a programme or signal (Yasa Eagle 17:45 → 02:15, Bao He Ling 12:00 → 06:00) — the first-call column shows how far the board\'s own estimate was before any programme existed.</p>`;
+}
+renderScore();
+
   const L={open:'open · confirm?',adopted:'adopted in rules',ok:'matched'};
   const openAll=window.innerWidth>640;
   // Mihir (5 Nov): show only the OPEN questions here; the matched / adopted entries stay in the log but behind a toggle
