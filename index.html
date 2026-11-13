@@ -278,6 +278,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 .nt .d{font-family:var(--f-mono);font-size:10.5px;color:var(--brass,#c9a24c);white-space:nowrap;padding-top:2px}
 .nt b{display:block;font-size:13px;margin-bottom:2px}
 .nt small{color:var(--muted)}
+.srcmore{margin-top:4px}.srcmore summary{cursor:pointer;color:var(--accent,#7cc4ff);font-size:12px;letter-spacing:.04em;text-transform:uppercase}.srcmore div{margin-top:6px;color:var(--muted);font-size:12.5px;line-height:1.5}
 .score-sum{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}.score-sum div{background:var(--panel2,rgba(255,255,255,.04));border:1px solid var(--line2);border-radius:8px;padding:8px 12px;min-width:120px}.score-sum b{display:block;font-family:var(--f-disp);font-size:22px}.score-sum small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}.score table{width:100%;border-collapse:collapse;font-size:12.5px}.score th,.score td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line2);vertical-align:top}.score th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}.score .hit{color:var(--ok,#5fbf7a)}.score .near{color:var(--warn)}.score .miss{color:var(--brk)}.score .pend{color:var(--muted)}.score td.n{white-space:nowrap}
 .learn{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
 .learn .empty{color:var(--muted);font-size:12.5px;grid-column:1/-1}
@@ -361,9 +362,9 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   <header class="top">
     <div>
       <div class="eyebrow" id="eyebrow">Deendayal Port · Kandla · Dry cargo jetty</div>
-      <h1>Berth <span>Board</span><span class="draft">11 NOV 2026</span></h1>
+      <h1>Berth <span>Board</span><span class="draft" id="hdrdate">13 NOV 2026</span></h1>
     </div>
-    <div class="asof"><span class="upd" id="upd"></span><br>Berthing List <b>12.11.26 · 0700</b> · DPR <b>12.11 0700</b> (both received by 14:38)<br>Signals up to <b>13 Nov DAY sheet (disp 0725)</b> — <b>DRAKE WELL: IN o/c on the FLOOD after Nord Newport (RT OUT 11:10, Capt Sandeep) → 7¼–N</b> · Programme <b>13.11 (meeting 12.11, TF/SH/2102, received 14:38)</b> — <b>DRAKE WELL → CJ-1 after Nord Newport (readiness 13 Nov 11:10), 6.5K</b> · Mihir 11 Nov 12:10 + 16:03 (pellets allowed at CJ-13–16 by port decision; 8K slot open, no berth free) + 19:46 (Honor Star's "13–16" remark a mistake — coal stays at CJ-5–8; loaders that will sail deeper than CJ-5 go straight to a deep berth) + <b>20:08 (a slot's berth goes to the senior only if it suits her, else to the next senior — no holding the slot)</b><br>Policy <b>24.03.25 + 6 amendments / corrigenda</b> (to 06.08.26)<br><span id="tide"></span></div>
+    <div class="asof"><span class="upd" id="upd"></span><br>List <b>12.11 · 0700</b> · DPR <b>12.11</b> · Programme <b>13.11</b> · Signals to <b>13 Nov day sheet (0725)</b><br><details class="srcmore"><summary>Sources, rules &amp; tide</summary><div>Berthing List 12.11.26 (0700) and DPR 12.11 (0700), both received 12 Nov 14:38 · Programme 13.11 (TF/SH/2102, meeting 12 Nov) · HM signals to the 13 Nov day sheet (disp 0725): Drake Well IN o/c on the flood after Nord Newport (RT OUT 11:10, Capt Sandeep) → 7¼–N · Rules from Mihir, 11–13 Nov: ETC on DPR balance and permissible time; pellets allowed at CJ-13–16; CJ-16 open to coal / dirty bulk in practice; a slot\'s berth goes to the senior only if it suits her; 24-hrs vessels sail within 24 h; loaders that will sail deeper than CJ-5 go straight to a deep berth · Policy 24.03.25 + 6 amendments / corrigenda (to 06.08.26)<br><span id="tide"></span></div></details>
   </header>
   <nav class="views" id="views" aria-label="Boards on this page">
     <a href="#cargo" data-view="cargo"><b>Cargo jetties</b><small>CJ-1 to CJ-16 · dry cargo · berthing policy &amp; projection</small><span class="vb" id="vb-cargo"></span></a>
@@ -540,7 +541,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='13 Nov 2026 · 09:10 IST';
+const UPDATED='13 Nov 2026 · 09:25 IST';
 const BOARD_SRC='list 12.11 (0700) · programme 13.11 (TF/SH/2102, meeting 12.11) · DPR 12.11 (0700) · HM signals to the 13 Nov day sheet (disp 0725) · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1291,7 +1292,7 @@ renderScore();
   el.innerHTML=(O.length?O.map(card).join(''):`<div class="empty">No open question — every variance so far is explained and folded into the rules.</div>`)
     +(C.length?`<details class="lc" style="grid-column:1/-1;border-left-color:var(--line2)"><summary class="hd"><div><b>${C.length} closed entries</b><small>matched or adopted into the rules — open to read</small></div><span class="st">closed</span></summary><div style="margin-top:6px">${C.map((x,i)=>card(x,i).replace(' open','')).join('')}</div></details>`:'');}
  // last time the board data was refreshed (shown in header + footer)
-document.getElementById('upd').innerHTML='LAST UPDATED <b>'+UPDATED+'</b>';
+document.getElementById('upd').innerHTML='LAST UPDATED <b>'+UPDATED+'</b>';{const hd=document.getElementById('hdrdate');if(hd)hd.textContent=UPDATED.split('·')[0].trim().toUpperCase();}
 function tideLine(){const d=dt(NOW);const k=String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');const t=TIDES[k];const n=dt(NOW+24);const k2=String(n.getUTCMonth()+1).padStart(2,'0')+'-'+String(n.getUTCDate()).padStart(2,'0');const t2=TIDES[k2];
  const f=x=>x?x.map(h=>`<b>${h[0]}</b> ${h[1].toFixed(2)} m`).join(' · '):'—';
  const el=document.getElementById('tide');if(el)el.innerHTML=`HW &amp; channel draught · today ${f(t)} · tomorrow ${f(t2)} <small>(DC circular MR/SH/1120/2026)</small>`;}document.getElementById('updf').textContent='Updated '+UPDATED;
