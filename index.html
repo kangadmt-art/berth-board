@@ -471,6 +471,8 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   <section class="card timber" data-sec="timber" aria-labelledby="th">
     <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
     <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
+    <div class="sechead" style="margin-top:18px"><h2 id="dmh">Timber demurrage · laytime from NOR</h2><p id="dmsub"></p></div>
+    <div class="scroll"><table class="mpt tmb" id="demur"></table></div>
   </section>
   </div><!-- /view cargo -->
 
@@ -708,7 +710,7 @@ const DPR={d:'14.11.2026',asOf:'11-14 07:00',src:'DPA Traffic Dept Daily Perform
   {loc:'CJ-1',n:'Nord Newport',ie:'EXP',c:'Rice bulk',l24:50,upto:30000,bal:0,g:'',hk:12,note:'COMPLETED 07:15, let go 11:20 on 13 Nov — 30,000 MT'},
   {loc:'CJ-1',n:'Drake Well',ie:'IMP',c:'Pine logs',l24:4358,upto:4358,bal:21753,g:'4/4/0',hk:0,partial:1,comm:'11-13 15:35',note:'MADE FAST 14:00, commenced 15:35 on 13 Nov — 13,774 pcs / 4,358 MT in the first 15½ h (≈ 6,800 MT/day); 68,746 pcs / 21,753 MT left → ~17 Nov 12:00 at this rate; agent and stevedore Mihir'},
   {loc:'CJ-2',n:'Bomustafao O',ie:'EXP',c:'Rice bags',l24:1834,upto:13691,bal:8254,g:'3/3/3',hk:10,note:'1,834 MT in 24 h — 8,254 left ≈ 4½ days at this rate; permissible time 14 Nov 11:33'},
-  {loc:'CJ-4',n:'Enishi',ie:'IMP',c:'Pine logs',l24:4578,upto:22062,bal:11072,g:'4/4/4',hk:12,note:'32,016 pcs / 4,578 MT in 24 h — 11,072 MT left → ~16 Nov 17:00 at this rate'},
+  {loc:'CJ-4',n:'Enshi',ie:'IMP',c:'Pine logs',l24:4578,upto:22062,bal:11072,g:'4/4/4',hk:12,note:'32,016 pcs / 4,578 MT in 24 h — 11,072 MT left → ~16 Nov 17:00 at this rate'},
   {loc:'CJ-5',n:'Belasitza',ie:'IMP',c:'Ammonium sulphate',l24:7681,upto:27529,bal:971,g:'3/3/3',hk:9,note:'7,681 MT in 24 h — only 971 left: completes this forenoon; programme OUT 17:30'},
   {loc:'CJ-6',n:'Bristol',ie:'IMP',c:'DAP + TSP',l24:12980,upto:57409,bal:4311,g:'4/4/4',hk:12,note:'12,980 MT in 24 h — 4,311 left ≈ 8 h: she finishes at CJ-6 about 15:00, before the programmed shift to CJ-5 (19:00)'},
   {loc:'CJ-7',n:'Chang Hang',ie:'EXP',c:'Iron ore pellets',l24:46000,upto:46300,bal:1400,g:'5/5/5',hk:15,note:'46,000 MT in 24 h on five cranes every shift (norm 42,000) — 1,400 left; signal: OUT 13:45 (programme 09:30)'},
@@ -1157,6 +1159,51 @@ function lineup(){
   const tbl=document.getElementById('liqtbl'); if(tbl){const trs=[...tbl.querySelectorAll('tr')].filter(tr=>tr.children.length===4&&!tr.querySelector('th'));
     LIQ.berths.forEach((b,i)=>{const tr=trs[i];if(!tr)return;const nx=bars.filter(x=>x.p.oj===b.b&&!x.now&&x.z>NOW).sort((a,z)=>a.a-z.a).slice(0,3);
       if(nx.length)tr.children[3].insertAdjacentHTML('beforeend',`<br><small style="color:var(--brass)">line-up ${LINEUP.d}: ${nx.map(x=>x.r.n+' '+fday(x.a).slice(4)+(x.p.shift?' (then shifts)':'')).join(' → ')}</small>`);});}
+}
+// ---- Timber demurrage (Mihir, 14 Nov 13:42): a timber vessel's laytime runs from NOR at Kandla at 4,000 CBM a day (about 166 CBM an hour);
+// once it is used up, demurrage runs at USD 20,000 a day until she completes. Change the two figures here if a charter party differs.
+const DEM={rate:4000,usd:20000};
+function demur(){
+  const el=document.getElementById('demur'); if(!el)return; const sub=document.getElementById('dmsub');
+  const hd=x=>x?(x.length===5?h(x+' 12:00'):h(x)):null;
+  const live=(Date.now()-Date.UTC(2026,9,24,18,30))/36e5; const tNow=(live>NOW&&live<NOW+72)?live:NOW;
+  const money=x=>'$'+(Math.round(x/100)*100).toLocaleString('en-US');
+  const dd=x=>(x/24).toFixed(1)+' d';
+  const alias=n=>n;
+  const ORD={berth:0,wait:1,eta:2,sailed:3};
+  const names=[...new Set([...V.filter(v=>isLogs(v.c)).map(v=>v.n),...W.filter(w=>isLogs(w.c)).map(w=>w.n),...TIMBER.rows.map(r=>alias(r.n))])];
+  const rows=names.map(n=>{
+    const tr=TIMBER.rows.find(r=>alias(r.n)===n)||{};
+    const vs=V.filter(x=>x.n===n).sort((a,z)=>a.F-z.F), v0=vs[0], v=vs[vs.length-1], sp=S.find(x=>x.n===n), w=W.find(x=>x.n===n);
+    const q=(v&&v.q)||(w&&w.q)||tr.cbm||null;
+    const nor=REP[n]?h(REP[n]):tr.arr?hd(tr.arr):(w&&w.rep!=null)?w.rep:tr.eta?hd(tr.eta):null;
+    if(!q||nor==null)return null;
+    const allow=q/DEM.rate*24, end=nor+allow;
+    const dr=DPR.rows.find(x=>x.n===n&&/^CJ/.test(x.loc)&&x.bal>0&&x.l24>0);
+    const eDpr=dr?h(DPR.asOf)+dr.bal/(dr.partial&&dr.comm?dr.l24/Math.max(1,h(DPR.asOf)-h(dr.comm)):dr.l24/24):null;
+    const bF=v0?v0.F:sp?sp.F:null;
+    const sailed=!!v&&v.T<=NOW, atB=!!v0&&v0.F<=NOW&&!sailed;
+    const done=sailed?v.T:atB?(eDpr||v.T):v?v.T:sp?sp.T:null;
+    const st=sailed?'sailed':atB?'berth':nor>NOW?'eta':'wait';
+    const upto=done!=null&&done<tNow?done:tNow;
+    const sofar=Math.max(0,upto-end), tot=done!=null?Math.max(0,done-end):null;
+    return {n,q,nor,allow,end,bF,done,st,sofar,tot,how:sailed?'actual':atB?(eDpr?'DPR pace':'ETC'):v?'programme':sp?'projection · at the norm':''};
+  }).filter(Boolean).sort((a,z)=>(ORD[a.st]-ORD[z.st])||(a.nor-z.nor));
+  const G={berth:'Working at berth',wait:'Arrived · waiting for berth',eta:'Expected · not yet arrived',sailed:'Completed'};
+  let last=null,sumS=0,sumT=0;
+  const body=rows.map(r=>{const g=r.st!==last?`<tr class="grp"><td colspan="8">${G[r.st]}</td></tr>`:'';last=r.st; if(r.st!=='sailed'){sumS+=r.sofar;sumT+=(r.tot||0);}
+    const stat=r.st==='sailed'?'':r.end>tNow?`<span class="dl ${r.tot>0?'same':'early'}">laytime runs to ${fmt(r.end)}</span>`:`<span class="dl late">on demurrage since ${fmt(r.end)}</span>`;
+    return g+`<tr class="${isMine(r.n)?'me':''}"><td class="n">${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${stat}</small></td>
+      <td class="d">${nf.format(Math.round(r.q))}<small>CBM</small></td>
+      <td class="d">${fmt(r.nor)}<small>${r.st==='eta'?'ETA':'NOR'}</small></td>
+      <td class="d">${dd(r.allow)}<small>ends ${fmt(r.end)}</small></td>
+      <td class="d">${r.bF!=null?fmt(r.bF):'—'}<small>${r.bF==null?'':r.bF<=NOW?'berthed':'board estimate'}</small></td>
+      <td class="d">${r.done!=null?fmt(r.done):'—'}<small>${r.how}</small></td>
+      <td class="d">${r.st==='sailed'?'—':r.sofar>0?`<b>${money(r.sofar/24*DEM.usd)}</b><small>${dd(r.sofar)}</small>`:'nil'}</td>
+      <td class="d">${r.tot==null?'—':r.tot>0?`<b>${money(r.tot/24*DEM.usd)}</b><small>${dd(r.tot)}${r.st==='sailed'?' · final':''}</small>`:'nil'}</td></tr>`;}).join('');
+  el.innerHTML='<tr><th>Vessel</th><th>Quantity</th><th>NOR at Kandla</th><th>Laytime allowed</th><th>Berthing</th><th>Completes</th><th>Demurrage so far</th><th>Total at completion</th></tr>'+body+`<tr class="grp"><td colspan="6">All timber vessels in port or expected</td><td class="d"><b>${money(sumS/24*DEM.usd)}</b></td><td class="d"><b>${money(sumT/24*DEM.usd)}</b></td></tr>`;
+  if(sub)sub.innerHTML=`Laytime runs from NOR at Kandla at <b>${nf.format(DEM.rate)} CBM a day</b> (about ${Math.round(DEM.rate/24)} CBM an hour). Once it is used up, demurrage runs at <b>USD ${nf.format(DEM.usd)} a day</b> until the vessel completes. "So far" counts up to ${fmt(tNow)}. Completion = actual, the DPR pace for vessels at berth, or the board's projection at the norm for vessels still waiting — a projection moves the total with it.`;
+  window.__DEM=rows;
 }
 function timber(){
   const el=document.getElementById('timber'); const sub=document.getElementById('tsub');
@@ -2490,7 +2537,7 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();dpr();timber();tuna();liquid();lineup();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();dpr();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
   summaries();
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }
