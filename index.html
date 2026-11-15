@@ -46,7 +46,7 @@ section.card{background:var(--panel);border:1px solid var(--line);border-radius:
 .secctl span{margin-right:auto}
 @media (max-width:640px){.sechead h2{font-size:20px}.sechead .ssum::after{content:" · tap to open";color:var(--dim)}.secctl span{display:none}}
 
-/* boards inside the one page: Cargo jetties · Tuna · Liquid (tabs, hash #cargo / #tuna / #liquid) */
+/* boards inside the one page: Cargo jetties · Timber · Tuna · Liquid (tabs, hash #cargo / #timber / #tuna / #liquid) */
 .views{display:flex;flex-wrap:wrap;gap:8px;margin:-6px 0 -8px}
 .views a{flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--line2);border-radius:8px;padding:10px 14px 9px;-webkit-tap-highlight-color:transparent}
 .views a[data-view="cargo"]{--sc:var(--brass)}.views a[data-view="tuna"]{--sc:var(--brk)}.views a[data-view="liquid"]{--sc:var(--dry)}
@@ -258,12 +258,45 @@ table{border-collapse:collapse;width:100%}
 .mine .hs{font-family:var(--f-mono);font-size:11px;color:var(--brk);margin-top:1px}
 .mine .hw{color:var(--muted);font-size:12px;margin-top:2px;line-height:1.45}
 .mine .dl{font-family:var(--f-mono);font-size:11px;font-weight:700}.mine .dl.late{color:var(--warn)}.mine .dl.early{color:var(--ok)}.mine .dl.same{color:var(--muted)}
-.timber{border-color:var(--brk)}
+/* Timber tab (16 Nov): own sheet — active vessels, laytime bar, completed record */
+:root{--tmb:#a3c46a}
+.views a[data-view="timber"]{--sc:var(--tmb)}
+.timber{border-color:var(--line)}.timber .sechead h2{color:var(--fg)}
+.tmb .money{font-family:var(--f-disp);font-weight:700;font-size:18px;letter-spacing:.01em;color:var(--fg);display:block;line-height:1.15}
+.tmb .money.dem{color:var(--bad)}.tmb .money.des{color:var(--ok)}
+.tmb .avg{font-family:var(--f-disp);font-weight:700;font-size:18px;color:var(--fg);display:block;line-height:1.15}
+.tmb .avg small{font-family:var(--f-mono);font-weight:400;font-size:10.5px;color:var(--muted)}
+.tmb .x{display:block;font-family:var(--f-mono);font-size:10.5px;font-weight:700}.tmb .x.hi{color:var(--ok)}.tmb .x.lo{color:var(--warn)}
+.tmb .pbar i{background:var(--tmb)}
+.lbar{position:relative;display:flex;height:10px;border-radius:5px;background:var(--line);overflow:hidden;margin:7px 0 2px;min-width:120px}
+.lbar i{display:block;height:100%;flex:none}.lbar .f{background:var(--line2)}.lbar .l{background:var(--ok)}.lbar .sv{background:rgba(95,191,127,.28)}.lbar .d{background:var(--bad)}.lbar .d.p{background:rgba(224,100,100,.4)}
+.lbar u,.lbar s{position:absolute;top:0;bottom:0;width:0;text-decoration:none}.lbar u{border-left:2px solid var(--brass)}.lbar s{border-left:2px dotted var(--fg)}
+.tjump{display:flex;flex-wrap:wrap;gap:8px;margin:-8px 0 -6px}.tjump button{flex:1 1 150px;font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--tmb);background:var(--panel);border:1px solid var(--line2);border-radius:6px;padding:8px 10px;cursor:pointer;-webkit-tap-highlight-color:transparent}.tjump button:hover{border-color:var(--tmb)}
+.lkey{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
+.lkey span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--kc)}
+.tmb th{box-sizing:border-box}
+#tmbstats{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}#tmbstats .stat .v{font-size:30px}
+.timber .sechead p{max-width:none}
+/* phones: each timber vessel is a card — name on top, the figures in two columns with their labels */
+@media (max-width:640px){
+ .timber .tsrc{gap:6px}.timber .tchip{min-width:140px;flex-basis:140px;padding:6px 10px}.timber .tchip b{font-size:16px}#tmbstats .stat .v{font-size:26px}
+ .tmb.tc{min-width:0;table-layout:auto;display:block}.tmb.tc tbody{display:block;width:100%}
+ .tmb.tc tr{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;padding:14px 2px 16px;border-bottom:1px solid var(--line)}
+ .tmb.tc tr:first-child{display:none}
+ .tmb.tc td{display:block;border:0;padding:0;width:auto !important;min-width:0}
+ .tmb.tc td.n,.tmb.tc td.full{grid-column:1/-1}.tmb.tc td.n{width:auto;font-size:16px}
+ .tmb.tc td.no,.tmb.tc td.mt,.tmb.tc tr.sumr td:empty{display:none}
+ .tmb.tc td[data-l]::before{content:attr(data-l);display:block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
+ .tmb.tc tr.me{background:rgba(92,200,255,.06);box-shadow:inset 3px 0 0 var(--brass);padding-left:12px;padding-right:8px}.tmb.tc tr.me td{background:none}
+ .tmb.tc tr.grp{display:block;padding:0;border:0;margin-top:6px}.tmb.tc tr.grp td{padding:6px 8px}
+ .tmb.tc tr.grp.sumr{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;padding:10px 8px;background:rgba(163,196,106,.08)}.tmb.tc tr.grp.sumr td{background:none;padding:0}.tmb.tc tr.grp.sumr td:first-child{grid-column:1/-1}
+ .tmb.tc .lbar{max-width:none}
+}
 .tmb td.n{font-weight:700;font-size:13.5px}
 .tmb td.n small{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px}
 .tmb td.d{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);line-height:1.5}
 .tmb td.d b{color:var(--fg);display:block;font-size:12.5px}
-.tmb tr.grp td{background:rgba(77,180,165,.08);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--brk);padding:5px 8px}
+.tmb tr.grp td{background:rgba(163,196,106,.08);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--tmb);padding:5px 8px}
 .tmb .dl{font-weight:700}.tmb .dl.late{color:var(--warn)}.tmb .dl.early{color:var(--ok)}.tmb .dl.same{color:var(--muted)}
 .sn{display:inline-block;min-width:18px;height:18px;line-height:18px;padding:0 5px;margin-right:6px;border-radius:9px;background:rgba(92,200,255,.14);color:var(--brass);font-family:var(--f-mono);font-size:10.5px;font-weight:700;text-align:center;vertical-align:middle}
 .tmb .tag.src{border-color:var(--brk);color:var(--brk);margin-left:0}.tmb .tag.src.team{border-color:var(--muted);color:var(--muted)}
@@ -368,6 +401,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   </header>
   <nav class="views" id="views" aria-label="Boards on this page">
     <a href="#cargo" data-view="cargo"><b>Cargo jetties</b><small>CJ-1 to CJ-16 · dry cargo · berthing policy &amp; projection</small><span class="vb" id="vb-cargo"></span></a>
+    <a href="#timber" data-view="timber"><b>Timber</b><small>Log vessels · position · laytime &amp; demurrage · record</small><span class="vb" id="vb-timber"></span></a>
     <a href="#tuna" data-view="tuna"><b>Tuna</b><small>TT-1 to TT-4 · Adani PPP terminal · status only</small><span class="vb" id="vb-tuna"></span></a>
     <a href="#liquid" data-view="liquid"><b>Liquid</b><small>OJ-1 to OJ-7 · oil jetties · status only</small><span class="vb" id="vb-liquid"></span></a>
   </nav>
@@ -468,13 +502,28 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div id="score"></div>
   </section>
 
-  <section class="card timber" data-sec="timber" aria-labelledby="th">
-    <div class="sechead"><h2 id="th">Timber vessels · team position</h2><p id="tsub"></p></div>
-    <div class="scroll"><table class="mpt tmb" id="timber"></table></div>
-    <div class="sechead" style="margin-top:18px"><h2 id="dmh">Timber demurrage · laytime from NOR</h2><p id="dmsub"></p></div>
-    <div class="scroll"><table class="mpt tmb" id="demur"></table></div>
-  </section>
   </div><!-- /view cargo -->
+
+  <div class="view" data-view="timber" id="view-timber">
+  <div class="stats" id="tmbstats" aria-label="Timber vessels"></div>
+  <div class="tjump" id="tjump" aria-label="Jump to a list"><button type="button" data-j="th">Working · waiting · expected</button><button type="button" data-j="dmh">Laytime · demurrage</button><button type="button" data-j="tdh">Completed record</button></div>
+  <section class="card timber" aria-labelledby="th">
+    <div class="sechead"><h2 id="th">Timber vessels · working, waiting, expected</h2><p id="tsub"></p></div>
+    <div class="scroll"><table class="mpt tmb tc" id="timber"></table></div>
+  </section>
+  <section class="card timber" aria-labelledby="dmh">
+    <div class="sechead"><h2 id="dmh">Laytime · demurrage / despatch</h2><p id="dmsub"></p></div>
+    <div class="scroll"><table class="mpt tmb tc" id="demur"></table></div>
+    <div class="lkey" id="lkey"></div>
+  </section>
+  <section class="card timber" aria-labelledby="tdh">
+    <div class="sechead"><h2 id="tdh">Completed vessels · record</h2><p id="tdsub"></p></div>
+    <div class="scroll"><table class="mpt tmb tc" id="tdone"></table></div>
+  </section>
+  <section class="card"><div class="sechead"><h2>How this sheet counts</h2></div>
+    <div class="note" id="tnote"></div>
+  </section>
+  </div><!-- /view timber -->
 
   <div class="view" data-view="tuna" id="view-tuna">
   <div class="stats" id="tstats" aria-label="Tuna terminal"></div>
@@ -514,7 +563,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="note" id="lpnotes"></div>
   </section>
   </div><!-- /view liquid -->
-  <footer><span id="updf"></span> · DPA berthing list 07.11.26 (0700, from Mihir 10:23; revised after the meeting, 15:07) and 05.11, movement programmes TF/SH/2102 for 08.11 and 09.11 (received 7 Nov 15:07 / 8 Nov 14:53), DPR 09.11 and 07.11 (0700), gang sheets 04.11 (2nd/3rd) and 05.11 (1st) · HM signals to the 8 Nov night sheet (disp 1457 → 1540) and the 8 Nov day sheet (disp 0535) · timber desk position report 07.11 1200 (updated to 08.11 1800, after the meeting) · Mihir\'s notes 6 Nov 19:34 · movement programmes TF/SH/2102 for 31.10 to 06.11 (06.11 received 5 Nov 21:01) · timber desk position report 02.11 (updated to 03.11 1800) · Tuna (TT) and oil-jetty (OJ) status from the same list and signals · Kandla tanker line-up 03.11 (Mihir & Co liquid desk; kept for reference until the next sheet) · DPA trade notices 1695–1698 dt 28.10.2026 (KPSAA mail 29.10) · DC circular MR/SH/1120/2026.</footer>
+  <footer><span id="updf"></span> · DPA berthing list 07.11.26 (0700, from Mihir 10:23; revised after the meeting, 15:07) and 05.11, movement programmes TF/SH/2102 for 08.11 and 09.11 (received 7 Nov 15:07 / 8 Nov 14:53), DPR 09.11 and 07.11 (0700), gang sheets 04.11 (2nd/3rd) and 05.11 (1st) · HM signals to the 8 Nov night sheet (disp 1457 → 1540) and the 8 Nov day sheet (disp 0535) · timber desk position report 07.11 1200 (updated to 08.11 1800, after the meeting) · Mihir's notes 6 Nov 19:34 · movement programmes TF/SH/2102 for 31.10 to 06.11 (06.11 received 5 Nov 21:01) · timber desk position report 02.11 (updated to 03.11 1800) · Tuna (TT) and oil-jetty (OJ) status from the same list and signals · Kandla tanker line-up 03.11 (Mihir & Co liquid desk; kept for reference until the next sheet) · DPA trade notices 1695–1698 dt 28.10.2026 (KPSAA mail 29.10) · DC circular MR/SH/1120/2026.</footer>
 </div>
 
 <script>
@@ -531,9 +580,9 @@ function pr(a){return frac(a[0])+'–'+frac(a[1]);}
 const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-15 20:54');
 const PROG_END=h('11-16 18:00'); // last movement programme covers till here (programme for 04.11, meeting 03.11) — barge windows end here; beyond it no data
-// ---- the three boards live on this one page as views (tabs): cargo (dry cargo CJ-1–16, projected), tuna (TT-1–4) and liquid (OJ-1–7), status only.
-const VIEWS={cargo:'Deendayal Port · Kandla · Dry cargo jetty',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
-const VIEW_NAME={cargo:'Cargo jetties',tuna:'Tuna',liquid:'Liquid'};
+// ---- the boards live on this one page as views (tabs): cargo (dry cargo CJ-1–16, projected), timber (log vessels: position, laytime, record — since 16 Nov), tuna (TT-1–4) and liquid (OJ-1–7), status only.
+const VIEWS={cargo:'Deendayal Port · Kandla · Dry cargo jetty',timber:'Deendayal Port · Kandla · Timber vessels — position, laytime, record',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
+const VIEW_NAME={cargo:'Cargo jetties',timber:'Timber',tuna:'Tuna',liquid:'Liquid'};
 let VIEW='cargo';
 const pageHref=k=>'#'+k; // same page, just another tab
 function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
@@ -543,7 +592,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='15 Nov 2026 · 21:10 IST';
+const UPDATED='16 Nov 2026 · 00:25 IST';
 const BOARD_SRC='list 14.11 (0700) · night signal 15 Nov, amended (disp 2048) · programme 16.11 (TF/SH/2102, dated 15.11) · programme 15.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -682,24 +731,32 @@ const LINEUP={d:'03.11.2026',asOf:'11-03 09:00',src:'Kandla Tanker Line-up as on
  {sec:'eta',n:'Lumis',arr:'11-11',ie:'IMP',c:'CPO + PFAD',q:20000,nm:650,rdy:'not ready',plan:[{oj:'OJ-7',etb:'11-15',etd:'11-17'}],rem:'REQ OJ-7'},
  {sec:'eta',n:'Jeil Crystal',arr:'11-12 14:30',ie:'IMP',c:'Chemicals',q:5000,nm:225,rdy:'not ready',plan:[{oj:'OJ-2',etb:'11-12',etd:'11-13'}],rem:'REQ OJ-2/3/4'}
 ]};
-const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'7 Nov 1200',upto:'8 Nov 1800, after the berthing meeting',rows:[
- {n:'African Quail',cbm:34758,from:'Argentina',c:'Pine logs',arr:'10-27 00:15',b:'11-04 14:10',pri:'SAAGAR',st:'berth',note:'team: berthed 4 Nov 14:10 under SAAGAR · DPR 09.11: COMPLETED 8 Nov 20:00, let go 9 Nov 00:00 — 4 days 7 h alongside, 33,734 MT / 100,095 pcs'},
- {n:'Lanna Naree',cbm:29222,from:'Malaysia',c:'Hardwood logs',arr:'10-27 12:54',b:'11-05 13:15',pri:'SAAGAR',st:'berth',note:'"Lunna Naree" in the team report · berthed 5 Nov 13:15 under SAAGAR · DPR 09.11: COMPLETED 9 Nov 06:45, shifted out to OTB 08:00 (day signal) — 29,222 MT / 11,633 pcs in 3 days 17 h'},
- {n:'African Peacock',cbm:36926,from:'Australia',c:'Pine logs',eta:'10-31 02:06',etb:'11-09',st:'wait',note:'team ETB 9 Nov (was 10) · SGR 1 · revised list 11.11 (14:58): CJ-13 112½–124½, made fast 8 Nov 23:42, norm now 3,450 (was 4,600) → permissible time 19 Nov 18:34; DPR 12.11: 4,973 MT / 38,261 pcs a day, 21,846 MT left → ~16 Nov 16:30 — team ETB met'},
- {n:'Enshi',cbm:33134,from:'Australia',c:'Pine logs',eta:'11-05 00:18',etb:'11-09',st:'wait',note:'"ENISHI" on the team sheet and the DPA list (board spelling Enshi) · team ETB 9 Nov (was 10) · SGR 2 · list 11.11: CJ-4 22¼–30¼, made fast 9 Nov 17:05, norm 3,450 → permissible time 19 Nov 09:34; DPR 11.11: 5,184 MT / 36,001 pcs a day → ~16 Nov 11:00 at this pace — team ETB 9 Nov met'},
- {n:'Drake Well',cbm:26112,from:'Argentina',c:'Pine logs',eta:'11-05 13:30',etb:'11-17',st:'wait',note:'team ETB 17 Nov (was 20) — team note: "if Drake Well berths under 6.5K priority then all the vessel berthing will be earlier than above" · 11.11 list: SGR 1, 8K 3, GEN 11 · programme 12.11: CJ-16 after Star Fighter went to CAPE DIVERSITY (HP 40K, pellets — the port now allows pellets at CJ-13–16, Mihir 16:03) with two clean vessels warped this evening to fit her — "the 8K slot is available but the berth is not" (Mihir); DAY SHEET 13 Nov: IN o/c on the flood after Nord Newport (RT OUT 11:10, Capt Sandeep) → 7¼–N, 6.5K — made fast ~13:00 est (see right); list 13.11: "6.5K / 8K · CJ-1 · B\'TODAY", norm not yet printed'},
- {n:'ML Egret',cbm:42886,from:'New Zealand',c:'Pine logs',eta:'11-06 15:00',etb:'11-18',st:'eta',note:'team ETB 18 Nov (was 20) · 11.11 list: SGR 2, 8K 4, GEN 12 (ready 6 Nov 14:24), 12.11 m · board: see right'},
- {n:'Uni Blossom',cbm:34870,from:'Uruguay',c:'Pine logs',eta:'11-09 01:00',etb:'11-20',st:'eta',note:'team ETB 20 Nov (was 24) · 11.11 list: SGR 3, 8K 6, GEN 16, 10.8 m · board: see right'},
-  {n:'AG Varvara',cbm:39113,from:'Australia',c:'JAS pine logs',eta:'11-12 00:00',etb:'',st:'eta',note:'not on the team report — DPA ETA sheet 11.11: ETA / readiness 12 Nov 00:00, SGR Y, Sr No 7, "cargo density 0.136", 199.99 m, 9.0 m · fourth logger in the SAAGAR queue · agent DBC'},
- {n:'AG Varvara',cbm:null,from:'Australia',c:'Pine logs',eta:'11-12',etb:'11-26',st:'eta',note:'team ETA moved 15 → 12 Nov, ETB 5 Dec → 26 Nov'},
- {n:'CD Glory',cbm:29158,from:'Malaysia',c:'Hardwood logs',eta:'11-15 12:00',etb:'11-28',st:'eta',note:'DPA list 14.11 (ETA sheet): timber logs 29,158.216 CBM, 179.9 m, 10.5 m, ETA 15 Nov 12:00, readiness N/A, agent Mihir · team ETA moved 10 → 15 Nov, ETB 30 → 28 Nov · the "CD GLORY" on programme 14.11 was a typing slip for CD CHERRY (Mihir, 14 Nov) — she is not programmed; options by priority are on the Mihir & Co card'},
- {n:'Dariya Priya',cbm:44968,from:'New Zealand',c:'Pine logs',eta:'11-16 08:00',etb:'12-03',st:'eta',note:'"Darya Priya" on the team sheet (ETA 16 Nov 19:30) · DPA list 14.11: ETA / readiness 16 Nov 08:00, 44,968 CBM, SGR Y · 8K Y, 11.0 m, agent DBC · team ETA moved 15 → 16 Nov, ETB 30 Nov → 3 Dec'},
- {n:'African Tiger',cbm:36328,from:'—',c:'Pine logs',eta:'11-18 00:00',etb:'',st:'eta',note:'not on the team report — DPA ETA sheet 14.11: pine logs 36,328 (printed MT), ETA 18 Nov, N/A, SGR Y · 8K Y, Sr No 7, 179.97 m · agent Synergy'},
- {n:'Paiwan Ace',cbm:null,from:'Uruguay',c:'Pine logs',eta:'11-21 21:00',etb:'12-05',st:'eta',note:'team ETB 5 Dec (unchanged)'},
- {n:'Erna Oldendorff',cbm:null,from:'Australia',c:'Pine logs',eta:'11-23 15:00',etb:'12-10',st:'eta',note:'new on the team sheet'},
- {n:'African Pheasant',cbm:null,from:'New Zealand',c:'Logs',eta:'11-23 16:30',etb:'12-12',st:'eta',note:'team ETB moved 11 → 12 Dec'},
- {n:'Paiwan Wisdom',cbm:null,from:'USA',c:'Logs',eta:'11-26',etb:'12-20',st:'eta',note:'team ETB moved 15 → 20 Dec'}
-]};
+const TIMBER={src:"Kandla Timber Vessel's Position · Mihir & Co timber desk",d:'7 Nov 1200',upto:'8 Nov 1800, after the berthing meeting',
+ // ACTIVE — working, waiting, expected. cbm = the desk's CBM (laytime is counted on it); eta = the desk's arrival / ETA (the DPA reporting time is used once she is on the list);
+ // etb = the desk's own berthing estimate; comm = commencement of discharge (from the DPR) — the average discharge is counted from it.
+ rows:[
+ {n:'African Peacock',cbm:36926,from:'Australia',c:'Pine logs',eta:'10-31 02:06',etb:'11-09',comm:'11-09 02:30',note:'team ETB 9 Nov'},
+ {n:'Enshi',cbm:33134,from:'Australia',c:'Pine logs',eta:'11-05 00:18',etb:'11-09',comm:'11-09 22:15',note:'"Enishi" on the team sheet and the DPA list · team ETB 9 Nov'},
+ {n:'Drake Well',cbm:26112,from:'Argentina',c:'Pine logs',eta:'11-05 13:30',etb:'11-17',comm:'11-13 15:35',note:'team ETB 17 Nov — she berthed under 6.5K / 8K instead of waiting for SAAGAR'},
+ {n:'ML Egret',cbm:42886,from:'New Zealand',c:'Pine logs',eta:'11-06 15:00',etb:'11-18',note:'team ETB 18 Nov · 12.11 m — deep berths only'},
+ {n:'Uni Blossom',cbm:34870,from:'Uruguay',c:'Pine logs',eta:'11-09 01:00',etb:'11-20',note:'team ETB 20 Nov · 10.8 m'},
+ {n:'AG Varvara',cbm:39113,from:'Australia',c:'JAS pine logs',eta:'11-12 00:00',etb:'11-26',note:'team ETB 26 Nov (was 5 Dec) · 199.99 m, 9.0 m'},
+ {n:'CD Glory',cbm:29158,from:'Malaysia',c:'Hardwood logs',eta:'11-15 12:00',etb:'11-28',note:'team ETB 28 Nov · ready from the 16 Nov meeting under SAAGAR and 6.5K (Mihir) · 179.9 m, 10.5 m — fits CJ-1, CJ-4, CJ-5'},
+ {n:'Dariya Priya',cbm:44968,from:'New Zealand',c:'Pine logs',eta:'11-16 08:00',etb:'12-03',note:'"Darya Priya" on the team sheet · team ETB 3 Dec · 11.0 m'},
+ {n:'African Tiger',cbm:36328,from:'—',c:'Pine logs',eta:'11-18 00:00',etb:'',note:'not on the team sheet — from the DPA ETA sheet 14.11 · 179.97 m'},
+ {n:'Paiwan Ace',cbm:null,from:'Uruguay',c:'Pine logs',eta:'11-21 21:00',etb:'12-05',note:'team ETB 5 Dec'},
+ {n:'Erna Oldendorff',cbm:null,from:'Australia',c:'Pine logs',eta:'11-23 15:00',etb:'12-10',note:'team ETB 10 Dec'},
+ {n:'African Pheasant',cbm:null,from:'New Zealand',c:'Logs',eta:'11-23 16:30',etb:'12-12',note:'team ETB 12 Dec'},
+ {n:'Paiwan Wisdom',cbm:null,from:'USA',c:'Logs',eta:'11-26',etb:'12-20',note:'team ETB 20 Dec'}
+ ],
+ // COMPLETED RECORD — kept for good, never trimmed. When a vessel completes: take her row out of `rows` and add her here with the times of the DPR
+ // (nor = arrival / NOR, mf = made fast, comm = commenced, done = completed, out = let go). A row here is self-contained — it does not need the berth entries.
+ done:[
+ {n:'Lanna Naree',cbm:29222,pcs:11633,from:'Malaysia',c:'Hardwood logs',ag:'Synergy',berth:'5',pri:'SAAGAR',nor:'10-27 12:54',mf:'11-05 13:12',comm:'11-05 14:40',done:'11-09 06:45',out:'11-09 08:00',note:'best day 8,832 (DPR 07.11)'},
+ {n:'African Quail',cbm:34758,pcs:100095,from:'Argentina',c:'Pine logs',ag:'Mihir & Company',berth:'15',pri:'SAAGAR',nor:'10-27 00:15',mf:'11-04 13:10',comm:'11-04 15:05',done:'11-08 20:00',out:'11-09 00:00',note:'stevedore Mihir · DPA out-turn 33,734 · best day 8,588 (DPR 07.11)'},
+ {n:'Centurion Buyo',cbm:29852,from:'—',c:'Pine logs',ag:'Synergy',berth:'15A',pri:'SAAGAR',nor:null,mf:'10-29 23:10',comm:'10-30 01:45',done:'11-03 20:00',out:'11-03 23:25',note:'best day 7,749 (DPR 02.11)'},
+ {n:'AC Kathryn',cbm:29068,from:'Australia',c:'JAS logs',ag:'DBC',berth:'14',pri:'SAAGAR',nor:null,mf:'10-25 06:36',comm:null,done:null,out:'11-01 10:00',note:'the hour she completed is not on record — she left the berth on 1 Nov 10:00, so her average is understated'}
+ ]};
 // ---- DPR: DPA Traffic Dept "Daily Performance Report", position as at 0700 hrs — last 24 h cargo, up-to-date, balance, gangs per shift, hooks.
 // Used as a CHECK beside the list ETC (balance ÷ yesterday's rate), never to replace it. loc = where the vessel is (berth / MS midstream / BA Bunder area / OP / IFFCO jetty / MRG mooring).
 const DPR={d:'15.11.2026',asOf:'11-15 07:00',src:'DPA Traffic Dept Daily Performance Report, position 0700 hrs 15 Nov (PDF from Mihir, 15 Nov 10:31)',
@@ -863,6 +920,7 @@ const NOTICES=[
 // Expected-vs-actual log. {d:'date', v:'vessel', exp:'what the board expected', act:'what the port did', why:'reason / hypothesis', fix:'rule change', st:'open'|'adopted'|'ok'}
 // st: open = waiting for Mihir to confirm the reason; adopted = folded into the rules; ok = matched, nothing to learn
 const LEARN=[
+ {d:'16 Nov 00:01 · Mihir — timber sheet, the 12 free hours',v:'TIMBER LAYTIME: after the vessel arrives, the first 12 hours are free; if she is berthed inside those 12 hours, despatch / demurrage is counted from berthing. The 12 hours are not counted. Timber is to have its own sheet, with every vessel\'s average and the completed vessels kept on it.',exp:'Board: laytime counted from the NOR itself and up to the hour the vessel let go; the timber tables sat at the bottom of the Cargo jetties page; completed vessels were mixed into the same list and their record was thin.',act:'Mihir, 16 Nov 00:01.',why:'Turn time: 12 hours after arrival, unless she berths sooner.',fix:'v166: TIMBER TAB — tiles, the active list (working · waiting · expected), laytime / demurrage with a bar per vessel, and the completed record (AC Kathryn, Centurion Buyo, African Quail, Lanna Naree), kept for good. Laytime now starts 12 h after arrival (or at berthing if sooner) and stops at the hour the vessel COMPLETED, not the hour she let go — about USD 10,000 a vessel less than before (Drake Well at completion ~USD 88,000, was ~98,000). Average discharge per vessel = quantity ÷ commencement-to-completion; for a waiting vessel the sheet also shows the demurrage if she works at the record average instead of the port norm. OPEN — to confirm with Mihir: (a) "avg dispatch" is read as the average DISCHARGE per day; (b) the despatch rate (half demurrage?) — till then despatch is shown in days only.',st:'open'},
  {d:'15 Nov 20:54 · night signal 15 Nov — amended sheet (disp 1850 / 2048)',v:'Three changes to tonight\'s sheet: PRINCESS JOANNA\'s shift brought forward (00:01 → 23:15), BOW PLATINUM put back (21:00 → 22:00), and EVANGELIA D given a later pilot — o/c with Capt Bali after TCI Anand\'s 05:25, where the first issue had Capt Pankaj straight after Cape Diversity\'s 03:00. A container vessel, Vira 1, is added at 87–95.',exp:'Board (first issue, disp 1805): Princess Joanna SHIFT 00:01 · Bow Platinum RT OUT 21:00 → Maple Castor / Haein Hope ~23:30 · Evangelia D alongside ~06:00, sailing ~17 Nov 12:30.',act:'AMENDED SHEET (disp 1805 / 1850 / 2048, Capt Sandeep): row 3 Princess Joanna SHIFT 2315 (0001 struck) · row 4 Bow Platinum RT OUT 2200 (2100 struck) · row 9 Velika marked "(ETA)" · row 12 now VIRA 1 IN o/c (Pankaj) → 87–95, flood, "SPEED 7.0" · row 15 EVANGELIA D IN o/c (Bali, after TCI Anand OUT 0525) → 173½–188. All other rows as first issued; still no Lujain move and no Avyaan.',why:'The pilot order is re-dealt when a vessel is added: the container vessel took the round-trip slot behind Cape Diversity, and the HP vessel was put behind the 05:25 sailing — CJ-16 stands empty for about five hours after the cape leaves. A first-issue night sheet is good for which movements happen, less so for their hour.',fix:'v165: Princess Joanna at CJ-5 ~00:15 on the 16th est · Evangelia D alongside ~08:30, sailing ~17 Nov 15:00 est · Maple Castor ~00:00 and Haein Hope ~00:30 est. Rome Trader is unaffected in effect (CJ-14 ~17 Nov 14:50): the HP place now comes from Cape Venture, which frees before Evangelia D. Because CJ-16 now frees after CJ-7 / CJ-8 on the 17th, the vacant Coastal and 24-hr slots change hands in the projection (Gokova-M takes the Coastal slot as a 30K/25K quote; Xin Hai Tong 71 moves to ~19 Nov) — these two freeings fall in one programme window, so the order between them is the port\'s to decide at the 16 Nov meeting; read those picks as loose.',st:'ok'},
  {d:'15 Nov 18:40 · night signal 15 Nov (disp 1805)',v:'Tonight\'s sheet against programmes 15.11 / 16.11: the cargo-jetty rows of programme 16.11 stand (Cape Diversity 03:00 → Evangelia D; the pipe barge gets 166½–171¾). The Princess Joanna shift and Truong Minh Dream\'s berthing, programmed for LAST night, are made tonight. At the oil jetties OJ-3 goes to MAPLE CASTOR, not to Lujain.',exp:'Board (programme 16.11): Lavraki out 20:00 → Haein Hope ~22:00 · Bow Platinum out 21:00 → Lujain moved OJ-4 → OJ-3 ~23:00 → Avyaan OJ-4 ~01:00 · Shanaya out 02:00 → Ishaan ~04:00 · Cape Diversity out 03:00 → Evangelia D ~05:00 · barge at CJ-15A ~02:00, no panels · Princess Joanna shift and Truong Minh Dream: placeholders of 13:00 / 15:00 on the 15th.',act:'NIGHT SIGNAL 15 Nov (disp 1805, Capt Sandeep): Lavraki OUT 20:00 (Karan) → Maple Castor IN o/c → OJ-3 · Princess Joanna SHIFT 00:01 47–54½ → 37–45¾, PORT-C (Karan) · Bow Platinum RT OUT 21:00 (Rawat) → Haein Hope IN o/c → OJ-2 · Shanaya OUT 02:00 (Rawat) → Truong Minh Dream IN o/c → 46¾–54½ · Ishaan IN 00:30 → OJ-6, flood (Yadav) · Velika IN 03:30 (KICT) → tug Chandra Sun + barge Victoria 251 IN o/c → 166½–171¾ · Cape Diversity RT OUT 03:00 (Pankaj) → Evangelia D IN o/c → 173½–188 · Coastal Amigo SHIFT 06:00 boat basin → OTB · TCI Anand OUT 05:25 (Bali). No Lujain shift, no Avyaan; nothing for CJ-4 / CJ-15 (Enishi, African Hornbill — day sheet, not received).',why:'A programmed night movement that is not made is carried on the next night\'s sheet without being programmed again — programme 16.11 has no row for Princess Joanna or Truong Minh Dream, yet both move tonight. The signal sheet can replace a programmed oil-jetty allotment within hours (Maple Castor for the Lujain move); the signal is the later document and the board follows it. An inward vessel marked "o/c" behind a round-trip sailing is alongside about 3 hours after the outward time, not the 2 hours the board adds to a programme readiness.',fix:'v164: all rows applied. Evangelia D alongside ~06:00 → sails ~17 Nov 12:30 est, so Rome Trader moves one hour (CJ-14 ~17 Nov 14:30). Truong Minh Dream ~04:30 on the 16th → ~19 Nov 10:30 est. The barge is on the chart at 166½–171¾ as quay space. Liquid tab: OJ-3 → Maple Castor (cargo unknown until a list carries her); Lujain kept at OJ-4; Avyaan shown as awaited. The re-run moves CD Glory to CJ-5 ~19 Nov 22:45 under General — a fragile gain, logged as a range of 19 to 21 Nov. Still estimates, no sheet seen: CD Cherry out, Enishi CJ-4 → CJ-15, African Hornbill into CJ-4, Lujain into OJ-4, Searay / CS Rotterdam.',st:'ok'},
  {d:'15 Nov 17:48 · Mihir answers the two points on programme 16.11',v:'(1) EVERY BAG-CARGO VESSEL BERTHED UNDER GENERAL GETS 2 DAYS\' EXTENSION. (2) ROME TRADER needs a clean berth and her cargo lies on the CJ-13 to 16 side — so the shift that opens her berth is on PORT account, not hers.',exp:'Board (v162): read Theometor and Bomustafao O as "past the permissible time, not moved because the programme has no outward row for them"; and asked whether a clean berth for Rome Trader has to be opened at the agent\'s cost, as Parekh Marine did for Rahma.',act:'Mihir, 15 Nov 17:48 — as above.',why:'The permissible time of a bag vessel under General is the list ETC plus two days — Theometor (list ETC 16 Nov 02:06 → 18 Nov 02:06) and Bomustafao O (14 Nov 11:33 → 16 Nov 11:33) are inside it, which is why programme 16.11 does not move them; Bomustafao O\'s DPR pace (~16 Nov 11:00) ends almost exactly with her extension. A shift is at the agent\'s cost when the agent wants a particular berth (Rahma, "REQ CJ 13 TO 16"; African Hornbill at CJ-4); it is on port account when the vessel must have a clean berth for her cargo and the cargo is on that side (salt).',fix:'v163: a berthed bag vessel under General is carried at her DPR pace up to list ETC + 48 h — the berth is free at the earlier of the two (Theometor ~17 Nov 14:13, North Gate ~18 Nov 11:05 instead of 17 Nov 04:59, Bomustafao O ~16 Nov 11:00); beyond the extension the port enforces as before. Projected stays of bag vessels that have not berthed yet stay at the norm — they can run up to 2 days longer. Rome Trader: no change of date (CJ-14, ~17 Nov 13:30 under HP); the port-convenience shift in the projection is confirmed as the right basis.',st:'adopted'},
@@ -1190,88 +1248,172 @@ function lineup(){
 }
 // ---- Timber demurrage (Mihir, 14 Nov 13:42): a timber vessel's laytime runs from NOR at Kandla at 4,000 CBM a day (about 166 CBM an hour);
 // once it is used up, demurrage runs at USD 20,000 a day until she completes. Change the two figures here if a charter party differs.
-const DEM={rate:4000,usd:20000};
-function demur(){
-  const el=document.getElementById('demur'); if(!el)return; const sub=document.getElementById('dmsub');
+// ---- TIMBER SHEET — its own tab since 16 Nov 2026 (Mihir: "ek timber ki puri sheet alag kar do"). Three lists: the active vessels
+// (working · waiting · expected), their laytime / demurrage, and the completed record, which is kept for good.
+// LAYTIME (Mihir, 16 Nov 00:01): after the vessel arrives (NOR at Kandla) the first 12 hours are free. Laytime starts when they end — or at
+// berthing, if she is berthed inside those 12 hours. Allowed = quantity ÷ 4,000 CBM a day. Past it: demurrage, USD 20,000 a day, until she
+// completes. Completed before it ends: the time saved is despatch (DEM.desp = USD a day; not given yet → only the days are shown).
+const DEM={rate:4000,usd:20000,free:12,desp:null};
+const tmbNow=()=>{const live=(Date.now()-Date.UTC(2026,9,24,18,30))/36e5;return (live>NOW&&live<NOW+72)?live:NOW;};
+const tmbMoney=x=>'$'+(Math.round(x/100)*100).toLocaleString('en-US');
+const tmbD=x=>(x/24).toFixed(1)+' d';
+function tmbRows(){
   const hd=x=>x?(x.length===5?h(x+' 12:00'):h(x)):null;
-  const live=(Date.now()-Date.UTC(2026,9,24,18,30))/36e5; const tNow=(live>NOW&&live<NOW+72)?live:NOW;
-  const money=x=>'$'+(Math.round(x/100)*100).toLocaleString('en-US');
-  const dd=x=>(x/24).toFixed(1)+' d';
-  const alias=n=>n;
-  const ORD={berth:0,wait:1,eta:2,sailed:3};
-  const names=[...new Set([...V.filter(v=>isLogs(v.c)).map(v=>v.n),...W.filter(w=>isLogs(w.c)).map(w=>w.n),...TIMBER.rows.map(r=>alias(r.n))])];
-  const rows=names.map(n=>{
-    const tr=TIMBER.rows.find(r=>alias(r.n)===n)||{};
-    const vs=V.filter(x=>x.n===n).sort((a,z)=>a.F-z.F), v0=vs[0], v=vs[vs.length-1], sp=S.find(x=>x.n===n), w=W.find(x=>x.n===n);
-    const q=(v&&v.q)||(w&&w.q)||tr.cbm||null;
-    const nor=REP[n]?h(REP[n]):tr.arr?hd(tr.arr):(w&&w.rep!=null)?w.rep:tr.eta?hd(tr.eta):null;
-    if(!q||nor==null)return null;
-    const allow=q/DEM.rate*24, end=nor+allow;
-    const dr=DPR.rows.find(x=>x.n===n&&/^CJ/.test(x.loc)&&x.bal>0&&x.l24>0);
-    const eDpr=dr?h(DPR.asOf)+dr.bal/(dr.partial&&dr.comm?dr.l24/Math.max(1,h(DPR.asOf)-h(dr.comm)):dr.l24/24):null;
-    const bF=v0?v0.F:sp?sp.F:null;
-    const sailed=!!v&&v.T<=NOW, atB=!!v0&&v0.F<=NOW&&!sailed;
-    const done=sailed?v.T:atB?(eDpr||v.T):v?v.T:sp?sp.T:null;
-    const st=sailed?'sailed':atB?'berth':nor>NOW?'eta':'wait';
-    const upto=done!=null&&done<tNow?done:tNow;
-    const sofar=Math.max(0,upto-end), tot=done!=null?Math.max(0,done-end):null;
-    return {n,q,nor,allow,end,bF,done,st,sofar,tot,how:sailed?'actual':atB?(eDpr?'DPR pace':'ETC'):v?'programme':sp?'projection · at the norm':''};
-  }).filter(Boolean).sort((a,z)=>(ORD[a.st]-ORD[z.st])||(a.nor-z.nor));
-  const G={berth:'Working at berth',wait:'Arrived · waiting for berth',eta:'Expected · not yet arrived',sailed:'Completed'};
-  let last=null,sumS=0,sumT=0;
-  const body=rows.map(r=>{const g=r.st!==last?`<tr class="grp"><td colspan="8">${G[r.st]}</td></tr>`:'';last=r.st; if(r.st!=='sailed'){sumS+=r.sofar;sumT+=(r.tot||0);}
-    const stat=r.st==='sailed'?'':r.end>tNow?`<span class="dl ${r.tot>0?'same':'early'}">laytime runs to ${fmt(r.end)}</span>`:`<span class="dl late">on demurrage since ${fmt(r.end)}</span>`;
-    return g+`<tr class="${isMine(r.n)?'me':''}"><td class="n">${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${stat}</small></td>
-      <td class="d">${nf.format(Math.round(r.q))}<small>CBM</small></td>
-      <td class="d">${fmt(r.nor)}<small>${r.st==='eta'?'ETA':'NOR'}</small></td>
-      <td class="d">${dd(r.allow)}<small>ends ${fmt(r.end)}</small></td>
-      <td class="d">${r.bF!=null?fmt(r.bF):'—'}<small>${r.bF==null?'':r.bF<=NOW?'berthed':'board estimate'}</small></td>
-      <td class="d">${r.done!=null?fmt(r.done):'—'}<small>${r.how}</small></td>
-      <td class="d">${r.st==='sailed'?'—':r.sofar>0?`<b>${money(r.sofar/24*DEM.usd)}</b><small>${dd(r.sofar)}</small>`:'nil'}</td>
-      <td class="d">${r.tot==null?'—':r.tot>0?`<b>${money(r.tot/24*DEM.usd)}</b><small>${dd(r.tot)}${r.st==='sailed'?' · final':''}</small>`:'nil'}</td></tr>`;}).join('');
-  el.innerHTML='<tr><th>Vessel</th><th>Quantity</th><th>NOR at Kandla</th><th>Laytime allowed</th><th>Berthing</th><th>Completes</th><th>Demurrage so far</th><th>Total at completion</th></tr>'+body+`<tr class="grp"><td colspan="6">All timber vessels in port or expected</td><td class="d"><b>${money(sumS/24*DEM.usd)}</b></td><td class="d"><b>${money(sumT/24*DEM.usd)}</b></td></tr>`;
-  if(sub)sub.innerHTML=`Laytime runs from NOR at Kandla at <b>${nf.format(DEM.rate)} CBM a day</b> (about ${Math.round(DEM.rate/24)} CBM an hour). Once it is used up, demurrage runs at <b>USD ${nf.format(DEM.usd)} a day</b> until the vessel completes. "So far" counts up to ${fmt(tNow)}. Completion = actual, the DPR pace for vessels at berth, or the board's projection at the norm for vessels still waiting — a projection moves the total with it.`;
-  window.__DEM=rows;
+  const tNow=tmbNow();
+  // rec = a row of the completed record. It is self-contained (its own times, berth, agent), so it keeps working after the vessel's berth entries are gone.
+  const mk=(tr,rec)=>{
+    const n=tr.n, vs=V.filter(x=>x.n===n).sort((a,z)=>a.F-z.F), v0=vs[0], v=vs[vs.length-1], cur=vs.find(x=>x.F<=NOW&&NOW<x.T), w=W.find(x=>x.n===n), sp=S.find(x=>x.n===n&&x.proj&&!x.shifted);
+    const ag=tr.ag||(AG[n]||''), mine=/mihir/i.test(ag);
+    const listQ=(v&&v.q)||(w&&w.q)||null, q=tr.cbm||listQ||null;      // the desk's CBM first (laytime is counted on it), else the DPA list quantity
+    const nor=tr.nor?hd(tr.nor):rec?null:REP[n]?h(REP[n]):tr.arr?hd(tr.arr):(w&&w.rep!=null)?w.rep:tr.eta?hd(tr.eta):null;
+    const mfA=tr.mf?h(tr.mf):(v0&&v0.F<=NOW?v0.F:null), mf=mfA!=null?mfA:(v0?v0.F:sp?sp.F:null);
+    const mfHow=mfA!=null?'made fast':v0?'programme / signal':sp?'board projection':'';
+    const comm=tr.comm?h(tr.comm):null;
+    const dr=rec?null:DPR.rows.find(x=>x.n===n&&/^CJ/.test(x.loc));
+    const eDpr=(dr&&dr.bal>0&&dr.l24>0)?h(DPR.asOf)+dr.bal/(dr.partial&&dr.comm?dr.l24/Math.max(1,h(DPR.asOf)-h(dr.comm)):dr.l24/24):null;
+    const sailed=!!rec||(!!v&&v.T<=NOW), atB=!sailed&&mfA!=null;
+    const out=tr.out?h(tr.out):(sailed&&v?v.T:null);
+    const done=tr.done?h(tr.done):sailed?out:atB?(eDpr||(v?v.T:null)):v?v.T:sp?sp.T:null;
+    const doneHow=tr.done?'completed':sailed?'left the berth':atB?(eDpr?'DPR pace':'list ETC'):v?'programme':sp?'projection · at the norm':'';
+    const st=sailed?'done':atB?'berth':(nor!=null&&nor<=NOW)?'wait':'eta';
+    const berth=tr.berth||(cur?cur.b:v?v.b:sp?sp.b:null), pri=tr.pri||(v?v.cat:sp?sp.cat:null);
+    let ls=null,lsHow='',allow=null,end=null,sofar=null,tot=null;
+    if(q&&nor!=null){const inFree=mf!=null&&mf<nor+DEM.free; ls=inFree?Math.max(nor,mf):nor+DEM.free;
+      lsHow=inFree?(mfA!=null?'at berthing, inside the '+DEM.free+' free hours':'at berthing — expected inside the '+DEM.free+' free hours'):'arrival + '+DEM.free+' h';
+      allow=q/DEM.rate*24; end=ls+allow; const upto=done!=null&&done<tNow?done:tNow; sofar=Math.max(0,upto-end); tot=done!=null?done-end:null;}   // tot < 0 = time saved (despatch)
+    const w0=comm!=null?comm:mfA; let avg=null,avgHow='',l24=null,pct=null,bal=null;
+    if(sailed){if(q&&done!=null&&w0!=null&&done>w0){avg=q/((done-w0)/24);avgHow=(comm!=null?'commencement':'made fast')+' → '+(tr.done?'completion':'leaving the berth');}}
+    else if(atB&&dr){l24=dr.l24;bal=dr.bal;pct=dr.upto+dr.bal>0?Math.round(dr.upto/(dr.upto+dr.bal)*100):null;
+      if(dr.upto>0&&w0!=null&&h(DPR.asOf)>w0+1){avg=dr.upto/((h(DPR.asOf)-w0)/24);avgHow=(comm!=null?'commencement':'made fast')+' → DPR '+DPR.d.slice(0,5)+' 0700';}}
+    const fin=done!=null&&done<tNow?done:tNow;
+    return {n,tr,rec:!!rec,ag,mine,c:rec?(tr.c||(v&&v.c)||'Logs'):((v&&v.c)||(w&&w.c)||tr.c||'Logs'),from:tr.from&&tr.from!=='—'?tr.from:'',q,listQ,pcs:tr.pcs||null,nor,mf,mfA,mfHow,comm,done,doneHow,out,st,berth,pri,ls,lsHow,allow,end,sofar,tot,avg,avgHow,l24,pct,bal,v,v0,vs,cur,w,sp,dr,eDpr,
+      wait:(mf!=null&&nor!=null)?Math.max(0,mf-nor):null, stay:mfA!=null?((sailed?(out!=null?out:done):fin)-mfA):null};
+  };
+  const known=new Set([...TIMBER.rows,...TIMBER.done].map(r=>r.n));
+  // log vessels on the board that the desk rows do not carry yet — shown from the DPA list, so a new arrival is never missing
+  const extra=[...new Set([...V.filter(v=>isLogs(v.c)).map(v=>v.n),...W.filter(w=>isLogs(w.c)).map(w=>w.n)])].filter(n=>!known.has(n)).map(n=>mk({n,note:'from the DPA list — not on the desk sheet'},false));
+  const all=[...TIMBER.rows.map(r=>mk(r,false)),...extra];
+  const ORD={berth:0,wait:1,eta:2}, big=x=>x==null?1e9:x;
+  const active=all.filter(r=>r.st!=='done').sort((a,z)=>(ORD[a.st]-ORD[z.st])||(big(a.nor)-big(z.nor)));
+  // a vessel that has left the berth but is not yet written into the record is listed with the completed ones, on the board's own times
+  const done=[...all.filter(r=>r.st==='done'),...TIMBER.done.map(r=>mk(r,true))].sort((a,z)=>(z.done||z.out||0)-(a.done||a.out||0));
+  // record average = quantity ÷ working time, over the completed vessels whose commencement and completion are both on record
+  const full=done.filter(r=>r.comm!=null&&r.tr.done&&r.q); const recAvg=full.length?full.reduce((a,r)=>a+r.q,0)/full.reduce((a,r)=>a+(r.done-r.comm)/24,0):null;
+  return {active,done,full,recAvg,tNow};
 }
+// laytime bar: arrival → [12 free hours | laytime | demurrage] → completion; │ = berthed, ┊ = now
+function tmbBar(r,tNow){
+  if(r.end==null)return '';
+  const fin=r.done!=null?r.done:tNow, X=Math.max(r.end,fin), span=X-r.nor; if(!(span>0))return '';
+  const pc=x=>Math.max(0,Math.min(100,x/span*100)).toFixed(2)+'%';
+  let segs=`<i class="f" style="width:${pc(r.ls-r.nor)}"></i>`;
+  if(fin>=r.end){segs+=`<i class="l" style="width:${pc(r.end-r.ls)}"></i>`;
+    const cut=r.st==='done'?fin:Math.max(r.end,Math.min(fin,tNow));
+    segs+=`<i class="d" style="width:${pc(cut-r.end)}"></i>`+(fin>cut?`<i class="d p" style="width:${pc(fin-cut)}"></i>`:'');}
+  else segs+=`<i class="l" style="width:${pc(Math.max(0,fin-r.ls))}"></i><i class="sv" style="width:${pc(r.end-Math.max(fin,r.ls))}"></i>`;
+  const tick=(t,tag)=>(t!=null&&t>=r.nor&&t<=X)?`<${tag} style="left:${pc(t-r.nor)}"></${tag}>`:'';
+  const ttl=`arrived ${fmt(r.nor)} · laytime ${fmt(r.ls)} → ${fmt(r.end)}${r.mf!=null?' · berth '+fmt(r.mf):''}${r.done!=null?' · completes '+fmt(r.done):''}`;
+  return `<div class="lbar" title="${ttl}">${segs}${tick(r.mf,'u')}${r.st==='done'?'':tick(tNow,'s')}</div>`;
+}
+const tmbAvg=r=>r.avg==null?'<span style="color:var(--dim)">—</span>':`<span class="avg">${nf.format(Math.round(r.avg/10)*10)}<small> CBM/day</small></span><span class="x ${r.avg>=DEM.rate?'hi':'lo'}">${(r.avg/DEM.rate).toFixed(1)}× the ${nf.format(DEM.rate)} basis</span>`;
+const tmbResult=(tot,final)=>tot==null?'<span style="color:var(--dim)">—</span>':tot>0?`<span class="money dem">${tmbMoney(tot/24*DEM.usd)}</span>demurrage · ${tmbD(tot)}${final?' · final':''}`:`<span class="money des">${DEM.desp?tmbMoney(-tot/24*DEM.desp):tmbD(-tot)+' saved'}</span>despatch${DEM.desp?' · '+tmbD(-tot)+' saved':' · rate not given'}${final?' · final':''}`;
 function timber(){
-  const el=document.getElementById('timber'); const sub=document.getElementById('tsub');
-  sub.innerHTML=`<span class="tsrc"><span class="tchip"><small>TEAM MESSAGE UPDATED</small><b>${TIMBER.upto}</b><small>report dated ${TIMBER.d}</small></span><span class="tchip"><small>DPR ADDED UP TO</small><b>${DPR.d} · 0700</b><small>port performance report</small></span><span class="tchip"><small>BOARD UPDATED</small><b>${UPDATED}</b><small>${BOARD_SRC}</small></span></span>Timber vessels from the DPA list, plus the ones our timber desk tracks before they reach the list ("<b>Kandla Timber Vessel's Position</b>"). Board = the actual: DPA list made-fast / ETC, programme, signal, or the board's projection; Team ETB = the desk's own estimate; DPR = last 24 h and balance from the port's performance report, with the finish at that rate.`;
+  const el=document.getElementById('timber'); if(!el)return; const sub=document.getElementById('tsub');
+  const T=tmbRows(), tNow=T.tNow; window.__TMB=T;
   const hd=x=>x?(x.length===5?h(x+' 12:00'):h(x)):null;
   const fd=x=>x?(x.length===5?fday(h(x+' 12:00')):fmt(h(x))):'—';
-  const G={berth:'Working at berth',wait:'Arrived · waiting for berth',eta:'Expected · not yet arrived',done:'Completed · sailed'};
-  // 14 Nov: the group is worked out from the board (berth entries, reporting time), not from the label stored with the desk row
-  const stOf=r=>{const vs=V.filter(x=>x.n===r.n).sort((a,z)=>a.F-z.F),v=vs[vs.length-1],w=W.find(x=>x.n===r.n);if(v&&v.T<=NOW)return 'done';if(vs.length&&vs[0].F<=NOW)return 'berth';const rp=REP[r.n]?h(REP[r.n]):(w&&w.rep!=null?w.rep:(r.arr?hd(r.arr):null));return rp!=null&&rp<=NOW?'wait':'eta';};
-  const ORD={berth:0,wait:1,eta:2,done:3};
-  const rows=TIMBER.rows.map((r,i)=>Object.assign({},r,{st:stOf(r),_i:i})).sort((a,z)=>(ORD[a.st]-ORD[z.st])||(a._i-z._i));
+  const A=T.active, nb=A.filter(r=>r.st==='berth'), nw=A.filter(r=>r.st==='wait'), ne=A.filter(r=>r.st==='eta');
+  const sum=(rows,k)=>rows.reduce((a,r)=>a+Math.max(0,r[k]||0),0);
+  const inPort=A.filter(r=>r.st!=='eta'), mineA=A.filter(r=>r.mine);
+  // tiles
+  const st=document.getElementById('tmbstats');
+  if(st){const tile=(c,v,l)=>`<div class="stat" style="--sc:${c};cursor:default"><div class="v">${v}</div><div class="l">${l}</div></div>`;
+    const lw=nw.slice().sort((a,z)=>a.nor-z.nor)[0], nx=ne.slice().sort((a,z)=>a.nor-z.nor)[0];
+    const dWait=T.done.filter(r=>r.wait!=null), dStay=T.done.filter(r=>r.stay!=null);
+    st.innerHTML=tile('var(--tmb)',nb.length,`<b>Working at berth</b> · ${nb.map(r=>r.n+' (CJ-'+r.berth+')').join(' · ')||'none'}`)
+     +tile('var(--warn)',nw.length,`<b>Arrived · waiting for a berth</b>${lw?' · longest: '+lw.n+', '+tmbD(tNow-lw.nor):''}`)
+     +tile('var(--line2)',ne.length,`<b>Expected</b>${nx?' · next: '+nx.n+', '+fmt(nx.nor):''}`)
+     +tile('var(--bad)',tmbMoney(sum(inPort,'sofar')/24*DEM.usd),`<b>Demurrage so far</b> · all timber vessels in port · <b>${tmbMoney(sum(inPort,'tot')/24*DEM.usd)}</b> by completion, waiting vessels at the port norm`)
+     +tile('var(--brass)',tmbMoney(sum(mineA,'sofar')/24*DEM.usd),`<b>Mihir &amp; Co vessels</b> · so far · <b>${tmbMoney(sum(mineA,'tot')/24*DEM.usd)}</b> at completion${mineA.length?' · '+mineA.map(r=>r.n).join(', '):''}`)
+     +tile('var(--ok)',T.done.length,`<b>Completed · on record</b>${T.recAvg?' · average discharge <b>'+nf.format(Math.round(T.recAvg/10)*10)+' CBM/day</b>':''}${dWait.length?' · average wait for a berth '+tmbD(dWait.reduce((a,r)=>a+r.wait,0)/dWait.length):''}${dStay.length?' · alongside '+tmbD(dStay.reduce((a,r)=>a+r.stay,0)/dStay.length):''}`);}
+  document.querySelectorAll('#tjump [data-j]').forEach(b=>b.onclick=()=>{const t=document.getElementById(b.dataset.j);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});
+  const vb=document.getElementById('vb-timber'); if(vb)vb.innerHTML=`<b>${nb.length}</b> at berth · <b>${nw.length}</b> waiting · <b>${ne.length}</b> expected`;
+  sub.innerHTML=`<span class="tsrc"><span class="tchip"><small>DESK SHEET</small><b>${TIMBER.upto}</b><small>"Kandla Timber Vessel's Position", dated ${TIMBER.d}</small></span><span class="tchip"><small>DPR ADDED UP TO</small><b>${DPR.d} · 0700</b><small>port performance report</small></span><span class="tchip"><small>BOARD UPDATED</small><b>${UPDATED}</b><small>list, programme and signals as on the Cargo jetties tab</small></span></span>Every timber vessel working, waiting or expected. <b>Board</b> = the actual: DPA made-fast time, programme, signal, or the board's projection. <b>Team ETB</b> = the desk's own estimate. <b>Work</b> = last 24 h and balance from the port's DPR, the finish at that rate, and the average since she commenced. A vessel that completes moves to the record at the bottom and stays there.`;
+  const G={berth:'Working at berth',wait:'Arrived · waiting for a berth',eta:'Expected · not yet arrived'};
+  const RKN={GOV:'GP',COASTAL:'CSTL',HP:'HP',SAAGAR:'SGR','24H':'24H','8K':'8K',STL:'STL',GEN:'GEN',BIT:'BIT'};
   let last=null;
   const row=(r,i)=>{
-    const vs=V.filter(x=>x.n===r.n).sort((a,z)=>a.F-z.F), v=vs[vs.length-1], cur=vs.find(x=>x.F<=NOW&&NOW<x.T), sp=S.find(x=>x.n===r.n), w=W.find(x=>x.n===r.n);
-    const inDPA=!!(v||w); const listQ=(v&&v.q)||(w&&w.q);
-    // board data first (DPA list), team data only where the board has none
-    const qty=listQ?`${nf.format(listQ)} ${(v&&v.u)||(w&&w.u)||'CBM'}`+(r.cbm&&Math.abs(listQ-r.cbm)>1?` <span style="color:var(--muted)">· team ${nf.format(r.cbm)}</span>`:''):r.cbm?`${nf.format(r.cbm)} CBM <span style="color:var(--muted)">· team</span>`:'<span style="color:var(--muted)">CBM n/a</span>';
-    const repT=REP[r.n]?h(REP[r.n]):(w&&w.rep!=null?w.rep:null);
-    const arrival=inDPA&&repT!=null?`<b>reported ${fmt(repT)}</b>DPA list`:r.arr?`<b>arrived ${fmt(h(r.arr))}</b>team report`:r.eta?`<b>ETA ${fd(r.eta)}</b>team report`:'—';
-    const srcTag=inDPA?'<span class="tag src">DPA list</span>':'<span class="tag src team">team report</span>';
+    const tr=r.tr, v=r.v, cur=r.cur, sp=r.sp, w=r.w, inDPA=!!(v||w);
+    const qty=r.q?`<b>${nf.format(Math.round(r.q))}</b>CBM`+(r.listQ&&tr.cbm&&Math.abs(r.listQ-tr.cbm)>1?` · DPA list ${nf.format(r.listQ)}`:''):'<span style="color:var(--dim)">CBM not given</span>';
+    const arrival=r.nor==null?'—':r.st==='eta'?`<b>ETA ${tr.eta&&tr.eta.length===5&&!REP[r.n]?fd(tr.eta):fmt(r.nor)}</b>${inDPA?'DPA list':'desk sheet'}`:`<b>${fmt(r.nor)}</b>arrived · NOR${r.st==='wait'?'<br><span class="dl late">waiting '+tmbD(tNow-r.nor)+'</span>':r.wait!=null?'<br>waited '+tmbD(r.wait)+' for the berth':''}`;
+    const srcTag=inDPA?'<span class="tag src">DPA list</span>':'<span class="tag src team">desk sheet</span>';
+    const ranks=w&&w.rk?Object.keys(w.rk).map(k=>(RKN[k]||k)+' '+(w.rk[k]===98?'Y':w.rk[k])).join(' · '):'';
     let board='', bt=null;
-    if(v&&v.T<=NOW)board=`<b>sailed</b>CJ-${v.b} · ${fmt(v.T)}`;
-    else if(cur&&v!==cur)board=`<b>CJ-${cur.b} · at berth</b>${cur.p&&v.p&&cur.b===v.b?'warps':'shifts'} ${fmt(cur.T)} → CJ-${v.b} ${v.p?pr(v.p):''} (programme) · ETC ${etcTxt(v)}`;
-    else if(v&&v.F<=NOW)board=`<b>CJ-${v.b} · at berth</b>made fast ${fmt(v.F)} · ETC ${etcTxt(v)}`;
+    if(cur&&v!==cur)board=`<b>CJ-${cur.b} · at berth</b>${cur.p&&v.p&&cur.b===v.b?'warps':'shifts'} ${fmt(cur.T)} → CJ-${v.b} ${v.p?pr(v.p):''} · ETC ${etcTxt(v)}`;
+    else if(v&&v.F<=NOW)board=`<b>CJ-${v.b} · at berth</b>made fast ${fmt(r.mfA)} · ETC ${etcTxt(v)}`;
     else if(v)board=`<b>CJ-${v.b} · ${fmt(v.F)}</b>fixed by programme / signal`;
     else if(sp){bt=sp.F;board=`<b>CJ-${sp.b} · ${fday(sp.F)} ~${fmt(sp.F,false)}</b>${CL[sp.cat]||sp.cat}${sp.via?' slot as '+sp.via:''} · projected`;}
-    else if(w&&w.rdy==null)board=`<b>readiness N/A</b>${w.x||'in DPA list, not ready'}`;
-    else if(w)board=`<b>beyond projection</b>in DPA list · ${CL[Object.keys(w.rk)[0]]||'no group rank'}`;
-    else board=`<b style="color:var(--muted)">not in DPA list yet</b>${r.eta?'ETA '+fd(r.eta):''}`;
-    const dr=dprOf(r.n); let dprCell='<span style="color:var(--dim)">—</span>';
-    if(dr){const e=dprEtc(dr),pct=dr.upto+dr.bal>0?Math.round(dr.upto/(dr.upto+dr.bal)*100):null;dprCell=`<b>${nf.format(dr.l24)} ${dr.unit||'MT'} / 24 h</b>balance ${nf.format(dr.bal)}${pct!=null?' · '+pct+'% done':''}${dr.ubal!=null?' · '+nf.format(dr.ubal)+' pcs left':''}<br>${dr.bal===0?'completed':e?'at this rate ~<b>'+fmt(e)+'</b>'+(dr.partial?' <span class="dl late">partial day</span>':'')+(v&&v.T>NOW&&!dr.partial?' <span class="dl '+((e-(v.listT||v.T))/24<-0.5?'early':(e-(v.listT||v.T))/24>0.5?'late':'same')+'">'+(Math.abs((e-(v.listT||v.T))/24)<0.5?'≈ list ETC':((e<(v.listT||v.T)?'':'+')+((e-(v.listT||v.T))/24).toFixed(1)+' d vs list ETC'))+'</span>'+(v.dpr?' · <b style="color:var(--brk)">used by the projection</b>':''):''):'no work in 24 h'}`;}
+    else if(w&&w.rdy==null)board=`<b>readiness N/A</b>in the DPA list, not declared ready`;
+    else if(w)board=`<b>beyond the projection</b>in the DPA list · ${ranks||'no group rank'}`;
+    else board=`<b style="color:var(--muted)">not in the DPA list yet</b>${tr.eta?'ETA '+fd(tr.eta):''}`;
+    const dr=r.dr; let work='<span style="color:var(--dim)">—</span>';
+    if(dr){const e=r.eDpr;work=`<b>${nf.format(dr.l24)} / 24 h</b>balance ${nf.format(dr.bal)}${r.pct!=null?' · '+r.pct+'% done':''}<div class="pbar"><i style="width:${r.pct||0}%"></i></div>${dr.bal===0?'completed':e?'at this rate ~<b style="display:inline">'+fmt(e)+'</b>':'no work in 24 h'}${r.avg!=null?'<br>average since she commenced: <b style="display:inline">'+nf.format(Math.round(r.avg/10)*10)+' CBM/day</b>':''}`;}
     let dl='—';
-    if(r.etb&&bt!=null){const dd=Math.round((bt-hd(r.etb))/24);dl=dd===0?'<span class="dl same">same day</span>':dd>0?`<span class="dl late">board +${dd} d later</span>`:`<span class="dl early">board ${dd} d earlier</span>`;}
+    if(tr.etb&&bt!=null){const dd=Math.round((bt-hd(tr.etb))/24);dl=dd===0?'<span class="dl same">same day</span>':dd>0?`<span class="dl late">board +${dd} d later</span>`:`<span class="dl early">board ${-dd} d earlier</span>`;}
+    else if(tr.etb&&r.mfA!=null){const dd=Math.round((r.mfA-hd(tr.etb))/24);dl=dd===0?'<span class="dl same">berthed on the team day</span>':dd>0?`<span class="dl late">berthed ${dd} d after</span>`:`<span class="dl early">berthed ${-dd} d before</span>`;}
     else if(r.st==='berth')dl='<span class="dl same">at berth</span>';
-    return `<tr class="${isMine(r.n)?'me':''} ${inDPA?'':'teamonly'}"><td class="d" style="color:var(--brk);font-weight:700">${i}</td><td class="n">${r.n}${isMine(r.n)?'<span class="tag">Mihir &amp; Co</span>':''}<small>${cg({n:r.n,c:(v&&v.c)||(w&&w.c)||r.c})} · ${r.from} · ${srcTag}${r.note?' · '+r.note:''}</small></td>
-      <td class="d">${qty}</td>
-      <td class="d">${arrival}</td>
-      <td class="d">${r.b?'<b>berthed '+fmt(h(r.b))+'</b>'+(r.pri?'under '+(CL[r.pri]||r.pri):''):r.etb?'<b>ETB '+fd(r.etb)+'</b>team estimate':'—'}</td>
-      <td class="d">${board}</td><td class="d">${dprCell}</td><td class="d">${dl}</td></tr>`;};
-  el.innerHTML='<tr><th style="width:34px">#</th><th>Vessel</th><th>Qty</th><th>Arrival</th><th>Team</th><th>Board (actual)</th><th>DPR '+DPR.d+'</th><th>Δ</th></tr>'+rows.map((r,i)=>{const g=r.st!==last?`<tr class="grp"><td colspan="8">${G[r.st]}</td></tr>`:'';last=r.st;return g+row(r,i+1);}).join('');
+    return `<tr class="${r.mine?'me':''} ${inDPA?'':'teamonly'}"><td class="d no" style="color:var(--tmb);font-weight:700">${i}</td><td class="n">${r.n}${r.mine?'<span class="tag">Mihir &amp; Co</span>':''}<small>${cg({n:r.n,c:r.c})}${r.from?' · '+r.from:''}${r.ag?' · agent '+r.ag:''} · ${srcTag}${ranks?' · '+ranks:''}${tr.note?' · '+tr.note:''}</small></td>
+      <td class="d" data-l="Quantity">${qty}</td><td class="d" data-l="Arrival">${arrival}</td>
+      <td class="d${tr.etb?'':' mt'}" data-l="Team">${tr.etb?'<b>ETB '+fd(tr.etb)+'</b>team estimate':'—'}</td>
+      <td class="d${dl==='—'?' mt':''}" data-l="Team vs board">${dl}</td>
+      <td class="d full" data-l="Board (actual)">${board}</td><td class="d full${dr?'':' mt'}" data-l="Work · DPR ${DPR.d}">${work}</td></tr>`;};
+  el.innerHTML='<tr><th style="width:36px">#</th><th style="width:23%">Vessel</th><th style="width:8%">Quantity</th><th style="width:11%">Arrival</th><th style="width:9%">Team</th><th style="width:11%">Team vs board</th><th style="width:19%">Board (actual)</th><th>Work · DPR '+DPR.d+'</th></tr>'+A.map((r,i)=>{const g=r.st!==last?`<tr class="grp"><td colspan="8">${G[r.st]}</td></tr>`:'';last=r.st;return g+row(r,i+1);}).join('');
+}
+function demur(){
+  const el=document.getElementById('demur'); if(!el)return; const sub=document.getElementById('dmsub');
+  const T=window.__TMB||tmbRows(), tNow=T.tNow, A=T.active.filter(r=>r.end!=null), noQ=T.active.filter(r=>r.end==null);
+  const G={berth:'Working at berth',wait:'Arrived · waiting for a berth',eta:'Expected · not yet arrived'};
+  let last=null,sumS=0,sumT=0,mS=0,mT=0;
+  const body=A.map(r=>{const g=r.st!==last?`<tr class="grp"><td colspan="9">${G[r.st]}</td></tr>`:'';last=r.st; sumS+=r.sofar;sumT+=Math.max(0,r.tot||0); if(r.mine){mS+=r.sofar;mT+=Math.max(0,r.tot||0);}
+    const stat=r.st==='eta'?`<span class="dl same">arrives ${fmt(r.nor)}</span>`:r.ls>tNow?`<span class="dl early">free time till ${fmt(r.ls)}</span>`:r.end>tNow?`<span class="dl early">laytime running · ${tmbD(r.end-tNow)} left</span>`:`<span class="dl late">on demurrage since ${fmt(r.end)}</span>`;
+    // a waiting vessel's completion is the board's projection at the port norm; the completed vessels worked faster — show what that would mean
+    let alt=''; if(r.st!=='berth'&&r.mf!=null&&T.recAvg){const aD=r.mf+2+r.q/T.recAvg*24, aT=aD-r.end;alt=`<b style="margin-top:6px">${aT>0?tmbMoney(aT/24*DEM.usd):'no demurrage'}</b>if she works at the record average, ${nf.format(Math.round(T.recAvg/100)*100)} a day (done ~${fmt(aD)})`;}
+    return g+`<tr class="${r.mine?'me':''}"><td class="n">${r.n}${r.mine?'<span class="tag">Mihir &amp; Co</span>':''}<small>${stat}</small></td>
+      <td class="d" data-l="Quantity"><b>${nf.format(Math.round(r.q))}</b>CBM</td>
+      <td class="d" data-l="Arrival → laytime starts"><b>${fmt(r.nor)}</b>${r.st==='eta'?'ETA':'arrived · NOR'}<b style="margin-top:5px">${fmt(r.ls)}</b>laytime starts · ${r.lsHow}</td>
+      <td class="d full" data-l="Laytime allowed"><b>${tmbD(r.allow)}</b>ends ${fmt(r.end)}${tmbBar(r,tNow)}</td>
+      <td class="d" data-l="Berthing">${r.mf!=null?'<b>'+fmt(r.mf)+'</b>'+(r.mfA!=null?'made fast · CJ-'+r.berth:r.mfHow+' · CJ-'+r.berth)+(r.wait!=null?'<br>'+tmbD(r.wait)+' after arrival':''):'<span style="color:var(--dim)">beyond the projection</span>'}</td>
+      <td class="d${r.done!=null?'':' mt'}" data-l="Completes">${r.done!=null?'<b>'+fmt(r.done)+'</b>'+r.doneHow:'—'}</td>
+      <td class="d full${r.avg!=null?'':' mt'}" data-l="Average discharge">${tmbAvg(r)}${r.avg!=null?r.avgHow+(r.l24!=null?' · last 24 h '+nf.format(r.l24):''):''}</td>
+      <td class="d" data-l="Demurrage so far">${r.sofar>0?`<span class="money dem">${tmbMoney(r.sofar/24*DEM.usd)}</span>${tmbD(r.sofar)}`:'nil'}</td>
+      <td class="d${r.tot!=null?'':' mt'}" data-l="At completion">${tmbResult(r.tot,false)}${alt?' · at the port norm':''}${alt}</td></tr>`;}).join('');
+  const tot=(l,s,t)=>`<tr class="grp sumr"><td colspan="7">${l}</td><td class="d" data-l="so far"><b>${tmbMoney(s/24*DEM.usd)}</b></td><td class="d" data-l="at completion"><b>${tmbMoney(t/24*DEM.usd)}</b></td></tr>`;
+  el.innerHTML='<tr><th style="width:14%">Vessel</th><th style="width:7%">Quantity</th><th style="width:12%">Arrival → laytime starts</th><th style="width:14%">Laytime allowed</th><th style="width:11%">Berthing</th><th style="width:10%">Completes</th><th style="width:11%">Average discharge</th><th style="width:8%">Demurrage so far</th><th>At completion</th></tr>'+body
+    +tot('All timber vessels in port or expected',sumS,sumT)+tot('Mihir &amp; Co vessels',mS,mT)
+    +(noQ.length?`<tr><td colspan="9" class="d full">Not counted — no quantity yet: ${noQ.map(r=>r.n).join(' · ')}</td></tr>`:'');
+  if(sub)sub.innerHTML=`After the vessel arrives the first <b>${DEM.free} hours are free</b>. Laytime starts when they end — or at berthing, if she is berthed inside those ${DEM.free} hours. Allowed time = quantity ÷ <b>${nf.format(DEM.rate)} CBM a day</b>. Once it is used up, demurrage runs at <b>USD ${nf.format(DEM.usd)} a day</b> until she completes; if she completes before it ends, the time saved is despatch. "So far" counts up to ${fmt(tNow)}. Completion = the DPR pace for a vessel at berth, the board's projection at the port norm for one still waiting.`;
+  const key=document.getElementById('lkey'); if(key)key.innerHTML=`<span style="--kc:var(--line2)">${DEM.free} free hours</span><span style="--kc:var(--ok)">laytime</span><span style="--kc:var(--bad)">demurrage</span><span style="--kc:rgba(224,100,100,.4)">demurrage still to come (estimate)</span><span style="--kc:var(--brass)">│ berthed</span><span style="--kc:var(--fg)">┊ now</span>`;
+  window.__DEM=A;
+  // completed record
+  const dn=document.getElementById('tdone'), ds=document.getElementById('tdsub');
+  if(dn){const D=T.done; let dem=0,nDem=0;
+    const rows=D.map((r,i)=>{if(r.tot!=null&&r.tot>0){dem+=r.tot;} if(r.tot!=null)nDem++;
+      return `<tr class="${r.mine?'me':''}"><td class="d no" style="color:var(--tmb);font-weight:700">${i+1}</td>
+      <td class="n">${r.n}${r.mine?'<span class="tag">Mihir &amp; Co</span>':''}<small>${r.c}${r.from?' · '+r.from:''}${r.ag?' · agent '+r.ag:''}${r.berth?' · CJ-'+r.berth:''}${r.pri?' · '+(CL[r.pri]||r.pri):''}${r.tr.note?' · '+r.tr.note:''}${r.rec?'':' · <span class="dl late">times from the board — not yet written into the record</span>'}</small></td>
+      <td class="d" data-l="Quantity"><b>${r.q?nf.format(Math.round(r.q)):'—'}</b>CBM${r.pcs?'<br>'+nf.format(r.pcs)+' pcs':''}</td>
+      <td class="d" data-l="Arrival">${r.nor!=null?'<b>'+fmt(r.nor)+'</b>arrived · NOR':'<span style="color:var(--dim)">arrival not on record</span>'}</td>
+      <td class="d" data-l="Berthed">${r.mf!=null?'<b>'+fmt(r.mf)+'</b>made fast'+(r.wait!=null?' · waited '+tmbD(r.wait):'')+(r.comm!=null?'<br>commenced '+fmt(r.comm):''):'—'}</td>
+      <td class="d" data-l="Completed">${r.done!=null?'<b>'+fmt(r.done)+'</b>'+r.doneHow+(r.out!=null&&r.out!==r.done?'<br>left the berth '+fmt(r.out):''):'—'}</td>
+      <td class="d" data-l="Stay">${r.stay!=null?'<b>'+tmbD(r.stay)+'</b>at berth':'—'}</td>
+      <td class="d" data-l="Average discharge">${tmbAvg(r)}${r.avg!=null?r.avgHow:''}</td>
+      <td class="d full" data-l="Laytime">${r.end!=null?'<b>'+tmbD(r.allow)+'</b>'+fmt(r.ls)+' → '+fmt(r.end)+tmbBar(r,tNow):'<span style="color:var(--dim)">not counted — arrival not on record</span>'}</td>
+      <td class="d full" data-l="Result">${tmbResult(r.tot,true)}</td></tr>`;}).join('');
+    const dW=D.filter(r=>r.wait!=null), dS=D.filter(r=>r.stay!=null), qT=D.reduce((a,r)=>a+(r.q||0),0);
+    dn.innerHTML='<tr><th style="width:36px">#</th><th style="width:19%">Vessel</th><th style="width:8%">Quantity</th><th style="width:9%">Arrival</th><th style="width:11%">Berthed</th><th style="width:11%">Completed</th><th style="width:6%">Stay</th><th style="width:11%">Average discharge</th><th style="width:13%">Laytime</th><th>Result</th></tr>'+rows
+      +`<tr class="grp sumr"><td colspan="2">${D.length} vessels completed</td><td class="d" data-l="total CBM"><b>${nf.format(Math.round(qT))}</b></td><td class="d"></td><td class="d" data-l="average wait for a berth">${dW.length?'<b>'+tmbD(dW.reduce((a,r)=>a+r.wait,0)/dW.length)+'</b>average wait':''}</td><td class="d"></td><td class="d" data-l="average stay">${dS.length?'<b>'+tmbD(dS.reduce((a,r)=>a+r.stay,0)/dS.length)+'</b>average':''}</td><td class="d" data-l="average discharge">${T.recAvg?'<b>'+nf.format(Math.round(T.recAvg/10)*10)+' CBM/day</b>'+T.full.length+' vessels with full times':''}</td><td class="d"></td><td class="d" data-l="demurrage">${nDem?'<b>'+tmbMoney(dem/24*DEM.usd)+'</b>demurrage · '+nDem+' counted':''}</td></tr>`;
+    if(ds)ds.innerHTML=`Every timber vessel that has completed, newest first — kept here for good, so the dates stay handy. <b>Average discharge</b> = quantity ÷ the time from commencement to completion (from made fast where the commencement is not on record). Laytime is counted the same way as above, to the hour she completed.`;}
+  const tn=document.getElementById('tnote');
+  if(tn)tn.innerHTML=`<b>Arrival</b> = the reporting time on the DPA list (NOR at Kandla); before a vessel reaches the list, the desk sheet's ETA. <b>Quantity</b> = the desk's CBM where the desk gave one, else the DPA list figure (the port prints logs in MT for some vessels — it is the same number). <b>Berthed</b> = DPA made-fast time. <b>Completed</b> = the "completed" time of the port's DPR, not the time she let go. Laytime runs without a break: no time is taken out for Sundays, holidays, rain, shifting or waiting for the tide, because the board has not been told of any such exception. Despatch is shown in days only — the rate has not been given. The desk sheet on the board is dated ${TIMBER.d}; team ETBs are from that sheet.`;
 }
 function dprLine(n){const r=dprOf(n);if(!r)return '';const e=dprEtc(r);const pct=r.upto+r.bal>0?Math.round(r.upto/(r.upto+r.bal)*100):null;return `<small style="color:var(--brk)">DPR ${DPR.d} 0700: 24 h ${nf.format(r.l24)}${r.u24!=null?' MT / '+nf.format(r.u24)+' pcs':''} · balance ${nf.format(r.bal)}${r.ubal!=null?' MT / '+nf.format(r.ubal)+' pcs':''}${pct!=null?' · '+pct+'% done':''}${e?' · at this rate ~'+fmt(e)+(r.partial?' (partial day, understated)':''):(r.bal===0?' · completed':'')}</small>`;}
 function dpr(){
@@ -2269,10 +2411,12 @@ function stats(){
   const total=`<div class="stat wide total" style="--sc:var(--brass)"><div class="tot2">
      <div><div class="top"><div class="v">${totW}</div><div class="l" style="margin:0"><b>Vessels waiting at Kandla</b> · all berths, reported and not yet berthed</div></div><div class="comm">${chip('Dry cargo · CJ queue',wait.length,'var(--brass)','all')}${chip('Liquid · oil jetties',lqW,'var(--dry)','liquid')}${chip('Tuna · TT (Adani)',ttW,'var(--brk)','tuna')}</div></div>
      <div><div class="top"><div class="v">${totE}</div><div class="l" style="margin:0"><b>Expected</b> · ETA given, not yet reported</div></div><div class="comm">${chip('Dry cargo · CJ',exp.length,'var(--brass)','exp')}${chip('Liquid · OJ',lqE,'var(--dry)','liquid')}${chip('Tuna · TT',ttE,'var(--brk)','tuna')}</div></div>
-    </div><div class="last" style="margin-top:6px">Dry cargo berths CJ-1–16 run under the berthing policy (projected below) · liquid and Tuna are status only — their own tabs above: <a class="plink" href="${pageHref('liquid')}" data-view="liquid">Liquid board →</a> · <a class="plink" href="${pageHref('tuna')}" data-view="tuna">Tuna board →</a></div></div>`;
+    </div><div class="last" style="margin-top:6px">Dry cargo berths CJ-1–16 run under the berthing policy (projected below) · liquid and Tuna are status only, and timber vessels have their own sheet — tabs above: <a class="plink" href="${pageHref('timber')}" data-view="timber">Timber sheet →</a> · <a class="plink" href="${pageHref('liquid')}" data-view="liquid">Liquid board →</a> · <a class="plink" href="${pageHref('tuna')}" data-view="tuna">Tuna board →</a></div></div>`;
   const lqOcc=LIQ.berths.filter(b=>b.now).length, lqMv=LIQ.berths.filter(b=>b.out&&h(b.out)>NOW).length, ttOcc=TUNA.berths.length;
+  const TQ=tmbRows(), tqB=TQ.active.filter(r=>r.st==='berth').length, tqW=TQ.active.filter(r=>r.st==='wait').length, tqE=TQ.active.filter(r=>r.st==='eta').length, tqS=TQ.active.filter(r=>r.st!=='eta').reduce((a,r)=>a+Math.max(0,r.sofar||0),0);
   const extra=`<div class="stat" data-go="liquid" style="--sc:var(--dry)"><div class="v">${lqOcc}<small>/${LIQ.berths.length}</small></div><div class="l"><b>Oil jetties occupied</b> · ${lqW} waiting · ${lqE} expected${lqMv?' · '+lqMv+' sailing'+(lqMv>1?'s':'')+' signalled tonight':''}</div><div class="last"><a class="plink" href="${pageHref('liquid')}" data-view="liquid">Open the Liquid board →</a> · same page, Liquid tab</div></div>
-   <div class="stat" data-go="tuna" style="--sc:var(--brk)"><div class="v">${ttOcc}<small>/4</small></div><div class="l"><b>Tuna berths occupied</b> (Adani PPP) · ${ttW} waiting · ${ttE} expected</div><div class="last"><a class="plink" href="${pageHref('tuna')}" data-view="tuna">Open the Tuna board →</a> · same page, Tuna tab</div></div>`;
+   <div class="stat" data-go="tuna" style="--sc:var(--brk)"><div class="v">${ttOcc}<small>/4</small></div><div class="l"><b>Tuna berths occupied</b> (Adani PPP) · ${ttW} waiting · ${ttE} expected</div><div class="last"><a class="plink" href="${pageHref('tuna')}" data-view="tuna">Open the Tuna board →</a> · same page, Tuna tab</div></div>
+   <div class="stat" data-go="timber" style="--sc:var(--tmb)"><div class="v">${tqB}<small> at berth</small></div><div class="l"><b>Timber vessels</b> · ${tqW} waiting · ${tqE} expected · demurrage running in port: <b>${tmbMoney(tqS/24*DEM.usd)}</b> so far</div><div class="last"><a class="plink" href="${pageHref('timber')}" data-view="timber">Open the Timber sheet →</a> · position, laytime, completed record</div></div>`;
   document.getElementById('stats').innerHTML=total+`<div class="stat wide" data-k="all" style="--sc:${t0[0]}"><div class="top"><div class="v">${t0[1]}</div><div class="l" style="margin:0">${t0[3]}</div></div><div class="comm">${chips}</div>${t0[5]}</div>`+ieTile+rest.map(([c,v,sm,l,ch,ln,k])=>`<div class="stat" ${k?`data-k="${k}"`:''} style="--sc:${c}"><div class="v">${v}${sm}</div><div class="l">${l}</div>${ch?`<div class="comm">${ch}</div>`:''}${ln||''}</div>`).join('')+extra;
   // tab badges: one line of numbers under each board's name
   const vb=(k,html)=>{const b=document.getElementById('vb-'+k);if(b)b.innerHTML=html;};
@@ -2281,7 +2425,7 @@ function stats(){
   vb('liquid',`<b>${lqOcc}</b>/${LIQ.berths.length} jetties · <b>${lqW}</b> waiting`);
   // tiles / chips / links that open another board (liquid, tuna) or jump to the dry-cargo tiles
   document.querySelectorAll('#stats a.plink[data-view]').forEach(a=>a.onclick=e=>{e.preventDefault();e.stopPropagation();setView(a.dataset.view,{top:true});});
-  document.querySelectorAll('#stats [data-go]').forEach(t=>t.onclick=e=>{if(e.target.closest('a'))return;const k=t.dataset.go;if(k==='liquid'||k==='tuna'){setView(k,{top:true});}else{const tile=document.querySelector(`#stats .stat[data-k="${k}"]`);if(tile)tile.click();}e.stopPropagation();});
+  document.querySelectorAll('#stats [data-go]').forEach(t=>t.onclick=e=>{if(e.target.closest('a'))return;const k=t.dataset.go;if(k==='liquid'||k==='tuna'||k==='timber'){setView(k,{top:true});}else{const tile=document.querySelector(`#stats .stat[data-k="${k}"]`);if(tile)tile.click();}e.stopPropagation();});
   // import / export chips → the vessels behind the number
   document.querySelectorAll('#stats [data-ie]').forEach(c=>c.onclick=e=>{e.stopPropagation();const k=c.dataset.ie,set=c.dataset.set;const base=set==='at'?atV:set==='exp'?exp:wait;openList((k==='IMP'?'Import':'Export')+' vessels · '+(set==='at'?'at berth now':set==='exp'?'expected (ETA)':'waiting'),base.filter(x=>ieOf(x.n)===k));});
   // click handlers: tile → all vessels of that kind; chip → that commodity within the tile
@@ -2754,14 +2898,12 @@ function summaries(){
   {const cj=DPR.rows.filter(r=>/^CJ/.test(r.loc)&&r.bal>0&&r.l24>0&&!r.partial);const vv=r=>V.filter(x=>x.n===r.n).sort((a,z)=>z.T-a.T)[0];const full=r=>{const v=vv(r),v0=V.filter(x=>x.n===r.n).sort((a,z)=>a.F-z.F)[0];return v&&v.T>NOW&&!(v0.F>h(DPR.asOf)-24);};const early=cj.filter(r=>{const v=vv(r);const e=dprEtc(r);return full(r)&&e&&(e-(v.listT||v.T))/24<-0.5;}).map(r=>r.n);const late=cj.filter(r=>{const v=vv(r);const e=dprEtc(r);return full(r)&&e&&(e-(v.listT||v.T))/24>0.5;}).map(r=>r.n);
    setSum('dpr',`DPR <b>${DPR.d}</b> · dry cargo jetties <b>${nf.format(DPR.tot.dry)} MT</b> in 24 h · port ${nf.format(DPR.tot.all)} MT${early.length?' · finishing before list ETC: <b>'+early.join(', ')+'</b>':''}${late.length?' · slower than list ETC: '+late.join(', '):''}`);}
   // (tuna / liquid are their own tabs now — no collapsible summary)
-  // timber
-  const tb=TIMBER.rows.filter(r=>r.st==='berth').length, tw=TIMBER.rows.filter(r=>r.st==='wait').length, te=TIMBER.rows.filter(r=>r.st==='eta').length;
-  setSum('timber',`<b>${TIMBER.rows.length}</b> vessels · ${tb} at berth · ${tw} waiting · ${te} expected · team report ${TIMBER.d}`);
+  // (timber is its own tab since 16 Nov — no collapsible summary)
 }
 // open at the focused vessel's berthing time if projected
 const s0=S.find(x=>x.n===focus);
 initSections();
-// tabs: Cargo jetties · Tuna · Liquid — same page, hash remembers the open board (#cargo / #tuna / #liquid)
+// tabs: Cargo jetties · Timber · Tuna · Liquid — same page, hash remembers the open board (#cargo / #timber / #tuna / #liquid)
 document.querySelectorAll('#views a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setView(a.dataset.view,{top:true});}));
 window.addEventListener('hashchange',()=>{const k=location.hash.replace('#','');if(VIEWS[k]&&k!==VIEW)setView(k,{hash:false,top:true});});
 setView((location.hash||'').replace('#',''),{hash:false});

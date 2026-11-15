@@ -1,7 +1,7 @@
 // Validate a board file before publishing.
-// Usage: node tools/check.js /abs/path/board.html [--mine] [--demur] [--meeting] [--all]
-// Prints: script syntax, "},," count, page errors, undefined/NaN tokens on the three tabs (every section opened),
-// DPR / overrun flags, the projection S, the own-vessel options, and optionally the Mihir & Co card, demurrage table, meeting preview.
+// Usage: node tools/check.js /abs/path/board.html [--mine] [--timber] [--meeting] [--all]   (--demur is the old name of --timber)
+// Prints: script syntax, "},," count, page errors, undefined/NaN tokens on the four tabs (every section opened),
+// DPR / overrun flags, the projection S, the own-vessel options, and optionally the Mihir & Co card, the Timber tab (tiles, active list, laytime, record), meeting preview.
 // Exit code 1 if anything is wrong. Needs playwright (preinstalled under /opt/npm-tools in this environment).
 const fs=require('fs'),vm=require('vm'),path=require('path');
 const file=path.resolve(process.argv[2]||'index.html');const want=f=>process.argv.includes(f)||process.argv.includes('--all');
@@ -20,16 +20,18 @@ const r=await p.evaluate(()=>{const S=window.__S||[];const f=window.__fmt;const 
  const sp=S.map(x=>[x.n,'CJ-'+x.b,f(x.F),f(x.T),x.cat,x.via||'',x.shifted?'SHIFTED':''].join(' | '));
  const opt={};for(const n in (window.__OPT||{}))opt[n]=window.__OPT[n].map(o=>o.label+' → '+(o.r?'CJ-'+o.r.b+' '+f(o.r.F)+' to '+f(o.r.T)+' ['+o.r.cat+(o.r.via?' via '+o.r.via:'')+']':'none'));
  return {flags,sp,opt,upd:(document.querySelector('.upd')||{}).innerText||'',mine:g('mine'),demur:g('demur'),mpsub:g('mpsub'),mpt:g('mpt')};});
-const tabs={};for(const v of ['liquid','tuna']){const a=await p.$(`a[data-view="${v}"]`);if(a){await a.click();await p.waitForTimeout(700);tabs[v]=await scan();}}
+const tabs={};let tmb={};for(const v of ['timber','liquid','tuna']){const a=await p.$(`a[data-view="${v}"]`);if(a){await a.click();await p.waitForTimeout(700);tabs[v]=await scan();
+  if(v==='timber')tmb=await p.evaluate(()=>{const g=id=>(document.getElementById(id)||{}).innerText||'';return {stats:g('tmbstats'),act:g('timber'),lay:g('demur'),rec:g('tdone'),n:{act:((window.__TMB||{}).active||[]).length,rec:((window.__TMB||{}).done||[]).length}};});}}
+if(!tabs.timber){bad++;console.log('NO TIMBER TAB');}
 console.log('page errors:',JSON.stringify(errs));console.log(r.upd.replace(/\n/g,' '));
-console.log('bad tokens — cargo tab:',main.length,'| liquid:',(tabs.liquid||[]).length,'| tuna:',(tabs.tuna||[]).length);
-[...main,...(tabs.liquid||[]),...(tabs.tuna||[])].forEach(x=>console.log('  BAD: …'+x+'…'));
+console.log('bad tokens — cargo tab:',main.length,'| timber:',(tabs.timber||[]).length,'| liquid:',(tabs.liquid||[]).length,'| tuna:',(tabs.tuna||[]).length,'| timber rows: active',(tmb.n||{}).act,'· record',(tmb.n||{}).rec);
+[...main,...(tabs.timber||[]),...(tabs.liquid||[]),...(tabs.tuna||[])].forEach(x=>console.log('  BAD: …'+x+'…'));
 console.log('--- flags');r.flags.forEach(x=>console.log(' ',x));
 console.log('--- projection S (vessel | berth | alongside | completes | group | via)');r.sp.forEach(x=>console.log(' ',x));
 console.log('--- own-vessel options');console.log(JSON.stringify(r.opt,null,1));
 if(want('--mine')){console.log('--- Mihir & Co card');console.log(r.mine);}
-if(want('--demur')){console.log('--- timber demurrage');console.log(r.demur.replace(/\n\s+/g,' | '));}
+if(want('--demur')||want('--timber')){const one=t=>(t||'').replace(/\t/g,' | ').replace(/\n\s*\n/g,'\n');console.log('--- timber tab · tiles');console.log(one(tmb.stats).replace(/\n/g,' · '));console.log('--- timber tab · active list');console.log(one(tmb.act));console.log('--- timber tab · laytime / demurrage');console.log(one(tmb.lay));console.log('--- timber tab · completed record');console.log(one(tmb.rec));}
 if(want('--meeting')){console.log('--- meeting preview');console.log(r.mpsub);console.log(r.mpt.replace(/\n\s*\n/g,'\n'));}
 await b.close();
-if(errs.length||main.length||(tabs.liquid||[]).length||(tabs.tuna||[]).length)bad++;
+if(errs.length||main.length||(tabs.timber||[]).length||(tabs.liquid||[]).length||(tabs.tuna||[]).length)bad++;
 if(bad){console.log('\nNOT OK — fix before publishing');process.exit(1);}console.log('\nOK');})();
