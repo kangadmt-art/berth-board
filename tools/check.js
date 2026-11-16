@@ -1,6 +1,6 @@
 // Validate a board file before publishing.
 // Usage: node tools/check.js /abs/path/board.html [--mine] [--timber] [--meeting] [--all]   (--demur is the old name of --timber)
-// Prints: script syntax, "},," count, page errors, undefined/NaN tokens on the four tabs (every section opened),
+// Prints: script syntax, "},," count, page errors, undefined / NaN / null tokens on the four tabs (every section opened),
 // DPR / overrun flags, the projection S, the own-vessel options, and optionally the Mihir & Co card, the Timber tab (tiles, active list, laytime, record), meeting preview.
 // Exit code 1 if anything is wrong. Needs playwright (preinstalled under /opt/npm-tools in this environment).
 const fs=require('fs'),vm=require('vm'),path=require('path');
@@ -13,7 +13,7 @@ const {chromium}=require('playwright');
 (async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1400,height:1100}});const errs=[];p.on('pageerror',e=>errs.push(e.message));
 await p.goto('file://'+file);await p.waitForTimeout(2500);
 const oa=await p.$('text=Open all');if(oa){await oa.click();await p.waitForTimeout(900);}
-const scan=()=>p.evaluate(()=>{const t=document.body.innerText;const out=[];const re=/undefined|NaN|\[object/g;let m;while((m=re.exec(t)))out.push(t.slice(Math.max(0,m.index-140),m.index+40).replace(/\n/g,' ⏎ '));return out;});
+const scan=()=>p.evaluate(()=>{const t=document.body.innerText;const out=[];const re=/undefined|NaN|\[object|\bnull\b/g;let m;while((m=re.exec(t)))out.push(t.slice(Math.max(0,m.index-140),m.index+40).replace(/\n/g,' ⏎ '));return out;});
 const main=await scan();
 const r=await p.evaluate(()=>{const S=window.__S||[];const f=window.__fmt;const V=(window.__dbg||{}).V||[];const g=id=>(document.getElementById(id)||{}).innerText||'';
  const flags=V.filter(v=>v.dpr||v.overrun||v.overstay).map(v=>v.n+' CJ-'+v.b+(v.dpr?' DPR→'+f(v.T):'')+(v.overrun?' OVERRUN→'+f(v.overrun):'')+(v.overstay?' OVERSTAY':''));
