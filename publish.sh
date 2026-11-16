@@ -11,7 +11,7 @@ cd "$(dirname "$0")"
 ID=(-c user.name="Berth Board" -c user.email="mihir@neelkanth.co.in")
 git "${ID[@]}" pull -q --rebase --autostash origin main
 [ "$SRC" = "$(readlink -f index.html)" ] || cp "$SRC" index.html
-git add index.html timber.html tuna.html liquid.html publish.sh README.md data handover tools 2>/dev/null || true
+git add index.html timber.html tuna.html liquid.html publish.sh README.md data handover tools circ 2>/dev/null || true
 git "${ID[@]}" commit -q -m "$MSG" || { echo "nothing to commit"; exit 0; }
 git push -q origin HEAD:main
 echo "pushed → https://kangadmt-art.github.io/berth-board/ (tabs: #timber, #tuna, #liquid)"
