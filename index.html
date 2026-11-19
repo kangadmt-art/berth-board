@@ -261,7 +261,7 @@ table{border-collapse:collapse;width:100%}
 /* Timber tab (16 Nov): own sheet. v168 — the list on top: summary pills, then ONE table of the active vessels, then the completed record.
    Phones: every vessel is a 3–4 line summary (td.sm); a tap opens the labelled details. */
 :root{--tmb:#a3c46a}
-.views a[data-view="timber"]{--sc:var(--tmb)}
+.views a[data-view="timber"]{--sc:var(--tmb)}.views a[data-view="priority"]{--sc:#d9b25f}
 .timber{border-color:var(--line)}.timber .sechead h2{color:var(--fg)}.timber .sechead p{max-width:none}
 .tmb th{box-sizing:border-box}
 .tmb .money{font-family:var(--f-disp);font-weight:700;font-size:18px;letter-spacing:.01em;color:var(--fg);display:block;line-height:1.15}
@@ -429,6 +429,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   </header>
   <nav class="views" id="views" aria-label="Boards on this page">
     <a href="#cargo" data-view="cargo"><b>Cargo jetties</b><small>CJ-1 to CJ-16 · dry cargo · berthing policy &amp; projection</small><span class="vb" id="vb-cargo"></span></a>
+    <a href="#priority" data-view="priority"><b>Priority chart</b><small>Dry cargo · port's waiting chart · rank / Y / N in each priority</small><span class="vb" id="vb-priority"></span></a>
     <a href="#timber" data-view="timber"><b>Timber</b><small>Log vessels · position · laytime &amp; demurrage · record</small><span class="vb" id="vb-timber"></span></a>
     <a href="#tuna" data-view="tuna"><b>Tuna</b><small>TT-1 to TT-4 · Adani PPP terminal · status only</small><span class="vb" id="vb-tuna"></span></a>
     <a href="#liquid" data-view="liquid"><b>Liquid</b><small>OJ-1 to OJ-7 · oil jetties · status only</small><span class="vb" id="vb-liquid"></span></a>
@@ -532,6 +533,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 
   </div><!-- /view cargo -->
 
+  <div class="view" data-view="priority" id="view-priority"><div id="pqtab"></div></div>
   <div class="view" data-view="timber" id="view-timber">
   <div class="tsum" id="tmbstats" aria-label="Timber vessels — summary"></div>
   <section class="card timber" aria-labelledby="th">
@@ -604,8 +606,8 @@ const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-19 12:29');
 const PROG_END=h('11-19 22:30'); // programme 19.11 + the day signal of 19 Nov (last movement about 22:00) cover till here — barge windows end here; beyond it no data
 // ---- the boards live on this one page as views (tabs): cargo (dry cargo CJ-1–16, projected), timber (log vessels: position, laytime, record — since 16 Nov), tuna (TT-1–4) and liquid (OJ-1–7), status only.
-const VIEWS={cargo:'Deendayal Port · Kandla · Dry cargo jetty',timber:'Deendayal Port · Kandla · Timber vessels',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
-const VIEW_NAME={cargo:'Cargo jetties',timber:'Timber',tuna:'Tuna',liquid:'Liquid'};
+const VIEWS={cargo:'Deendayal Port · Kandla · Dry cargo jetty',priority:'Deendayal Port · Kandla · Priority chart',timber:'Deendayal Port · Kandla · Timber vessels',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
+const VIEW_NAME={cargo:'Cargo jetties',priority:'Priority chart',timber:'Timber',tuna:'Tuna',liquid:'Liquid'};
 let VIEW='cargo';
 const pageHref=k=>'#'+k; // same page, just another tab
 function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
@@ -617,7 +619,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='19 Nov 2026 · 13:10 IST';
+const UPDATED='19 Nov 2026 · 14:30 IST';
 const BOARD_SRC='list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -3077,8 +3079,204 @@ function summaries(){
 }
 // open at the focused vessel's berthing time if projected
 const s0=S.find(x=>x.n===focus);
+// ---- PRIORITY CHART — view "priority" (v174, 19 Nov; asked by Mihir 14:09, port format chosen 14:18, approved 14:23).
+// The port's waiting-sheet format: one line a vessel, a column a priority (GP · CSTL · HP · SGR · 24H · 8K/6.5K · STL/PRJ · GEN · SR 7), the cell = rank / Y / N;
+// on top our vessels (rank, vessels ahead, turn by each line) and an at-berth table priority-wise. It reads the live objects (V, W, S, OPTRES) — nothing to keep by hand.
+// Drawn in a shadow root so that its CSS and the board's stay apart. Source of the markup / code: tools/priority_page/template.html.
+(function(){const host=document.getElementById('pqtab');if(!host||!host.attachShadow)return;
+ const proj={};S.filter(x=>x.proj).forEach(x=>{proj[x.n]={b:x.b,F:x.F,cat:x.cat,via:x.via||''};});
+ const D={NOW,HZ,opt:OPTRES,
+  berth:V.filter(v=>v.T>NOW&&!v.span).map(v=>({slot:v.slot||v.cat,cat:v.cat,via:v.via||'',b:v.b,n:v.n,c:v.c,q:v.q,u:v.u,F:v.F,T:v.T,est:!!v.est,lt:(v.listT&&Math.abs(v.listT-v.T)>0.5)?fmt(v.listT):'',future:v.F>NOW,mine:isMine(v.n)})),
+  wait:W.map(w=>{const x=w.x||'',tags=[];if(/FINISHING AT MIDSTREAM/i.test(x.slice(0,400)))tags.push('finishing at midstream');else if(/working at (MS|MRG|midstream)/i.test(x.slice(0,260)))tags.push('working at midstream');
+   if(/HELD|held out|still held|no berth; held/i.test(x.slice(0,400)))tags.push('held');
+   return {n:w.n,c:w.c,q:w.q,u:w.u,rdy:w.rdy,rep:w.rep,rk:w.rk,govAuto:!!w.govAuto,q7:Q7(w),noHP:!!w.noHP,allowed:allowedBerths(w),tags,mine:isMine(w.n),proj:proj[w.n]||null};})};
+ const root=host.attachShadow({mode:'open'});
+ root.innerHTML=`<style>:host{display:block;--gold:#d9b25f;font-family:var(--f-body);font-size:15px;line-height:1.45;color:var(--fg);margin-top:16px}
+.sub{color:var(--muted);max-width:820px}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding:26px 18px 60px}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+h1{font-family:var(--f-disp);font-weight:800;font-size:clamp(34px,6vw,54px);line-height:.95;text-transform:uppercase;margin-top:4px}
+h1 span{color:var(--brass)}
+.draft{display:inline-block;margin-left:10px;vertical-align:middle;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;border:1px dashed var(--gold);color:var(--gold);padding:2px 7px;border-radius:3px}
+.sub{color:var(--muted);margin-top:10px;max-width:780px}
+.asof{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);margin-top:8px}.asof b{color:var(--fg);font-weight:500}
+h2{font-family:var(--f-disp);font-weight:600;font-size:24px;letter-spacing:.02em;text-transform:uppercase}
+.sec{margin-top:26px}
+.sechead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}.sechead p{color:var(--muted);font-size:13.5px}
+/* our vessels */
+.mine{display:grid;gap:12px}
+.mv{background:linear-gradient(180deg,#14212d,var(--panel));border:1px solid var(--line2);border-top:3px solid var(--brass);border-radius:8px;padding:14px 16px}
+.mv .top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start}
+.mv .nm{font-family:var(--f-disp);font-weight:800;font-size:28px;line-height:1;text-transform:uppercase}
+.mv .cg{color:var(--muted);font-size:13.5px;margin-top:4px}
+.mv .pick{text-align:right}.mv .pick .big{font-family:var(--f-disp);font-weight:800;font-size:30px;line-height:1;color:var(--brass)}
+.mv .pick small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--brass2);color:var(--brass);border-radius:3px;padding:1px 6px;vertical-align:middle;margin-left:6px}
+.tag.soft{border-color:var(--warn);color:var(--warn)}.tag.ok{border-color:var(--ok);color:var(--ok)}
+table.rt{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+table.rt th{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:left;font-weight:500;padding:5px 8px;border-bottom:1px solid var(--line2)}
+table.rt td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.rt tr.best td{background:rgba(92,200,255,.07)}
+table.rt td.r{font-family:var(--f-disp);font-weight:800;font-size:24px;line-height:1;color:var(--brass);white-space:nowrap}
+table.rt td.r small{font-family:var(--f-body);font-weight:400;font-size:12px;color:var(--muted)}
+table.rt td b{font-weight:600}table.rt small{color:var(--muted);font-size:12.5px;display:block}
+/* picker */
+.pick2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+.pick2 label{font-weight:600}.pick2 select{background:var(--panel2);color:var(--fg);border:1px solid var(--brass2);border-radius:5px;padding:7px 9px;font:inherit;min-width:220px;max-width:100%}
+.chip{font:inherit;font-size:13px;background:none;color:var(--fg);border:1px solid var(--line2);border-radius:14px;padding:3px 11px;cursor:pointer}.chip:hover,.chip.on{border-color:var(--brass);color:var(--brass)}
+.pos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pos .p{background:var(--panel);border:1px solid var(--line2);border-left:3px solid var(--brass);border-radius:5px;padding:6px 11px;font-size:13.5px;cursor:pointer}
+.pos .p b{font-family:var(--f-disp);font-size:20px;font-weight:800;color:var(--brass);margin-right:5px}
+.pos .none{color:var(--muted);font-size:13.5px}
+/* port-format tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+table.pt{border-collapse:separate;border-spacing:0;width:100%;font-size:13.5px}
+table.pt th{position:sticky;top:0;background:var(--panel2);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:8px 6px;border-bottom:1px solid var(--line2);text-align:center;white-space:nowrap;z-index:2}
+table.pt th.l,table.pt td.l{text-align:left}
+table.pt th.pc{cursor:pointer;color:var(--fg)}table.pt th.pc:hover,table.pt th.pc.on{color:var(--brass)}table.pt th.pc.on{box-shadow:inset 0 -2px 0 var(--brass)}
+table.pt th small{display:block;font-size:9.5px;letter-spacing:.04em;color:var(--dim);text-transform:none;margin-top:2px}
+table.pt td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle}
+table.pt td.v{position:sticky;left:0;background:var(--panel);z-index:1;min-width:168px;max-width:230px;text-align:left;border-right:1px solid var(--line)}
+table.pt th.v{left:0;z-index:3;text-align:left}
+table.pt td.v b{font-weight:600}table.pt td.v small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}table.pt td.v small,table.pt td.k small,table.pt td.l small{display:block;color:var(--muted);font-size:12px}
+table.pt td.sr{color:var(--dim);font-family:var(--f-mono);font-size:11.5px;width:30px}
+table.pt td.c{font-family:var(--f-disp);font-weight:800;font-size:20px;line-height:1;width:52px;color:var(--fg)}
+table.pt td.c.y{color:var(--gold);font-family:var(--f-body);font-weight:700;font-size:15px}table.pt td.c.n{color:#3d4c5a;font-family:var(--f-body);font-size:12px;font-weight:500}
+table.pt td.c.auto{color:var(--muted)}
+table.pt td.c.ahead{background:rgba(226,176,74,.16);color:var(--warn)}
+table.pt td.c.by{box-shadow:inset 0 0 0 2px var(--ok);border-radius:4px}
+table.pt td.k{text-align:left;min-width:190px;font-size:13px}table.pt td.k b{font-weight:600;white-space:nowrap}
+table.pt tr.nr td{color:var(--dim)}table.pt tr.nr td.c:not(.n){opacity:.55}table.pt tr.nr td.v b{color:var(--muted)}
+table.pt tr.me td{background:rgba(92,200,255,.12)}table.pt tr.me td.v{background:#17303f;box-shadow:inset 3px 0 0 var(--brass)}table.pt tr.me td.c:not(.n):not(.y){color:var(--brass);font-size:24px}
+table.pt tr.grp td{background:var(--panel2);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:left;padding:6px 10px}
+table.pt tr.dim td{opacity:.38}
+table.pt td.pr{text-align:left;white-space:nowrap}table.pt td.pr b{font-family:var(--f-disp);font-weight:800;font-size:17px;text-transform:uppercase;letter-spacing:.01em}table.pt td.pr small{display:block;color:var(--muted);font-size:11.5px}
+table.pt td.bj{font-family:var(--f-disp);font-weight:800;font-size:18px;color:var(--ok);white-space:nowrap}table.pt tr.fut td.bj{color:var(--warn)}
+table.pt td.vac{color:var(--dim);text-align:left}
+.mini{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line2);color:var(--muted);border-radius:3px;padding:0 5px;margin-left:5px;white-space:nowrap}
+.mini.w{border-color:var(--warn);color:var(--warn)}.mini.m{border-color:var(--brass2);color:var(--brass)}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}.bar .lb2{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.key{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12.5px;margin:8px 0 10px}.key b{font-family:var(--f-disp);font-size:16px;font-weight:800;color:var(--fg);margin-right:4px}.key .sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.foot{margin-top:22px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}.foot b{color:var(--fg);font-weight:500}
+@media (max-width:760px){.mv .pick{text-align:left}table.rt th:nth-child(3),table.rt td:nth-child(3){display:none}table.pt td.v{min-width:132px;max-width:150px}table.pt{font-size:13px}}
+</style><p class="sub">Port ki waiting sheet ka format: har vessel ki line, priority ke column — number list ka rank hai, Y = declared par rank nahi, N = us priority mein nahi. Upar hamare vessels aur at-berth sheet. Dates berth board ka projection hain, port ka order nahi.</p>
+<div class="sec"><div class="sechead"><h2>Hamare vessels</h2><p>Mihir &amp; Company — har priority mein number aur us line se baari</p></div><div class="mine" id="mine"></div></div>
+
+<div class="sec"><div class="sechead"><h2>At berth · priority-wise</h2><p>port ki at-berth sheet jaisa — har priority ki jagah par kaun hai aur kab tak</p></div><div class="tw"><table class="pt" id="atb"></table></div></div>
+
+<div class="sec"><div class="sechead"><h2>Waiting vessels · port chart</h2><p>port ki waiting sheet jaisa — vessel ki line, priority ke column</p></div>
+<div class="pick2"><label for="vs">Vessel chuno</label><select id="vs"></select><span id="chips"></span></div><div class="pos" id="pos"></div>
+<div class="bar"><span class="lb2">Line dekho</span><span id="sorts"></span></div>
+<div class="key"><span><b>5</b>rank on the list</span><span><b style="color:var(--gold)">Y</b>declared, not ranked yet</span><span><b style="color:#4a5a69">N</b>not in that priority</span><span><span class="sw" style="background:rgba(226,176,74,.3)"></span>ahead of the chosen vessel in that column</span><span><span class="sw" style="box-shadow:inset 0 0 0 2px var(--ok)"></span>the priority the board expects her to berth by</span></div>
+<div class="tw"><table class="pt" id="chart"></table></div></div>
+
+<div class="foot" id="foot"></div>
+`;
+ (function(D,root){
+const CATS=[
+ {k:'GOV',l:'Govt priority',p:'2 places · fertiliser / Govt cargo, by seniority',max:2},
+ {k:'COASTAL',l:'Coastal',p:'1 place',max:1},
+ {k:'HP',l:'Higher productivity',p:'2 places · goes to the highest MTPD quote of the day, not to the rank',max:2},
+ {k:'SAAGAR',l:'SAAGAR',p:'1 bulk + 1 break-bulk place',max:2},
+ {k:'24H',l:'24 hours',p:'1 place · must leave within 24 h',max:1},
+ {k:'8K',l:'6.5K / 8K',p:'1 place',max:1},
+ {k:'STL',l:'Steel / project',p:'1 place',max:1},
+ {k:'BIT',l:'Bitumen',p:'1 place · if no bitumen vessel, a General vessel takes it',max:1},
+ {k:'GEN',l:'General',p:'3 places · by seniority · at most 3 bag vessels',max:3},
+ {k:'Q7',l:'Sr No 7 · 30K / 25K quote',p:'no place of its own — takes a vacant Govt, Coastal or 24-hr place',max:0}];
+const CL=Object.fromEntries(CATS.map(c=>[c.k,c.l]));CL.PPP='GFPL berth';CL.SPC='Space a/c';
+const nf=new Intl.NumberFormat('en-IN');
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DAY=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const dt=h=>new Date(Date.UTC(2026,9,25)+h*36e5);
+const fd=h=>{const d=dt(h);return d.getUTCDate()+' '+MON[d.getUTCMonth()];};
+const ft=h=>{const d=dt(h);return fd(h)+' '+String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');};
+const fw=h=>DAY[dt(h).getUTCDay()]+' '+fd(h);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const short=n=>n.replace(/ \((salt, next call|blades, next call|next call|reload)\)/,'');
+const ord=n=>n+(n%100>10&&n%100<14?'th':['th','st','nd','rd'][n%10]||'th');
+const POOL=['1','2','3','4','5','6','7','8','13','14','15','15A','16'];
+function berths(a){if(!a||!a.length)return 'no berth fits';if(a.length>=POOL.length-1)return '';const idx=a.map(b=>POOL.indexOf(b)).filter(i=>i>=0).sort((x,y)=>x-y);const out=[];let s=idx[0],p=idx[0];
+ for(let i=1;i<=idx.length;i++){if(idx[i]===p+1&&idx[i]!==8){p=idx[i];continue;}out.push(s===p?POOL[s]:POOL[s]+'–'+POOL[p]);s=p=idx[i];}return 'CJ '+out.join(', ')+' only';}
+const W=D.wait,B=D.berth;
+const rankIn=(w,k)=>k==='Q7'?(w.q7?1:null):(w.rk[k]==null||w.rk[k]===99?null:w.rk[k]);
+function queue(k){ // ranked vessels in order + the "Y" (declared, not ranked) ones
+ if(k==='Q7'){const l=W.filter(w=>w.q7).sort((a,b)=>(a.rep??1e9)-(b.rep??1e9));return {ranked:l.map((w,i)=>({w,no:i+1})),ys:[]};}
+ const l=W.filter(w=>rankIn(w,k)!=null);const ranked=l.filter(w=>w.rk[k]<98||(k==='GOV'&&w.govAuto)).sort((a,b)=>a.rk[k]-b.rk[k]);
+ return {ranked:ranked.map((w,i)=>({w,no:(k==='GOV'&&w.govAuto)?i+1:w.rk[k]})),ys:l.filter(w=>w.rk[k]===98)};}
+const optOf=(n,k)=>{const o=(D.opt||{})[n];if(!o)return null;const re={SAAGAR:/SAAGAR/i,'8K':/8K/i,GEN:/General/i,HP:/^HP|Higher/i,Q7:/Sr No 7/i}[k];const x=re&&o.find(r=>re.test(r.label)&&!(k==='8K'&&/Sr No 7/i.test(r.label)));return x&&x.r?x.r:null;};
+const lineOf=p=>/^General/.test(p.via)?'GEN':/30k\/25k/i.test(p.via)?'Q7':/SAAGAR project/.test(p.via)?'SAAGAR':p.cat;
+const viaTxt=p=>{const v=p.via||'';let m;if((m=v.match(/^General · cross-fill \(vacant (.+) slot\)/)))return 'General · in a vacant '+m[1]+' place';
+ if(/30k\/25k/i.test(v))return 'Sr No 7 quote · in a vacant '+CL[p.cat]+' place';if(/SAAGAR project/.test(v))return 'SAAGAR project · in a vacant '+CL[p.cat]+' place';if(/^General$/.test(v))return 'General · in a vacant '+CL[p.cat]+' place';return CL[p.cat]+(v?' · '+v:'');};
+let sel=(W.find(w=>w.mine)||{}).n||'';
+
+function mineHtml(){
+ const out=[];
+ B.filter(v=>v.mine&&!v.future).forEach(v=>out.push(`<div class="mv"><div class="top"><div><div class="nm">${esc(short(v.n))}<span class="tag ok">at berth</span></div><div class="cg">${esc(v.c)} · ${nf.format(v.q)} ${v.u} · holds a <b>${CL[v.slot]||v.slot}</b> place</div></div>
+  <div class="pick"><div class="big">CJ-${v.b}</div><small>made fast ${ft(v.F)} · completes ~${ft(v.T)}${v.est?' (estimate)':''}</small></div></div></div>`));
+ W.filter(w=>w.mine).forEach(w=>{const p=w.proj;const rows=CATS.filter(c=>rankIn(w,c.k)!=null&&!(c.k==='Q7')).map(c=>{const q=queue(c.k),i=q.ranked.findIndex(x=>x.w.n===w.n);if(i<0)return '';
+   const ahead=q.ranked.slice(0,i),rdy=ahead.filter(x=>x.w.rdy!=null).length;const o=optOf(w.n,c.k);const best=p&&o&&Math.abs(o.F-p.F)<1;
+   return `<tr class="${best?'best':''}"><td><b>${c.l}</b><small>${c.p}</small></td><td class="r">${q.ranked[i].no}<small> rank</small></td><td>${ahead.length} ahead<small>${rdy} of them ready</small></td><td>${o?`<b>CJ-${o.b} · ${fw(o.F)}</b><small>if she berths by this line alone${best?' — <b style="color:var(--brass)">the board\'s pick</b>':''}</small>`:'<small>not worked out</small>'}</td></tr>`;}).join('');
+  out.push(`<div class="mv"><div class="top"><div><div class="nm">${esc(short(w.n))}<span class="tag">waiting</span></div><div class="cg">${esc(w.c)} · ${nf.format(w.q)} ${w.u} · reported ${w.rep!=null?ft(w.rep):'—'} · waiting ${w.rep!=null?((D.NOW-w.rep)/24).toFixed(1)+' d':'—'}</div></div>
+   <div class="pick">${p?`<div class="big">${fw(p.F)}</div><small>board's pick · CJ-${p.b} · about ${ft(p.F).slice(-5)} · through ${viaTxt(p)}</small>`:`<div class="big">—</div><small>no berth on the board before ${fd(D.HZ)}</small>`}</div></div>
+   <table class="rt"><tr><th>Priority</th><th>Her number</th><th>Ahead of her</th><th>Her turn by this line</th></tr>${rows}</table></div>`);});
+ root.getElementById('mine').innerHTML=out.join('')||'<div class="vac">No Mihir &amp; Company vessel in the dry-cargo list today.</div>';
+}
+function posHtml(){const w=W.find(x=>x.n===sel);const el=root.getElementById('pos');if(!w){el.innerHTML='';return;}
+ const ps=CATS.map(c=>{if(rankIn(w,c.k)==null)return '';const q=queue(c.k),i=q.ranked.findIndex(x=>x.w.n===w.n);if(i<0)return `<span class="p" data-k="${c.k}"><b>Y</b>${c.l} · declared, not ranked</span>`;return `<span class="p" data-k="${c.k}"><b>${q.ranked[i].no}</b>${c.l} · ${i} ahead</span>`;}).join('');
+ el.innerHTML=(ps||'<span class="none">No rank printed in any priority.</span>')+(w.proj?`<span class="p" style="border-left-color:var(--ok);cursor:default"><b style="color:var(--ok)">${fd(w.proj.F)}</b>board: CJ-${w.proj.b} · ${viaTxt(w.proj)}</span>`:`<span class="none">${w.rdy==null?'Not ready — the board does not seat her yet.':'Board: no berth before '+fd(D.HZ)+'.'}</span>`);
+ el.querySelectorAll('.p[data-k]').forEach(p=>p.onclick=()=>{sortK=p.dataset.k;chart();sorts();root.getElementById('chart').scrollIntoView({behavior:'smooth',block:'start'});});}
+const COLS=[{k:'GOV',h:'GP',t:'Govt'},{k:'COASTAL',h:'CSTL',t:'Coastal'},{k:'HP',h:'HP',t:'Higher prod.'},{k:'SAAGAR',h:'SGR',t:'SAAGAR'},{k:'24H',h:'24H',t:'24 hours'},{k:'8K',h:'8K / 6.5K',t:'6.5K / 8K'},{k:'STL',h:'STL / PRJ',t:'Steel / project'},{k:'GEN',h:'GEN',t:'General'},{k:'Q7',h:'SR 7',t:'30K / 25K'}];
+const govOrd={};W.filter(w=>w.govAuto&&w.rk.GOV!=null&&w.rk.GOV<98).sort((a,b)=>a.rk.GOV-b.rk.GOV).forEach((w,i)=>govOrd[w.n]=i+1);
+// cell value: {t:'num'|'y'|'n', v:number shown, s:sort key, auto}
+function cell(w,k){if(k==='Q7')return w.q7?{t:'y',s:(w.rep??1e6)}:{t:'n',s:1e9};const r=w.rk[k];if(r==null||r===99)return {t:'n',s:1e9};if(r===98)return {t:'y',s:5e5+(w.rep??0)};
+ if(k==='GOV'&&w.govAuto)return {t:'num',v:govOrd[w.n],s:r,auto:1};return {t:'num',v:r,s:r};}
+let sortK='';
+function chart(){
+ const selW=W.find(w=>w.n===sel);const arrived=w=>w.rep!=null&&w.rep<=D.NOW;
+ let rows=W.slice();const byRep=(a,b)=>(a.rep??1e9)-(b.rep??1e9);
+ if(sortK)rows.sort((a,b)=>cell(a,sortK).s-cell(b,sortK).s||byRep(a,b));else rows.sort((a,b)=>(arrived(b)-arrived(a))||byRep(a,b));
+ const head=`<tr><th>Sr</th><th class="v">Vessel</th><th class="l">Reported<small>ready</small></th>${COLS.map(c=>`<th class="pc${sortK===c.k?' on':''}" data-k="${c.k}">${c.h}<small>${c.t}</small></th>`).join('')}<th class="l">Board · kab<small>berth · date · by which priority</small></th></tr>`;
+ let n=0,grp='';const body=rows.map(w=>{let g='';
+  if(!sortK){const gg=arrived(w)?'A':'E';if(gg!==grp){grp=gg;g=`<tr class="grp"><td colspan="${COLS.length+4}">${gg==='A'?'Waiting at Kandla · in order of reporting':'Expected · not yet reported'}</td></tr>`;n=0;}}
+  else{const gg=cell(w,sortK).t==='n'?'N':'I';if(gg!==grp){grp=gg;g=`<tr class="grp"><td colspan="${COLS.length+4}">${gg==='I'?'In this priority · in rank order':'Not in this priority'}</td></tr>`;n=0;}}
+  n++;const p=w.proj,me=w.n===sel,by=p?lineOf(p):null;
+  const cs=COLS.map(c=>{const x=cell(w,c.k);let cl='c '+(x.t==='num'?'':x.t);if(x.auto)cl+=' auto';
+    if(selW&&!me){const m=cell(selW,c.k);if(m.t!=='n'&&x.t!=='n'&&x.s<m.s&&!(m.t==='y'&&c.k!=='Q7'))cl+=' ahead';}
+    if(by===c.k&&x.t!=='n')cl+=' by';return `<td class="${cl}">${x.t==='num'?x.v:x.t==='y'?'Y':'N'}</td>`;}).join('');
+  const kab=w.rdy==null?`<small>${arrived(w)?'not ready':'expected '+(w.rep!=null?fd(w.rep):'')}${w.tags.length?' · '+w.tags.join(' · '):''}</small>`:p?`<b>CJ-${p.b} · ${ft(p.F)}</b><small>${viaTxt(p)}</small>`:`<small>no berth before ${fd(D.HZ)}${w.tags.length?' · '+w.tags.join(' · '):''}</small>`;
+  const bt=berths(w.allowed);
+  return g+`<tr class="${me?'me':''}${w.rdy==null?' nr':''}${sortK&&cell(w,sortK).t==='n'?' dim':''}"><td class="sr">${n}</td><td class="v"><b>${esc(short(w.n))}</b>${w.mine?'<span class="mini m">Mihir</span>':''}${w.noHP?'<span class="mini w" title="passed over for HP">HP ✕</span>':''}<small title="${esc(w.c)}${bt?' · '+bt:''}">${esc(w.c)} · ${nf.format(w.q)} ${w.u}</small></td>
+   <td class="l" style="white-space:nowrap">${w.rep!=null?fd(w.rep):'—'}<small>${w.rdy!=null?'ready '+fd(w.rdy):'N/A'}</small></td>${cs}<td class="k">${kab}</td></tr>`;}).join('');
+ const t=root.getElementById('chart');t.innerHTML=head+body;
+ t.querySelectorAll('th.pc').forEach(h=>h.onclick=()=>{sortK=sortK===h.dataset.k?'':h.dataset.k;chart();sorts();});
+}
+function sorts(){const el=root.getElementById('sorts');el.innerHTML=[['','List order']].concat(COLS.map(c=>[c.k,c.t])).map(([k,l])=>`<button class="chip${sortK===k?' on':''}" data-k="${k}">${l}</button>`).join(' ');
+ el.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{sortK=b.dataset.k;chart();sorts();});}
+function atBerth(){
+ const order=CATS.map(c=>c.k).concat(['SPC','PPP']);let sr=0;
+ const rows=order.map(k=>{const c=CATS.find(x=>x.k===k)||{l:CL[k],p:k==='PPP'?'CJ-9 / CJ-10 · outside the priority places':'free quay · uses no priority place'};
+  const l=B.filter(v=>k==='Q7'?/30k\/25k/i.test(v.via):v.slot===k).sort((a,b)=>(a.future-b.future)||a.T-b.T);if(!l.length&&(k==='SPC'||k==='PPP'))return '';sr++;
+  const pr=`<td class="sr" rowspan="${Math.max(1,l.length)}">${sr}</td><td class="pr" rowspan="${Math.max(1,l.length)}"><b>${c.l}</b><small>${c.p}</small></td>`;
+  if(!l.length)return `<tr>${pr}<td class="vac" colspan="5">${k==='Q7'?'NIL':'— vacant —'}</td></tr>`;
+  return l.map((v,i)=>`<tr class="${v.mine?'me':''}${v.future?' fut':''}">${i?'':pr}<td class="bj">CJ-${v.b}</td><td class="l"><b>${esc(short(v.n))}</b>${v.mine?'<span class="mini m">Mihir</span>':''}${v.future?'<span class="mini w">coming</span>':''}</td><td class="l">${esc(v.c)}<small>${nf.format(v.q)} ${v.u}</small></td><td class="l" style="white-space:nowrap">${v.future?'~'+ft(v.F)+' <small>est</small>':ft(v.F)}</td><td class="l" style="white-space:nowrap"><b>${ft(v.T)}</b>${v.est?' <small>estimate</small>':''}${v.lt?`<small>list ETC ${v.lt}</small>`:''}</td></tr>`).join('');}).join('');
+ root.getElementById('atb').innerHTML=`<tr><th>Sr</th><th class="l">Priority</th><th>Berth</th><th class="l">Vessel</th><th class="l">Cargo</th><th class="l">Made fast</th><th class="l">Out · ETC</th></tr>`+rows;
+}
+function pickers(){const s=root.getElementById('vs');s.innerHTML='<option value="">— koi nahi —</option>'+W.slice().sort((a,b)=>a.n.localeCompare(b.n)).map(w=>`<option value="${esc(w.n)}"${w.n===sel?' selected':''}>${esc(short(w.n))}${w.mine?' · Mihir & Co':''}</option>`).join('');
+ s.onchange=()=>{sel=s.value;render();};
+ const ch=root.getElementById('chips');ch.innerHTML=W.filter(w=>w.mine).map(w=>`<button class="chip${w.n===sel?' on':''}" data-n="${esc(w.n)}">${esc(short(w.n))}</button>`).join(' ');
+ ch.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{sel=b.dataset.n;render();});}
+function render(){pickers();posHtml();chart();sorts();}
+root.getElementById('foot').innerHTML=`<b>How to read it.</b> Same columns as the port's waiting sheet: a number is the rank printed on the DPA berthing list, Y is declared but not ranked yet, N is not in that priority. GP numbers are the board's order by reporting time — the list prints none; SR 7 = the vessel has declared a 30K / 25K quote. Tap a priority to see that line in rank order. A faded line is a vessel not ready yet — she does not compete until she declares readiness. "Board · kab" is the berth board's projection up to ${fd(D.HZ)}, not a port order.`;
+mineHtml();atBerth();render();
+ })(D,root);
+ const vb=document.getElementById('vb-priority');if(vb){const m=D.wait.filter(w=>w.mine);const RL={SAAGAR:'SGR','8K':'8K',GEN:'GEN',HP:'HP',COASTAL:'CSTL','24H':'24H',STL:'STL'};
+  vb.innerHTML=m.length?m.map(w=>'<b>'+w.n.replace(/ \(.*\)$/,'')+'</b> · '+Object.keys(w.rk).filter(k=>RL[k]&&w.rk[k]<98).map(k=>RL[k]+' '+w.rk[k]).join(' · ')).join(' | '):'<b>'+D.wait.filter(w=>w.rdy!=null).length+'</b> ready · rank / Y / N';}
+})();
 initSections();
-// tabs: Cargo jetties · Timber · Tuna · Liquid — same page, hash remembers the open board (#cargo / #timber / #tuna / #liquid)
+// tabs: Cargo jetties · Priority chart · Timber · Tuna · Liquid — same page, hash remembers the open board (#cargo / #priority / #timber / #tuna / #liquid)
 document.querySelectorAll('#views a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();setView(a.dataset.view,{top:true});}));
 window.addEventListener('hashchange',()=>{const k=location.hash.replace('#','');if(VIEWS[k]&&k!==VIEW)setView(k,{hash:false,top:true});});
 {let k0=(location.hash||'').replace('#','');if(!VIEWS[k0]){try{k0=localStorage.getItem('bb.view')||'';}catch(e){k0='';}}setView(k0,{hash:false,keep:false});} // no #tab in the link → the tab this viewer used last

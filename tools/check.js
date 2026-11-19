@@ -23,6 +23,10 @@ const r=await p.evaluate(()=>{const S=window.__S||[];const f=window.__fmt;const 
 const tabs={};let tmb={};for(const v of ['timber','liquid','tuna']){const a=await p.$(`a[data-view="${v}"]`);if(a){await a.click();await p.waitForTimeout(700);tabs[v]=await scan();
   if(v==='timber')tmb=await p.evaluate(()=>{const g=id=>(document.getElementById(id)||{}).innerText||'';return {stats:g('tmbstats'),act:[...document.querySelectorAll('#timber tr')].map(tr=>[...tr.children].filter(td=>!td.classList.contains('sm')).map(td=>td.innerText.replace(/\s*\n\s*/g,' ; ')).join(' | ')).join('\n'),rec:[...document.querySelectorAll('#tdone tr')].map(tr=>[...tr.children].filter(td=>!td.classList.contains('sm')).map(td=>td.innerText.replace(/\s*\n\s*/g,' ; ')).join(' | ')).join('\n'),n:{act:((window.__TMB||{}).active||[]).length,rec:((window.__TMB||{}).done||[]).length}};});}}
 if(!tabs.timber){bad++;console.log('NO TIMBER TAB');}
+// priority chart (v174): the tab draws inside a shadow root — innerText does not reach it, so it is scanned on its own
+const prio=await p.evaluate(()=>{const h=document.getElementById('pqtab');const sr=h&&h.shadowRoot;if(!sr)return null;const t=sr.textContent||'';
+ return {bad:(t.match(/.{0,30}(undefined|NaN|null|\[object).{0,20}/g)||[]),rows:sr.querySelectorAll('#chart tr').length,atb:sr.querySelectorAll('#atb tr').length,mine:(sr.getElementById('mine')||{}).innerText||''};});
+if(!prio||!prio.rows||!prio.atb){bad++;console.log('NO PRIORITY CHART');}else{console.log('priority chart — rows:',prio.rows,'| at-berth rows:',prio.atb,'| bad tokens:',prio.bad.length);prio.bad.forEach(x=>console.log('  BAD (priority): …'+x+'…'));if(prio.bad.length)bad++;}
 console.log('page errors:',JSON.stringify(errs));console.log(r.upd.replace(/\n/g,' '));
 console.log('bad tokens — cargo tab:',main.length,'| timber:',(tabs.timber||[]).length,'| liquid:',(tabs.liquid||[]).length,'| tuna:',(tabs.tuna||[]).length,'| timber rows: active',(tmb.n||{}).act,'· record',(tmb.n||{}).rec);
 [...main,...(tabs.timber||[]),...(tabs.liquid||[]),...(tabs.tuna||[])].forEach(x=>console.log('  BAD: …'+x+'…'));
