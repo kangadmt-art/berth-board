@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DPA Priority Queue — draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#0f1419;--panel:#161d24;--panel2:#1c252e;--line:#273340;--line2:#334454;--fg:#e8eef4;--muted:#95a6b8;--dim:#60707f;--brass:#5cc8ff;--brass2:#3a97c4;--ok:#5fbf7f;--warn:#e2b04a;--bad:#e06464;--gold:#d9b25f;
+--f-disp:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;--f-body:"IBM Plex Sans Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;--f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding:26px 18px 60px}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+h1{font-family:var(--f-disp);font-weight:800;font-size:clamp(34px,6vw,54px);line-height:.95;text-transform:uppercase;margin-top:4px}
+h1 span{color:var(--brass)}
+.draft{display:inline-block;margin-left:10px;vertical-align:middle;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;border:1px dashed var(--gold);color:var(--gold);padding:2px 7px;border-radius:3px}
+.sub{color:var(--muted);margin-top:10px;max-width:780px}
+.asof{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);margin-top:8px}.asof b{color:var(--fg);font-weight:500}
+h2{font-family:var(--f-disp);font-weight:600;font-size:24px;letter-spacing:.02em;text-transform:uppercase}
+.sec{margin-top:26px}
+.sechead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}.sechead p{color:var(--muted);font-size:13.5px}
+/* our vessels */
+.mine{display:grid;gap:12px}
+.mv{background:linear-gradient(180deg,#14212d,var(--panel));border:1px solid var(--line2);border-top:3px solid var(--brass);border-radius:8px;padding:14px 16px}
+.mv .top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start}
+.mv .nm{font-family:var(--f-disp);font-weight:800;font-size:28px;line-height:1;text-transform:uppercase}
+.mv .cg{color:var(--muted);font-size:13.5px;margin-top:4px}
+.mv .pick{text-align:right}.mv .pick .big{font-family:var(--f-disp);font-weight:800;font-size:30px;line-height:1;color:var(--brass)}
+.mv .pick small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--brass2);color:var(--brass);border-radius:3px;padding:1px 6px;vertical-align:middle;margin-left:6px}
+.tag.soft{border-color:var(--warn);color:var(--warn)}.tag.ok{border-color:var(--ok);color:var(--ok)}
+table.rt{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+table.rt th{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:left;font-weight:500;padding:5px 8px;border-bottom:1px solid var(--line2)}
+table.rt td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.rt tr.best td{background:rgba(92,200,255,.07)}
+table.rt td.r{font-family:var(--f-disp);font-weight:800;font-size:24px;line-height:1;color:var(--brass);white-space:nowrap}
+table.rt td.r small{font-family:var(--f-body);font-weight:400;font-size:12px;color:var(--muted)}
+table.rt td b{font-weight:600}table.rt small{color:var(--muted);font-size:12.5px;display:block}
+/* picker */
+.pick2{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+.pick2 label{font-weight:600}.pick2 select{background:var(--panel2);color:var(--fg);border:1px solid var(--brass2);border-radius:5px;padding:7px 9px;font:inherit;min-width:220px;max-width:100%}
+.chip{font:inherit;font-size:13px;background:none;color:var(--fg);border:1px solid var(--line2);border-radius:14px;padding:3px 11px;cursor:pointer}.chip:hover,.chip.on{border-color:var(--brass);color:var(--brass)}
+.pos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.pos .p{background:var(--panel);border:1px solid var(--line2);border-left:3px solid var(--brass);border-radius:5px;padding:6px 11px;font-size:13.5px;cursor:pointer}
+.pos .p b{font-family:var(--f-disp);font-size:20px;font-weight:800;color:var(--brass);margin-right:5px}
+.pos .none{color:var(--muted);font-size:13.5px}
+/* lanes */
+.lane{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-top:12px;overflow:hidden;scroll-margin-top:10px}
+.lane.has{border-color:var(--brass2)}
+.lh{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 16px;background:var(--panel2);border-bottom:1px solid var(--line)}
+.lh .no{font-family:var(--f-mono);font-size:12px;color:var(--dim);border:1px solid var(--line2);border-radius:50%;width:26px;height:26px;display:grid;place-items:center;flex:none}
+.lh h3{font-family:var(--f-disp);font-weight:800;font-size:23px;line-height:1;text-transform:uppercase;letter-spacing:.01em}
+.lh .pl{color:var(--muted);font-size:13px}
+.lh .you{margin-left:auto;font-size:13.5px;background:rgba(92,200,255,.1);border:1px solid var(--brass2);color:var(--brass);border-radius:5px;padding:3px 10px;white-space:nowrap}.lh .you b{font-weight:700}
+.lb{display:grid;grid-template-columns:minmax(250px,34%) 1fr}
+.col{padding:12px 16px}.col+.col{border-left:1px solid var(--line)}
+.ct{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
+.ab{border-left:3px solid var(--ok);padding:4px 0 4px 10px;margin-bottom:9px}.ab.fut{border-left-color:var(--warn)}.ab.me{border-left-color:var(--brass);background:rgba(92,200,255,.06)}
+.ab b{font-weight:600;font-size:15px}.ab small{display:block;color:var(--muted);font-size:12.5px}.ab .till{font-size:13px;color:var(--fg)}
+.vac{color:var(--muted);font-size:13.5px}
+.row{display:grid;grid-template-columns:34px 1fr minmax(170px,40%);gap:10px;align-items:start;padding:7px 8px;border-bottom:1px solid var(--line);border-radius:4px}
+.row:last-child{border-bottom:0}
+.row .rk{font-family:var(--f-disp);font-weight:800;font-size:22px;line-height:1.05;color:var(--muted);text-align:center}
+.row .n b{font-weight:600}.row .n small{display:block;color:var(--muted);font-size:12.5px}
+.row .st{font-size:13px;color:var(--muted)}.row .st b{color:var(--fg);font-weight:600}.row .st .same{color:var(--ok)}.row .st .oth{color:var(--warn)}
+.row.nr{opacity:.55}
+.row.me{background:rgba(92,200,255,.11);outline:1px solid var(--brass2);opacity:1}.row.me .rk{color:var(--brass)}
+.mini{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line2);color:var(--muted);border-radius:3px;padding:0 5px;margin-left:5px;white-space:nowrap}
+.mini.w{border-color:var(--warn);color:var(--warn)}.mini.m{border-color:var(--brass2);color:var(--brass)}
+.more{margin:8px 0 0 44px;font:inherit;font-size:13px;background:none;border:1px dashed var(--line2);color:var(--brass);border-radius:5px;padding:4px 12px;cursor:pointer}
+.ys{margin-top:9px;font-size:13px;color:var(--muted);padding-left:44px}.ys b{color:var(--fg);font-weight:500}.ys .me{color:var(--brass)}
+.foot{margin-top:22px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}.foot b{color:var(--fg);font-weight:500}
+@media (max-width:760px){.lb{grid-template-columns:1fr}.col+.col{border-left:0;border-top:1px solid var(--line)}.row{grid-template-columns:30px 1fr}.row .st{grid-column:2}.mv .pick{text-align:left}.lh .you{margin-left:0}.ys,.more{padding-left:0;margin-left:0}table.rt th:nth-child(3),table.rt td:nth-child(3){display:none}}
+</style></head><body><div class="wrap">
+<div class="eyebrow">Deendayal Port · Kandla · Dry cargo jetty</div>
+<h1>Priority <span>Queue</span><span class="draft">DRAFT</span></h1>
+<p class="sub">Har priority ki line alag — kaun berth par hai, line mein kaun kis number par hai, aur board ke hisaab se kiski baari kab. Rank DPA berthing list ke hain; dates berth board ka projection hain, port ka order nahi.</p>
+<div class="asof" id="asof"></div>
+
+<div class="sec"><div class="sechead"><h2>Hamare vessels</h2><p>Mihir &amp; Company — har priority mein number aur us line se baari</p></div><div class="mine" id="mine"></div></div>
+
+<div class="sec"><div class="pick2"><label for="vs">Vessel chuno</label><select id="vs"></select><span id="chips"></span></div><div class="pos" id="pos"></div></div>
+
+<div class="sec"><div class="sechead"><h2>Priority-wise line</h2><p>berthing policy ke order mein · upar wali priority ko berth pehle milti hai</p></div><div id="lanes"></div></div>
+
+<div class="foot" id="foot"></div>
+</div>
+<script>
+const D=/*DATA*/null;
+const CATS=[
+ {k:'GOV',l:'Govt priority',p:'2 places · fertiliser / Govt cargo, by seniority',max:2},
+ {k:'COASTAL',l:'Coastal',p:'1 place',max:1},
+ {k:'HP',l:'Higher productivity',p:'2 places · goes to the highest MTPD quote of the day, not to the rank',max:2},
+ {k:'SAAGAR',l:'SAAGAR',p:'1 bulk + 1 break-bulk place',max:2},
+ {k:'24H',l:'24 hours',p:'1 place · must leave within 24 h',max:1},
+ {k:'8K',l:'6.5K / 8K',p:'1 place',max:1},
+ {k:'STL',l:'Steel / project',p:'1 place',max:1},
+ {k:'BIT',l:'Bitumen',p:'1 place · if no bitumen vessel, a General vessel takes it',max:1},
+ {k:'GEN',l:'General',p:'3 places · by seniority · at most 3 bag vessels',max:3},
+ {k:'Q7',l:'Sr No 7 · 30K / 25K quote',p:'no place of its own — takes a vacant Govt, Coastal or 24-hr place',max:0}];
+const CL=Object.fromEntries(CATS.map(c=>[c.k,c.l]));CL.PPP='GFPL berth';CL.SPC='Space a/c';
+const nf=new Intl.NumberFormat('en-IN');
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DAY=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const dt=h=>new Date(Date.UTC(2026,9,25)+h*36e5);
+const fd=h=>{const d=dt(h);return d.getUTCDate()+' '+MON[d.getUTCMonth()];};
+const ft=h=>{const d=dt(h);return fd(h)+' '+String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');};
+const fw=h=>DAY[dt(h).getUTCDay()]+' '+fd(h);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const short=n=>n.replace(/ \((salt, next call|blades, next call|next call|reload)\)/,'');
+const ord=n=>n+(n%100>10&&n%100<14?'th':['th','st','nd','rd'][n%10]||'th');
+const POOL=['1','2','3','4','5','6','7','8','13','14','15','15A','16'];
+function berths(a){if(!a||!a.length)return 'no berth fits';if(a.length>=POOL.length-1)return '';const idx=a.map(b=>POOL.indexOf(b)).filter(i=>i>=0).sort((x,y)=>x-y);const out=[];let s=idx[0],p=idx[0];
+ for(let i=1;i<=idx.length;i++){if(idx[i]===p+1&&idx[i]!==8){p=idx[i];continue;}out.push(s===p?POOL[s]:POOL[s]+'–'+POOL[p]);s=p=idx[i];}return 'CJ '+out.join(', ')+' only';}
+const W=D.wait,B=D.berth;
+const rankIn=(w,k)=>k==='Q7'?(w.q7?1:null):(w.rk[k]==null||w.rk[k]===99?null:w.rk[k]);
+function queue(k){ // ranked vessels in order + the "Y" (declared, not ranked) ones
+ if(k==='Q7'){const l=W.filter(w=>w.q7).sort((a,b)=>(a.rep??1e9)-(b.rep??1e9));return {ranked:l.map((w,i)=>({w,no:i+1})),ys:[]};}
+ const l=W.filter(w=>rankIn(w,k)!=null);const ranked=l.filter(w=>w.rk[k]<98||(k==='GOV'&&w.govAuto)).sort((a,b)=>a.rk[k]-b.rk[k]);
+ return {ranked:ranked.map((w,i)=>({w,no:(k==='GOV'&&w.govAuto)?i+1:w.rk[k]})),ys:l.filter(w=>w.rk[k]===98)};}
+const optOf=(n,k)=>{const o=(D.opt||{})[n];if(!o)return null;const re={SAAGAR:/SAAGAR/i,'8K':/8K/i,GEN:/General/i,HP:/^HP|Higher/i,Q7:/Sr No 7/i}[k];const x=re&&o.find(r=>re.test(r.label)&&!(k==='8K'&&/Sr No 7/i.test(r.label)));return x&&x.r?x.r:null;};
+const lineOf=p=>/^General/.test(p.via)?'GEN':/30k\/25k/i.test(p.via)?'Q7':/SAAGAR project/.test(p.via)?'SAAGAR':p.cat;
+const viaTxt=p=>{const v=p.via||'';let m;if((m=v.match(/^General · cross-fill \(vacant (.+) slot\)/)))return 'General · in a vacant '+m[1]+' place';
+ if(/30k\/25k/i.test(v))return 'Sr No 7 quote · in a vacant '+CL[p.cat]+' place';if(/SAAGAR project/.test(v))return 'SAAGAR project · in a vacant '+CL[p.cat]+' place';if(/^General$/.test(v))return 'General · in a vacant '+CL[p.cat]+' place';return CL[p.cat]+(v?' · '+v:'');};
+let sel=(W.find(w=>w.mine)||{}).n||'';
+
+function mineHtml(){
+ const out=[];
+ B.filter(v=>v.mine&&!v.future).forEach(v=>out.push(`<div class="mv"><div class="top"><div><div class="nm">${esc(short(v.n))}<span class="tag ok">at berth</span></div><div class="cg">${esc(v.c)} · ${nf.format(v.q)} ${v.u} · holds a <b>${CL[v.slot]||v.slot}</b> place</div></div>
+  <div class="pick"><div class="big">CJ-${v.b}</div><small>made fast ${ft(v.F)} · completes ~${ft(v.T)}${v.est?' (estimate)':''}</small></div></div></div>`));
+ W.filter(w=>w.mine).forEach(w=>{const p=w.proj;const rows=CATS.filter(c=>rankIn(w,c.k)!=null&&!(c.k==='Q7')).map(c=>{const q=queue(c.k),i=q.ranked.findIndex(x=>x.w.n===w.n);if(i<0)return '';
+   const ahead=q.ranked.slice(0,i),rdy=ahead.filter(x=>x.w.rdy!=null).length;const o=optOf(w.n,c.k);const best=p&&o&&Math.abs(o.F-p.F)<1;
+   return `<tr class="${best?'best':''}"><td><b>${c.l}</b><small>${c.p}</small></td><td class="r">${q.ranked[i].no}<small> rank</small></td><td>${ahead.length} ahead<small>${rdy} of them ready</small></td><td>${o?`<b>CJ-${o.b} · ${fw(o.F)}</b><small>if she berths by this line alone${best?' — <b style="color:var(--brass)">the board\'s pick</b>':''}</small>`:'<small>not worked out</small>'}</td></tr>`;}).join('');
+  out.push(`<div class="mv"><div class="top"><div><div class="nm">${esc(short(w.n))}<span class="tag">waiting</span></div><div class="cg">${esc(w.c)} · ${nf.format(w.q)} ${w.u} · reported ${w.rep!=null?ft(w.rep):'—'} · waiting ${w.rep!=null?((D.NOW-w.rep)/24).toFixed(1)+' d':'—'}</div></div>
+   <div class="pick">${p?`<div class="big">${fw(p.F)}</div><small>board's pick · CJ-${p.b} · about ${ft(p.F).slice(-5)} · through ${viaTxt(p)}</small>`:`<div class="big">—</div><small>no berth on the board before ${fd(D.HZ)}</small>`}</div></div>
+   <table class="rt"><tr><th>Priority</th><th>Her number</th><th>Ahead of her</th><th>Her turn by this line</th></tr>${rows}</table></div>`);});
+ document.getElementById('mine').innerHTML=out.join('')||'<div class="vac">No Mihir &amp; Company vessel in the dry-cargo list today.</div>';
+}
+function posHtml(){const w=W.find(x=>x.n===sel);const el=document.getElementById('pos');if(!w){el.innerHTML='';return;}
+ const ps=CATS.map(c=>{if(rankIn(w,c.k)==null)return '';const q=queue(c.k),i=q.ranked.findIndex(x=>x.w.n===w.n);if(i<0)return `<span class="p" data-k="${c.k}"><b>Y</b>${c.l} · declared, not ranked</span>`;return `<span class="p" data-k="${c.k}"><b>${q.ranked[i].no}</b>${c.l} · ${i} ahead</span>`;}).join('');
+ el.innerHTML=(ps||'<span class="none">No rank printed in any priority.</span>')+(w.proj?`<span class="p" style="border-left-color:var(--ok);cursor:default"><b style="color:var(--ok)">${fd(w.proj.F)}</b>board: CJ-${w.proj.b} · ${viaTxt(w.proj)}</span>`:`<span class="none">${w.rdy==null?'Not ready — the board does not seat her yet.':'Board: no berth before '+fd(D.HZ)+'.'}</span>`);
+ el.querySelectorAll('.p[data-k]').forEach(p=>p.onclick=()=>document.getElementById('lane-'+p.dataset.k).scrollIntoView({behavior:'smooth'}));}
+const open={};
+function rowHtml(x,k){const w=x.w,p=w.proj,me=w.n===sel;let st;
+ if(w.rdy==null)st='not ready'+(w.tags.length?' · '+w.tags.join(' · '):'');
+ else if(p){const same=lineOf(p)===k;st=`<b>CJ-${p.b} · ${ft(p.F)}</b><br><span class="${same?'same':'oth'}">${same?'by this line':'goes by '+viaTxt(p)}</span>`;}
+ else st='no berth on the board before '+fd(D.HZ)+(w.tags.length?' · '+w.tags.join(' · '):'');
+ const bt=berths(w.allowed);
+ return `<div class="row${me?' me':''}${w.rdy==null?' nr':''}"><div class="rk">${x.no}</div><div class="n"><b>${esc(short(w.n))}</b>${w.mine?'<span class="mini m">Mihir &amp; Co</span>':''}${k==='HP'&&w.noHP?'<span class="mini w">passed over</span>':''}${w.q7&&k!=='Q7'?'<span class="mini">Sr 7</span>':''}
+  <small>${esc(w.c)} · ${nf.format(w.q)} ${w.u}${w.rdy!=null?' · ready '+fd(w.rdy):''}${bt?' · '+bt:''}</small></div><div class="st">${st}</div></div>`;}
+function lanes(){
+ const el=document.getElementById('lanes');const N=6;
+ el.innerHTML=CATS.map((c,ci)=>{const q=queue(c.k);const at=B.filter(v=>(c.k==='Q7'?/30k\/25k/i.test(v.via):v.slot===c.k)&&!v.future).sort((a,b)=>a.T-b.T),fut=B.filter(v=>(c.k==='Q7'?false:v.slot===c.k)&&v.future).sort((a,b)=>a.F-b.F);
+  const si=q.ranked.findIndex(x=>x.w.n===sel),sy=q.ys.some(w=>w.n===sel);
+  const abh=v=>`<div class="ab${v.future?' fut':''}${v.mine?' me':''}"><b>${esc(short(v.n))}</b> · CJ-${v.b}${v.mine?'<span class="mini m">Mihir &amp; Co</span>':''}<small>${esc(v.c)} · ${nf.format(v.q)} ${v.u}</small><span class="till">${v.future?'berthing ~'+ft(v.F):'out ~'+ft(v.T)+(v.est?' <span style="color:var(--muted)">(est)</span>':'')}</span></div>`;
+  const showAll=open[c.k]||q.ranked.length<=N+2;const lim=showAll?q.ranked.length:Math.max(N,si+1);
+  const rows=q.ranked.slice(0,lim).map(x=>rowHtml(x,c.k)).join('');
+  return `<div class="lane${si>=0||sy?' has':''}" id="lane-${c.k}"><div class="lh"><span class="no">${ci+1}</span><h3>${c.l}</h3><span class="pl">${c.p}</span>${si>=0?`<span class="you"><b>${esc(short(sel))}</b> — ${ord(si+1)} in line · rank ${q.ranked[si].no}</span>`:sy?`<span class="you"><b>${esc(short(sel))}</b> — declared, not ranked yet</span>`:''}</div>
+   <div class="lb"><div class="col"><div class="ct">At berth now${c.max?' · '+at.length+' of '+c.max+' place'+(c.max>1?'s':''):''}</div>${at.map(abh).join('')||`<div class="vac">${c.k==='Q7'?'Nil — no vessel alongside under Sr No 7.':'Nobody — the place is vacant.'}</div>`}${fut.length?'<div class="ct" style="margin-top:12px">Coming · programmed</div>'+fut.map(abh).join(''):''}</div>
+   <div class="col"><div class="ct">Waiting in line · ${q.ranked.length} ranked${q.ys.length?' · '+q.ys.length+' not ranked yet':''}</div>${rows||'<div class="vac">Nobody is ranked in this priority.</div>'}${lim<q.ranked.length?`<button class="more" data-k="${c.k}">Show all ${q.ranked.length} ▾</button>`:''}
+   ${q.ys.length?`<div class="ys">Declared, not ranked yet (“Y” on the list): ${q.ys.map(w=>`<b class="${w.n===sel?'me':''}">${esc(short(w.n))}</b>`).join(', ')}</div>`:''}</div></div></div>`;}).join('');
+ el.querySelectorAll('.more').forEach(b=>b.onclick=()=>{open[b.dataset.k]=1;lanes();});
+}
+function pickers(){const s=document.getElementById('vs');s.innerHTML='<option value="">— koi nahi —</option>'+W.slice().sort((a,b)=>a.n.localeCompare(b.n)).map(w=>`<option value="${esc(w.n)}"${w.n===sel?' selected':''}>${esc(short(w.n))}${w.mine?' · Mihir & Co':''}</option>`).join('');
+ s.onchange=()=>{sel=s.value;render();};
+ const ch=document.getElementById('chips');ch.innerHTML=W.filter(w=>w.mine).map(w=>`<button class="chip${w.n===sel?' on':''}" data-n="${esc(w.n)}">${esc(short(w.n))}</button>`).join(' ');
+ ch.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{sel=b.dataset.n;render();});}
+function render(){pickers();posHtml();lanes();}
+document.getElementById('asof').innerHTML=`As of <b>${D.nowT}</b> · ${esc(D.hdr.replace(/ · Gang sheet.*$/,''))} · board updated <b>${esc(D.updated)}</b>`;
+const oth=B.filter(v=>!CL[v.slot]||v.slot==='PPP'||v.slot==='SPC').filter(v=>!v.future);
+document.getElementById('foot').innerHTML=`<b>How to read it.</b> The number is the rank printed on the DPA berthing list (Govt and Sr No 7 have no printed rank — they go by reporting time). Green “by this line” = the board expects her to berth through this priority; amber “goes by …” = she is expected to berth through another priority first, so she leaves this line. A faded row is a vessel not ready yet — she does not compete until she declares readiness. Dates are the berth board's projection up to ${fd(D.HZ)}.`
+ +(oth.length?`<br><b>Outside the priority places:</b> ${oth.map(v=>esc(short(v.n))+' · CJ-'+v.b+' ('+(CL[v.slot]||v.slot)+')').join(' · ')}.`:'');
+mineHtml();render();
+</script></body></html>

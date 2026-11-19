@@ -43,33 +43,37 @@ table.rt td b{font-weight:600}table.rt small{color:var(--muted);font-size:12.5px
 .pos .p{background:var(--panel);border:1px solid var(--line2);border-left:3px solid var(--brass);border-radius:5px;padding:6px 11px;font-size:13.5px;cursor:pointer}
 .pos .p b{font-family:var(--f-disp);font-size:20px;font-weight:800;color:var(--brass);margin-right:5px}
 .pos .none{color:var(--muted);font-size:13.5px}
-/* lanes */
-.lane{background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-top:12px;overflow:hidden;scroll-margin-top:10px}
-.lane.has{border-color:var(--brass2)}
-.lh{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 16px;background:var(--panel2);border-bottom:1px solid var(--line)}
-.lh .no{font-family:var(--f-mono);font-size:12px;color:var(--dim);border:1px solid var(--line2);border-radius:50%;width:26px;height:26px;display:grid;place-items:center;flex:none}
-.lh h3{font-family:var(--f-disp);font-weight:800;font-size:23px;line-height:1;text-transform:uppercase;letter-spacing:.01em}
-.lh .pl{color:var(--muted);font-size:13px}
-.lh .you{margin-left:auto;font-size:13.5px;background:rgba(92,200,255,.1);border:1px solid var(--brass2);color:var(--brass);border-radius:5px;padding:3px 10px;white-space:nowrap}.lh .you b{font-weight:700}
-.lb{display:grid;grid-template-columns:minmax(250px,34%) 1fr}
-.col{padding:12px 16px}.col+.col{border-left:1px solid var(--line)}
-.ct{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
-.ab{border-left:3px solid var(--ok);padding:4px 0 4px 10px;margin-bottom:9px}.ab.fut{border-left-color:var(--warn)}.ab.me{border-left-color:var(--brass);background:rgba(92,200,255,.06)}
-.ab b{font-weight:600;font-size:15px}.ab small{display:block;color:var(--muted);font-size:12.5px}.ab .till{font-size:13px;color:var(--fg)}
-.vac{color:var(--muted);font-size:13.5px}
-.row{display:grid;grid-template-columns:34px 1fr minmax(170px,40%);gap:10px;align-items:start;padding:7px 8px;border-bottom:1px solid var(--line);border-radius:4px}
-.row:last-child{border-bottom:0}
-.row .rk{font-family:var(--f-disp);font-weight:800;font-size:22px;line-height:1.05;color:var(--muted);text-align:center}
-.row .n b{font-weight:600}.row .n small{display:block;color:var(--muted);font-size:12.5px}
-.row .st{font-size:13px;color:var(--muted)}.row .st b{color:var(--fg);font-weight:600}.row .st .same{color:var(--ok)}.row .st .oth{color:var(--warn)}
-.row.nr{opacity:.55}
-.row.me{background:rgba(92,200,255,.11);outline:1px solid var(--brass2);opacity:1}.row.me .rk{color:var(--brass)}
+/* port-format tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+table.pt{border-collapse:separate;border-spacing:0;width:100%;font-size:13.5px}
+table.pt th{position:sticky;top:0;background:var(--panel2);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:8px 6px;border-bottom:1px solid var(--line2);text-align:center;white-space:nowrap;z-index:2}
+table.pt th.l,table.pt td.l{text-align:left}
+table.pt th.pc{cursor:pointer;color:var(--fg)}table.pt th.pc:hover,table.pt th.pc.on{color:var(--brass)}table.pt th.pc.on{box-shadow:inset 0 -2px 0 var(--brass)}
+table.pt th small{display:block;font-size:9.5px;letter-spacing:.04em;color:var(--dim);text-transform:none;margin-top:2px}
+table.pt td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle}
+table.pt td.v{position:sticky;left:0;background:var(--panel);z-index:1;min-width:168px;max-width:230px;text-align:left;border-right:1px solid var(--line)}
+table.pt th.v{left:0;z-index:3;text-align:left}
+table.pt td.v b{font-weight:600}table.pt td.v small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}table.pt td.v small,table.pt td.k small,table.pt td.l small{display:block;color:var(--muted);font-size:12px}
+table.pt td.sr{color:var(--dim);font-family:var(--f-mono);font-size:11.5px;width:30px}
+table.pt td.c{font-family:var(--f-disp);font-weight:800;font-size:20px;line-height:1;width:52px;color:var(--fg)}
+table.pt td.c.y{color:var(--gold);font-family:var(--f-body);font-weight:700;font-size:15px}table.pt td.c.n{color:#3d4c5a;font-family:var(--f-body);font-size:12px;font-weight:500}
+table.pt td.c.auto{color:var(--muted)}
+table.pt td.c.ahead{background:rgba(226,176,74,.16);color:var(--warn)}
+table.pt td.c.by{box-shadow:inset 0 0 0 2px var(--ok);border-radius:4px}
+table.pt td.k{text-align:left;min-width:190px;font-size:13px}table.pt td.k b{font-weight:600;white-space:nowrap}
+table.pt tr.nr td{color:var(--dim)}table.pt tr.nr td.c:not(.n){opacity:.55}table.pt tr.nr td.v b{color:var(--muted)}
+table.pt tr.me td{background:rgba(92,200,255,.12)}table.pt tr.me td.v{background:#17303f;box-shadow:inset 3px 0 0 var(--brass)}table.pt tr.me td.c:not(.n):not(.y){color:var(--brass);font-size:24px}
+table.pt tr.grp td{background:var(--panel2);font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-align:left;padding:6px 10px}
+table.pt tr.dim td{opacity:.38}
+table.pt td.pr{text-align:left;white-space:nowrap}table.pt td.pr b{font-family:var(--f-disp);font-weight:800;font-size:17px;text-transform:uppercase;letter-spacing:.01em}table.pt td.pr small{display:block;color:var(--muted);font-size:11.5px}
+table.pt td.bj{font-family:var(--f-disp);font-weight:800;font-size:18px;color:var(--ok);white-space:nowrap}table.pt tr.fut td.bj{color:var(--warn)}
+table.pt td.vac{color:var(--dim);text-align:left}
 .mini{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line2);color:var(--muted);border-radius:3px;padding:0 5px;margin-left:5px;white-space:nowrap}
 .mini.w{border-color:var(--warn);color:var(--warn)}.mini.m{border-color:var(--brass2);color:var(--brass)}
-.more{margin:8px 0 0 44px;font:inherit;font-size:13px;background:none;border:1px dashed var(--line2);color:var(--brass);border-radius:5px;padding:4px 12px;cursor:pointer}
-.ys{margin-top:9px;font-size:13px;color:var(--muted);padding-left:44px}.ys b{color:var(--fg);font-weight:500}.ys .me{color:var(--brass)}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}.bar .lb2{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.key{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12.5px;margin:8px 0 10px}.key b{font-family:var(--f-disp);font-size:16px;font-weight:800;color:var(--fg);margin-right:4px}.key .sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:5px}
 .foot{margin-top:22px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}.foot b{color:var(--fg);font-weight:500}
-@media (max-width:760px){.lb{grid-template-columns:1fr}.col+.col{border-left:0;border-top:1px solid var(--line)}.row{grid-template-columns:30px 1fr}.row .st{grid-column:2}.mv .pick{text-align:left}.lh .you{margin-left:0}.ys,.more{padding-left:0;margin-left:0}table.rt th:nth-child(3),table.rt td:nth-child(3){display:none}}
+@media (max-width:760px){.mv .pick{text-align:left}table.rt th:nth-child(3),table.rt td:nth-child(3){display:none}table.pt td.v{min-width:132px;max-width:150px}table.pt{font-size:13px}}
 </style></head><body><div class="wrap">
 <div class="eyebrow">Deendayal Port · Kandla · Dry cargo jetty</div>
 <h1>Priority <span>Queue</span><span class="draft">DRAFT</span></h1>
@@ -78,9 +82,13 @@ table.rt td b{font-weight:600}table.rt small{color:var(--muted);font-size:12.5px
 
 <div class="sec"><div class="sechead"><h2>Hamare vessels</h2><p>Mihir &amp; Company — har priority mein number aur us line se baari</p></div><div class="mine" id="mine"></div></div>
 
-<div class="sec"><div class="pick2"><label for="vs">Vessel chuno</label><select id="vs"></select><span id="chips"></span></div><div class="pos" id="pos"></div></div>
+<div class="sec"><div class="sechead"><h2>At berth · priority-wise</h2><p>port ki at-berth sheet jaisa — har priority ki jagah par kaun hai aur kab tak</p></div><div class="tw"><table class="pt" id="atb"></table></div></div>
 
-<div class="sec"><div class="sechead"><h2>Priority-wise line</h2><p>berthing policy ke order mein · upar wali priority ko berth pehle milti hai</p></div><div id="lanes"></div></div>
+<div class="sec"><div class="sechead"><h2>Waiting vessels · port chart</h2><p>port ki waiting sheet jaisa — vessel ki line, priority ke column</p></div>
+<div class="pick2"><label for="vs">Vessel chuno</label><select id="vs"></select><span id="chips"></span></div><div class="pos" id="pos"></div>
+<div class="bar"><span class="lb2">Line dekho</span><span id="sorts"></span></div>
+<div class="key"><span><b>5</b>rank on the list</span><span><b style="color:var(--gold)">Y</b>declared, not ranked yet</span><span><b style="color:#4a5a69">N</b>not in that priority</span><span><span class="sw" style="background:rgba(226,176,74,.3)"></span>ahead of the chosen vessel in that column</span><span><span class="sw" style="box-shadow:inset 0 0 0 2px var(--ok)"></span>the priority the board expects her to berth by</span></div>
+<div class="tw"><table class="pt" id="chart"></table></div></div>
 
 <div class="foot" id="foot"></div>
 </div>
@@ -137,36 +145,49 @@ function mineHtml(){
 function posHtml(){const w=W.find(x=>x.n===sel);const el=document.getElementById('pos');if(!w){el.innerHTML='';return;}
  const ps=CATS.map(c=>{if(rankIn(w,c.k)==null)return '';const q=queue(c.k),i=q.ranked.findIndex(x=>x.w.n===w.n);if(i<0)return `<span class="p" data-k="${c.k}"><b>Y</b>${c.l} · declared, not ranked</span>`;return `<span class="p" data-k="${c.k}"><b>${q.ranked[i].no}</b>${c.l} · ${i} ahead</span>`;}).join('');
  el.innerHTML=(ps||'<span class="none">No rank printed in any priority.</span>')+(w.proj?`<span class="p" style="border-left-color:var(--ok);cursor:default"><b style="color:var(--ok)">${fd(w.proj.F)}</b>board: CJ-${w.proj.b} · ${viaTxt(w.proj)}</span>`:`<span class="none">${w.rdy==null?'Not ready — the board does not seat her yet.':'Board: no berth before '+fd(D.HZ)+'.'}</span>`);
- el.querySelectorAll('.p[data-k]').forEach(p=>p.onclick=()=>document.getElementById('lane-'+p.dataset.k).scrollIntoView({behavior:'smooth'}));}
-const open={};
-function rowHtml(x,k){const w=x.w,p=w.proj,me=w.n===sel;let st;
- if(w.rdy==null)st='not ready'+(w.tags.length?' · '+w.tags.join(' · '):'');
- else if(p){const same=lineOf(p)===k;st=`<b>CJ-${p.b} · ${ft(p.F)}</b><br><span class="${same?'same':'oth'}">${same?'by this line':'goes by '+viaTxt(p)}</span>`;}
- else st='no berth on the board before '+fd(D.HZ)+(w.tags.length?' · '+w.tags.join(' · '):'');
- const bt=berths(w.allowed);
- return `<div class="row${me?' me':''}${w.rdy==null?' nr':''}"><div class="rk">${x.no}</div><div class="n"><b>${esc(short(w.n))}</b>${w.mine?'<span class="mini m">Mihir &amp; Co</span>':''}${k==='HP'&&w.noHP?'<span class="mini w">passed over</span>':''}${w.q7&&k!=='Q7'?'<span class="mini">Sr 7</span>':''}
-  <small>${esc(w.c)} · ${nf.format(w.q)} ${w.u}${w.rdy!=null?' · ready '+fd(w.rdy):''}${bt?' · '+bt:''}</small></div><div class="st">${st}</div></div>`;}
-function lanes(){
- const el=document.getElementById('lanes');const N=6;
- el.innerHTML=CATS.map((c,ci)=>{const q=queue(c.k);const at=B.filter(v=>(c.k==='Q7'?/30k\/25k/i.test(v.via):v.slot===c.k)&&!v.future).sort((a,b)=>a.T-b.T),fut=B.filter(v=>(c.k==='Q7'?false:v.slot===c.k)&&v.future).sort((a,b)=>a.F-b.F);
-  const si=q.ranked.findIndex(x=>x.w.n===sel),sy=q.ys.some(w=>w.n===sel);
-  const abh=v=>`<div class="ab${v.future?' fut':''}${v.mine?' me':''}"><b>${esc(short(v.n))}</b> · CJ-${v.b}${v.mine?'<span class="mini m">Mihir &amp; Co</span>':''}<small>${esc(v.c)} · ${nf.format(v.q)} ${v.u}</small><span class="till">${v.future?'berthing ~'+ft(v.F):'out ~'+ft(v.T)+(v.est?' <span style="color:var(--muted)">(est)</span>':'')}</span></div>`;
-  const showAll=open[c.k]||q.ranked.length<=N+2;const lim=showAll?q.ranked.length:Math.max(N,si+1);
-  const rows=q.ranked.slice(0,lim).map(x=>rowHtml(x,c.k)).join('');
-  return `<div class="lane${si>=0||sy?' has':''}" id="lane-${c.k}"><div class="lh"><span class="no">${ci+1}</span><h3>${c.l}</h3><span class="pl">${c.p}</span>${si>=0?`<span class="you"><b>${esc(short(sel))}</b> — ${ord(si+1)} in line · rank ${q.ranked[si].no}</span>`:sy?`<span class="you"><b>${esc(short(sel))}</b> — declared, not ranked yet</span>`:''}</div>
-   <div class="lb"><div class="col"><div class="ct">At berth now${c.max?' · '+at.length+' of '+c.max+' place'+(c.max>1?'s':''):''}</div>${at.map(abh).join('')||`<div class="vac">${c.k==='Q7'?'Nil — no vessel alongside under Sr No 7.':'Nobody — the place is vacant.'}</div>`}${fut.length?'<div class="ct" style="margin-top:12px">Coming · programmed</div>'+fut.map(abh).join(''):''}</div>
-   <div class="col"><div class="ct">Waiting in line · ${q.ranked.length} ranked${q.ys.length?' · '+q.ys.length+' not ranked yet':''}</div>${rows||'<div class="vac">Nobody is ranked in this priority.</div>'}${lim<q.ranked.length?`<button class="more" data-k="${c.k}">Show all ${q.ranked.length} ▾</button>`:''}
-   ${q.ys.length?`<div class="ys">Declared, not ranked yet (“Y” on the list): ${q.ys.map(w=>`<b class="${w.n===sel?'me':''}">${esc(short(w.n))}</b>`).join(', ')}</div>`:''}</div></div></div>`;}).join('');
- el.querySelectorAll('.more').forEach(b=>b.onclick=()=>{open[b.dataset.k]=1;lanes();});
+ el.querySelectorAll('.p[data-k]').forEach(p=>p.onclick=()=>{sortK=p.dataset.k;chart();sorts();document.getElementById('chart').scrollIntoView({behavior:'smooth',block:'start'});});}
+const COLS=[{k:'GOV',h:'GP',t:'Govt'},{k:'COASTAL',h:'CSTL',t:'Coastal'},{k:'HP',h:'HP',t:'Higher prod.'},{k:'SAAGAR',h:'SGR',t:'SAAGAR'},{k:'24H',h:'24H',t:'24 hours'},{k:'8K',h:'8K / 6.5K',t:'6.5K / 8K'},{k:'STL',h:'STL / PRJ',t:'Steel / project'},{k:'GEN',h:'GEN',t:'General'},{k:'Q7',h:'SR 7',t:'30K / 25K'}];
+const govOrd={};W.filter(w=>w.govAuto&&w.rk.GOV!=null&&w.rk.GOV<98).sort((a,b)=>a.rk.GOV-b.rk.GOV).forEach((w,i)=>govOrd[w.n]=i+1);
+// cell value: {t:'num'|'y'|'n', v:number shown, s:sort key, auto}
+function cell(w,k){if(k==='Q7')return w.q7?{t:'y',s:(w.rep??1e6)}:{t:'n',s:1e9};const r=w.rk[k];if(r==null||r===99)return {t:'n',s:1e9};if(r===98)return {t:'y',s:5e5+(w.rep??0)};
+ if(k==='GOV'&&w.govAuto)return {t:'num',v:govOrd[w.n],s:r,auto:1};return {t:'num',v:r,s:r};}
+let sortK='';
+function chart(){
+ const selW=W.find(w=>w.n===sel);const arrived=w=>w.rep!=null&&w.rep<=D.NOW;
+ let rows=W.slice();const byRep=(a,b)=>(a.rep??1e9)-(b.rep??1e9);
+ if(sortK)rows.sort((a,b)=>cell(a,sortK).s-cell(b,sortK).s||byRep(a,b));else rows.sort((a,b)=>(arrived(b)-arrived(a))||byRep(a,b));
+ const head=`<tr><th>Sr</th><th class="v">Vessel</th><th class="l">Reported<small>ready</small></th>${COLS.map(c=>`<th class="pc${sortK===c.k?' on':''}" data-k="${c.k}">${c.h}<small>${c.t}</small></th>`).join('')}<th class="l">Board · kab<small>berth · date · by which priority</small></th></tr>`;
+ let n=0,grp='';const body=rows.map(w=>{let g='';
+  if(!sortK){const gg=arrived(w)?'A':'E';if(gg!==grp){grp=gg;g=`<tr class="grp"><td colspan="${COLS.length+4}">${gg==='A'?'Waiting at Kandla · in order of reporting':'Expected · not yet reported'}</td></tr>`;n=0;}}
+  else{const gg=cell(w,sortK).t==='n'?'N':'I';if(gg!==grp){grp=gg;g=`<tr class="grp"><td colspan="${COLS.length+4}">${gg==='I'?'In this priority · in rank order':'Not in this priority'}</td></tr>`;n=0;}}
+  n++;const p=w.proj,me=w.n===sel,by=p?lineOf(p):null;
+  const cs=COLS.map(c=>{const x=cell(w,c.k);let cl='c '+(x.t==='num'?'':x.t);if(x.auto)cl+=' auto';
+    if(selW&&!me){const m=cell(selW,c.k);if(m.t!=='n'&&x.t!=='n'&&x.s<m.s&&!(m.t==='y'&&c.k!=='Q7'))cl+=' ahead';}
+    if(by===c.k&&x.t!=='n')cl+=' by';return `<td class="${cl}">${x.t==='num'?x.v:x.t==='y'?'Y':'N'}</td>`;}).join('');
+  const kab=w.rdy==null?`<small>${arrived(w)?'not ready':'expected '+(w.rep!=null?fd(w.rep):'')}${w.tags.length?' · '+w.tags.join(' · '):''}</small>`:p?`<b>CJ-${p.b} · ${ft(p.F)}</b><small>${viaTxt(p)}</small>`:`<small>no berth before ${fd(D.HZ)}${w.tags.length?' · '+w.tags.join(' · '):''}</small>`;
+  const bt=berths(w.allowed);
+  return g+`<tr class="${me?'me':''}${w.rdy==null?' nr':''}${sortK&&cell(w,sortK).t==='n'?' dim':''}"><td class="sr">${n}</td><td class="v"><b>${esc(short(w.n))}</b>${w.mine?'<span class="mini m">Mihir</span>':''}${w.noHP?'<span class="mini w" title="passed over for HP">HP ✕</span>':''}<small title="${esc(w.c)}${bt?' · '+bt:''}">${esc(w.c)} · ${nf.format(w.q)} ${w.u}</small></td>
+   <td class="l" style="white-space:nowrap">${w.rep!=null?fd(w.rep):'—'}<small>${w.rdy!=null?'ready '+fd(w.rdy):'N/A'}</small></td>${cs}<td class="k">${kab}</td></tr>`;}).join('');
+ const t=document.getElementById('chart');t.innerHTML=head+body;
+ t.querySelectorAll('th.pc').forEach(h=>h.onclick=()=>{sortK=sortK===h.dataset.k?'':h.dataset.k;chart();sorts();});
+}
+function sorts(){const el=document.getElementById('sorts');el.innerHTML=[['','List order']].concat(COLS.map(c=>[c.k,c.t])).map(([k,l])=>`<button class="chip${sortK===k?' on':''}" data-k="${k}">${l}</button>`).join(' ');
+ el.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{sortK=b.dataset.k;chart();sorts();});}
+function atBerth(){
+ const order=CATS.map(c=>c.k).concat(['SPC','PPP']);let sr=0;
+ const rows=order.map(k=>{const c=CATS.find(x=>x.k===k)||{l:CL[k],p:k==='PPP'?'CJ-9 / CJ-10 · outside the priority places':'free quay · uses no priority place'};
+  const l=B.filter(v=>k==='Q7'?/30k\/25k/i.test(v.via):v.slot===k).sort((a,b)=>(a.future-b.future)||a.T-b.T);if(!l.length&&(k==='SPC'||k==='PPP'))return '';sr++;
+  const pr=`<td class="sr" rowspan="${Math.max(1,l.length)}">${sr}</td><td class="pr" rowspan="${Math.max(1,l.length)}"><b>${c.l}</b><small>${c.p}</small></td>`;
+  if(!l.length)return `<tr>${pr}<td class="vac" colspan="5">${k==='Q7'?'NIL':'— vacant —'}</td></tr>`;
+  return l.map((v,i)=>`<tr class="${v.mine?'me':''}${v.future?' fut':''}">${i?'':pr}<td class="bj">CJ-${v.b}</td><td class="l"><b>${esc(short(v.n))}</b>${v.mine?'<span class="mini m">Mihir</span>':''}${v.future?'<span class="mini w">coming</span>':''}</td><td class="l">${esc(v.c)}<small>${nf.format(v.q)} ${v.u}</small></td><td class="l" style="white-space:nowrap">${v.future?'~'+ft(v.F)+' <small>est</small>':ft(v.F)}</td><td class="l" style="white-space:nowrap"><b>${ft(v.T)}</b>${v.est?' <small>estimate</small>':''}${v.lt?`<small>list ETC ${v.lt}</small>`:''}</td></tr>`).join('');}).join('');
+ document.getElementById('atb').innerHTML=`<tr><th>Sr</th><th class="l">Priority</th><th>Berth</th><th class="l">Vessel</th><th class="l">Cargo</th><th class="l">Made fast</th><th class="l">Out · ETC</th></tr>`+rows;
 }
 function pickers(){const s=document.getElementById('vs');s.innerHTML='<option value="">— koi nahi —</option>'+W.slice().sort((a,b)=>a.n.localeCompare(b.n)).map(w=>`<option value="${esc(w.n)}"${w.n===sel?' selected':''}>${esc(short(w.n))}${w.mine?' · Mihir & Co':''}</option>`).join('');
  s.onchange=()=>{sel=s.value;render();};
  const ch=document.getElementById('chips');ch.innerHTML=W.filter(w=>w.mine).map(w=>`<button class="chip${w.n===sel?' on':''}" data-n="${esc(w.n)}">${esc(short(w.n))}</button>`).join(' ');
  ch.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{sel=b.dataset.n;render();});}
-function render(){pickers();posHtml();lanes();}
+function render(){pickers();posHtml();chart();sorts();}
 document.getElementById('asof').innerHTML=`As of <b>${D.nowT}</b> · ${esc(D.hdr.replace(/ · Gang sheet.*$/,''))} · board updated <b>${esc(D.updated)}</b>`;
-const oth=B.filter(v=>!CL[v.slot]||v.slot==='PPP'||v.slot==='SPC').filter(v=>!v.future);
-document.getElementById('foot').innerHTML=`<b>How to read it.</b> The number is the rank printed on the DPA berthing list (Govt and Sr No 7 have no printed rank — they go by reporting time). Green “by this line” = the board expects her to berth through this priority; amber “goes by …” = she is expected to berth through another priority first, so she leaves this line. A faded row is a vessel not ready yet — she does not compete until she declares readiness. Dates are the berth board's projection up to ${fd(D.HZ)}.`
- +(oth.length?`<br><b>Outside the priority places:</b> ${oth.map(v=>esc(short(v.n))+' · CJ-'+v.b+' ('+(CL[v.slot]||v.slot)+')').join(' · ')}.`:'');
-mineHtml();render();
+document.getElementById('foot').innerHTML=`<b>How to read it.</b> Same columns as the port's waiting sheet: a number is the rank printed on the DPA berthing list, Y is declared but not ranked yet, N is not in that priority. GP numbers are the board's order by reporting time — the list prints none; SR 7 = the vessel has declared a 30K / 25K quote. Tap a priority to see that line in rank order. A faded line is a vessel not ready yet — she does not compete until she declares readiness. "Board · kab" is the berth board's projection up to ${fd(D.HZ)}, not a port order.`;
+mineHtml();atBerth();render();
 </script></body></html>
