@@ -341,7 +341,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 .nt b{display:block;font-size:13px;margin-bottom:2px}
 .nt small{color:var(--muted)}
 .srcmore{margin-top:4px}.srcmore summary{cursor:pointer;color:var(--accent,#7cc4ff);font-size:12px;letter-spacing:.04em;text-transform:uppercase}.srcmore div{margin-top:6px;color:var(--muted);font-size:12.5px;line-height:1.5}
-.score-sum{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}.score-sum div{background:var(--panel2,rgba(255,255,255,.04));border:1px solid var(--line2);border-radius:8px;padding:8px 12px;min-width:120px}.score-sum b{display:block;font-family:var(--f-disp);font-size:22px}.score-sum small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}.score table{width:100%;border-collapse:collapse;font-size:12.5px}.score th,.score td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line2);vertical-align:top}.score th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}.score .hit{color:var(--ok,#5fbf7a)}.score .near{color:var(--warn)}.score .miss{color:#e5636a}.score .pend{color:var(--muted)}.score td.n{white-space:nowrap}
+.mc-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:2px 0 12px}.mc-sum div{background:var(--panel2,rgba(255,255,255,.04));border:1px solid var(--line2);border-top:3px solid var(--sc,var(--line2));border-radius:8px;padding:10px 12px}.mc-sum b{display:block;font-family:var(--f-disp);font-size:30px;line-height:1.05}.mc-sum b small{font-size:15px;color:var(--muted);font-weight:400}.mc-sum span{display:block;color:var(--muted);font-size:12px;margin-top:3px}.mc-day{border:1px solid var(--line2);border-radius:8px;padding:10px 12px 11px;margin-top:8px;background:var(--panel2,rgba(255,255,255,.04))}.mc-day.open{border-color:var(--brass);background:rgba(217,178,95,.06)}.mc-day.nocall{opacity:.75}.mc-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.mc-head b{font-family:var(--f-disp);font-size:18px;text-transform:uppercase;letter-spacing:.02em}.mc-head small{color:var(--muted);font-size:11.5px}.mc-score{font-family:var(--f-disp);font-size:24px;white-space:nowrap}.mc-score small{font-size:13px;color:var(--muted)}.mc-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}.mc-row>i{font-style:normal;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;flex:0 0 100%}.mc-chip{display:inline-flex;gap:5px;align-items:baseline;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;font-size:13px;white-space:nowrap}.mc-chip small{color:var(--muted);font-size:11px}.mc-chip.y{border-color:rgba(95,191,122,.6);background:rgba(95,191,122,.13);color:#9be3b0}.mc-chip.n{border-color:rgba(229,99,106,.5);background:rgba(229,99,106,.09);color:#f3a7ab}.mc-chip.x{color:var(--muted)}.mc-chip.me{box-shadow:0 0 0 1px var(--brass)}.mc-note{color:var(--muted);font-size:12px;margin-top:8px;line-height:1.45}.score-sum{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}.score-sum div{background:var(--panel2,rgba(255,255,255,.04));border:1px solid var(--line2);border-radius:8px;padding:8px 12px;min-width:120px}.score-sum b{display:block;font-family:var(--f-disp);font-size:22px}.score-sum small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}.score table{width:100%;border-collapse:collapse;font-size:12.5px}.score th,.score td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line2);vertical-align:top}.score th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}.score .hit{color:var(--ok,#5fbf7a)}.score .near{color:var(--warn)}.score .miss{color:#e5636a}.score .pend{color:var(--muted)}.score td.n{white-space:nowrap}
 .learn{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
 .learn .empty{color:var(--muted);font-size:12.5px;grid-column:1/-1}
 .lc{border:1px solid var(--line);border-left:4px solid var(--warn,#e0a040);border-radius:6px;background:var(--panel2);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
@@ -427,7 +427,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
       <div class="eyebrow" id="eyebrow">Deendayal Port · Kandla · Dry cargo jetty</div>
       <h1>Berth <span>Board</span><span class="draft" id="hdrdate">13 NOV 2026</span></h1>
     </div>
-    <div class="asof"><span class="upd" id="upd"></span><br>List <b>19.11 · 0700</b> · DPR <b>19.11</b> · Programme <b>20.11</b> · Signals to <b>19 Nov evening sheet (disp 1640, amended 1940)</b> · Gang sheet <b>13 Nov III shift</b><br><details class="srcmore"><summary>Sources, rules &amp; tide</summary><div>New 19 Nov 22:55 (Mihir): a BARGE tab — vessels working by barge, the daily barge discharge / loading and the work commodity-wise, from DPR 17.11, 18.11 and 19.11 · Mihir, 19 Nov 22:32: General berths by seniority with at most three bag vessels at a time (confirmed) · African Hornbill takes CJ-16 under Project priority in the absence of an HP vessel · Ocean Kudos's holds were rejected and her movement cancelled · HN Doris loaded her full quantity · Received 19 Nov 19:51: the evening signal sheet of 19 Nov — "amendment &amp; new signal", dispatched 1640, amended 1940 (Capt Omesh / Capt Madaan). It sends African Hornbill to 175–188 (CJ-16) tonight; Ocean Kudos, programmed for that berth, is not on it · Received 19 Nov 16:12: Berthing List 19.11 (0700) and Programme for 20.11 (TF/SH/2102, dated 19 Nov). The afternoon movements of 19 Nov are still as signalled, not confirmed — the evening sheet of 19 Nov and DPR 20.11 are awaited · Received 19 Nov 12:29, three days together: Berthing List 17.11 and 18.11 (two issues each — the 18.11 sheet revised after the meeting is the one used), Programme 18.11 and 19.11 (TF/SH/2102), DPR 17.11, 18.11 and 19.11 (0700), and the signal sheets of 16 Nov night (disp 2005), 17 Nov (disp 1250, amended to 1750), 18 Nov (disp 2130 on the 17th, amended to 0933) and 19 Nov (disp 0745 / 1040, Capt Madaan). List 19.11, the evening sheet of 18 Nov and programme 20.11 are not in hand · Berthing List 16.11.26 (0700 — two issues; the second, revised after the 11:00 meeting, is the one used), Programme 17.11 (TF/SH/2102, dated 16 Nov), night signal 16 Nov (disp 1710, Capt Madaan) and the timber desk sheet of 16 Nov, all received 16 Nov 18:17 · DPR 16.11 and list 15.11 not received — DPR 15.11 stays · Night signal 15 Nov, amended (disp 1805 / 1850 / 2048, Capt Sandeep; first issue received 18:40, amended sheet 20:54 — the 14 Nov sheets and the 15 Nov day sheet were not received) · Programme 16.11 (TF/SH/2102, dated 15 Nov; received 15 Nov 16:41) · DPR 15.11.26 (position 0700 15 Nov; received 15 Nov 10:31) · Berthing List 14.11.26 (0700) and Programme 15.11 (TF/SH/2102, dated 14 Nov), both received 14 Nov 15:55 · Berthing List 13.11.26 (0700) and Programme 14.11 (TF/SH/2102, meeting 13 Nov), both received 13 Nov 15:13 · DPR 13.11 (0700, PDF, received 09:35) · Programme 13.11 (TF/SH/2102, meeting 12 Nov) · HM signals to the 13 Nov day sheet (disp 0725): Drake Well IN o/c on the flood after Nord Newport (RT OUT 11:10, Capt Sandeep) → 7¼–N · DPA Trade Notice 3089 dt 15.11.2026: coal / coke / iron ore fines / iron ore pellets are handled at CJ-16 (from the 15 Nov meeting) — and only there among CJ-13–16: the circular is final (Mihir, 16 Nov); salt is still loaded at CJ-16 after coal · Rules from Mihir, 15 Nov: bag vessels under General get 2 days’ extension; a shift that opens a clean berth for salt is on port account · Rules from Mihir, 11–13 Nov: ETC on DPR balance and permissible time; pellets allowed at CJ-13–16; CJ-16 open to coal / dirty bulk in practice; a slot\'s berth goes to the senior only if it suits her; 24-hrs vessels sail within 24 h; loaders that will sail deeper than CJ-5 go straight to a deep berth · Policy 24.03.25 + 6 amendments / corrigenda (to 06.08.26)<br><span id="tide"></span></div></details>
+    <div class="asof"><span class="upd" id="upd"></span><br>List <b>19.11 · 0700</b> · DPR <b>19.11</b> · Programme <b>20.11</b> · Signals to <b>19 Nov evening sheet (disp 1640, amended 1940)</b> · Gang sheet <b>13 Nov III shift</b><br><details class="srcmore"><summary>Sources, rules &amp; tide</summary><div>New 19 Nov 23:08 (Mihir): Accuracy made simple — before each meeting the board names the vessels it expects to berth; when the programme comes, how many did (one card a meeting, 11–19 Nov backfilled from the board's own saved versions) · New 19 Nov 22:55 (Mihir): a BARGE tab — vessels working by barge, the daily barge discharge / loading and the work commodity-wise, from DPR 17.11, 18.11 and 19.11 · Mihir, 19 Nov 22:32: General berths by seniority with at most three bag vessels at a time (confirmed) · African Hornbill takes CJ-16 under Project priority in the absence of an HP vessel · Ocean Kudos's holds were rejected and her movement cancelled · HN Doris loaded her full quantity · Received 19 Nov 19:51: the evening signal sheet of 19 Nov — "amendment &amp; new signal", dispatched 1640, amended 1940 (Capt Omesh / Capt Madaan). It sends African Hornbill to 175–188 (CJ-16) tonight; Ocean Kudos, programmed for that berth, is not on it · Received 19 Nov 16:12: Berthing List 19.11 (0700) and Programme for 20.11 (TF/SH/2102, dated 19 Nov). The afternoon movements of 19 Nov are still as signalled, not confirmed — the evening sheet of 19 Nov and DPR 20.11 are awaited · Received 19 Nov 12:29, three days together: Berthing List 17.11 and 18.11 (two issues each — the 18.11 sheet revised after the meeting is the one used), Programme 18.11 and 19.11 (TF/SH/2102), DPR 17.11, 18.11 and 19.11 (0700), and the signal sheets of 16 Nov night (disp 2005), 17 Nov (disp 1250, amended to 1750), 18 Nov (disp 2130 on the 17th, amended to 0933) and 19 Nov (disp 0745 / 1040, Capt Madaan). List 19.11, the evening sheet of 18 Nov and programme 20.11 are not in hand · Berthing List 16.11.26 (0700 — two issues; the second, revised after the 11:00 meeting, is the one used), Programme 17.11 (TF/SH/2102, dated 16 Nov), night signal 16 Nov (disp 1710, Capt Madaan) and the timber desk sheet of 16 Nov, all received 16 Nov 18:17 · DPR 16.11 and list 15.11 not received — DPR 15.11 stays · Night signal 15 Nov, amended (disp 1805 / 1850 / 2048, Capt Sandeep; first issue received 18:40, amended sheet 20:54 — the 14 Nov sheets and the 15 Nov day sheet were not received) · Programme 16.11 (TF/SH/2102, dated 15 Nov; received 15 Nov 16:41) · DPR 15.11.26 (position 0700 15 Nov; received 15 Nov 10:31) · Berthing List 14.11.26 (0700) and Programme 15.11 (TF/SH/2102, dated 14 Nov), both received 14 Nov 15:55 · Berthing List 13.11.26 (0700) and Programme 14.11 (TF/SH/2102, meeting 13 Nov), both received 13 Nov 15:13 · DPR 13.11 (0700, PDF, received 09:35) · Programme 13.11 (TF/SH/2102, meeting 12 Nov) · HM signals to the 13 Nov day sheet (disp 0725): Drake Well IN o/c on the flood after Nord Newport (RT OUT 11:10, Capt Sandeep) → 7¼–N · DPA Trade Notice 3089 dt 15.11.2026: coal / coke / iron ore fines / iron ore pellets are handled at CJ-16 (from the 15 Nov meeting) — and only there among CJ-13–16: the circular is final (Mihir, 16 Nov); salt is still loaded at CJ-16 after coal · Rules from Mihir, 15 Nov: bag vessels under General get 2 days’ extension; a shift that opens a clean berth for salt is on port account · Rules from Mihir, 11–13 Nov: ETC on DPR balance and permissible time; pellets allowed at CJ-13–16; CJ-16 open to coal / dirty bulk in practice; a slot\'s berth goes to the senior only if it suits her; 24-hrs vessels sail within 24 h; loaders that will sail deeper than CJ-5 go straight to a deep berth · Policy 24.03.25 + 6 amendments / corrigenda (to 06.08.26)<br><span id="tide"></span></div></details>
   </header>
   <nav class="views" id="views" aria-label="Boards on this page">
     <a href="#cargo" data-view="cargo"><b>Cargo jetties</b><small>CJ-1 to CJ-16 · dry cargo · berthing policy &amp; projection</small><span class="vb" id="vb-cargo"></span></a>
@@ -530,8 +530,10 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   </section>
 
   <section class="card" data-sec="score" aria-labelledby="sch">
-    <div class="sechead"><h2 id="sch">Accuracy · berthing predictions</h2><p><b>Mihir's measure (13 Nov):</b> each day, from that morning's DPR and the berthing policy, the board says <b>which berth</b> a waiting vessel gets and <b>when</b>. That call is frozen and scored against the actual berthing (DPR made-fast time) — <b>before</b> the port's programme or signal for it existed. A programme-based call is not a prediction and is not counted. Hit = right berth and within 6 h · near = right berth, within 12 h · miss = wrong berth, &gt; 12 h, or not predicted at all. Sailing times are not scored (a sailing two hours late is not important). Record starts with DPR 11.11.</p></div>
-    <div id="score"></div>
+    <div class="sechead"><h2 id="sch">Accuracy · meeting call vs programme</h2><p><b>Mihir's measure (19 Nov):</b> before each day's berthing meeting the board names the vessels it expects to get a berth. When the programme comes, every name gets a <b style="color:#9be3b0">✓</b> or a <b style="color:#f3a7ab">✗</b> — that is the score.</p></div>
+    <div id="mscore"></div>
+    <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--muted);font-size:12.5px">Detail · berth and time of every single prediction (the earlier measure)</summary><p style="color:var(--muted);font-size:12.5px;margin:8px 0 10px"><b>Earlier measure (13 Nov):</b> each day, from that morning's DPR and the berthing policy, the board says <b>which berth</b> a waiting vessel gets and <b>when</b>. That call is frozen and scored against the actual berthing (DPR made-fast time) — <b>before</b> the port's programme or signal for it existed. A programme-based call is not a prediction and is not counted. Hit = right berth and within 6 h · near = right berth, within 12 h · miss = wrong berth, &gt; 12 h, or not predicted at all. Sailing times are not scored (a sailing two hours late is not important). Record starts with DPR 11.11.</p>
+    <div id="score"></div></details>
   </section>
 
   </div><!-- /view cargo -->
@@ -632,7 +634,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='19 Nov 2026 · 23:00 IST';
+const UPDATED='19 Nov 2026 · 23:20 IST';
 const BOARD_SRC='evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1853,6 +1855,83 @@ const PREDLOG=[
  {v:'Libra',predAt:'11-19 22:32',pb:'1',pt:'11-23 05:05',ab:'',at:'',note:'19 Nov 22:32 re-run after Mihir\'s answers (Ocean Kudos cancelled — holds rejected) — General against a vacant HP place, CJ-1 a day after New Bliss leaves'},
  {v:'Crystal Land',predAt:'11-19 22:32',pb:'16',pt:'11-26 05:21',ab:'',at:'',note:'19 Nov 22:32 re-run after Mihir\'s answers (Ocean Kudos cancelled — holds rejected) — 6.5K / 8K (8K 1), CJ-16 after African Hornbill — only once CD Glory is through with the place'}
 ];
+// ===== MEETING CALL vs PROGRAMME — Mihir's accuracy measure (19 Nov 23:08) =====
+// "Before the berthing meeting we say: today these 5 vessels will berth. Against that — how many did, once the programme has come."
+// One entry a berthing meeting, NEWEST FIRST.
+//  at / basis = the board's data time and sheets behind the call · prog = the programme that answers it
+//  call = the vessels the board's meeting preview named BEFORE that programme reached the board — [vessel, berth the board said]
+//         (projection rows whose berth frees by 18:00 of the day after the meeting; port-convenience shifts are not calls).
+//         null = the board was not updated between the two programmes, so there was no call and the day is not scored.
+//  got  = the vessels that got a berth in that meeting's window — the INWARD column of the programme at the dry-cargo berths
+//         (no shifts / warps, no container berths CJ-11 / CJ-12, no tug-and-barge), plus a berthing given by a signal inside the
+//         window: [vessel, berth, 'signal']. A programmed vessel later known NOT to have berthed is taken out and named in the note.
+// The call of the meeting still to come is not stored here: it is read live from the projection (see renderMeetlog) and frozen
+// into this list with `node tools/meeting_call.js <board.html>` BEFORE the next programme is applied.
+const MEETLOG=[
+ {d:'11-19',at:'11-19 12:29',basis:'DPR 19.11 · list 18.11 · programme 19.11',prog:'20.11',
+  call:[['Ken Ann','14'],['AG Varvara','5'],['Safi Alfa','4'],['Sea Postman','6']],
+  got:[['Belmoira','15'],['Ken Ann','5'],['Katerina K','6'],['Nord Copper','14'],['African Hornbill','16','signal']],
+  note:'Belmoira took a Govt place on her 30K quote and Katerina K a provisional berth; African Hornbill came in by the evening signal after Ocean Kudos\' holds were rejected. The two General vessels the board named were passed over.'},
+ {d:'11-18',at:null,basis:'',prog:'19.11',call:null,
+  got:[['DSM London','2'],['Meghna Prestige','7'],['Sea Gautham','3'],['Heng Yuan Fa Zhan','15A']],
+  note:'No call — no sheets reached the board on 17 or 18 Nov, so this day is not scored. Ocean Kudos was programmed for CJ-16 and did not berth (holds rejected).'},
+ {d:'11-17',at:'11-16 18:17',basis:'list 16.11 · programme 17.11 — made the evening before, no sheets on 17 Nov',prog:'18.11',
+  call:[['Safi Alfa','14'],['AG Varvara','4'],['Yara J','2'],['Aboudi D','3']],
+  got:[['Seacon Monaco','9'],['Yara J','14'],['Rome Trader','13'],['ML Egret','15','signal']],
+  note:'The programme printed Rome Trader at CJ-15 and Pioneer Fortune at CJ-10: Rome Trader berthed at CJ-13, ML Egret took CJ-15 by signal, Pioneer Fortune did not berth.'},
+ {d:'11-16',at:'11-15 20:54',basis:'night signal 15 Nov · programme 16.11 — no DPR or list of 16 Nov before the programme',prog:'17.11',
+  call:[['Pioneer Fortune','4'],['Saga Viking','1'],['Vishva Bandhan','7'],['Gokova-M','8'],['Rome Trader','14'],['HN Doris','13'],['Propel Confidence','16']],
+  got:[['New Bliss','1'],['Bristol','15A'],['Phoenix Coral','4'],['Saga Viking','5'],['Propel Confidence','7'],['Vishva Bandhan','8'],['HN Doris','16']],
+  note:'Four of the seven named got a berth — each at a different berth from the one the board gave. New Bliss (6.5K), Bristol (HP quote) and Phoenix Coral (24 hrs) were not named.'},
+ {d:'11-15',at:'11-15 10:50',basis:'DPR 15.11 · list 14.11',prog:'16.11',
+  call:[['Evangelia D','16'],['Rahma','14'],['Deniz ID','2'],['Saga Viking','5']],
+  got:[['Rahma','15A'],['Honor Star','9'],['Evangelia D','16']],
+  note:'The two General vessels named (Deniz ID, Saga Viking) did not get a berth; Honor Star went to the GFPL berth.'},
+ {d:'11-14',at:'11-14 10:15',basis:'DPR 14.11 · list 13.11',prog:'15.11',
+  call:[['Sea Gautham','5'],['Xin Hai Tong 71','15'],['Rahma','14']],
+  got:[['Truong Minh Dream','6'],['African Hornbill','4']],
+  note:'The port gave CJ-6 to Truong Minh Dream (Govt) and CJ-4 to African Hornbill (24 hrs); none of the three named berthed.'},
+ {d:'11-13',at:'11-13 09:30',basis:'DPR 13.11 · list 12.11',prog:'14.11',
+  call:[['Rahma','15'],['Gokova-M','7'],['CD Cherry','5'],['Saga Viking','2']],
+  got:[['Princess Joanna','6'],['Cape Venture','7'],['CD Cherry','15','signal']],
+  note:'The programme printed CD Glory at CJ-15 under 24 hrs; CD Cherry berthed there by the night-sheet amendment.'},
+ {d:'11-12',at:'11-12 11:00',basis:'DPR 12.11 · list 11.11',prog:'13.11',
+  call:[['Drake Well','15'],['Heng Yuan Fa Zhan','15A'],['Gokova-M','8'],['Saga Viking','7'],['CD Cherry','5'],['Rahma','15A']],
+  got:[['Drake Well','1'],['Chang Hang','7'],['Merchia','8'],['Karpathos Dawn','15']],
+  note:'Chang Hang (HP), Merchia (Coastal) and Karpathos Dawn (24 hrs) took the berths the board had given to General and Steel vessels.'},
+ {d:'11-11',at:'11-11 12:00',basis:'DPR 11.11 · list 11.11',prog:'12.11',
+  call:[['Drake Well','16']],
+  got:[['Leya','9'],['Cape Diversity','16']],
+  note:'CJ-16 went to Cape Diversity (pellets, HP) instead of Drake Well; Leya went to the GFPL berth.'}
+];
+function renderMeetlog(){
+  const el=document.getElementById('mscore'); if(!el) return;
+  const bl=b=>b?(/^OJ|^TT/.test(b)?b:'CJ-'+b):'', clean=n=>n.replace(/\s*\(.*\)\s*$/,''), dayOf=d=>fday(h(d+' 12:00'));
+  const pad=x=>String(x).padStart(2,'0'), iso=t=>{const d=dt(t);return pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate())+' '+pad(d.getUTCHours())+':'+pad(d.getUTCMinutes());};
+  const rows=MEETLOG.map(m=>{const got=new Map(m.got.map(g=>[g[0],g])), named=new Set((m.call||[]).map(c=>c[0]));
+    const call=m.call?m.call.map(c=>({n:c[0],b:c[1],g:got.get(c[0])||null})):null;
+    return {...m,callR:call,hit:call?call.filter(c=>c.g).length:0,extra:m.got.filter(g=>!named.has(g[0]))};});
+  const sc=rows.filter(r=>r.callR), C=sc.reduce((a,r)=>a+r.callR.length,0), H=sc.reduce((a,r)=>a+r.hit,0), K=sc.reduce((a,r)=>a+r.got.length,0);
+  const BR=sc.reduce((a,r)=>a+r.callR.filter(c=>c.g&&c.g[1]===c.b).length,0), pc=(a,b)=>b?Math.round(100*a/b)+'%':'—';
+  // the call for the meeting still to come — the same rows as the meeting preview, read live from the projection
+  const fa=x=>x.freeAt!=null?x.freeAt:x.prevAt, end=NXM-11+24+18;
+  const live=S.filter(x=>x.proj&&!x.shifted&&x.prevAt!=null&&fa(x)<=end).sort((a,z)=>fa(a)-fa(z));
+  window.__CALL={d:iso(NXM).slice(0,5),at:iso(NOW),end:iso(end),pend:PEND,call:live.map(x=>[clean(x.n),String(x.b)])};
+  const chip=(cls,mark,n,sm)=>`<span class="mc-chip ${cls}${isMine(n)?' me':''}">${mark?'<b>'+mark+'</b>':''}${n}${sm?' <small>'+sm+'</small>':''}</span>`;
+  const openCard=`<div class="mc-day open"><div class="mc-head"><div><b>${fday(NXM)} meeting</b> <small>· ${PEND?'held — programme awaited':'still to come'} · window to ${fday(end)} 18:00</small></div><div class="mc-score"><small>open</small></div></div>
+    <div class="mc-row"><i>Board says these ${live.length||''} will get a berth</i>${live.length?live.map(x=>chip('',' ',clean(x.n),bl(x.b))).join(''):'<span class="mc-chip x">no berth frees for a waiting vessel in this window</span>'}</div>
+    <div class="mc-note">Scored when the next programme comes. The call can still change if a new DPR, list or signal reaches the board before that.</div></div>`;
+  const card=r=>`<div class="mc-day${r.callR?'':' nocall'}"><div class="mc-head"><div><b>${dayOf(r.d)} meeting</b> <small>· programme ${r.prog}</small></div><div class="mc-score">${r.callR?`<b style="color:${r.hit*2>=r.callR.length?'#9be3b0':'#f3a7ab'}">${r.hit}</b> <small>of ${r.callR.length} berthed</small>`:'<small>no call</small>'}</div></div>
+    ${r.callR?`<div class="mc-row"><i>Board said these ${r.callR.length} will berth</i>${r.callR.map(c=>c.g?chip('y','✓',c.n,bl(c.g[1])+(c.g[1]!==c.b?' · board said '+bl(c.b):'')+(c.g[2]?' · by signal':'')):chip('n','✗',c.n,'')).join('')}</div>`:''}
+    <div class="mc-row"><i>${r.callR?'Port also berthed — not named by the board':'Port berthed'}</i>${r.extra.length?r.extra.map(g=>chip('x','',g[0],bl(g[1])+(g[2]?' · by signal':''))).join(''):'<span class="mc-chip x">none</span>'}</div>
+    <div class="mc-note">${r.at?'Call made '+fmt(h(r.at))+' · '+r.basis+'. ':''}${r.note}</div></div>`;
+  el.innerHTML=`<div class="mc-sum">
+    <div style="--sc:${H*2>=C?'var(--ok,#5fbf7a)':'#e5636a'}"><b>${H} <small>of ${C}</small></b><span><b style="display:inline;font:inherit;color:var(--text,#e8edf2)">${pc(H,C)}</b> · vessels the board named that got a berth</span></div>
+    <div><b>${H} <small>of ${K}</small></b><span><b style="display:inline;font:inherit;color:var(--text,#e8edf2)">${pc(H,K)}</b> · vessels the port berthed that the board had named</span></div>
+    <div><b>${BR} <small>of ${H}</small></b><span>of those, at the berth the board said</span></div>
+    <div><b>${sc.length}</b><span>meetings scored · ${fday(h(sc[sc.length-1].d+' 12:00')).replace(/^\S+ /,'')} to ${fday(h(sc[0].d+' 12:00')).replace(/^\S+ /,'')}</span></div></div>
+  ${openCard}${rows.map(card).join('')}`;
+}
 function renderPredlog(){
   const el=document.getElementById('score'); if(!el) return;
   const rows=PREDLOG.map(x=>{const done=!!x.at&&h(x.at)<=NOW; const dpr=x.src!=='prog';
@@ -1901,7 +1980,7 @@ function renderScore(){
   </tbody></table></div>
   <p style="color:var(--muted);font-size:12px;margin-top:8px">Sign: + = later than called, − = earlier. A "miss" on the last call usually means the port moved a sailing that was already on a programme or signal (Yasa Eagle 17:45 → 02:15, Bao He Ling 12:00 → 06:00) — the first-call column shows how far the board\'s own estimate was before any programme existed.</p>`;
 }
-renderPredlog();renderScore();
+renderPredlog();renderScore();renderMeetlog(); // these three sit inside learn(), which runs after the projection S exists
 
   const L={open:'open · confirm?',adopted:'adopted in rules',ok:'matched'};
   const openAll=window.innerWidth>640;
