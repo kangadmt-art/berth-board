@@ -20,7 +20,7 @@ const r=await p.evaluate(()=>{const S=window.__S||[];const f=window.__fmt;const 
  const sp=S.map(x=>[x.n,'CJ-'+x.b,f(x.F),f(x.T),x.cat,x.via||'',x.shifted?'SHIFTED':''].join(' | '));
  const opt={};for(const n in (window.__OPT||{}))opt[n]=window.__OPT[n].map(o=>o.label+' → '+(o.r?'CJ-'+o.r.b+' '+f(o.r.F)+' to '+f(o.r.T)+' ['+o.r.cat+(o.r.via?' via '+o.r.via:'')+']':'none'));
  return {flags,sp,opt,upd:(document.querySelector('.upd')||{}).innerText||'',mine:g('mine'),demur:g('demur'),mpsub:g('mpsub'),mpt:g('mpt')};});
-const tabs={};let tmb={};for(const v of ['timber','liquid','tuna']){const a=await p.$(`a[data-view="${v}"]`);if(a){await a.click();await p.waitForTimeout(700);tabs[v]=await scan();
+const tabs={};let tmb={};for(const v of ['timber','liquid','tuna','barge']){const a=await p.$(`a[data-view="${v}"]`);if(a){await a.click();await p.waitForTimeout(700);tabs[v]=await scan();
   if(v==='timber')tmb=await p.evaluate(()=>{const g=id=>(document.getElementById(id)||{}).innerText||'';return {stats:g('tmbstats'),act:[...document.querySelectorAll('#timber tr')].map(tr=>[...tr.children].filter(td=>!td.classList.contains('sm')).map(td=>td.innerText.replace(/\s*\n\s*/g,' ; ')).join(' | ')).join('\n'),rec:[...document.querySelectorAll('#tdone tr')].map(tr=>[...tr.children].filter(td=>!td.classList.contains('sm')).map(td=>td.innerText.replace(/\s*\n\s*/g,' ; ')).join(' | ')).join('\n'),n:{act:((window.__TMB||{}).active||[]).length,rec:((window.__TMB||{}).done||[]).length}};});}}
 if(!tabs.timber){bad++;console.log('NO TIMBER TAB');}
 // priority chart (v174): the tab draws inside a shadow root — innerText does not reach it, so it is scanned on its own

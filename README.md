@@ -2,7 +2,7 @@
 
 Live berthing board for Deendayal Port (Kandla) dry cargo berths CJ-1 to CJ-16, built daily from the DPA berthing list, movement programme and signal sheets.
 
-Live page: https://kangadmt-art.github.io/berth-board/ — one page, five tabs: Cargo jetties · Priority chart (`#priority` — the port's waiting-sheet format: rank / Y / N of every vessel in every priority, our vessels on top) · Timber (`#timber` — log vessels: position, laytime / demurrage, completed record) · Tuna (`#tuna`) · Liquid (`#liquid`).
+Live page: https://kangadmt-art.github.io/berth-board/ — one page, six tabs: Cargo jetties · Barge (`#barge` — vessels working by barge at midstream, the daily barge discharge / loading and the work commodity-wise, from the DPR) · Priority chart (`#priority` — the port's waiting-sheet format: rank / Y / N of every vessel in every priority, our vessels on top) · Timber (`#timber` — log vessels: position, laytime / demurrage, completed record) · Tuna (`#tuna`) · Liquid (`#liquid`).
 
 Maintained automatically for Mihir & Company / Neelkanth Group. Updated each morning after the 0700 berthing list and each afternoon after the berthing meeting programme.
 
