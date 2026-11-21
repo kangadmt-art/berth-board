@@ -427,6 +427,8 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 .owner{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}.owner b{color:var(--brass);letter-spacing:.06em;text-transform:none;font-size:13px}
 .srcchips{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;margin:8px 0 6px}.srcchips .sc{display:inline-flex;align-items:baseline;gap:6px;border:1px solid var(--line);border-radius:6px;padding:3px 8px;background:rgba(255,255,255,.03);font-size:11.5px;line-height:1.5}.srcchips .sc i{font-style:normal;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-size:10px}.srcchips .sc b{color:var(--fg);font-weight:500}
 @media (max-width:640px){.srcchips{justify-content:flex-start;display:grid;grid-template-columns:1fr 1fr;gap:6px}.srcchips .sc{display:flex;flex-direction:column;gap:0;padding:5px 8px}.srcchips .sc:first-child,.srcchips .sc:nth-child(4){grid-column:1/-1}body[data-view="timber"] .srcchips{display:none}}
+.owner{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.vcount{display:inline-flex;align-items:baseline;gap:8px;border:1.5px solid var(--brass);border-radius:8px;padding:3px 12px 2px;background:rgba(201,162,76,.08)}.vcount i{font-style:normal;font-size:11px;letter-spacing:.16em;color:var(--brass)}.vcount b{font-family:var(--f-disp,inherit);font-size:24px;line-height:1.1;color:var(--fg);letter-spacing:.02em;text-transform:none}
+@media (max-width:640px){.owner{justify-content:space-between}}
 </style>
 
 <div class="wrap">
@@ -434,9 +436,9 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div>
       <div class="eyebrow" id="eyebrow">Deendayal Port · Kandla · Dry cargo jetty</div>
       <h1>Berth <span>Board</span><span class="draft" id="hdrdate">13 NOV 2026</span></h1>
-      <div class="owner">Board owned by <b>@mk</b></div>
+      <div class="owner"><span>Board owned by <b>@mk</b></span><span class="vcount" id="viewcount" style="display:none"></span></div>
     </div>
-    <div class="asof"><span class="upd" id="upd"></span> <span class="upd" id="viewcount" style="display:none"></span><div class="srcchips" aria-label="Papers on the board"><span class="sc"><i>List</i><b>21.11 · revised after the meeting</b></span><span class="sc"><i>Programme</i><b>22.11</b></span><span class="sc"><i>DPR</i><b>21.11</b></span><span class="sc"><i>Signals to</i><b>21 Nov night sheet (disp 1900)</b></span></div><details class="srcmore"><summary>Sources &amp; tide</summary><div><b>Papers of 21 Nov on the board:</b> berthing list 21.11 (07:00) and the list as revised after the meeting · HM signal sheets — day (disp 07:46), amended (disp 12:57), night (disp 19:00) · DPR 21.11 (position 07:00) · programme 22.11 · timber desk sheet 21 Nov 12:00 · berthing-policy circular 5237 of 21.11.2026. The rules the board follows are in the rule book; every paper received since the end of October is logged with the data book.<br><span id="tide"></span></div></details>
+    <div class="asof"><span class="upd" id="upd"></span> <div class="srcchips" aria-label="Papers on the board"><span class="sc"><i>List</i><b>21.11 · revised after the meeting</b></span><span class="sc"><i>Programme</i><b>22.11</b></span><span class="sc"><i>DPR</i><b>21.11</b></span><span class="sc"><i>Signals to</i><b>21 Nov night sheet (disp 1900)</b></span></div><details class="srcmore"><summary>Sources &amp; tide</summary><div><b>Papers of 21 Nov on the board:</b> berthing list 21.11 (07:00) and the list as revised after the meeting · HM signal sheets — day (disp 07:46), amended (disp 12:57), night (disp 19:00) · DPR 21.11 (position 07:00) · programme 22.11 · timber desk sheet 21 Nov 12:00 · berthing-policy circular 5237 of 21.11.2026. The rules the board follows are in the rule book; every paper received since the end of October is logged with the data book.<br><span id="tide"></span></div></details>
   </header>
   <nav class="views" id="views" aria-label="Boards on this page">
     <a href="#cargo" data-view="cargo"><b>Cargo jetties</b><small>CJ-1 to CJ-16 · dry cargo · berthing policy &amp; projection</small><span class="vb" id="vb-cargo"></span></a>
@@ -666,7 +668,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='21 Nov 2026 · 22:30 IST';
+const UPDATED='21 Nov 2026 · 22:35 IST';
 const BOARD_SRC='HM signal 21 Nov night sheet (disp 1900) · programme 22.11 · list 21.11 revised · HM signal 21 Nov amended (disp 1257) · DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -3678,9 +3680,9 @@ render(false);
 // Service: Abacus (abacus.jasoncameron.dev) — a free counter; each page load sends one "hit" and gets the running total back. If it does not answer, the pill simply stays hidden.
 (function(){try{const el=document.getElementById('viewcount');if(!el)return;const pub=/github\.io$/.test(location.hostname);
   // JSONP (a script tag), as the Abacus documentation shows — it needs no cross-origin permission. On the public link each load is one "hit"; anywhere else the total is only read, never raised.
-  if(pub){el.innerHTML='Opened <b>…</b> times';el.style.display='';}
-  window.__bbViews=function(j){try{if(j&&j.value!=null){el.innerHTML='Opened <b>'+Number(j.value).toLocaleString('en-IN')+'</b> times';el.style.display='';}}catch(e){}};
-  const sc=document.createElement('script');sc.async=true;sc.src='https://abacus.jasoncameron.dev/'+(pub?'hit':'get')+'/kangadmt-art.github.io/berth-board?callback=__bbViews';sc.onerror=function(){if(pub)el.innerHTML='Opened <b>—</b> times · counter not reachable';};const go=()=>setTimeout(()=>document.head.appendChild(sc),400);if(document.readyState==='complete')go();else window.addEventListener('load',go); // added only after the page has finished loading, so a slow counter never holds the board up
+  const show=v=>{el.innerHTML='<i>Views</i><b>'+v+'</b>';el.style.display='';};if(pub)show('…');
+  window.__bbViews=function(j){try{if(j&&j.value!=null){const n=Number(j.value);show(n<10?'0'+n:n.toLocaleString('en-IN'));}}catch(e){}};
+  const sc=document.createElement('script');sc.async=true;sc.src='https://abacus.jasoncameron.dev/'+(pub?'hit':'get')+'/kangadmt-art.github.io/berth-board?callback=__bbViews';sc.onerror=function(){if(pub)show('—');};const go=()=>setTimeout(()=>document.head.appendChild(sc),400);if(document.readyState==='complete')go();else window.addEventListener('load',go); // added only after the page has finished loading, so a slow counter never holds the board up
   }catch(e){}})();
 })();
 </script>
