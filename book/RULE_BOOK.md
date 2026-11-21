@@ -14,11 +14,18 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - **Bitumen — 1 place.**
 - **General — 3 places,** with at most three bag vessels alongside at a time. *(Mihir, 19 Nov)*
 
+## 1A. Timber log norms (Circular 5237 of 21.11.2026)
+
+- Pine logs: base norm 4,000 a day, whatever the parcel size. Hardwood logs: base norm 5,500 a day.
+- The list prints base + 15 % for a berthed vessel, so the board counts 4,600 a day for pine and 6,325 for hardwood. (Before: 3,450 / 4,600 by parcel size.)
+- This is the port's berth norm. Demurrage on the Timber tab still counts 4,000 CBM a day — that is the charter-party basis, a separate thing.
+
 ## 2. When a place has no vessel of its own
 
 - Government and Coastal: first SAAGAR project cargo, otherwise a vessel that has quoted 30,000 / 25,000 a day (Sr No 7).
+  - **Circular 5237 of 21.11.2026, from the meeting of 23 Nov:** with no suitable Govt / Coastal vessel, allotment goes down the order of priority up to and including Sr. No. 3(B) — 3(A) Higher productivity, 3(B) SAAGAR. *(Not applied on the board yet: to confirm with Mihir whether this replaces the 30K / 25K quote vessels.)*
 - 24 hours: a 30,000 / 25,000 quote vessel.
-- Bitumen: the senior General vessel.
+- Bitumen: **from the meeting of 23 Nov 2026** the senior vessel of the 6.5K line (6,500 MTPD priority), by seniority — Circular 5237 of 21.11.2026. Before that: the senior General vessel.
 - HP: no fallback. With no HP vessel, a Project-priority vessel takes the berth "in absence of HP"; after that the berth goes down the order and lastly to General. *(Mihir, 19 Nov)*
 - A real vessel of the group always goes before a quote vessel.
 - A quote vessel works to 30,000 tonnes a day.
