@@ -85,6 +85,9 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - **Gear chip (Mihir, 21 Nov 15:05):** shown for dry cargo vessels and Tuna vessels only. Liquid vessels carry no gear chip.
 - **DPR table (Mihir, 21 Nov 18:30):** only vessels still working are shown. A completed or sailed vessel's DPR line is kept in the data book.
 - **Lists as tables (Mihir, 21 Nov 18:23–18:30):** Salt and Timber records and the Salt working / waiting / expected lists are drawn as tables with the same columns in every row; on a phone the table scrolls sideways and the vessel name stays in place.
+- **Priority column (Mihir, 21 Nov 18:45):** every Salt and Timber table says under which priority the vessel berthed ("Berthed under"); for a waiting vessel, the priority the board expects her to berth by ("Board: under").
+- **Liquid tab (Mihir, 21 Nov 18:45):** short tables only — jetties, waiting, expected. The long notes stay under "Full notes". Mihir does not follow liquid.
+- **Our vessels card:** one line per reading and per option; the reasoning opens on a tap.
 
 ## 9. Which paper wins when two disagree
 
