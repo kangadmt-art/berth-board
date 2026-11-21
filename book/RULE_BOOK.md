@@ -87,3 +87,4 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - Mihir's word is above all of them.
 - The port is taken as right. A mismatch is kept as an open point until Mihir confirms.
 - On a signal sheet, only a struck row is cancelled. A row that is merely missing is kept and asked about.
+- **Team's timber desk sheet vs the port list (Mihir, 21 Nov):** the team's message is corrected from the port's papers. Where the two differ (arrival hour, berthing hour, ETA, quantity), the DPA berthing list is right. The desk sheet is used only for what the list does not print (ETB dates, port of loading, vessels not yet on the list).
