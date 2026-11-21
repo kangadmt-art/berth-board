@@ -390,18 +390,18 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
 .mpt .tag{font-family:var(--f-mono);font-size:10px;border:1px solid var(--brass);color:var(--brass);border-radius:3px;padding:0 5px;margin-left:4px}
 /* phones: the meeting preview stacks each berth as a card instead of a 4-column table */
 @media (max-width:640px){
- .mpt:not(.tmb),.mpt:not(.tmb) tbody,.mpt:not(.tmb) tr,.mpt:not(.tmb) td{display:block;width:100%;box-sizing:border-box}
- .mpt:not(.tmb) tr:first-child{display:none}
- .mpt:not(.tmb) tr{padding:10px 0 12px;border-bottom:1px solid var(--line)}
- .mpt:not(.tmb) td{border:0;padding:3px 0 3px 10px;overflow-wrap:anywhere}
- .mpt:not(.tmb) td.w{white-space:normal;padding-top:0}
- .mpt:not(.tmb) td.w b{display:inline;font-size:15px;margin-right:6px}
- .mpt:not(.tmb) td.pk::before,.mpt:not(.tmb) td.al::before,.mpt:not(.tmb) td.fl::before{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:6px 0 2px}
- .mpt:not(.tmb) td.pk::before{content:"Board's pick"}
+ .mpt:not(.tmb):not(.wd),.mpt:not(.tmb):not(.wd) tbody,.mpt:not(.tmb):not(.wd) tr,.mpt:not(.tmb):not(.wd) td{display:block;width:100%;box-sizing:border-box}
+ .mpt:not(.tmb):not(.wd) tr:first-child{display:none}
+ .mpt:not(.tmb):not(.wd) tr{padding:10px 0 12px;border-bottom:1px solid var(--line)}
+ .mpt:not(.tmb):not(.wd) td{border:0;padding:3px 0 3px 10px;overflow-wrap:anywhere}
+ .mpt:not(.tmb):not(.wd) td.w{white-space:normal;padding-top:0}
+ .mpt:not(.tmb):not(.wd) td.w b{display:inline;font-size:15px;margin-right:6px}
+ .mpt:not(.tmb):not(.wd) td.pk::before,.mpt:not(.tmb):not(.wd) td.al::before,.mpt:not(.tmb):not(.wd) td.fl::before{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:6px 0 2px}
+ .mpt:not(.tmb):not(.wd) td.pk::before{content:"Board's pick"}
  .spt td.pk:nth-of-type(2)::before{content:"In the slot now" !important}
  .spt td.al::before{content:"Sails in the window?" !important}
  .spt td.pk:nth-of-type(4)::before{content:"Next berthing vessel" !important}
- .mpt:not(.tmb) td.al::before{content:"Next in line"}
+ .mpt:not(.tmb):not(.wd) td.al::before{content:"Next in line"}
  .lqt td.pk::before{content:"Vessel" !important}
  .lqt td.al::before{content:"Cargo · agent" !important}
  .lqt td.fl::before{content:"Status" !important}
@@ -412,17 +412,18 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
  .dprt td.pk::before{content:"Progress (last 24 h · up to date · balance)" !important}
  .dprt td.al::before{content:"At yesterday's rate" !important}
  .dprt td.fl::before{content:"Gangs I/II/III · hooks" !important}
- .mpt:not(.tmb) td.fl::before{content:"What could overturn it"}
- .mpt:not(.tmb) tr.chk,.mpt:not(.tmb) tr.sh,.mpt:not(.tmb) tr.me{border-left:3px solid var(--prj);padding-left:0}
- .mpt:not(.tmb) tr.sh{border-left-color:var(--warn)}.mpt:not(.tmb) tr.me{border-left-color:var(--brass)}
- .mpt:not(.tmb) tr.chk td,.mpt:not(.tmb) tr.sh td,.mpt:not(.tmb) tr.me td{border-left:0;background:transparent}
- .mpt:not(.tmb) tr.chk{background:rgba(226,112,90,.07)}.mpt:not(.tmb) tr.sh{background:rgba(226,176,74,.05)}.mpt:not(.tmb) tr.me{background:rgba(201,162,76,.07)}
- .mpt:not(.tmb) .fl li{margin-left:16px}
+ .mpt:not(.tmb):not(.wd) td.fl::before{content:"What could overturn it"}
+ .mpt:not(.tmb):not(.wd) tr.chk,.mpt:not(.tmb):not(.wd) tr.sh,.mpt:not(.tmb):not(.wd) tr.me{border-left:3px solid var(--prj);padding-left:0}
+ .mpt:not(.tmb):not(.wd) tr.sh{border-left-color:var(--warn)}.mpt:not(.tmb):not(.wd) tr.me{border-left-color:var(--brass)}
+ .mpt:not(.tmb):not(.wd) tr.chk td,.mpt:not(.tmb):not(.wd) tr.sh td,.mpt:not(.tmb):not(.wd) tr.me td{border-left:0;background:transparent}
+ .mpt:not(.tmb):not(.wd) tr.chk{background:rgba(226,112,90,.07)}.mpt:not(.tmb):not(.wd) tr.sh{background:rgba(226,176,74,.05)}.mpt:not(.tmb):not(.wd) tr.me{background:rgba(201,162,76,.07)}
+ .mpt:not(.tmb):not(.wd) .fl li{margin-left:16px}
 }
 .sdwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:6px 0 14px}.sdt{border-collapse:collapse;width:100%;min-width:860px;font-size:12.5px;font-variant-numeric:tabular-nums}.sdt th,.sdt td{padding:7px 9px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}.sdt th{font-weight:600;color:var(--muted);font-size:11px;letter-spacing:.04em;text-transform:uppercase}.sdt .l{text-align:left}.sdt td:first-child,.sdt th:first-child{position:sticky;left:0;background:var(--panel)}.sdt tr.our td:first-child{box-shadow:inset 3px 0 0 var(--brass)}.sdt tr.tot td{font-weight:700;border-bottom:0;color:var(--brass)}
 .sdh{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tmb,var(--brass));font-weight:700;background:var(--panel2,rgba(255,255,255,.04));padding:8px 10px;margin-top:10px;border-radius:4px}.sdt .dem{color:var(--bad);font-weight:700}.sdt .des{color:var(--ok);font-weight:700}.tdfull{margin-top:6px}.tdfull>summary{cursor:pointer;color:var(--muted);font-size:12.5px;padding:8px 2px}
 @media (max-width:640px){.lqt td.fl,.lqt td.pk small{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.lqt tr.open td.fl,.lqt tr.open td.pk small{display:block;-webkit-line-clamp:unset;overflow:visible}.lqt td.fl{cursor:pointer}}
 .modal .sdt td:first-child,.modal .sdt th:first-child{background:var(--panel)}.modal .sdt tbody tr{cursor:pointer}.modal .sdwrap{max-height:70vh;overflow:auto}.modal .sdt thead th{position:sticky;top:0;background:var(--panel);z-index:2}.modal .sdt thead th:first-child{z-index:3}
+@media (max-width:640px){#mpt.wd,#spt.wd,#dpr.wd{min-width:1040px;font-size:12.5px}#mpt.wd td::before,#spt.wd td::before,#dpr.wd td::before{content:none !important;display:none !important}.wd td:first-child,.wd th:first-child{position:sticky;left:0;background:var(--panel);z-index:1;max-width:150px;white-space:normal}}
 </style>
 
 <div class="wrap">
@@ -461,11 +462,11 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   </section>
   <section class="card" data-sec="mpt" aria-labelledby="mp">
     <div class="sechead"><h2 id="mp">Meeting preview · berth-wise</h2><p id="mpsub">Berth-wise view of the same window (18:00 on the meeting day → 18:00 next day): for each DPA berth expected to free up, who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated.</p></div>
-    <div class="scroll"><table class="mpt" id="mpt"></table></div>
+    <div class="scroll"><table class="mpt wd" id="mpt"></table></div>
   </section>
   <section class="card" data-sec="spt" aria-labelledby="sp">
     <div class="sechead"><h2 id="sp">Next-day prospects · slot-wise</h2><p id="spsub"></p></div>
-    <div class="scroll"><table class="mpt spt" id="spt"></table></div>
+    <div class="scroll"><table class="mpt spt wd" id="spt"></table></div>
   </section>
   <section class="card" data-sec="rules" aria-labelledby="rh">
     <div class="sechead"><h2 id="rh">Routine se hat ke · not sailing on time</h2><p>Only vessels still alongside past their ETC, or whose sailing was postponed, show up here. Vessels finishing on or before ETC are not listed.</p></div>
@@ -477,7 +478,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   <section class="card" data-sec="dpr" aria-labelledby="dh">
     <div class="sechead"><h2 id="dh">Cargo progress · DPR</h2><p id="dsub"></p></div>
     <div class="stats" id="dstats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"></div>
-    <div class="scroll"><table class="mpt dprt" id="dpr"></table></div>
+    <div class="scroll"><table class="mpt dprt wd" id="dpr"></table></div>
   </section>
 
   <section class="card" data-sec="quay">
@@ -654,7 +655,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='21 Nov 2026 · 20:40 IST';
+const UPDATED='21 Nov 2026 · 20:50 IST';
 const BOARD_SRC='HM signal 21 Nov night sheet (disp 1900) · programme 22.11 · list 21.11 revised · HM signal 21 Nov amended (disp 1257) · DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1093,7 +1094,7 @@ function prospects(){
   const el=document.getElementById('spt'), sub=document.getElementById('spsub'); if(!el)return;
   const d=dt(T);const hod=d.getUTCHours()+d.getUTCMinutes()/60;const day0=T-hod;
   const meet=NXM, ws=meet+7, we=ws+24;
-  sub.innerHTML=`${PEND?'<b style="color:var(--warn)">Meeting held</b> — ':'Meeting of '}<b>${fday(meet)} 11:00</b> programmes <b>${fday(ws)} 18:00 → ${fday(we)} 18:00</b>${PEND?' — <b>programme sheet awaited; this is the board\'s expectation of what the meeting did</b>':''}. Eligible: waiting vessels that are ready; ETA vessels arriving by the ${fday(ws)} evening high water; a vessel shown N/A can still declare readiness at the meeting (seniority is by reporting / ETA), so senior N/A vessels appear as flips in the meeting preview. Slot order as per the regulation — Govt 2 (else Project SAAGAR, else 30k/25k) · Coastal 1 (same fallback) · HP 2 · SAAGAR 1 bulk + 1 break bulk (bulk slot may go to break bulk) · 24 hrs 1 (else 30k/25k) · 8k/6.5k 1 · Steel/Project 1 · Bitumen 1 (else senior General) · General 3 by seniority.`;
+  sub.innerHTML=`${PEND?'<b style="color:var(--warn)">Meeting held</b> — ':'Meeting of '}<b>${fday(meet)} 11:00</b> programmes <b>${fday(ws)} 18:00 → ${fday(we)} 18:00</b>${PEND?' — <b>programme sheet awaited; this is the board\'s expectation of what the meeting did</b>':''}. Eligible: waiting vessels that are ready; ETA vessels arriving by the ${fday(ws)} evening high water; a vessel shown N/A can still declare readiness at the meeting (seniority is by reporting / ETA), so senior N/A vessels appear as flips in the meeting preview. Slot order as per the regulation — Govt 2 (else Project SAAGAR, else 30k/25k) · Coastal 1 (same fallback) · HP 2 · SAAGAR 1 bulk + 1 break bulk (bulk slot may go to break bulk) · 24 hrs 1 (else 30k/25k) · 8k/6.5k 1 · Steel/Project 1 · Bitumen 1 (else the senior 6.5K vessel from the 23 Nov meeting — circular 5237; senior General before that) · General 3 by seniority.`;
   // occupants of each group at the start of the window (alongside or already allotted), including vessels sitting in the slot as a fallback (via)
   const start=x=>x.proj?(x.prevAt!=null?x.prevAt:x.F):Math.min(x.F,NOW);
   const soft=x=>x.est&&!x.nm&&!x.dpr&&x.cat!=='24H'&&!x.proj; // alongside with no ETC / norm (and no DPR pace): the meeting treats it as staying
