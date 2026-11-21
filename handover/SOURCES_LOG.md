@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 21 Nov 22:41 — 5 PDFs from Mihir (3 documents): 2 new on the register (Middle East nodal officer circular 13.03.2026, first Middle East container waiver 16.03.2026); LPG priority berthing 16.03 was already there
 - 21 Nov 22:39 — 5 PDFs from Mihir: 3 new on the register (EBS O&M helpdesk notice 23.03.2026, OJ-3 withdrawal notices of mid-March and 18.03); 2 were already there
 - 21 Nov 22:37 — 6 PDFs from Mihir: 2 new on the register (ship-shore safety checklist 30.03.2026, Middle East waiver 24.03); 2 already there; 'BTT OUT LIST' (container list) not a circular, not filed
 - 21 Nov 22:36 — 5 PDFs from Mihir: 2 new on the register (railway terminal waiver for short-haul container rakes 07.04.2026, OJ-1 dredging withdrawal 06.04); 3 were already there
