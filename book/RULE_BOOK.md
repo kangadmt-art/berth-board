@@ -24,7 +24,7 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 ## 2. When a place has no vessel of its own
 
 - Government and Coastal: first SAAGAR project cargo, otherwise a vessel that has quoted 30,000 / 25,000 a day (Sr No 7).
-  - Circular 5237 of 21.11.2026 also speaks of vacant Govt / Coastal places going down the order up to Sr. No. 3(B). **Mihir, 21 Nov: all the rules stay as they were; the only change in who berths is the Bitumen place.** Nothing is changed here.
+  - Circular 5237 of 21.11.2026 also speaks of vacant Govt / Coastal places going down the order up to Sr. No. 3(B). **OPEN — Mihir, 21 Nov 20:25: this needs the port's confirmation; he will tell after the berthing meeting of Monday 23 Nov.** Until then nothing is changed here.
 - 24 hours: a 30,000 / 25,000 quote vessel.
 - Bitumen: **from the meeting of 23 Nov 2026** the senior vessel of the 6.5K line (6,500 MTPD priority), by seniority — Circular 5237 of 21.11.2026. Before that: the senior General vessel.
 - HP: no fallback. With no HP vessel, a Project-priority vessel takes the berth "in absence of HP"; after that the berth goes down the order and lastly to General. *(Mihir, 19 Nov)*
