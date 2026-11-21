@@ -6,7 +6,7 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 
 - **Government — 2 places.** Every bulk fertiliser cargo is Government cargo, even when the list prints no rank. Fertiliser in bags is not. Rock phosphate is not. *(Mihir, 20 Nov)*
 - **Coastal — 1 place.**
-- **Higher productivity (HP) — 2 places.** The place goes to the highest tonnes-per-day quote of the day, not to the HP rank. HP time is enforced: a vessel that runs past her quoted time is taken off the berth. *(seen 15–18 Nov)*
+- **Higher productivity (HP) — 2 places.** HP is a bid *(Mihir's team, 21 Nov)*. Only vessels that can do more than 40,000 MT a day take part. The bid starts at 40,000 and goes up to 50,000 at most. The highest bid gets the berth. If two vessels both bid 50,000, the senior one gets it. So the HP rank on the list does not decide the berth, and the board cannot know the winner before the meeting. HP time is enforced: a vessel that runs past her quoted time is taken off the berth.
 - **SAAGAR — 1 bulk place and 1 break-bulk place.** They are two separate priorities. SAAGAR project cargo does not use these two places. *(Mihir, 1 and 14 Nov)*
 - **24 hours — 1 place.** For a vessel that can finish in 24 hours, by seniority and by the berth she needs.
 - **6.5K / 8K — 1 place.**
@@ -90,3 +90,5 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - The port is taken as right. A mismatch is kept as an open point until Mihir confirms.
 - On a signal sheet, only a struck row is cancelled. A row that is merely missing is kept and asked about.
 - **Team's timber desk sheet vs the port list (Mihir, 21 Nov):** the team's message is corrected from the port's papers. Where the two differ (arrival hour, berthing hour, ETA, quantity), the DPA berthing list is right. The desk sheet is used only for what the list does not print (ETB dates, port of loading, vessels not yet on the list).
+- **Ready or not ready:** a vessel is ready only when her agent declares it and the berthing list shows it. A rank printed on the list is not readiness.
+- **Vessel names:** the port's list can carry typing errors ("Paiwan Ice" for Paiwan Ace). The team's name is used; the list spelling is kept in the note.
