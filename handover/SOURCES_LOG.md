@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 21 Nov 23:43 — 10 PDFs (e1–e10) from Mihir, all of 2021: 8 new on the register (port entry pass circulars, OJ and CJ-2 and Bunder Basin dredging notices, bagged cargo norms 50 %, COVID oxygen cargo priority); a compassionate-appointment list not filed
 - 21 Nov 23:40 — 7 PDFs and 2 zips from Mihir (Civil / Mechanical / Medical papers): 1 new on the register (trade notice 02.02.2024, Geology & Mining NOC for export of minerals / ores); work orders for the Berth 17 DPR and the CJ-1 to 6 fender up-gradation, hospital circulars and a staff attendance sheet kept in the file, not on the register
 - 21 Nov 23:37 — 15 PDFs, a zip and an xlsx from Mihir (General Administration / Finance papers): 3 new on the register (SOR indexation 0.65 % from 01.05.2026, SOR continued to 19.01.2027, SOR extension of 28.11.2022); the GST invoice spreadsheet and the staff / administration papers kept in the file, not on the register
 - 21 Nov 23:34 — 17 PDFs (156–164, D1–d9) from Mihir: 13 new on the register (ship waste SOP 08.09.2026, Harit Sagar notice 28.08.2026, Ebola advisory May 2026, monsoon preparedness, OJ-8 draft, stevedoring licence renewal 2023 with proposed rates, penal berth hire dues, safety advisory, RFID and entry pass circulars of Nov 2022, jetty withdrawals of 2021 and 2022); an Immigration letter and three personal staff-club letters not filed
