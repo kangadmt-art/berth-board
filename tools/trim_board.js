@@ -30,8 +30,14 @@ const js=o=>o===null||o===undefined?'null':typeof o==='number'?String(o):typeof 
   const n=g('n'),bn=n.replace(/ \(.*$/,''),mf=g('f'),qm=l.match(/\bq:([0-9.]+)/);const blk=(s.indexOf('const PPP_DONE=[')>0)?s.slice(s.indexOf('const PPP_DONE=[')).split('\n];')[0]:'';if(blk.includes("{n:'"+bn+"',")&&blk.includes("mf:'"+mf+"'"))return;
   const agm=s.match(new RegExp("'"+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+"':'([A-Z][^']*)'"));
   pd.push(" {n:'"+bn+"',b:'"+g('b')+"',c:'"+g('c')+"',q:"+(qm?qm[1]:0)+",ie:'',ag:'"+(agm?agm[1]:'')+"',mf:'"+mf+"',out:'"+g('t')+"'"+(/\best:1/.test(l)?',est:1':'')+"}");});
+ // an HP vessel that leaves V goes into HP_LOG first (the HP bid panel's record of winning quotes — Mihir, 22 Nov)
+ const hd=[];[...drop].forEach(i=>{const l=lines[i];const g=k=>{const m=l.match(new RegExp("\\b"+k+":'((?:[^'\\\\]|\\\\.)*)'"));return m?m[1]:'';};if(g('cat')!=='HP'||/\bslot:'/.test(l)||/\bvia:'/.test(l)||/\best:1/.test(l))return;const nm=l.match(/\bnm:(\d+)/);if(!nm)return;
+  const n=g('n'),bn=n.replace(/ \(.*$/,''),mf=g('f'),qm=l.match(/\bq:([0-9.]+)/);const blk=(s.indexOf('const HP_LOG=[')>0)?s.slice(s.indexOf('const HP_LOG=[')).split('\n];')[0]:'';if(!blk||(blk.includes("{n:'"+bn+"',")&&blk.includes("f:'"+mf+"'")))return;
+  const agm=s.match(new RegExp("'"+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+"':'([A-Z][^']*)'"));
+  hd.push(" {n:'"+bn+"',b:'"+g('b')+"',c:'"+g('c')+"',q:"+(qm?qm[1]:0)+",ag:'"+(agm?agm[1]:'')+"',qt:"+nm[1]+",f:'"+mf+"',o:'"+g('t')+"'}");});
  s=s.slice(0,a)+lines.filter((l,i)=>!drop.has(i)).join('\n')+s.slice(e);
  if(pd.length){const x=s.indexOf('const PPP_DONE=['),y=s.indexOf('\n];',x);if(x>0)s=s.slice(0,y)+',\n'+pd.join(',\n')+s.slice(y);console.log('CJ-9/10 record +',pd.length,'— CHECK the I/E, agent and sailing hour of the new line(s) in PPP_DONE');}
+ if(hd.length){const x=s.indexOf('const HP_LOG=['),y=s.indexOf('\n];',x);if(x>0)s=s.slice(0,y)+',\n'+hd.join(',\n')+s.slice(y);console.log('HP record +',hd.length,'— CHECK the agent of the new line(s) in HP_LOG');}
  if(sd.length){const x=s.indexOf('const SALT_DONE=['),y=s.indexOf('\n];',x);if(x>0)s=s.slice(0,y)+',\n'+sd.join(',\n')+s.slice(y);console.log('salt record +',sd.length,'— CHECK the agent and arrival of the new line(s) in SALT_DONE');}
  // ---- 2. MV and LIQ.moves — rows of the board's day only
  const cutMoves=(start,endMark,ind)=>{const a=s.indexOf(start); if(a<0)return [0,0]; const a2=a+start.length, e=s.indexOf(endMark,a2); const arr=Function('return ['+s.slice(a2,e)+'\n]')();

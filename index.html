@@ -471,6 +471,13 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="sechead"><h2 id="mp">Meeting preview · berth-wise</h2><p id="mpsub">Berth-wise view of the same window (18:00 on the meeting day → 18:00 next day): for each DPA berth expected to free up, who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated.</p></div>
     <div class="scroll"><table class="mpt wd" id="mpt"></table></div>
   </section>
+  <section class="card" data-sec="hpb" aria-labelledby="hpbh">
+    <div class="sechead"><h2 id="hpbh">HP berth · who is in the bid</h2><p id="hpbsub"></p></div>
+    <div id="hpbpool"></div>
+    <div class="sdh">Quotes that won an HP berth so far</div>
+    <p id="hpbsum" style="font-size:12.5px;line-height:1.7;margin:8px 2px 10px"></p>
+    <details class="tdfull"><summary>Every HP berth given so far — quote, stay, and what was done against the quote</summary><div id="hpblog"></div></details>
+  </section>
   <section class="card" data-sec="spt" aria-labelledby="sp">
     <div class="sechead"><h2 id="sp">Next-day prospects · slot-wise</h2><p id="spsub"></p></div>
     <div class="scroll"><table class="mpt spt wd" id="spt"></table></div>
@@ -668,7 +675,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='21 Nov 2026 · 23:50 IST';
+const UPDATED='22 Nov 2026 · 00:22 IST';
 const BOARD_SRC='HM signal 21 Nov night sheet (disp 1900) · programme 22.11 · list 21.11 revised · HM signal 21 Nov amended (disp 1257) · DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1273,6 +1280,58 @@ function prospects(){
   if(shifts.length)rows+=`<tr class="sh"><td class="w"><b>Port-convenience shift</b></td><td class="pk" colspan="3">${shifts.map(x=>`<b>${x.n}</b> CJ-${x.fromB} → CJ-${x.b} ~${fmt(x.F)} · frees CJ-${x.fromB} for ${x.forWho}`).join('<br>')}</td></tr>`;
   el.innerHTML='<tr><th style="width:190px">Slot</th><th>Vessel in the slot at '+fmt(ws,false)+' · berth · panels</th><th>Sails in the window?</th><th>Next berthing vessel · berth · panels (projected = free panels at that time)</th></tr>'+rows;
 }
+// ---- HP bid (Mihir, 22 Nov 00:07). HP is a bid at the meeting — 40,000 to 50,000 MT a day, the highest bid takes the berth, at 50,000 each the senior one.
+// The board cannot see the bids, so it names no winner: it shows who bids at which meeting (the meeting that programmes the first berth she can use),
+// by list seniority, and the quotes that won so far (the programme prints the winner's quote).
+const hpFam=c=>/salt/i.test(c)?'Salt':/coal|coke/i.test(c)?'Coal / coke':/aggregate/i.test(c)?'Aggregates':/pellet|iron|\bore\b|fines/i.test(c)?'Ore / pellets':/clay|feldspar/i.test(c)?'Clay':/gypsum/i.test(c)?'Gypsum':'Other';
+function hpRecs(){
+  const base=n=>n.replace(/ \(.*$/,'');
+  const rec=HP_LOG.map(r=>({n:r.n,b:r.b,c:r.c,q:r.q,ag:r.ag,qt:r.qt,F:h(r.f),T:h(r.o),est:!!r.est,x:!!r.x}));
+  const byN={};V.filter(v=>v.cat==='HP'&&!v.slot&&!v.via&&v.nm).forEach(v=>{const n=base(v.n);const a=byN[n];if(!a)byN[n]={n,b:v.b,c:v.c,q:v.q,ag:agOf(v.n)!=='—'?agOf(v.n):agOf(n),qt:v.nm,F:v.F,T:v.T,est:!!v.est||v.T>NOW,x:false};else{a.F=Math.min(a.F,v.F);if(v.T>a.T){a.T=v.T;a.est=!!v.est||v.T>NOW;}}});
+  Object.values(byN).forEach(v=>{if(!rec.some(r=>r.n===v.n&&Math.abs(r.F-v.F)<1))rec.push(v);});
+  return rec.sort((a,z)=>z.F-a.F);
+}
+function hpbid(){
+  const el=document.getElementById('hpbpool'); if(!el)return;
+  const sub=document.getElementById('hpbsub'), lg=document.getElementById('hpblog'), sm=document.getElementById('hpbsum');
+  const rec=hpRecs(), K=x=>(Math.round(x/100)/10)+'K', base=n=>n.replace(/ \(.*$/,''), dd=x=>{const d=dt(x);return d.getUTCDate()+' '+MON[d.getUTCMonth()];};
+  const tbl=(th,rows)=>`<div class="sdwrap"><table class="sdt"><tr>${th.map((x,i)=>`<th${(i===0||i===th.length-1)?' class="l"':''}>${x}</th>`).join('')}</tr>${rows.join('')}</table></div>`;
+  // the HP places now — a General or Project vessel standing in a vacant HP place does not block an HP vessel (12 Nov, 14 Nov)
+  const live={};V.filter(v=>v.cat==='HP'&&!v.slot&&!v.via&&v.T>NOW).forEach(v=>{const n=base(v.n);if(!live[n]||v.T>live[n].T)live[n]=v;});
+  const use=Object.values(live).sort((a,z)=>a.T-z.T), MAXHP=2, vac=Math.max(0,MAXHP-use.length);
+  const guest=V.filter(v=>v.slot==='HP'&&v.cat!=='HP'&&v.T>NOW);
+  const M=NXM;
+  // when a berth is next clear: after the last vessel alongside or programmed there — and after any vessel lying across into it (Flag Marina, 254 m, lies over CJ-7 and CJ-8)
+  const firstFree=b=>{const B=BERTHS.find(x=>x.id===b);if(!B)return null;const bl=V.filter(v=>v.cat!=='SPACE'&&v.T>NOW&&(v.b===b||(v.p&&Math.min(v.p[1],B.p[1])-Math.max(v.p[0],B.p[0])>2.5)));return bl.length?Math.max(...bl.map(v=>v.T)):NOW;};
+  // the meeting of day D (11:00) programmes D 18:00 → D+1 18:00
+  const winMeet=t=>{const d=dt(t);const hod=d.getUTCHours()+d.getUTCMinutes()/60;const day0=t-hod;return hod>=18?day0+11:day0-24+11;};
+  const cand=W.filter(w=>w.rk&&w.rk.HP).map(w=>{
+    const rank=w.rk.HP<98?w.rk.HP:null, two=(w.loa||0)>235, al=allowedBerths(w).filter(b=>{const B=BERTHS.find(x=>x.id===b);return !(B&&B.dr&&w.dr&&w.dr-(B.dr+(B.tide||0))>1);}) /* a berth more than 1 m short of her draft, tide allowance counted, is left out: petcoke at 13.3 m is not for CJ-5 (10.5 m); Lila Tokyo at 14.04 m still counts for CJ-7 / 8 (12 + 1.5 m, after lighterage) */, exp=(typeof ETA!=='undefined')&&!!ETA[w.n];
+    const last=rec.find(r=>hpFam(r.c)===hpFam(w.c)), pj=S.find(x=>x.n===w.n&&x.proj);
+    let opt=null, mt=null;
+    if(w.rdy!=null){al.map(b=>({b,t:firstFree(b)})).filter(o=>o.t!=null).forEach(o=>{const go=Math.max(o.t,w.rdy);if(!opt||go<opt.go)opt={b:o.b,t:o.t,go};});
+      if(opt){mt=Math.max(M,winMeet(opt.go));for(let k=0;k<3&&w.rep!=null&&w.rep>mt&&w.rep>firstHW(mt);k++)mt+=24;}}
+    return {w,rank,two,al,exp,last,pj,opt,mt,st:w.rdy==null?3:opt?0:2};
+  }).sort((a,z)=>a.st-z.st||((a.mt||1e9)-(z.mt||1e9))||((a.rank||99)-(z.rank||99))||((a.w.rdy||1e9)-(z.w.rdy||1e9)));
+  const stTxt=c=>{const w=c.w;const t=[c.st===0?`<b class="des">${fday(c.mt)} meeting</b> · CJ-${c.opt.b} frees ~${fmt(c.opt.t)}`:c.st===2?'<span style="color:var(--muted)">ready, no berth of hers in sight</span>':'<span style="color:var(--muted)">not ready</span>'];
+    if(c.st===0&&c.exp)t.push('if she arrives on her ETA');if(c.two)t.push('two berths ('+Math.round(w.loa)+' m)');if(w.noHP)t.push('passed over before');return t.join(' · ');};
+  const grp={};cand.filter(c=>c.st===0).forEach(c=>{(grp[c.mt]=grp[c.mt]||[]).push(c);});const mts=Object.keys(grp).map(Number).sort((a,z)=>a-z);
+  if(sub)sub.innerHTML=`HP is a <b>bid at the meeting</b> — 40,000 to 50,000 MT a day. The highest bid takes the berth; at 50,000 each, the senior vessel takes it. The board cannot see the bids, so it names no winner: it shows who bids at which meeting.`;
+  const places=`<p style="font-size:13px;line-height:1.7;margin:4px 2px 8px"><b>HP places: ${MAXHP}</b> · ${use.length?use.map(v=>`CJ-${v.b} ${base(v.n)} (${K(v.nm)}) till ~${fmt(v.T)}${v.est?' est':''}`).join(' · '):'none in use'}${vac?` · <b style="color:var(--ok)">${vac} open</b>`:''}`+
+    mts.slice(0,3).map(m=>{const g=grp[m], byB={};g.forEach(c=>{(byB[c.opt.b]=byB[c.opt.b]||[]).push(c);});const sen=g.filter(c=>c.rank)[0];
+      return `<br><b>${fday(m)} meeting</b> · ${g.length} in the bid — ${Object.keys(byB).map(b=>`CJ-${b}: ${byB[b].map(c=>`${c.w.n} (${c.rank?'HP '+c.rank:'Y'})`).join(', ')}`).join(' · ')}${sen&&g.length>1?` · at 50,000 each the senior takes it: <b>${sen.w.n}</b>`:''}`;}).join('')+
+    (mts.length&&mts[0]>M+0.01?`<br><span style="color:var(--muted)">${fday(M)} meeting: no berth comes free for an HP vessel in its window — no HP bid expected.</span>`:'')+
+    (guest.length?`<br><span style="color:var(--muted)">${guest.map(v=>`CJ-${v.b} ${base(v.n)} (project) stands in a vacant HP place and does not block an HP vessel`).join(' · ')}.</span>`:'')+`</p>`;
+  el.innerHTML=places+(cand.length?tbl(['HP no.','Vessel','Bids at','Last HP quote · same cargo','Cargo','MT','Ready / ETA','Agent','Berths she can use','Board expects her at'],cand.map(c=>{const w=c.w;
+    return `<tr${isMine(w.n)?' class="our"':''}><td class="l"><b title="${c.rank?'her HP seniority on the list':'the list prints Y: listed for HP, not numbered yet'}">${c.rank?'HP '+c.rank:'HP Y'}</b></td><td class="l"><b>${w.n}</b>${isMine(w.n)?' <span class="tag">Mihir &amp; Co</span>':''}</td><td class="l">${stTxt(c)}</td><td class="l">${c.last?'<b>'+K(c.last.qt)+'</b> · '+dd(c.last.F)+' · '+c.last.n:'none on record'}</td><td class="l">${w.c}</td><td>${nf.format(Math.round(w.q))}</td><td class="l">${w.rdy==null?'N/A':fmt(w.rdy)}</td><td class="l">${agOf(w.n)}</td><td class="l">${c.al.length?'CJ-'+c.al.join(' · '):'—'}</td><td class="l">${c.pj?`CJ-${c.pj.b} · ${fmt(c.pj.F)} · ${CL[c.pj.cat]||c.pj.cat}${c.pj.via?' as '+c.pj.via:''}`:'—'}</td></tr>`;}))
+    +`<p style="font-size:12.5px;color:var(--muted);margin:2px 2px 8px">"Bids at" = the meeting that programmes the first berth she can use once it is clear (sailing times marked est are the board's estimate). A vessel that runs past her quoted time is taken off the berth.</p>`
+    :'<p style="font-size:12.5px;color:var(--muted)">No vessel on the list carries an HP rank.</p>');
+  // quotes that won so far, cargo-wise, oldest → newest
+  const fam={};rec.slice().reverse().forEach(r=>{(fam[hpFam(r.c)]=fam[hpFam(r.c)]||[]).push(r);});
+  if(sm)sm.innerHTML=Object.keys(fam).sort((a,z)=>fam[z].length-fam[a].length).map(k=>`<b>${k}</b> · ${fam[k].map(r=>K(r.qt)).join(' → ')} <span style="color:var(--muted)">(latest ${dd(fam[k][fam[k].length-1].F)})</span>`).join('<br>')+`<br><span style="color:var(--muted)">${rec.length} HP berths on record since ${dd(rec[rec.length-1].F)} · 40K means nobody bid against her.</span>`;
+  if(lg)lg.innerHTML=tbl(['Vessel','Quote','Cargo','MT','Berth','Berthed','Sailed','Days at berth','MT a day over the whole stay','Whole stay vs quote','Agent'],rec.map(r=>{const days=(r.T-r.F)/24, live=r.est, rate=(!r.x&&!live&&days>0)?r.q/days:null;
+    return `<tr${/mihir/i.test(r.ag||'')?' class="our"':''}><td class="l"><b>${r.n}</b></td><td><b>${K(r.qt)}</b></td><td class="l">${r.c}</td><td>${nf.format(Math.round(r.q))}</td><td>CJ-${r.b}</td><td class="l">${fmt(r.F)}</td><td class="l">${live?'~'+fmt(r.T)+' est':fmt(r.T)}</td><td>${live?'at berth':days.toFixed(1)}</td><td>${rate?nf.format(Math.round(rate)):(r.x?'shift / top-up':'—')}</td><td>${rate?Math.round(rate/r.qt*100)+' %':'—'}</td><td class="l">${r.ag||'—'}</td></tr>`;}))+'<p style="font-size:12px;color:var(--muted);margin:2px 2px 8px">Whole stay vs quote = cargo ÷ days from made fast to sailing, against the quote. The stay counts the hours before commencement and the wait for the tide after completion, so it reads lower than the working rate — a vessel can meet her quote and still show 80 %.</p>';
+}
 function preview(){
   // The 11:00 berthing meeting programmes movements up to 18:00 of the next day. Preview covers the NEXT meeting's window:
   // meeting today 11:00 (if we are before it) or tomorrow 11:00, and berths freeing from now until 18:00 of the day after that meeting.
@@ -1285,7 +1344,7 @@ function preview(){
   if(!rows.length){el.innerHTML=`<tr><td class="fl">No DPA berth is projected to free up before ${fday(end)} 18:00 beyond what the programme already fixes.</td></tr>`;return;}
   el.innerHTML='<tr><th style="width:200px">Berth frees</th><th>Board\'s pick</th><th>Next in line</th><th>What could overturn it at the meeting</th></tr>'+rows.map((x,i)=>`<tr class="${isMine(x.n)?'me':''} ${x.projChk?'chk':''} ${x.shifted?'sh':''}">
    <td class="w"><b><span class="sn">${i+1}</span>CJ-${x.b}</b>${x.projChk?'<span class="tag chk">PROJECT VESSEL · check sailing</span><br>':''}${fmt(x.freeAt||x.prevAt)}<br>${x.prev}${(()=>{const pv=V.find(v=>v.n===x.prev)||S.find(v=>v.n===x.prev);return pv?' · '+pv.c+(pv.cat?' · '+(CL[pv.cat]||pv.cat):''):'';})()}${/shifted out/.test(x.prev)?'':' sails'}${x.prevEst?' (est.)':''}${x.freeAt&&x.freeAt<x.prevAt-0.01?'<br><small>'+(x.softWait?'no declared ETC → cannot be programmed in this window; next meeting from '+fmt(x.prevAt)+' unless the vessel confirms sailing':Math.abs(x.prevAt-(NXM+7))<0.01?'not in the current programme → next meeting, berthing from '+fmt(x.prevAt):x.prevAt>end?'no slot free in this window → next meeting, ~'+fmt(x.prevAt):'no slot free till ~'+fmt(x.prevAt))+'</small>':''}</td>
-   <td class="pk"><b>${x.n}</b>${isMine(x.n)?'<span class="tag">Mihir &amp; Co</span>':''}${x.shifted?'<span class="tag shift">SHIFT · port convenience</span>':''}<small>${cg(x)} · ${nf.format(x.q)} ${x.u}${agTxt(x.n)}</small><small>${x.shifted?`shifted from CJ-${x.fromB} (${CL[x.cat]||x.cat}, slot unchanged) · frees CJ-${x.fromB} for <b>${x.forWho}</b> (${CL[x.forCat]||x.forCat}) · alongside ~${fmt(x.F)}`:`${CL[x.cat]||x.cat}${x.via?' slot · as '+x.via:''} · alongside ~${fmt(x.F)}${x.tide?' · '+x.tide:''}`}</small></td>
+   <td class="pk"><b>${x.n}</b>${isMine(x.n)?'<span class="tag">Mihir &amp; Co</span>':''}${x.cat==='HP'&&!x.via?'<span class="tag" title="HP is decided by the bid at the meeting — see the HP bid table below">HP · decided by bid</span>':''}${x.shifted?'<span class="tag shift">SHIFT · port convenience</span>':''}<small>${cg(x)} · ${nf.format(x.q)} ${x.u}${agTxt(x.n)}</small><small>${x.shifted?`shifted from CJ-${x.fromB} (${CL[x.cat]||x.cat}, slot unchanged) · frees CJ-${x.fromB} for <b>${x.forWho}</b> (${CL[x.forCat]||x.forCat}) · alongside ~${fmt(x.F)}`:`${CL[x.cat]||x.cat}${x.via?' slot · as '+x.via:''} · alongside ~${fmt(x.F)}${x.tide?' · '+x.tide:''}`}</small></td>
    <td class="al">${x.alt?`<b>${x.alt.n}</b><small>${x.alt.c} · ${CL[x.alt.cat]||x.alt.cat}${x.alt.via?' as '+x.alt.via:''}${x.alt.same?' · same group, next rank':''}</small>`:'<span style="color:var(--dim)">nobody else eligible</span>'}</td>
    <td class="fl">${x.flips&&x.flips.length?'<ul>'+x.flips.map(f=>`<li>${f}</li>`).join('')+'</ul>':'—'}</td></tr>`).join('');
 }
@@ -1588,6 +1647,23 @@ const tmbResult=(tot,final)=>tot==null?'<span style="color:var(--dim)">—</span
 // "Salt wale mae sirf aaya, laga aur nikla — total kitne din huve; completed vessel dikhte rahe aur monthly figure bhi." No demurrage here.
 // SALT_DONE = the record of salt vessels that have sailed: n, q (MT), ag, b (berth), pri, arr (reported for the salt call; null = not on record), mf (made fast), out (left the berth).
 // tools/trim_board.js adds a salt vessel here when it takes her out of V.
+const HP_LOG=[ // every berth given under HP since 28 Oct with the quote the programme printed (from the data book, 22 Nov) — trim_board.js appends an HP vessel here before it drops her from V. x:1 = quantity not worked at this berth alone (shift / top-up), no rate shown
+ {n:'Xanadu',b:'7',c:'Coal bulk',q:79219,ag:'Ambika',qt:50000,f:'10-28 16:05',o:'10-30 23:30'},
+ {n:'Agia Fevronia',b:'16',c:'Salt in bulk',q:60500,ag:'Gautam Freight',qt:40000,f:'10-28 18:06',o:'10-30 06:00'},
+ {n:'Maritime Harmony',b:'16',c:'Salt',q:74850,ag:'Cross Trade',qt:40000,f:'10-30 13:00',o:'11-01 18:00'},
+ {n:'Fu Hai 16',b:'7',c:'Iron ore fines',q:53243,ag:'Genesis',qt:50000,f:'10-31 03:00',o:'11-01 06:15'},
+ {n:'Meghna Venus',b:'7',c:'Clay / feldspar',q:55000,ag:'Shantilal',qt:50000,f:'11-01 07:18',o:'11-02 17:15'},
+ {n:'Alasia',b:'16',c:'Aggregates',q:59900,ag:'Scorpio Shg',qt:40000,f:'11-01 20:36',o:'11-03 10:32'},
+ {n:'Unity Melody',b:'15A',c:'Salt in bulk',q:54705,ag:'Gautham Freight',qt:40000,f:'11-05 10:24',o:'11-06 23:05'},
+ {n:'Andreas Petrakis',b:'7',c:'Coal bulk',q:71500,ag:'Dariya Shg',qt:50000,f:'11-05 12:00',o:'11-07 06:05'},
+ {n:'Mariblue',b:'4',c:'Aggregates',q:60000,ag:'Scorpio Shg',qt:40000,f:'11-08 09:00',o:'11-09 16:00',x:1},
+ {n:'Mariblue',b:'7',c:'Aggregates',q:54500,ag:'Scorpio Shg',qt:40000,f:'11-10 07:55',o:'11-10 16:10',x:1},
+ {n:'Alberta',b:'7',c:'Aggregates',q:60380,ag:'BS Shg',qt:40000,f:'11-11 14:30',o:'11-13 04:45'},
+ {n:'Cape Diversity',b:'16',c:'DR pellets',q:116540,ag:'Genesis',qt:40000,f:'11-12 05:48',o:'11-16 03:00'},
+ {n:'Chang Hang',b:'7',c:'Iron ore pellet feed',q:47700,ag:'Genesis',qt:42000,f:'11-13 05:24',o:'11-14 13:45'},
+ {n:'Cape Venture',b:'7',c:'Oxide pellets',q:114207,ag:'Genesis',qt:42500,f:'11-14 19:45',o:'11-17 16:35'},
+ {n:'Evangelia D',b:'16',c:'Aggregates',q:60216,ag:'BS Shg',qt:50000,f:'11-16 07:54',o:'11-17 19:15'}
+];
 const SALT_DONE=[
  {n:'Agia Fevronia',q:60500,ag:'Gautham Freight',b:'16',pri:'HP',arr:null,mf:'10-28 18:06',out:'10-30 06:00'},
  {n:'Maritime Harmony',q:74850,ag:'Cross Trade',b:'16',pri:'HP',arr:null,mf:'10-30 13:00',out:'11-01 18:00'},
@@ -3510,12 +3586,12 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();salt();ppp();dpr();msWork();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();salt();ppp();dpr();msWork();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();hpbid();qdetail();side();gantt();groups();moves();
   summaries();
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }
 // ---- collapsible sections: every card opens on tap; closed cards show a one-line summary. State is remembered per viewer (localStorage, best effort).
-const SEC_OPEN_DEFAULT=new Set(['finder','mine']);
+const SEC_OPEN_DEFAULT=new Set(['finder','mine','hpb']);
 let SECST={};try{SECST=JSON.parse(localStorage.getItem('bb.sec')||'{}')||{};}catch(e){SECST={};}
 function saveSec(){try{localStorage.setItem('bb.sec',JSON.stringify(SECST));}catch(e){}}
 function setSec(id,open,save){const sec=document.querySelector(`section.card[data-sec="${id}"]`);if(!sec)return;sec.classList.toggle('closed',!open);const b=sec.querySelector('.tgl');if(b)b.setAttribute('aria-expanded',open?'true':'false');if(save!==false){SECST[id]=open?1:0;saveSec();}}
