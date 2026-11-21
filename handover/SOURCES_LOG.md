@@ -2,6 +2,11 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 21 Nov 22:23 — 11 circular PDFs from Mihir: 5 new on the register (container VRC 18.06.2026, alcohol SOP 23.06, PPE colour coding 23.06, fumigant 14.07, AIS circular 20.07); 6 were already there
+- 21 Nov 20:26 — HM signal 21 Nov night sheet (disp 19:00)
+- 21 Nov 18:48 — berthing-policy circular 5237 dt 21.11.2026
+- 21 Nov 18:17 — 20 circular files (8 new on the register)
+- 21 Nov 15:15 — DGMA Order 31 of 2026
 - Received 21 Nov 14:46: PROGRAMME 22.11 (Crystal O into CJ-1 under 6.5K; tug Sagar 5 with barge and Sanghi Sundarshan into CJ-14 behind Nord Copper; Sand Topic into CJ-9), the LIST of 21.11 revised after the meeting (Belmoira at CJ-15A under 24 hrs as a 30K quote; 6.5K / 8K ranks renumbered with Crystal O first), the HM signal of 21 Nov amended at 12:57 (Heng Yuan Fa Zhan out 18:45, Belmoira in behind her) and the timber desk sheet of 21 Nov 12:00
 - Received 21 Nov 11:22: the DAILY PERFORMANCE REPORT 21.11 (0700) — Rome Trader completed 20:00 and left 23:40 on 20 Nov; Meghna Prestige left 02:45; Seacon Monaco completed 07:30; ML Egret 6,473 CBM in the day (25,854 left); Sea Postman and Dariya Priya have started at midstream; African Hornbill only 803 MT in the day
 - Received 21 Nov 10:21: the BERTHING LIST 21.11 (0700) and the HM SIGNAL SHEET of 21 Nov (day sheet, disp 07:46) — the day's moves are signalled five to seven hours ahead of programme 21.11: Vishva Bandhan shifted CJ-8 → CJ-5 at 10:15, Flag Marina in (pilot 09:00), Ken Ann out 10:30, Seacon Monaco out and Yuan Hang Wei Ye in "on completion". The list gives the night's actual hours (Safi Alfa made fast 20 Nov 17:50, Parvraj 22:50, Uni Blossom 21 Nov 02:00) and the first norms / ETCs for them
