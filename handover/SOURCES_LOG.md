@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 21 Nov 22:27 — 6 circular PDFs from Mihir: 3 new on the register (fertiliser storage 06.08.2026, rest areas for dock workers 09.06, railway terminal charges 21.05); 3 were already there
 - 21 Nov 22:23 — 11 circular PDFs from Mihir: 5 new on the register (container VRC 18.06.2026, alcohol SOP 23.06, PPE colour coding 23.06, fumigant 14.07, AIS circular 20.07); 6 were already there
 - 21 Nov 20:26 — HM signal 21 Nov night sheet (disp 19:00)
 - 21 Nov 18:48 — berthing-policy circular 5237 dt 21.11.2026
