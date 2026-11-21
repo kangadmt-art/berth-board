@@ -80,7 +80,7 @@ const ours=r=>/mihir/i.test(r.agent||'');
 const REC=[].concat(D.calls.map(c=>Object.assign({kind:'call',st:c.status,g:grp(c.cargo),stay:c.status==='sailed'?days(c.madeFast,c.out):null,key:c.madeFast},c)),
   D.waiting.map(w=>Object.assign({kind:'wait',st:w.status,g:grp(w.cargo),berth:'',priority:'',key:w.reported||'9999'},w)));
 REC.sort((a,z)=>{const o={alongside:0,coming:1,waiting:2,expected:3,sailed:4};return (o[a.st]-o[z.st])||(a.st==='sailed'?(z.key>a.key?1:-1):(a.key>z.key?1:-1));});
-$('asof').textContent='Record from 25 Oct 2026 · as of '+dt(D.asOf);
+$('asof').textContent='The data starts at the end of October 2026 (earliest berthing on record 25 Oct; CJ-9 from 28 Oct) — nothing earlier is on record · as of '+dt(D.asOf);
 const cnt=s=>REC.filter(r=>r.st===s).length;
 $('tiles').innerHTML=[[D.calls.length,'berth calls on record'],[cnt('alongside'),'alongside now'],[cnt('waiting'),'waiting'],[cnt('expected'),'expected']].map(t=>'<div class="tile"><b>'+t[0]+'</b><span>'+t[1]+'</span></div>').join('');
 const opt=(id,label,vals,nm)=>{$(id).innerHTML='<option value="">'+label+'</option>'+vals.map(v=>'<option value="'+esc(v)+'">'+esc(nm?nm(v):v)+'</option>').join('');};

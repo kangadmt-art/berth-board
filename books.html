@@ -141,8 +141,10 @@ table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card
 <li><b>Cargo tab order (Mihir, 21 Nov 19:00 — "simple, understood at once"):</b> our vessels first; then four tiles (all waiting, dry cargo waiting, berths occupied, timber) with the rest under "More figures"; then the berth finder, meeting preview and next-day prospects; circulars and news last.</li>
 <li><b>Main screen tiles (Mihir, 21 Nov 21:26):</b> Timber and Salt come first. Each shows waiting + expected as the big number, the number at berth beneath it, and waiting / expected separately; a tap opens that page. Then the all-vessels tile. Everything else is under "More figures".</li>
 <li><b>Free space on the quay:</b> folded shut under the quay picture, with a plain explanation of what each line means.</li>
-<li><b>Meeting accuracy and expected-vs-actual:</b> only the last two meetings / last two days are shown (open checks always stay). The rest is in the data book.</li>
+<li><b>Meeting accuracy:</b> only the last two meetings are shown. <b>Expected-vs-actual (logic check): only the pending ones are shown</b> — a check that is closed goes to the data book <i>(Mihir, 21 Nov 21:52)</i>.</li>
 <li><b>CJ-9 · CJ-10 tab:</b> the PPP berths run by Gautam Freight — who is alongside, when she leaves, who is next, and the circulars on these berths. Status only; the board does not project them. It also keeps the record of every completed call — stay (made fast to left the berth), output (cargo ÷ days at berth) and cargo handled month-wise, counted in the month of berthing <i>(Mihir, 21 Nov 21:46)</i>.</li>
+<li><b>DPR table:</b> CJ-9 and CJ-10 come first, under the name "Gautam Freight (PPP berths)", whatever their state — working, completed or vacant <i>(Mihir, 21 Nov 21:52)</i>.</li>
+<li><b>Where the data starts:</b> every record says it. The board's record begins at the end of October 2026 (earliest berthing on it: 25 Oct; CJ-9: 28 Oct). Nothing earlier is on record.</li>
 </ul>
 <h3>9. Which paper wins when two disagree</h3>
 <ul>
@@ -226,7 +228,7 @@ const ours=r=>/mihir/i.test(r.agent||'');
 const REC=[].concat(D.calls.map(c=>Object.assign({kind:'call',st:c.status,g:grp(c.cargo),stay:c.status==='sailed'?days(c.madeFast,c.out):null,key:c.madeFast},c)),
   D.waiting.map(w=>Object.assign({kind:'wait',st:w.status,g:grp(w.cargo),berth:'',priority:'',key:w.reported||'9999'},w)));
 REC.sort((a,z)=>{const o={alongside:0,coming:1,waiting:2,expected:3,sailed:4};return (o[a.st]-o[z.st])||(a.st==='sailed'?(z.key>a.key?1:-1):(a.key>z.key?1:-1));});
-$('asof').textContent='Record from 25 Oct 2026 · as of '+dt(D.asOf);
+$('asof').textContent='The data starts at the end of October 2026 (earliest berthing on record 25 Oct; CJ-9 from 28 Oct) — nothing earlier is on record · as of '+dt(D.asOf);
 const cnt=s=>REC.filter(r=>r.st===s).length;
 $('tiles').innerHTML=[[D.calls.length,'berth calls on record'],[cnt('alongside'),'alongside now'],[cnt('waiting'),'waiting'],[cnt('expected'),'expected']].map(t=>'<div class="tile"><b>'+t[0]+'</b><span>'+t[1]+'</span></div>').join('');
 const opt=(id,label,vals,nm)=>{$(id).innerHTML='<option value="">'+label+'</option>'+vals.map(v=>'<option value="'+esc(v)+'">'+esc(nm?nm(v):v)+'</option>').join('');};
