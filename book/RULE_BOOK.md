@@ -64,6 +64,7 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - After that, demurrage is USD 20,000 a day until she completes (the DPR's completion hour).
 - Completed before laytime ends = despatch at half the rate, USD 10,000 a day. *(Mihir, 16 Nov)*
 - Demurrage and despatch are totalled separately, vessel by vessel. Time runs without a break.
+- "Avg dispatch" on the timber sheet means the average discharge per day (CBM a day). *(Mihir, 21 Nov)*
 
 ## 8. Ship's gear
 
