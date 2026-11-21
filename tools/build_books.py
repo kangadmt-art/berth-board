@@ -20,7 +20,7 @@ def md(path):
         elif ln.strip(): o.append('<p>' + inline(ln) + '</p>')
     if inl: o.append('</ul>')
     return '\n'.join(o)
-DATA = {'asOf': db['asOf'], 'calls': db['calls'], 'waiting': db['waiting'], 'timberDone': db['timber'].get('done', [])}
+DATA = {'circ': db.get('circulars', []), 'asOf': db['asOf'], 'calls': db['calls'], 'waiting': db['waiting'], 'timberDone': db['timber'].get('done', [])}
 blob = json.dumps(DATA, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
 PAGE = r'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -65,7 +65,7 @@ table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card
  <h2>Days alongside by cargo · vessels that have sailed (a shift counts as one stay)</h2><table id="tc"></table>
  <h2>Calls by berth · days per call at that berth</h2><table id="tb"></table>
 </section>
-<section id="t-rules" class="hide"><div class="book">__RULES__</div></section>
+<section id="t-rules" class="hide"><div class="book">__RULES__</div><h2>Circulars and trade notices on record</h2><div class="count" id="ccount"></div><div id="circ"></div></section>
 <section id="t-process" class="hide"><div class="book">__PROCESS__</div></section>
 </div>
 <script>
@@ -120,6 +120,11 @@ const VIS=[];{const by={};D.calls.filter(c=>c.priority!=='SPACE').forEach(c=>{(b
 const G={};VIS.filter(v=>v.st==='sailed').forEach(v=>{const d=days(v.f,v.out);if(d>0.2)(G[v.g]=G[v.g]||[]).push(d);});
 $('tc').innerHTML='<tr><th>Cargo</th><th>Vessels</th><th>Average days</th><th>Shortest</th><th>Longest</th></tr>'+Object.keys(G).sort((a,z)=>G[z].length-G[a].length).map(k=>{const a=G[k];return '<tr><td>'+k+'</td><td>'+a.length+'</td><td>'+f1(a.reduce((s,x)=>s+x,0)/a.length)+'</td><td>'+f1(Math.min(...a))+'</td><td>'+f1(Math.max(...a))+'</td></tr>';}).join('');
 $('tb').innerHTML='<tr><th>Berth</th><th>Calls</th><th>Average days</th><th>Now</th></tr>'+bo.filter(b=>D.calls.some(c=>c.berth===b)).map(b=>{const a=sailed.filter(r=>r.berth===b).map(r=>r.stay),n=D.calls.filter(c=>c.berth===b),now=n.find(c=>c.status==='alongside');return '<tr><td>CJ-'+b+'</td><td>'+n.length+'</td><td>'+(a.length?f1(a.reduce((s,x)=>s+x,0)/a.length):'—')+'</td><td>'+(now?esc(now.vessel):'—')+'</td></tr>';}).join('');
+// circulars — newest first; in force before the rest
+{const C=(D.circ||[]).slice().sort((a,z)=>((a.st==='in force'?0:1)-(z.st==='in force'?0:1))||(z.iso>a.iso?1:-1));
+ $('ccount').textContent=C.length+' on record · '+C.filter(c=>c.st==='in force').length+' in force · tap one for the gist and the PDF';
+ $('circ').innerHTML=C.map(c=>'<div class="v"><div class="vt"><span class="vn">'+esc(c.t)+'</span><span class="tag '+(c.st==='in force'?'t-alongside':'t-sailed')+'">'+esc((c.st||'').toUpperCase())+'</span></div><div class="vs">'+esc(c.kind||'')+' · dated '+esc(c.rd||'')+'</div><div class="vd"><div class="kv"><span>Reference</span><div>'+esc(c.ref||'')+'</div><span>Received</span><div>'+esc(c.d||'')+' · '+esc(c.src||'')+'</div></div><div class="note"><b>What it says:</b> '+esc(c.s||'')+'</div>'+(c.eff?'<div class="note"><b>Bearing on berthing:</b> '+esc(c.eff)+'</div>':'')+(c.file?'<div class="note"><a href="'+esc(c.file)+'" target="_blank" rel="noopener" style="color:var(--brass2)">Open the PDF'+(c.pg?' · '+c.pg+' page'+(c.pg>1?'s':''):'')+'</a></div>':'')+'</div></div>').join('');
+ $('circ').addEventListener('click',e=>{if(e.target.closest('a'))return;const v=e.target.closest('.v');if(v)v.classList.toggle('open');});}
 chips();draw();
 </script></body></html>'''
 page = PAGE.replace('__RULES__', md(os.path.join(R, 'book', 'RULE_BOOK.md'))).replace('__PROCESS__', md(os.path.join(R, 'book', 'PROCESS_BOOK.md'))).replace('__DATA__', blob)
