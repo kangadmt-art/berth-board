@@ -103,6 +103,7 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - **CJ-9 · CJ-10 tab:** the PPP berths run by Gautam Freight — who is alongside, when she leaves, who is next, and the circulars on these berths. Status only; the board does not project them. It also keeps the record of every completed call — stay (made fast to left the berth), output (cargo ÷ days at berth) and cargo handled month-wise, counted in the month of berthing *(Mihir, 21 Nov 21:46)*.
 - **DPR table:** CJ-9 and CJ-10 come first, under the name "Gautam Freight (PPP berths)", whatever their state — working, completed or vacant *(Mihir, 21 Nov 21:52)*.
 - **Where the data starts:** every record says it. The board's record begins at the end of October 2026 (earliest berthing on it: 25 Oct; CJ-9: 28 Oct). Nothing earlier is on record.
+- **Viewers count (Mihir, 21 Nov 22:00):** the public link shows at the top how many times it has been opened. Every opening counts, his own included. It uses an outside free counter (Abacus); if that service is down the number is simply not shown.
 
 ## 9. Which paper wins when two disagree
 
