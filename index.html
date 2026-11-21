@@ -420,6 +420,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
  .mpt:not(.tmb) .fl li{margin-left:16px}
 }
 .sdwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:6px 0 14px}.sdt{border-collapse:collapse;width:100%;min-width:860px;font-size:12.5px;font-variant-numeric:tabular-nums}.sdt th,.sdt td{padding:7px 9px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}.sdt th{font-weight:600;color:var(--muted);font-size:11px;letter-spacing:.04em;text-transform:uppercase}.sdt .l{text-align:left}.sdt td:first-child,.sdt th:first-child{position:sticky;left:0;background:var(--panel)}.sdt tr.our td:first-child{box-shadow:inset 3px 0 0 var(--brass)}.sdt tr.tot td{font-weight:700;border-bottom:0;color:var(--brass)}
+.sdh{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tmb,var(--brass));font-weight:700;background:var(--panel2,rgba(255,255,255,.04));padding:8px 10px;margin-top:10px;border-radius:4px}.sdt .dem{color:var(--bad);font-weight:700}.sdt .des{color:var(--ok);font-weight:700}.tdfull{margin-top:6px}.tdfull>summary{cursor:pointer;color:var(--muted);font-size:12.5px;padding:8px 2px}
 </style>
 
 <div class="wrap">
@@ -565,7 +566,8 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   </section>
   <section class="card timber" aria-labelledby="tdh">
     <div class="sechead"><h2 id="tdh">Completed vessels · record</h2><p id="tdsub"></p></div>
-    <div class="scroll"><table class="mpt tmb tc" id="tdone"></table></div>
+    <div id="tdoneC"></div>
+    <details class="tdfull"><summary>Full details per vessel — laytime bar, commencement, notes</summary><div class="scroll"><table class="mpt tmb tc" id="tdone"></table></div></details>
   </section>
   <section class="card"><div class="sechead"><h2>How this sheet counts</h2></div>
     <div class="note" id="tnote"></div>
@@ -646,7 +648,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='21 Nov 2026 · 18:32 IST';
+const UPDATED='21 Nov 2026 · 18:40 IST';
 const BOARD_SRC='programme 22.11 · list 21.11 revised · HM signal 21 Nov amended (disp 1257) · DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1580,6 +1582,14 @@ function demur(){ // the completed record and the notes under it (the name is ke
   const dW=D.filter(r=>r.wait!=null), dS=D.filter(r=>r.stay!=null), qT=D.reduce((a,r)=>a+(r.q||0),0);
   dn.innerHTML='<tr><th style="width:30px">#</th><th style="width:19%">Vessel</th><th style="width:8%">Quantity</th><th style="width:9%">Arrival</th><th style="width:11%">Berthed</th><th style="width:11%">Completed</th><th style="width:6%">Stay</th><th style="width:11%">Average discharge</th><th style="width:13%">Laytime</th><th>Result</th></tr>'+rows
     +`<tr class="grp sumr"><td colspan="2">${D.length} vessels completed</td><td class="d" data-l="total CBM"><b>${nf.format(Math.round(qT))}</b></td><td class="d"></td><td class="d" data-l="average wait for a berth">${dW.length?'<b>'+tmbD(dW.reduce((a,r)=>a+r.wait,0)/dW.length)+'</b><span class="cap">average wait</span>':''}</td><td class="d"></td><td class="d" data-l="average stay at berth">${dS.length?'<b>'+tmbD(dS.reduce((a,r)=>a+r.stay,0)/dS.length)+'</b><span class="cap">average</span>':''}</td><td class="d" data-l="average discharge">${T.recAvg?'<b>'+nf.format(Math.round(T.recAvg/10)*10)+' CBM/day</b>'+T.full.length+' vessels with full times':''}</td><td class="d"></td><td class="d" data-l="result">${nDem?'<b>'+tmbMoney(dem/24*DEM.usd)+'</b>demurrage'+(des>0&&DEM.desp?'<b style="color:var(--ok)">'+tmbMoney(des/24*DEM.desp)+'</b>despatch':'')+' · '+nDem+' counted':''}</td></tr>`;
+  // compact record table, one per month, the same columns as the Salt record (Mihir, 21 Nov 18:27)
+  {const tc=document.getElementById('tdoneC'); if(tc){const M3=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],sd=t=>{if(t==null)return '—';const d=dt(t);return String(d.getUTCDate()).padStart(2,'0')+' '+M3[d.getUTCMonth()]+' '+String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');},dy=x=>x==null?'—':(x/24).toFixed(1),
+    resC=r=>r.tot==null?'—':r.tot>0?`<span class="dem">${tmbMoney(r.tot/24*DEM.usd)} dem</span>`:`<span class="des">${DEM.desp?tmbMoney(-r.tot/24*DEM.desp):tmbD(-r.tot)} desp</span>`,
+    TH='<tr><th class="l">Vessel</th><th>Berth</th><th>CBM</th><th>Arrived</th><th>Berthed</th><th>Completed</th><th>Waited</th><th>At berth</th><th>Total days</th><th>CBM a day</th><th>Demurrage / despatch</th><th class="l">Agent</th></tr>';
+    const keys=[...new Set(ordM.map(i=>mKey(D[i])))];
+    tc.innerHTML=keys.map(k=>{const G=ordM.map(i=>D[i]).filter(r=>mKey(r)===k),q=G.reduce((a,r)=>a+(r.q||0),0),W=G.filter(r=>r.wait!=null),S=G.filter(r=>r.stay!=null),TT=G.filter(r=>r.nor!=null&&r.done!=null),dm=G.reduce((a,r)=>a+(r.tot>0?r.tot:0),0),dp=G.reduce((a,r)=>a+(r.tot<0?-r.tot:0),0),stq=S.reduce((a,r)=>a+(r.q||0),0),sth=S.reduce((a,r)=>a+r.stay,0);
+      return `<div class="sdh">${mLab(k)} · ${G.length} vessel${G.length>1?'s':''} · ${nf.format(Math.round(q))} CBM</div><div class="sdwrap"><table class="sdt">`+TH+G.map(r=>`<tr${r.mine?' class="our"':''}><td class="l"><b>${r.n}</b>${gearChip(r.n)}</td><td>${r.berth?'CJ-'+r.berth:'—'}</td><td>${r.q?nf.format(Math.round(r.q)):'—'}</td><td>${sd(r.nor)}</td><td>${sd(r.mf)}</td><td>${sd(r.done)}</td><td>${dy(r.wait)}</td><td>${dy(r.stay)}</td><td><b>${r.nor!=null&&r.done!=null?((r.done-r.nor)/24).toFixed(1):'—'}</b></td><td>${r.avg!=null?nf.format(Math.round(r.avg/10)*10):'—'}</td><td>${resC(r)}</td><td class="l">${r.ag||'—'}</td></tr>`).join('')
+        +`<tr class="tot"><td class="l">${mLab(k).split(' ')[0]} total</td><td></td><td>${nf.format(Math.round(q))}</td><td></td><td></td><td></td><td>${W.length?dy(W.reduce((a,r)=>a+r.wait,0)/W.length)+' avg':'—'}</td><td>${S.length?dy(sth/S.length)+' avg':'—'}</td><td>${TT.length?(TT.reduce((a,r)=>a+(r.done-r.nor),0)/TT.length/24).toFixed(1)+' avg':'—'}</td><td>${sth?nf.format(Math.round(stq/(sth/24)/10)*10):'—'}</td><td>${dm?tmbMoney(dm/24*DEM.usd)+' dem':''}${dm&&dp?' · ':''}${dp&&DEM.desp?tmbMoney(dp/24*DEM.desp)+' desp':''}${!dm&&!dp?'—':''}</td><td></td></tr></table></div>`;}).join('')||'<div class="empty">None yet.</div>';}}
   dn.onclick=e=>{const t=e.target.closest('tr.vr');if(t&&!e.target.closest('a,button'))t.classList.toggle('open');};
   if(ds)ds.innerHTML=`<span class="ph2"><b>Completed vessels · record.</b> </span>Every timber vessel that has completed, newest first — kept for good<span class="dk">, so the dates stay handy</span>.<span class="ph"> Tap a vessel for the details.</span>`;
   const tn=document.getElementById('tnote');
