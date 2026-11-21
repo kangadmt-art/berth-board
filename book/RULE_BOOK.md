@@ -100,7 +100,7 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - **Main screen tiles (Mihir, 21 Nov 21:26):** Timber and Salt come first. Each shows waiting + expected as the big number, the number at berth beneath it, and waiting / expected separately; a tap opens that page. Then the all-vessels tile. Everything else is under "More figures".
 - **Free space on the quay:** folded shut under the quay picture, with a plain explanation of what each line means.
 - **Meeting accuracy and expected-vs-actual:** only the last two meetings / last two days are shown (open checks always stay). The rest is in the data book.
-- **CJ-9 · CJ-10 tab:** the PPP berths run by Gautam Freight — who is alongside, when she leaves, who is next, and the circulars on these berths. Status only; the board does not project them.
+- **CJ-9 · CJ-10 tab:** the PPP berths run by Gautam Freight — who is alongside, when she leaves, who is next, and the circulars on these berths. Status only; the board does not project them. It also keeps the record of every completed call — stay (made fast to left the berth), output (cargo ÷ days at berth) and cargo handled month-wise, counted in the month of berthing *(Mihir, 21 Nov 21:46)*.
 
 ## 9. Which paper wins when two disagree
 

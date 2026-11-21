@@ -661,7 +661,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='21 Nov 2026 · 21:50 IST';
+const UPDATED='21 Nov 2026 · 22:00 IST';
 const BOARD_SRC='HM signal 21 Nov night sheet (disp 1900) · programme 22.11 · list 21.11 revised · HM signal 21 Nov amended (disp 1257) · DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1511,6 +1511,17 @@ function salt(){const el=document.getElementById('saltlist');if(!el)return;
   const tp=(c,v,l)=>`<div class="tp" style="--sc:${c}"><b>${v}</b><span>${l}</span></div>`;
   document.getElementById('saltstats').innerHTML=tp('var(--ok,#5fbf7a)',atB.length,'at berth')+tp('var(--warn)',wt.length,'waiting')+tp('#7fb2ff',ex.length,'expected')+tp('#dfe7f2',done.length,'completed ↓');
   const vb=document.getElementById('vb-salt');if(vb)vb.innerHTML=`<b>${atB.length}</b> at berth · <b>${wt.length}</b> waiting · <b>${ex.length}</b> expected`;}
+const PPP_DONE=[ // every completed call at CJ-9 / CJ-10 on the board's record (from the data book, 21 Nov) — trim_board.js appends a vessel here before it drops her
+ {n:'Lacerta',b:'9',c:'US coal',q:78005,ie:'IMP',ag:'Gautam Freight',mf:'10-28 04:50',out:'10-30 23:30'},
+ {n:'Cervia',b:'9',c:'Coal bulk',q:82390,ie:'IMP',ag:'Dariya Shg',mf:'10-31 06:20',out:'11-04 14:10'},
+ {n:'KSL Ruiyang',b:'9',c:'DR pellets',q:24033,ie:'EXP',ag:'Genesis',mf:'11-04 20:00',out:'11-05 20:00'},
+ {n:'African Bateleur',b:'9',c:'Petcoke',q:56884,ie:'IMP',ag:'Ambica',mf:'11-06 00:50',out:'11-08 02:00'},
+ {n:'Global Express',b:'9',c:'Coking coal',q:26493,ie:'IMP',ag:'Seascape',mf:'11-08 04:00',out:'11-10 07:00'},
+ {n:'Yasa Eagle',b:'9',c:'Coal bulk',q:49500,ie:'IMP',ag:'Dariya',mf:'11-10 08:40',out:'11-13 02:00'},
+ {n:'Leya',b:'9',c:'Iron ore pellet feed',q:89000,ie:'EXP',ag:'Genesis',mf:'11-13 08:18',out:'11-17 05:20'},
+ {n:'Honor Star',b:'9',c:'Coal in bulk',q:24000,ie:'IMP',ag:'Spartans',mf:'11-17 08:00',out:'11-18 03:20'},
+ {n:'Seacon Monaco',b:'9',c:'Soda ash in bulk',q:41000,ie:'IMP',ag:'Cross Trade',mf:'11-18 06:36',out:'11-21 11:45',est:1}
+];
 // ================= CJ-9 / CJ-10 tab (Mihir, 21 Nov 21:26) =================
 // "PPP wale 9 and 10 berth ka bhi page alag bana de to pata chale udhar kya chal raha hai." Status only — these berths are run by Gautam Freight (O&M) and are outside the berthing-policy queue.
 function ppp(){
@@ -1518,7 +1529,7 @@ function ppp(){
   const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],s2=t=>{if(t==null)return '—';const d=dt(t);return String(d.getUTCDate()).padStart(2,'0')+' '+MN[d.getUTCMonth()]+' '+String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');},f=x=>x==null?'—':Math.round(x).toLocaleString('en-IN'),base=n=>n.replace(/ \(.*$/,'');
   const P=V.filter(v=>v.b==='9'||v.b==='10').sort((a,z)=>a.F-z.F),now=P.filter(v=>v.F<=NOW&&v.T>NOW),next=P.filter(v=>v.F>NOW),past=P.filter(v=>v.T<=NOW).sort((a,z)=>z.T-a.T);
   const dprOf=n=>DPR.rows.find(r=>base(r.n)===base(n)&&/^CJ-(9|10)$/.test(r.loc||''));
-  const wq=W.filter(w=>/CJ-?0?9\b|CJ-?10\b|GFPL/i.test(w.x||'')&&!P.some(v=>base(v.n)===base(w.n)));
+  const wq=W.filter(w=>/"CJ-0?9"|"CJ-10"|\bGFPL\b/i.test(w.x||'')&&!P.some(v=>base(v.n)===base(w.n)));
   const tbl=(th,rows)=>`<div class="sdwrap"><table class="sdt"><tr>${th.map((x,i)=>`<th${(i===0||i===th.length-1)?' class="l"':''}>${x}</th>`).join('')}</tr>${rows.join('')}</table></div>`,head=t=>`<div class="sdh">${t}</div>`;
   const row=(v,st)=>{const r=dprOf(v.n);return `<tr><td class="l"><b>${base(v.n)}</b>${gearChip(v.n)}</td><td>CJ-${v.b}</td><td>${st}</td><td>${v.c||'—'}</td><td>${f(v.q)} ${v.u||''}</td><td>${(typeof IE!=='undefined'&&IE[base(v.n)])||'—'}</td><td>${s2(v.F)}</td><td><b>${s2(v.T)}</b>${v.est?' est':''}</td><td>${r&&r.upto>0?f(r.upto):'—'}</td><td>${r&&r.upto>0?f(r.bal):'—'}</td><td class="l">${(typeof AG!=='undefined'&&AG[base(v.n)])||'—'}</td></tr>`;};
   const TH=['Vessel','Berth','Status','Cargo','Quantity','I/E','Berthed','Out about','Done (DPR)','Left (DPR)','Agent'];
@@ -1526,11 +1537,24 @@ function ppp(){
   H+=head('At berth now · '+now.length)+(now.length?tbl(TH,now.map(v=>row(v,'working'))):'<div class="empty">No vessel alongside CJ-9 or CJ-10 at this hour.</div>');
   H+=head('Coming next · '+next.length)+(next.length?tbl(TH,next.map(v=>row(v,'programmed'))):'<div class="empty">No next vessel named on the programme or signal.</div>');
   if(wq.length)H+=head('Waiting / expected for these berths (list remark) · '+wq.length)+tbl(['Vessel','Cargo','Quantity','Reported / ETA','Ready','List remark'],wq.map(w=>`<tr><td class="l"><b>${w.n}</b>${gearChip(w.n)}</td><td>${w.c}</td><td>${f(w.q)} ${w.u}</td><td>${s2(w.rep)}</td><td>${w.rdy!=null?s2(w.rdy):'N/A'}</td><td class="l" style="white-space:normal;min-width:220px">${String(w.x||'').slice(0,140)}</td></tr>`));
-  if(past.length)H+=head('Last vessel out · '+past.length)+tbl(TH,past.map(v=>row(v,'sailed')));
+  // ---- the record: stay, output and month-wise cargo (Mihir, 21 Nov 21:46 — "pata chale 9 number kitna output de raha hai")
+  const FMN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const rec=PPP_DONE.map(r=>({n:r.n,b:r.b,c:r.c,q:r.q,ie:r.ie,ag:r.ag,F:h(r.mf),T:h(r.out),est:r.est}));
+  past.forEach(v=>{if(!rec.some(r=>r.n===base(v.n)&&Math.abs(r.F-v.F)<1))rec.push({n:base(v.n),b:v.b,c:v.c,q:v.q,ie:(typeof IE!=='undefined'&&IE[base(v.n)])||'',ag:(typeof AG!=='undefined'&&AG[base(v.n)])||'',F:v.F,T:v.T,est:v.est});});
+  rec.sort((a,z)=>z.F-a.F);
+  const stay=r=>(r.T-r.F)/24,mk=r=>{const d=dt(r.F);return d.getUTCFullYear()*100+d.getUTCMonth();},keys=[...new Set(rec.map(mk))];
+  const sum=G=>{const q=G.reduce((a,r)=>a+(r.q||0),0),d=G.reduce((a,r)=>a+stay(r),0);return {n:G.length,q,d,rate:d>0?q/d:0};};
+  const RT=['Vessel','Berth','Cargo','I/E','MT','Berthed','Sailed','Stay · days','Output · MT a day','Agent'];
+  const recH=keys.map(k=>{const G=rec.filter(r=>mk(r)===k),S=sum(G);return head(`${FMN[k%100]} ${Math.floor(k/100)} · ${S.n} vessel${S.n>1?'s':''} · ${f(S.q)} MT · ${f(S.rate)} MT a day at berth`)+tbl(RT,G.map(r=>`<tr><td class="l"><b>${r.n}</b>${gearChip(r.n)}</td><td>CJ-${r.b}</td><td>${r.c}</td><td>${r.ie||'—'}</td><td>${f(r.q)}</td><td>${s2(r.F)}</td><td>${s2(r.T)}${r.est?' est':''}</td><td><b>${stay(r).toFixed(1)}</b></td><td><b>${f((r.q||0)/Math.max(stay(r),0.05))}</b></td><td class="l">${r.ag||'—'}</td></tr>`).concat(`<tr class="tot"><td class="l">${FMN[k%100]} total</td><td></td><td></td><td></td><td>${f(S.q)}</td><td></td><td></td><td>${(S.d/S.n).toFixed(1)} avg</td><td>${f(S.rate)}</td><td></td></tr>`));}).join('');
+  const mt=tbl(['Month (by berthing)','Vessels','Cargo handled · MT','Import','Export','Days at berth','Average stay','Output · MT a day','Top cargo'],keys.map(k=>{const G=rec.filter(r=>mk(r)===k),S=sum(G),im=G.filter(r=>r.ie==='IMP').reduce((a,r)=>a+r.q,0),ex=G.filter(r=>r.ie==='EXP').reduce((a,r)=>a+r.q,0),bc={};G.forEach(r=>{const c=/coal/i.test(r.c)?'Coal':/pet ?coke/i.test(r.c)?'Petcoke':/pellet|iron/i.test(r.c)?'Iron ore / pellets':r.c;bc[c]=(bc[c]||0)+r.q;});const top=Object.entries(bc).sort((a,z)=>z[1]-a[1])[0];return `<tr><td class="l"><b>${FMN[k%100]} ${Math.floor(k/100)}</b></td><td>${S.n}</td><td><b>${f(S.q)}</b></td><td>${f(im)}</td><td>${f(ex)}</td><td>${S.d.toFixed(1)}</td><td>${(S.d/S.n).toFixed(1)}</td><td><b>${f(S.rate)}</b></td><td class="l">${top?top[0]+' · '+f(top[1]):'—'}</td></tr>`;}));
+  const ALL=sum(rec);
+  H+=head('Month-wise · cargo handled and output')+mt+`<div class="empty" style="text-align:left;margin:4px 0 10px">Stay = made fast to left the berth. Output = cargo ÷ days at the berth (so it includes idle hours alongside). A vessel counts in the month she berthed. On record since 28 Oct: <b>${ALL.n}</b> vessels · <b>${f(ALL.q)}</b> MT · average stay <b>${(ALL.d/ALL.n).toFixed(1)}</b> days · <b>${f(ALL.rate)}</b> MT a day.${rec.some(r=>r.est)?' "est" = the sailing hour is not on a paper yet; it is the board estimate.':''}</div>`;
+  H+=head('Completed vessels · record')+recH;
   el.innerHTML=H;
   const tp=(c,v,l)=>`<div class="tp" style="--sc:${c}"><b>${v}</b><span>${l}</span></div>`;
   const b9=now.find(v=>v.b==='9'),b10=now.find(v=>v.b==='10'),n9=next.find(v=>v.b==='9');
-  document.getElementById('pppstats').innerHTML=tp('#c58bff',b9?base(b9.n):'vacant','CJ-9 · '+(b9?(b9.c+' · out about '+s2(b9.T)):'no vessel')+(n9?' · next: '+base(n9.n)+', '+s2(n9.F):''))+tp('var(--muted)',b10?base(b10.n):'vacant','CJ-10 · '+(b10?b10.c:'the DPR of '+DPR.d.slice(0,5)+' prints CJ-10 as VACANT — no vessel on the list, programme or signal'));
+  const kNow=(()=>{const d=dt(NOW);return d.getUTCFullYear()*100+d.getUTCMonth();})(),SM=sum(rec.filter(r=>mk(r)===kNow));
+  document.getElementById('pppstats').innerHTML=tp('var(--ok)',f(SM.q)+' MT',FMN[kNow%100]+' so far · '+SM.n+' vessels completed')+tp('var(--brass)',f(SM.rate)+' MT a day','output at berth this month · average stay '+(SM.n?(SM.d/SM.n).toFixed(1):'—')+' days')+tp('#c58bff',b9?base(b9.n):'vacant','CJ-9 · '+(b9?(b9.c+' · out about '+s2(b9.T)):'no vessel')+(n9?' · next: '+base(n9.n)+', '+s2(n9.F):''))+tp('var(--muted)',b10?base(b10.n):'vacant','CJ-10 · '+(b10?b10.c:'the DPR of '+DPR.d.slice(0,5)+' prints CJ-10 as VACANT — no vessel on the list, programme or signal'));
   document.getElementById('pppsub').innerHTML='CJ-9 and CJ-10 are operated by M/s Gautam Freight Pvt Ltd (O&amp;M). They are <b>outside the DPA berthing queue</b>, so the board does not project them — this page only shows what the list, programme, HM signal and DPR say: who is alongside, when she leaves, who is named next. The <b>DPR does carry these berths</b>: one line each for CJ-9 and CJ-10, with the cargo handled in 24 hours, the total so far and the balance — shown here as Done / Left. A vessel that berthed after the 07:00 position of the DPR shows a dash until the next DPR. Every past call at these berths is kept in the data book.';
   const circ=NOTICES.filter(n=>/\b0?9\s*(&|and|,|\/)\s*10\b|Gautam|GFPL|OMCJ910/i.test((n.t||'')+' '+(n.ref||''))).sort((a,z)=>String(z.iso).localeCompare(String(a.iso)));
   document.getElementById('pppcirc').innerHTML=circ.length?tbl(['Date','Circular','Ref','PDF'],circ.map(n=>`<tr><td class="l">${n.rd||''}</td><td style="text-align:left;white-space:normal;min-width:240px"><b>${n.t}</b></td><td style="text-align:left;white-space:normal">${n.ref||''}</td><td class="l">${n.file?`<a class="plink" href="${n.file}" target="_blank" rel="noopener">open</a>`:'—'}</td></tr>`)):'<div class="empty">None on the register.</div>';
