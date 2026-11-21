@@ -97,6 +97,10 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - **Liquid tab (Mihir, 21 Nov 18:45):** short tables only — jetties, waiting, expected. The long notes stay under "Full notes". Mihir does not follow liquid.
 - **Our vessels card:** one line per reading and per option; the reasoning opens on a tap.
 - **Cargo tab order (Mihir, 21 Nov 19:00 — "simple, understood at once"):** our vessels first; then four tiles (all waiting, dry cargo waiting, berths occupied, timber) with the rest under "More figures"; then the berth finder, meeting preview and next-day prospects; circulars and news last.
+- **Main screen tiles (Mihir, 21 Nov 21:26):** Timber and Salt come first. Each shows waiting + expected as the big number, the number at berth beneath it, and waiting / expected separately; a tap opens that page. Then the all-vessels tile. Everything else is under "More figures".
+- **Free space on the quay:** folded shut under the quay picture, with a plain explanation of what each line means.
+- **Meeting accuracy and expected-vs-actual:** only the last two meetings / last two days are shown (open checks always stay). The rest is in the data book.
+- **CJ-9 · CJ-10 tab:** the PPP berths run by Gautam Freight — who is alongside, when she leaves, who is next, and the circulars on these berths. Status only; the board does not project them.
 
 ## 9. Which paper wins when two disagree
 

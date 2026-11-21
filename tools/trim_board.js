@@ -1,7 +1,7 @@
 // node tools/trim_board.js <abs board.html>   — makes the DISPLAY board light (Mihir, 21 Nov 14:18). Run tools/build_db.js FIRST: what is cut here lives on in the data book.
 //  1. a vessel that has completed and left is taken out of V (kept: every entry of a vessel still alongside or coming, and the last vessel that left each berth — the projection reads it)
 //  2. signal movements: only the rows of the board's own day (MV and LIQ.moves)
-//  3. expected-vs-actual checks (LEARN): only the open ones
+//  3. expected-vs-actual checks (LEARN): the open ones and those of the last two days
 // The projection must be identical before and after — check with tools/dump_projection.js.
 const {chromium}=require('/opt/npm-tools/node_modules/playwright');const fs=require('fs');
 const q=s=>String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n');
@@ -29,12 +29,13 @@ const js=o=>o===null||o===undefined?'null':typeof o==='number'?String(o):typeof 
  if(sd.length){const x=s.indexOf('const SALT_DONE=['),y=s.indexOf('\n];',x);if(x>0)s=s.slice(0,y)+',\n'+sd.join(',\n')+s.slice(y);console.log('salt record +',sd.length,'— CHECK the agent and arrival of the new line(s) in SALT_DONE');}
  // ---- 2. MV and LIQ.moves — rows of the board's day only
  const cutMoves=(start,endMark,ind)=>{const a=s.indexOf(start); if(a<0)return [0,0]; const a2=a+start.length, e=s.indexOf(endMark,a2); const arr=Function('return ['+s.slice(a2,e)+'\n]')();
-  const out=arr.map(([t,rows])=>[t,rows.filter(r=>String(r[5]||'').startsWith(day))]).filter(x=>x[1].length);
+  const out=arr.map(([t,rows])=>[t,rows.filter(r=>String(r[5]||'').slice(0,5)>=day /* today and what is already signalled for tomorrow */)]).filter(x=>x[1].length);
   s=s.slice(0,a2)+out.map(x=>ind+js(x)).join(',\n')+s.slice(e); return [arr.length,out.length];};
  const mv=cutMoves('const MV=[\n','\n];',' '); const la=s.indexOf('const LIQ={'); const lm=s.indexOf(' moves:[\n',la); let lq=[0,0];
- if(lm>0){const a2=lm+' moves:[\n'.length,e=s.indexOf('\n ]',a2);const arr=Function('return ['+s.slice(a2,e)+'\n]')();const out=arr.map(([t,rows])=>[t,rows.filter(r=>String(r[5]||'').startsWith(day))]).filter(x=>x[1].length);s=s.slice(0,a2)+out.map(x=>'  '+js(x)).join(',\n')+s.slice(e);lq=[arr.length,out.length];}
+ if(lm>0){const a2=lm+' moves:[\n'.length,e=s.indexOf('\n ]',a2);const arr=Function('return ['+s.slice(a2,e)+'\n]')();const out=arr.map(([t,rows])=>[t,rows.filter(r=>String(r[5]||'').slice(0,5)>=day /* today and what is already signalled for tomorrow */)]).filter(x=>x[1].length);s=s.slice(0,a2)+out.map(x=>'  '+js(x)).join(',\n')+s.slice(e);lq=[arr.length,out.length];}
  // ---- 3. LEARN — open only
- const l0=s.indexOf('const LEARN=[\n')+'const LEARN=[\n'.length, l1=s.indexOf('\n];',l0); const L=s.slice(l0,l1).split('\n'); const ent=L.filter(l=>/^ \{d:'/.test(l)); const open=ent.filter(l=>/st:'open'\},?$/.test(l));
+ const l0=s.indexOf('const LEARN=[\n')+'const LEARN=[\n'.length, l1=s.indexOf('\n];',l0); const L=s.slice(l0,l1).split('\n'); const ent=L.filter(l=>/^ \{d:'/.test(l)); const MON3=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const nowL=/const NOW=h\(.(\d\d)-(\d\d) /.exec(s);const dKey=(m,d)=>m*100+d;const today=dKey(+nowL[1],+nowL[2]);const recent=l=>{const m=/^ \{d:'(\d{1,2}) ([A-Z][a-z]{2})/.exec(l);if(!m)return false;const k=dKey(MON3.indexOf(m[2])+1,+m[1]);return k===today||k===today-1||(+nowL[2]===1&&k<today&&k>=today-75);}; // Mihir, 21 Nov 21:26: keep the open ones and the last two days; the rest go to the data book
+ const open=ent.filter(l=>/st:'open'\},?$/.test(l)||recent(l));
  if(ent.length!==L.filter(l=>l.trim()).length)console.error('note: LEARN has',L.filter(l=>l.trim()).length-ent.length,'lines that are not entries — left out');
  s=s.slice(0,l0)+open.map(l=>l.replace(/,$/,'')).join(',\n')+s.slice(l1);
  fs.writeFileSync(file,s);
