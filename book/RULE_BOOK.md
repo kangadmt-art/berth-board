@@ -67,9 +67,19 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 
 ## 8. Ship's gear
 
-- Found online for that vessel: shown as confirmed (GEARED with her cranes, or GEARLESS).
+- Found online for that vessel: GEARED (with her cranes) or GEARLESS.
 - "(GL)" printed after her name on the DPA list: GEARLESS.
-- Otherwise by size: above 215 m GEARLESS, 215 m or less GEARED, a tug with barge GEARLESS. These are marked "BY RULE". *(Mihir, 20 Nov; the 215 m reading both ways is the board's)*
+- Not confirmed and longer than 215 m: MAY BE GEARLESS.
+- Not confirmed and 215 m or less: NO GEAR DETAILS. No guess is made.
+- A tug with barge is gearless.
+- The label is shown wherever a vessel's name appears. *(Mihir, final, 21 Nov)*
+
+## 8A. What the display board shows
+
+- A vessel that has completed and left goes off the display board; her full record stays in the data book.
+- Signal movements: only the day's own. Older sheets are in the data book.
+- Expected-against-actual checks: only the open ones.
+- Timber: completed vessels stay on show, with the month-wise arrivals and the demurrage rule at the top. *(Mihir, 21 Nov)*
 
 ## 9. Which paper wins when two disagree
 

@@ -32,7 +32,20 @@ const {chromium}=require('/opt/npm-tools/node_modules/playwright');const fs=requ
  // blocks declared inside a function of the board (not visible at the end of the script): read as plain literals from the source
  const lit=name=>{const a=s.indexOf('const '+name+'=[');if(a<0)return [];const e=s.indexOf('\n];',a);try{return Function('return '+s.slice(a+('const '+name+'=').length,e+2))();}catch(err){console.error(name+' not read: '+err.message);return [];}};
  if(!db.meetings)db.meetings=lit('MEETLOG'); if(!db.predictions)db.predictions=lit('PREDLOG'); db.missing='';
- fs.mkdirSync(out,{recursive:true}); fs.writeFileSync(path.join(out,'databook.json'),JSON.stringify(db));
+ // THE DATA BOOK KEEPS EVERYTHING: the display board drops sailed vessels, old signal sheets and closed checks — what is no longer on the board stays here from the earlier build.
+ const file=path.join(out,'databook.json');
+ if(fs.existsSync(file)){const old=JSON.parse(fs.readFileSync(file,'utf8'));
+  const merge=(now,was,key,onKeep)=>{const k=new Set((now||[]).map(key));const kept=(was||[]).filter(x=>!k.has(key(x)));if(onKeep)kept.forEach(onKeep);return (now||[]).concat(kept);};
+  db.calls=merge(db.calls,old.calls,c=>c.vessel+'|'+c.berth+'|'+c.madeFast,c=>{c.status='sailed';c.outIsEstimate=false;});
+  db.moves=merge(db.moves,old.moves,m=>m[0]);
+  // a sheet still on the board may have been cut to today's rows: keep the fuller copy
+  db.moves=db.moves.map(m=>{const o=(old.moves||[]).find(x=>x[0]===m[0]);return (o&&o[1].length>m[1].length)?o:m;});
+  db.learn=merge(db.learn,old.learn,l=>l.d); db.meetings=merge(db.meetings,old.meetings,m=>m.d); db.predictions=merge(db.predictions,old.predictions,x=>x.v+'|'+x.predAt+'|'+x.pb+'|'+x.pt);
+  db.barge.days=merge(db.barge.days,old.barge&&old.barge.days,d=>d.d); db.tunaDays=merge(db.tunaDays,old.tunaDays,d=>d.d); db.circulars=merge(db.circulars,old.circulars,c=>c.ref+'|'+c.t);
+  if(old.liquid&&old.liquid.moves){db.liquid.moves=merge(db.liquid.moves,old.liquid.moves,m=>m[0]).map(m=>{const o=old.liquid.moves.find(x=>x[0]===m[0]);return (o&&o[1].length>m[1].length)?o:m;});}
+  db.dprDays=merge([{d:db.dpr.d,asOf:db.dpr.asOf,tot:db.dpr.tot,rows:db.dpr.rows}],old.dprDays,d=>d.d);
+ } else db.dprDays=[{d:db.dpr.d,asOf:db.dpr.asOf,tot:db.dpr.tot,rows:db.dpr.rows}];
+ fs.mkdirSync(out,{recursive:true}); fs.writeFileSync(file,JSON.stringify(db));
  const st=x=>db.calls.filter(c=>c.status===x).length;
  console.log('databook.json',(JSON.stringify(db).length/1024|0)+' KB · calls',db.calls.length,'(sailed',st('sailed'),'· alongside',st('alongside'),'· coming',st('coming')+') · waiting rows',db.waiting.length,'· moves sheets',db.moves.length,'· barge days',db.barge.days.length,'· meetings',db.meetings.length,'· predictions',db.predictions.length);
 })();
