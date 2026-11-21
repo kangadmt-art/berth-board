@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 21 Nov 22:37 — 6 PDFs from Mihir: 2 new on the register (ship-shore safety checklist 30.03.2026, Middle East waiver 24.03); 2 already there; 'BTT OUT LIST' (container list) not a circular, not filed
 - 21 Nov 22:36 — 5 PDFs from Mihir: 2 new on the register (railway terminal waiver for short-haul container rakes 07.04.2026, OJ-1 dredging withdrawal 06.04); 3 were already there
 - 21 Nov 22:33 — zip and 5 PDFs from Mihir: 4 new on the register (stevedore undertaking / SOP / punitive action matrix 16.04.2026, OJ-4 maintenance 13.04, CJ-2 maintenance 08.04, Middle East container waiver 08.04); the rest were already there
 - 21 Nov 22:32 — 5 PDFs from Mihir: 3 new on the register (Aadhaar for gate pass 21.04.2026, ground-rent waiver for Middle East containers 16.04, OJ-1 dredging withdrawal in abeyance — April, undated); 2 were already there
