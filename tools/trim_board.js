@@ -19,7 +19,14 @@ const js=o=>o===null||o===undefined?'null':typeof o==='number'?String(o):typeof 
  info.V.forEach((v,i)=>{if(v.T<=NOW&&(!lastAt[v.b]||info.V[lastAt[v.b].i].T<v.T))lastAt[v.b]={i};});
  const keepLast=new Set(Object.values(lastAt).map(x=>x.i)); const drop=new Set(); 
  info.V.forEach((v,i)=>{if(v.T<=NOW&&!live.has(v.n)&&!keepLast.has(i))drop.add(idx[i]);});
+ // a SALT vessel that leaves V goes into SALT_DONE first (the Salt tab's completed record)
+ const sd=[];[...drop].forEach(i=>{const l=lines[i];const g=k=>{const m=l.match(new RegExp("\\b"+k+":'((?:[^'\\\\]|\\\\.)*)'"));return m?m[1]:'';};if(!/salt/i.test(g('c'))||/\best:1/.test(l))return;
+  const n=g('n'),bn=n.replace(/ \(.*$/,''),mf=g('f'),qm=l.match(/\bq:([0-9.]+)/);if(s.includes("{n:'"+bn+"',")&&s.slice(s.indexOf('const SALT_DONE=[')).split('\n];')[0].includes("mf:'"+mf+"'"))return;
+  const rp=x=>{const m=s.match(new RegExp("'"+x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+"':'(\\d\\d-\\d\\d \\d\\d:\\d\\d)'"));return m?m[1]:null;};const arr=rp(n)||rp(bn);
+  const agm=s.match(new RegExp("'"+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+"':'([A-Z][^']*)'"));
+  sd.push(" {n:'"+bn+"',q:"+(qm?qm[1]:0)+",ag:'"+(agm?agm[1]:'')+"',b:'"+g('b')+"',pri:'"+g('cat')+"',arr:"+(arr?"'"+arr+"'":'null')+",mf:'"+mf+"',out:'"+g('t')+"'}");});
  s=s.slice(0,a)+lines.filter((l,i)=>!drop.has(i)).join('\n')+s.slice(e);
+ if(sd.length){const x=s.indexOf('const SALT_DONE=['),y=s.indexOf('\n];',x);if(x>0)s=s.slice(0,y)+',\n'+sd.join(',\n')+s.slice(y);console.log('salt record +',sd.length,'— CHECK the agent and arrival of the new line(s) in SALT_DONE');}
  // ---- 2. MV and LIQ.moves — rows of the board's day only
  const cutMoves=(start,endMark,ind)=>{const a=s.indexOf(start); if(a<0)return [0,0]; const a2=a+start.length, e=s.indexOf(endMark,a2); const arr=Function('return ['+s.slice(a2,e)+'\n]')();
   const out=arr.map(([t,rows])=>[t,rows.filter(r=>String(r[5]||'').startsWith(day))]).filter(x=>x[1].length);

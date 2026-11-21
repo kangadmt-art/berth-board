@@ -262,7 +262,7 @@ table{border-collapse:collapse;width:100%}
 /* Timber tab (16 Nov): own sheet. v168 — the list on top: summary pills, then ONE table of the active vessels, then the completed record.
    Phones: every vessel is a 3–4 line summary (td.sm); a tap opens the labelled details. */
 :root{--tmb:#a3c46a}
-.views a[data-view="timber"]{--sc:var(--tmb)}.views a[data-view="priority"]{--sc:#d9b25f}.views a[data-view="barge"]{--sc:#4fd1c5}
+.views a[data-view="timber"]{--sc:var(--tmb)}.views a[data-view="salt"]{--sc:#dfe7f2}.views a[data-view="priority"]{--sc:#d9b25f}.views a[data-view="barge"]{--sc:#4fd1c5}
 .timber{border-color:var(--line)}.timber .sechead h2{color:var(--fg)}.timber .sechead p{max-width:none}
 .tmb th{box-sizing:border-box}
 .tmb .money{font-family:var(--f-disp);font-weight:700;font-size:18px;letter-spacing:.01em;color:var(--fg);display:block;line-height:1.15}
@@ -434,6 +434,7 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <a href="#priority" data-view="priority"><b>Priority chart</b><small>Dry cargo · port's waiting chart · rank / Y / N in each priority</small><span class="vb" id="vb-priority"></span></a>
     <a href="#barge" data-view="barge"><b>Barge</b><small>Midstream · vessels working by barge · daily discharge / loading · commodity-wise</small><span class="vb" id="vb-barge"></span></a>
     <a href="#timber" data-view="timber"><b>Timber</b><small>Log vessels · position · laytime &amp; demurrage · record</small><span class="vb" id="vb-timber"></span></a>
+    <a href="#salt" data-view="salt"><b>Salt</b><small>Salt vessels · arrived · berthed · sailed · days · record</small><span class="vb" id="vb-salt"></span></a>
     <a href="#tuna" data-view="tuna"><b>Tuna</b><small>TT-1 to TT-4 · Adani PPP terminal · status only</small><span class="vb" id="vb-tuna"></span></a>
     <a href="#liquid" data-view="liquid"><b>Liquid</b><small>OJ-1 to OJ-7 · oil jetties · status only</small><span class="vb" id="vb-liquid"></span></a>
   </nav>
@@ -549,6 +550,11 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   <section class="card" aria-labelledby="bgh4"><div class="sechead"><h2 id="bgh4">Vessel operations · commodity-wise</h2><p id="bgvsub"></p></div>
     <div class="scroll"><table class="mst" id="bgves" style="min-width:620px"></table></div></section>
   </div>
+  <div class="view" data-view="salt" id="view-salt">
+  <div class="tsum" id="saltstats" aria-label="Salt vessels — summary" style="grid-template-columns:repeat(4,minmax(0,1fr))"></div>
+  <section class="card"><div class="sechead"><h2>Salt vessels</h2><p id="saltsub"></p></div><div id="saltlist"></div></section>
+  <section class="card"><div class="sechead"><h2>Completed vessels · record</h2><p>Every salt vessel that has loaded and sailed, newest first — kept for good.</p></div><div id="saltdone"></div></section>
+  </div>
   <div class="view" data-view="timber" id="view-timber">
   <div class="tsum" id="tmbstats" aria-label="Timber vessels — summary"></div>
   <section class="card timber" aria-labelledby="th">
@@ -626,7 +632,7 @@ const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-21 11:22');
 const PROG_END=h('11-21 18:00'); // programme 21.11 (meeting of 20 Nov) covers till here — barge windows end here; beyond it no data
 // ---- the boards live on this one page as views (tabs): cargo (dry cargo CJ-1–16, projected), timber (log vessels: position, laytime, record — since 16 Nov), tuna (TT-1–4) and liquid (OJ-1–7), status only.
-const VIEWS={cargo:'Deendayal Port · Kandla · Dry cargo jetty',priority:'Deendayal Port · Kandla · Priority chart',barge:'Deendayal Port · Kandla · Barge work',timber:'Deendayal Port · Kandla · Timber vessels',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
+const VIEWS={cargo:'Deendayal Port · Kandla · Dry cargo jetty',priority:'Deendayal Port · Kandla · Priority chart',barge:'Deendayal Port · Kandla · Barge work',timber:'Deendayal Port · Kandla · Timber vessels',salt:'Deendayal Port · Kandla · Salt vessels',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
 const VIEW_NAME={cargo:'Cargo jetties',priority:'Priority chart',barge:'Barge',timber:'Timber',tuna:'Tuna',liquid:'Liquid'};
 let VIEW='cargo';
 const pageHref=k=>'#'+k; // same page, just another tab
@@ -639,7 +645,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='21 Nov 2026 · 14:30 IST';
+const UPDATED='21 Nov 2026 · 14:36 IST';
 const BOARD_SRC='DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1412,6 +1418,49 @@ const tmbAvg=r=>r.avg==null?'<span style="color:var(--dim)">—</span>':`<span c
 const tmbResult=(tot,final)=>tot==null?'<span style="color:var(--dim)">—</span>':tot>0?`<span class="money dem">${tmbMoney(tot/24*DEM.usd)}</span>demurrage · ${tmbD(tot)}${final?' · final':''}`:`<span class="money des">${DEM.desp?tmbMoney(-tot/24*DEM.desp):tmbD(-tot)+' saved'}</span>despatch${DEM.desp?' · '+tmbD(-tot)+' saved':' · rate not given'}${final?' · final':''}`;
 // The sheet (v168, 16 Nov 01:26 — Mihir: the list must be on top): summary pills, then ONE list of the active vessels with everything in one line each —
 // arrival, berth, work, laytime, demurrage. Phones: each vessel is a 3–4 line summary (td.sm); a tap opens the labelled details.
+// ================= SALT tab (Mihir, 21 Nov 14:31) =================
+// "Salt wale mae sirf aaya, laga aur nikla — total kitne din huve; completed vessel dikhte rahe aur monthly figure bhi." No demurrage here.
+// SALT_DONE = the record of salt vessels that have sailed: n, q (MT), ag, b (berth), pri, arr (reported for the salt call; null = not on record), mf (made fast), out (left the berth).
+// tools/trim_board.js adds a salt vessel here when it takes her out of V.
+const SALT_DONE=[
+ {n:'Agia Fevronia',q:60500,ag:'Gautham Freight',b:'16',pri:'HP',arr:null,mf:'10-28 18:06',out:'10-30 06:00'},
+ {n:'Maritime Harmony',q:74850,ag:'Cross Trade',b:'16',pri:'HP',arr:null,mf:'10-30 13:00',out:'11-01 18:00'},
+ {n:'Unity Melody',q:54705,ag:'Gautham Freight',b:'15A',pri:'HP',arr:'11-03 14:00',mf:'11-05 10:24',out:'11-06 23:05'},
+ {n:'Orion',q:61600,ag:'Cross Trade',b:'16',pri:'24H',arr:'10-27 10:42',mf:'11-05 14:30',out:'11-06 14:30'},
+ {n:'Mettle Star',q:79080,ag:'Cross Trade',b:'15A',pri:'24H',arr:'11-01 06:42',mf:'11-07 11:30',out:'11-08 11:30'},
+ {n:'Star Fighter',q:58000,ag:'Cross Trade',b:'16',pri:'8K',arr:'11-04 22:48',mf:'11-09 15:54',out:'11-12 01:35'},
+ {n:'HN Doris',q:75000,ag:'Cross Trade',b:'16',pri:'HP',arr:'11-14 03:54',mf:'11-17 21:12',out:'11-19 21:20'},
+ {n:'Bristol',q:63200,ag:'True Blue',b:'15A',pri:'HP',arr:'11-16 00:00',mf:'11-17 21:30',out:'11-19 20:40'},
+ {n:'Rome Trader',q:55275,ag:'Mihir & Company',b:'13',pri:'SAAGAR',arr:'11-14 17:00',mf:'11-18 17:00',out:'11-20 23:40'}
+];
+function salt(){const el=document.getElementById('saltlist');if(!el)return;
+  const isS=c=>/salt/i.test(c||''),base=n=>n.replace(/ \(.*$/,''),mine=x=>/mihir/i.test(x.ag||''),MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const f=x=>Math.round(x).toLocaleString('en-IN'),dd=(a,b)=>(a==null||b==null)?null:(b-a)/24,d1=x=>x==null?'—':x.toFixed(1)+' d',tm=x=>x==null?'not on record':fmt(x);
+  const PR={GOV:'Govt',COASTAL:'Coastal',HP:'Higher productivity',SAAGAR:'SAAGAR','24H':'24 hours','8K':'6.5K / 8K',STL:'Steel / Project',BIT:'Bitumen',GEN:'General'};
+  const arrOf=n=>REP[n]?h(REP[n]):(REP[base(n)]?h(REP[base(n)]):null);
+  const done=SALT_DONE.map(r=>({n:r.n,q:r.q,ag:r.ag,b:r.b,pri:r.pri,arr:r.arr?h(r.arr):null,mf:h(r.mf),out:h(r.out)}));
+  V.filter(v=>isS(v.c)&&v.T<=NOW&&!v.est).forEach(v=>{if(!done.some(r=>r.n===base(v.n)&&Math.abs(r.mf-v.F)<1))done.push({n:base(v.n),q:v.q,ag:agOf(v.n),b:v.b,pri:v.cat,arr:arrOf(v.n),mf:v.F,out:v.T});});
+  done.sort((a,z)=>z.out-a.out);
+  const atB=V.filter(v=>isS(v.c)&&v.F<=NOW&&v.T>NOW),com=V.filter(v=>isS(v.c)&&v.F>NOW);
+  const wt=W.filter(w=>isS(w.c)&&w.rep!=null&&w.rep<=NOW),ex=W.filter(w=>isS(w.c)&&(w.rep==null||w.rep>NOW)).sort((a,z)=>(a.rep||1e9)-(z.rep||1e9));
+  const tag=x=>mine(x)?' <span class="ie" style="border:1px solid var(--brass);color:var(--brass)">Mihir &amp; Co</span>':'';
+  const row=(name,ag,top,l1,l2)=>`<div style="padding:10px 2px;border-bottom:1px solid var(--line)${mine({ag})?';border-left:3px solid var(--brass);padding-left:9px':''}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap"><b style="font-size:15px">${name}${tag({ag})}${gearChip(name)}</b><span style="font-size:12px;color:var(--brass)">${top}</span></div><div style="font-size:12.5px;color:var(--muted);margin-top:2px">${l1}</div><div style="font-size:12.5px;margin-top:2px">${l2}</div></div>`;
+  const head=t=>`<div style="font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:14px 0 2px;padding:5px 8px;background:rgba(255,255,255,.04)">${t}</div>`;
+  let H='';
+  if(atB.length){H+=head('Loading at berth');atB.forEach(v=>{const a=arrOf(v.n);H+=row(base(v.n),agOf(v.n),'CJ-'+v.b,`${f(v.q)} MT · ${PR[v.cat]||v.cat} · agent ${agOf(v.n)}`,`arrived <b>${tm(a)}</b> · berthed <b>${fmt(v.F)}</b> · waited ${d1(dd(a,v.F))} · at berth ${d1(dd(v.F,NOW))} so far · out about <b>${fmt(v.T)}</b>`);});}
+  if(com.length){H+=head('Coming alongside');com.forEach(v=>{const a=arrOf(v.n);H+=row(base(v.n),agOf(v.n),'CJ-'+v.b,`${f(v.q)} MT · ${PR[v.cat]||v.cat} · agent ${agOf(v.n)}`,`arrived <b>${tm(a)}</b> · berthing about <b>${fmt(v.F)}</b>`);});}
+  if(wt.length){H+=head('Arrived · waiting for a berth');wt.forEach(w=>{const p=S.find(x=>x.n===w.n&&x.proj);H+=row(base(w.n),agOf(w.n),'waiting '+d1(dd(w.rep,NOW)),`${f(w.q)} MT · agent ${agOf(w.n)}${w.rdy==null?' · readiness not declared':''}`,`arrived <b>${fmt(w.rep)}</b> · board: ${p?'<b>CJ-'+p.b+' about '+fmt(p.F)+'</b>':'beyond the projection'}`);});}
+  if(ex.length){H+=head('Expected · not yet arrived');ex.forEach(w=>{const p=S.find(x=>x.n===w.n&&x.proj);H+=row(base(w.n),agOf(w.n),w.rep!=null?'ETA '+fmt(w.rep).replace(/ \d\d:\d\d$/,''):'ETA not given',`${f(w.q)} MT · agent ${agOf(w.n)}`,p?`board: <b>CJ-${p.b} about ${fmt(p.F)}</b>`:'');});}
+  el.innerHTML=H||'<div class="empty">No salt vessel at berth, waiting or expected.</div>';
+  // month-wise — by the month she sailed
+  const m={};done.forEach(r=>{const d=dt(r.out),k=d.getUTCFullYear()*100+d.getUTCMonth();const o=m[k]=m[k]||{n:0,q:0,st:0,ns:0,lab:MN[d.getUTCMonth()]+' '+d.getUTCFullYear()};o.n++;o.q+=r.q||0;const t=dd(r.mf,r.out);o.st+=t;});
+  const ks=Object.keys(m).sort(),T=ks.reduce((s,k)=>({n:s.n+m[k].n,q:s.q+m[k].q,st:s.st+m[k].st}),{n:0,q:0,st:0});
+  const mt=`<table style="width:100%;margin-top:8px;border-collapse:collapse;font-size:12.5px;text-align:right"><tr style="color:var(--muted)"><th style="text-align:left;font-weight:600">Salt loaded · by month of sailing</th><th style="font-weight:600">Vessels</th><th style="font-weight:600">MT</th><th style="font-weight:600">Avg days at berth</th></tr>${ks.map(k=>`<tr><td style="text-align:left">${m[k].lab}</td><td>${m[k].n}</td><td>${f(m[k].q)}</td><td>${(m[k].st/m[k].n).toFixed(1)}</td></tr>`).join('')}<tr style="border-top:1px solid var(--line);font-weight:700"><td style="text-align:left">On record</td><td>${T.n}</td><td>${f(T.q)}</td><td>${T.n?(T.st/T.n).toFixed(1):'—'}</td></tr></table>`;
+  const sub=document.getElementById('saltsub');if(sub)sub.innerHTML='Arrived, berthed and sailed — and the days each took. No demurrage on this tab. Tonnage is the list quantity.'+mt;
+  document.getElementById('saltdone').innerHTML=done.map(r=>row(r.n,r.ag,'CJ-'+r.b+' · total '+d1(dd(r.arr,r.out)),`${f(r.q)} MT · ${PR[r.pri]||r.pri} · agent ${r.ag}`,`arrived <b>${tm(r.arr)}</b> · berthed <b>${fmt(r.mf)}</b> · sailed <b>${fmt(r.out)}</b><br>waited ${d1(dd(r.arr,r.mf))} · at berth <b>${d1(dd(r.mf,r.out))}</b>`)).join('')||'<div class="empty">None yet.</div>';
+  const tp=(c,v,l)=>`<div class="tp" style="--sc:${c}"><b>${v}</b><span>${l}</span></div>`;
+  document.getElementById('saltstats').innerHTML=tp('var(--ok,#5fbf7a)',atB.length,'at berth')+tp('var(--warn)',wt.length,'waiting')+tp('#7fb2ff',ex.length,'expected')+tp('#dfe7f2',done.length,'completed ↓');
+  const vb=document.getElementById('vb-salt');if(vb)vb.innerHTML=`<b>${atB.length}</b> at berth · <b>${wt.length}</b> waiting · <b>${ex.length}</b> expected`;}
 function timber(){
   const el=document.getElementById('timber'); if(!el)return; const sub=document.getElementById('tsub');
   const T=tmbRows(), tNow=T.tNow; window.__TMB=T;
@@ -3192,7 +3241,7 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();dpr();msWork();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();salt();dpr();msWork();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();qdetail();side();gantt();groups();moves();
   summaries();
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }
