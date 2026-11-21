@@ -1,0 +1,61 @@
+# Process book
+
+What is done with each paper, step by step. The aim: papers go into the data book, the rule book is applied, and the display board shows the result.
+
+## 1. What Mihir does
+
+- Send the papers in the chat as they come: berthing list, DPR, programme, signal sheets, timber desk sheet, circulars. No text is needed.
+- Say in one line when a rule changes or the port does something different.
+- Ask any question. The answer is taken from the data book.
+
+## 2. Daily berthing list (Excel, position 0700)
+
+- At-berth sheet: who is alongside, panels, made fast, commenced, norm, list ETC.
+- Waiting sheet: every waiting vessel with her ranks, readiness and remarks. "B'TODAY" and an X in the rank columns mean she is being berthed.
+- Expected sheet: ETA of vessels not yet arrived.
+- New vessel: add her record, and look up her gear once.
+- A vessel that has left the list has sailed; her exact hour comes from the DPR.
+
+## 3. Daily performance report — DPR (position 0700)
+
+- For each vessel: work in the last 24 hours, total so far, balance, gangs and hooks.
+- Remarks give the actual hours: made fast, commenced, completed, left the berth.
+- Midstream and mooring rows go to the barge record.
+- A vessel that worked only part of the day is marked so; her figure is not a day's rate.
+
+## 4. Movement programme (after the 11:00 meeting)
+
+- Who berths and who sails in the window 18:00 to 18:00.
+- The board's call for that meeting is scored against it: named right, berth right.
+- The call is never rebuilt after the meeting hour.
+
+## 5. Harbour master's signal sheets (photos)
+
+- Each row: pilot, hour, IN / OUT / SHIFT, vessel, from, to.
+- For an IN from OTB the hour is the pilot boarding; she is alongside about two hours later.
+- A sheet can have two pages. An amended sheet replaces the earlier one.
+
+## 6. Timber desk sheet
+
+- CBM, origin, ETA and expected berthing date of every log vessel.
+- Laytime and demurrage are counted on the desk's CBM.
+
+## 7. After every paper
+
+- The record of each vessel in the data book is updated: nothing is deleted; a sailed vessel stays in the record.
+- The rule book is applied to give the next berth and date for every ready vessel.
+- If the result for a Mihir & Company vessel moves, it is said plainly with the reason.
+- Checks are run before anything is published.
+- The display board is published, and the data book is rebuilt from it with one command: `node tools/build_db.js <board> ` then `python3 tools/build_books.py`.
+
+## 8. Asking the data book
+
+- Examples: average waiting of salt vessels; every call at CJ-13 this month; how many days a vessel took against her norm; what was predicted and what happened.
+- The answer is worked out from the data book files, not from memory.
+
+## 9. Where things are kept
+
+- **Data book:** `db/databook.json` in the repository, and the Data book page.
+- **Rule book and process book:** `book/` in the repository, and the same page.
+- **Every paper received:** `data/YYYY-MM-DD/` in the repository.
+- **Display board:** the DPA Berth Board page.

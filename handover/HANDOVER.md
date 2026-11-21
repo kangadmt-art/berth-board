@@ -28,6 +28,16 @@ The board does two jobs:
 
 The artifact also holds DPA circulars (`circ/*.pdf`) and tanker line-ups (`liq/*.pdf`) that the board links to. Publish only `index.html`; never remove the others.
 
+## 2A. The three books (started 21 Nov 13:58 — Mihir: "ek data base, ek rule book, ek process book, ek display board")
+
+Mihir wants the work split so that it is easy to follow and uses less of Claude: a DATA BOOK that keeps every vessel's record for good, a RULE BOOK, a PROCESS BOOK, and a DISPLAY BOARD that shows only what is needed today.
+- **Data book** = `db/databook.json`, built from the board by `node tools/build_db.js <abs board.html>` (calls since 25 Oct, waiting rows with projection, DPR, barge days, Tuna, liquid, timber, moves, meetings, predictions, learn). Rebuild after EVERY board version.
+- **Rule book / process book** = `book/RULE_BOOK.md`, `book/PROCESS_BOOK.md` — simple English. A rule Mihir changes is changed THERE first, then in the board code, then in §7 here.
+- **Books page** = artifact "DPA Data Book", slug `37cacbc7-e233-401f-b546-0f44e02a353c` (https://claude.ai/artifact/7tb8PkB3a7AXeN9QeZp4Gs, private) — `python3 tools/build_books.py /home/claude/work/books.html`, then `publish_files` (index.html) with the last version as base. v1 = `1795249958-03d2`. Mirror: `books.html` in the repo (Pages: …/berth-board/books.html).
+- **Display board** = the DPA Berth Board, unchanged so far. STEP 2 (not done): make it lighter — sailed vessels' long notes, old signal sheets, old LEARN / PREDLOG rows move out of the board into the data book, and the board keeps only what is alongside, waiting, expected and projected. Do it mechanically with a script and `check.js --all`; the projection must come out identical before and after.
+- **Step 3 (not done):** list / DPR parsers that write straight into the data book, so a routine paper needs no hand-written notes.
+- Questions from Mihir about history are answered from `db/databook.json` with a short script, not from memory.
+
 ## 3. Setting up in a new chat
 
 1. Attach the repo with **push** access (`kangadmt-art/berth-board`) and clone it. Work on a copy of `index.html`, e.g. `/home/claude/work/dpa-berth-board.html`.
