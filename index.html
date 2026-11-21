@@ -443,16 +443,11 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
   </nav>
   <div class="view" data-view="cargo" id="view-cargo">
   <div class="secctl" id="secctl"><span>Sections open on tap · detail only when you want it</span><button type="button" class="qb" id="openAll">Open all</button><button type="button" class="qb" id="closeAll">Close all</button></div>
-  <section class="card" data-sec="notices" aria-labelledby="nh">
-    <div class="sechead"><h2 id="nh">DPA circulars &amp; trade notices · library</h2><p>Every circular, trade notice and reference document the board knows — from the DPA website (Mihir, 3 Nov), the KPSAA mail and the DC — with its number, date, status, what it says in one line, what it means for berthing, and the PDF itself. Filter by kind or search; newest first.</p></div>
-    <div class="nbar" id="nbar"></div>
-    <div class="scroll"><table class="mpt ntt" id="notices"></table></div>
-  </section>
-  <section class="card" data-sec="news" aria-labelledby="nwh">
-    <div class="sechead"><h2 id="nwh">DPA news</h2><p>Important news on Deendayal Port and Kandla trade — from the port's site and the trade press (LinkedIn cannot be read by the board). Newest first, with what it means for berthing.</p></div>
-    <div class="scroll"><table class="mpt ntt" id="news"></table></div>
-  </section>
 
+  <section class="card mine" data-sec="mine" aria-labelledby="mh">
+    <div class="sechead"><h2 id="mh">Mihir &amp; Company · our vessels</h2><p>Every vessel in the berthing list with agent Mihir &amp; Company, with where it stands today and when it berths.</p></div>
+    <div id="mine"></div>
+  </section>
   <div class="stats" id="stats" aria-label="Waiting at Kandla"></div>
   <section class="card finder" data-sec="finder" aria-labelledby="fh">
     <div class="sechead"><h2 id="fh">Kab berth milega?</h2><p>Pick any waiting or expected vessel. The board runs today's queue forward under the berthing policy and shows when that vessel's turn is likely to come.</p></div>
@@ -463,17 +458,13 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div class="quick" id="quick"></div>
     <div class="result" id="result"></div>
   </section>
-  <section class="card mine" data-sec="mine" aria-labelledby="mh">
-    <div class="sechead"><h2 id="mh">Mihir &amp; Company · our vessels</h2><p>Every vessel in the berthing list with agent Mihir &amp; Company, with where it stands today and when it berths.</p></div>
-    <div id="mine"></div>
+  <section class="card" data-sec="mpt" aria-labelledby="mp">
+    <div class="sechead"><h2 id="mp">Meeting preview · berth-wise</h2><p id="mpsub">Berth-wise view of the same window (18:00 on the meeting day → 18:00 next day): for each DPA berth expected to free up, who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated.</p></div>
+    <div class="scroll"><table class="mpt" id="mpt"></table></div>
   </section>
   <section class="card" data-sec="spt" aria-labelledby="sp">
     <div class="sechead"><h2 id="sp">Next-day prospects · slot-wise</h2><p id="spsub"></p></div>
     <div class="scroll"><table class="mpt spt" id="spt"></table></div>
-  </section>
-  <section class="card" data-sec="mpt" aria-labelledby="mp">
-    <div class="sechead"><h2 id="mp">Meeting preview · berth-wise</h2><p id="mpsub">Berth-wise view of the same window (18:00 on the meeting day → 18:00 next day): for each DPA berth expected to free up, who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated.</p></div>
-    <div class="scroll"><table class="mpt" id="mpt"></table></div>
   </section>
   <section class="card" data-sec="rules" aria-labelledby="rh">
     <div class="sechead"><h2 id="rh">Routine se hat ke · not sailing on time</h2><p>Only vessels still alongside past their ETC, or whose sailing was postponed, show up here. Vessels finishing on or before ETC are not listed.</p></div>
@@ -540,6 +531,15 @@ footer{color:var(--dim);font-size:11.5px;font-family:var(--f-mono)}
     <div id="score"></div></details>
   </section>
 
+    <section class="card" data-sec="notices" aria-labelledby="nh">
+    <div class="sechead"><h2 id="nh">DPA circulars &amp; trade notices · library</h2><p>Every circular, trade notice and reference document the board knows — from the DPA website (Mihir, 3 Nov), the KPSAA mail and the DC — with its number, date, status, what it says in one line, what it means for berthing, and the PDF itself. Filter by kind or search; newest first.</p></div>
+    <div class="nbar" id="nbar"></div>
+    <div class="scroll"><table class="mpt ntt" id="notices"></table></div>
+  </section>
+  <section class="card" data-sec="news" aria-labelledby="nwh">
+    <div class="sechead"><h2 id="nwh">DPA news</h2><p>Important news on Deendayal Port and Kandla trade — from the port's site and the trade press (LinkedIn cannot be read by the board). Newest first, with what it means for berthing.</p></div>
+    <div class="scroll"><table class="mpt ntt" id="news"></table></div>
+  </section>
   </div><!-- /view cargo -->
 
   <div class="view" data-view="priority" id="view-priority"><div id="pqtab"></div></div>
@@ -653,7 +653,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='21 Nov 2026 · 19:45 IST';
+const UPDATED='21 Nov 2026 · 20:00 IST';
 const BOARD_SRC='programme 22.11 · list 21.11 revised · HM signal 21 Nov amended (disp 1257) · DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -2917,6 +2917,8 @@ function stats(){
    <div class="stat" data-go="tuna" style="--sc:var(--brk)"><div class="v">${ttOcc}<small>/4</small></div><div class="l"><b>Tuna berths occupied</b> (Adani PPP) · ${ttW} waiting · ${ttE} expected</div><div class="last"><a class="plink" href="${pageHref('tuna')}" data-view="tuna">Open the Tuna board →</a> · same page, Tuna tab</div></div>
    <div class="stat" data-go="timber" style="--sc:var(--tmb)"><div class="v">${tqB}<small> at berth</small></div><div class="l"><b>Timber vessels</b> · ${tqW} waiting · ${tqE} expected · demurrage running in port: <b>${tmbMoney(tqS/24*DEM.usd)}</b> so far</div><div class="last"><a class="plink" href="${pageHref('timber')}" data-view="timber">Open the Timber sheet →</a> · position, laytime, completed record</div></div>`;
   document.getElementById('stats').innerHTML=total+`<div class="stat wide" data-k="all" style="--sc:${t0[0]}"><div class="top"><div class="v">${t0[1]}</div><div class="l" style="margin:0">${t0[3]}</div></div><div class="comm">${chips}</div>${t0[5]}</div>`+ieTile+rest.map(([c,v,sm,l,ch,ln,k])=>`<div class="stat" ${k?`data-k="${k}"`:''} style="--sc:${c}"><div class="v">${v}${sm}</div><div class="l">${l}</div>${ch?`<div class="comm">${ch}</div>`:''}${ln||''}</div>`).join('')+extra;
+  {const st=document.getElementById('stats'),all=[...st.children],more=all.filter((e,k)=>![0,1,7,10].includes(k)); // four tiles stay in view (all waiting · dry cargo waiting · berths occupied · timber); the other seven fold under "More figures" (Mihir, 21 Nov 19:00: make it simple)
+   if(more.length&&all.length===11){const d=document.createElement('details');d.className='tdfull';d.style.gridColumn='1/-1';d.innerHTML='<summary>More figures · import / export · bulk · bagged · break bulk · expected · oil jetties · Tuna</summary><div class="stats" style="margin-top:8px"></div>';const box=d.lastChild;more.forEach(e=>box.appendChild(e));st.appendChild(d);}}
   // tab badges: one line of numbers under each board's name
   const vb=(k,html)=>{const b=document.getElementById('vb-'+k);if(b)b.innerHTML=html;};
   vb('cargo',`<b>${wait.length}</b> waiting · <b>${at}</b>/${POOL.length} berths`);
@@ -3088,7 +3090,7 @@ function statusOf(n){
          if(v.F<=NOW) return {k:'at',d:'CJ-'+v.b,sub:'at berth · ETC '+fmt(v.T)+(v.est?' (est)':''),o:v};
          return {k:'today',d:fmt(v.F),sub:'berthing per signal · CJ-'+v.b,o:v}; }
   if(s) return {k:'proj',d:fday(s.F),sub:part(s.F)+' ~'+fmt(s.F,false)+' · CJ-'+s.b+' · '+CL[s.cat]+(s.via?' slot as '+s.via:'')+' (projected)',o:s};
-  if(w&&w.rdy==null){const hs=simulate(n,S0).find(x=>x.n===n);return {k:'na',d:hs?fday(hs.F):'—',sub:'if ready today · readiness N/A'+(w.x?' · '+(w.x.length>150?w.x.slice(0,150).replace(/\s+\S*$/,'')+' …':w.x):''),o:w};}
+  if(w&&w.rdy==null){const hs=simulate(n,S0).find(x=>x.n===n);return {k:'na',d:hs?fday(hs.F):'—',sub:'readiness not declared on the list yet — she is not in the line till then',o:w};}
   if(w) return {k:'far',d:'after '+fday(HZ),sub:'beyond projection',o:w};
   return null;
 }

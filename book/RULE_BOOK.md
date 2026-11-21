@@ -95,6 +95,7 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - **Priority column (Mihir, 21 Nov 18:45):** every Salt and Timber table says under which priority the vessel berthed ("Berthed under"); for a waiting vessel, the priority the board expects her to berth by ("Board: under").
 - **Liquid tab (Mihir, 21 Nov 18:45):** short tables only — jetties, waiting, expected. The long notes stay under "Full notes". Mihir does not follow liquid.
 - **Our vessels card:** one line per reading and per option; the reasoning opens on a tap.
+- **Cargo tab order (Mihir, 21 Nov 19:00 — "simple, understood at once"):** our vessels first; then four tiles (all waiting, dry cargo waiting, berths occupied, timber) with the rest under "More figures"; then the berth finder, meeting preview and next-day prospects; circulars and news last.
 
 ## 9. Which paper wins when two disagree
 
