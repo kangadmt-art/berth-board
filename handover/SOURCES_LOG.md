@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 21 Nov 22:33 — zip and 5 PDFs from Mihir: 4 new on the register (stevedore undertaking / SOP / punitive action matrix 16.04.2026, OJ-4 maintenance 13.04, CJ-2 maintenance 08.04, Middle East container waiver 08.04); the rest were already there
 - 21 Nov 22:32 — 5 PDFs from Mihir: 3 new on the register (Aadhaar for gate pass 21.04.2026, ground-rent waiver for Middle East containers 16.04, OJ-1 dredging withdrawal in abeyance — April, undated); 2 were already there
 - 21 Nov 22:30 — 5 circular PDFs from Mihir: 3 new on the register (stevedoring royalty 07.05.2026, OJ-4 revised schedule 24.04, OJ-1 maintenance 09.05); 2 were already there
 - 21 Nov 22:27 — 6 circular PDFs from Mihir: 3 new on the register (fertiliser storage 06.08.2026, rest areas for dock workers 09.06, railway terminal charges 21.05); 3 were already there
