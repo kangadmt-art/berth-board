@@ -59,3 +59,8 @@ What is done with each paper, step by step. The aim: papers go into the data boo
 - **Rule book and process book:** `book/` in the repository, and the same page.
 - **Every paper received:** `data/YYYY-MM-DD/` in the repository.
 - **Display board:** the DPA Berth Board page.
+
+## Header of the board (from 21 Nov)
+
+- Under the title: "Board owned by @mk", the last-updated time, and one small box per paper — List, Programme, DPR, Signals — with the date the board is updated to.
+- "Sources & tide" holds one sentence naming the day's papers, and the tide. The full log of every paper received is kept in `handover/SOURCES_LOG.md`, newest first; add a line there with every update.
