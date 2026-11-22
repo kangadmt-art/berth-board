@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 23 Nov 02:16 — HM SIGNAL 22 Nov NIGHT sheet ("Amendment & new signal", disp 21:30 / 21:55, Capt Sandeep), image, no text → v262. Sanghi Sundarshan RT OUT 23:00 · Yuan Hang Wei Ye RT OUT 23:30 (CJ-9) · Sand Topic IN o/c, ebb → CJ-9 · PVT Aurora RT OUT 02:30 (OJ-2) → Rasheeda o/c · Bow Fortitude OUT 07:00 (OJ-4) → Al Mahbooba o/c · DCI Dredge XVII IN 07:00 to mooring buoy 2. Projection unchanged. Archived: data/2026-11-22/HM_signal_22-11-2026_night_amendment_disp_2130_2155.jpg
 - 22 Nov 18:48 — NO PAPER. Mihir: review every rule — keep the needed ones, take out the useless and the overridden, the latest is final. Rule book reviewed: 7 rules taken out (section 10), 5 missing berth rules written in; board not changed.
 - 22 Nov 18:38 — NO PAPER. Mihir: work out the one rule from the last ten days of berthings. Record reviewed from the lists of 13–21 Nov + programmes 22 / 23 (31 berthings) → RULE_BOOK §0; tools in tools/backtest/. Board not changed.
 - 22 Nov 18:20 — NO PAPER. Mihir: we are reading it wrong (a salt vessel is never berthed under General) and it has become too complicated — review and make it simple. v261: the meeting section rewritten on his one rule (same priority first, the one after only if needed), names from the list's rank columns; record reviewed (salt: never General; same priority followed on the same berth 36 of 97 times).
