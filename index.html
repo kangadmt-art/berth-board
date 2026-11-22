@@ -444,7 +444,7 @@ header.top.band .asof{position:relative;z-index:1}
 .hscene{top:auto;bottom:24px;right:8px;width:150px;opacity:.3}.qrule{font-size:8.5px;height:20px}
 body[data-view="timber"] .hscene,header.top.band:has(.srcmore[open]) .hscene{display:none}body[data-view="timber"] header.top.band{padding-bottom:42px}}
 @media (max-width:380px){header.top.band{padding:13px 12px 34px}.brandrow{column-gap:9px}.bmark{width:40px;height:40px}header.top.band h1{font-size:31px}header.top.band .eyebrow{letter-spacing:.05em}}
-/* v257 Meeting page (v258: each vessel with her details) — the next meeting berth by berth: strip of the berths, one card per berth that empties (Niklegi / Priority / Chance), a short Continue list */
+/* v257 Meeting section (v261: the simple version — same priority, then the one after) — the next meeting berth by berth: strip of the berths, one card per berth that empties (Niklegi / Priority / Chance), a short Continue list */
 .mbhead{margin-bottom:12px}.mbey{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:#c9a24c;text-transform:uppercase}
 .mbhead h2{font-family:var(--f-disp);font-weight:800;font-size:clamp(30px,4vw,38px);line-height:1;text-transform:uppercase;margin:2px 0 4px}.mbhead h2 span{color:var(--brass)}
 .mbhead p{color:var(--muted);font-size:13.5px;margin:0}
@@ -480,6 +480,8 @@ body[data-view="timber"] .hscene,header.top.band:has(.srcmore[open]) .hscene{dis
 @media (max-width:640px){.mbjump{position:static;display:inline-block;margin:0 0 9px}}
 .mbh{display:inline-block;font-family:var(--f-mono);font-size:11px;color:#8fd6ff;border:1px solid #2f6f9c;border-radius:4px;padding:0 6px;margin-left:7px;vertical-align:1px;white-space:nowrap;font-weight:400}
 .mbrp{color:#c5d0da;font-size:13px;margin-top:4px}.mbrp b{color:var(--fg)}
+.mbr.mbw>label{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:6px}.mbr.mbw>label small{font-family:var(--f-body);letter-spacing:0;text-transform:none;font-size:12.5px;color:var(--muted)}
+.mbv1>em.mbx{color:#f0bd60;border-color:#8a6a2a}
 </style>
 
 <div class="wrap">
@@ -729,7 +731,7 @@ function setView(k,opts){opts=opts||{};if(k==='meeting')k='priority';if(!VIEWS[k
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='22 Nov 2026 · 18:12 IST';
+const UPDATED='22 Nov 2026 · 18:27 IST';
 const BOARD_SRC='HM signal 21 Nov night sheet amended (disp 2230) · HM signal 21 Nov night sheet (disp 1900) · programme 22.11 · list 21.11 revised · HM signal 21 Nov amended (disp 1257) · DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1398,13 +1400,13 @@ function hpbid(){
   if(lg)lg.innerHTML=tbl(['Vessel','Quote','Cargo','MT','Berth','Berthed','Sailed','Days at berth','MT a day over the whole stay','Whole stay vs quote','Agent'],rec.map(r=>{const days=(r.T-r.F)/24, live=r.est, rate=(!r.x&&!live&&days>0)?r.q/days:null;
     return `<tr${/mihir/i.test(r.ag||'')?' class="our"':''}><td class="l"><b>${r.n}</b></td><td><b>${K(r.qt)}</b></td><td class="l">${r.c}</td><td>${nf.format(Math.round(r.q))}</td><td>CJ-${r.b}</td><td class="l">${fmt(r.F)}</td><td class="l">${live?'~'+fmt(r.T)+' est':fmt(r.T)}</td><td>${live?'at berth':days.toFixed(1)}</td><td>${rate?nf.format(Math.round(rate)):(r.x?'shift / top-up':'—')}</td><td>${rate?Math.round(rate/r.qt*100)+' %':'—'}</td><td class="l">${r.ag||'—'}</td></tr>`;}))+'<p style="font-size:12px;color:var(--muted);margin:2px 2px 8px">Whole stay vs quote = cargo ÷ days from made fast to sailing, against the quote. The stay counts the hours before commencement and the wait for the tide after completion, so it reads lower than the working rate — a vessel can meet her quote and still show 80 %.</p>';
 }
-// ---- NEXT MEETING, berth by berth — shown at the top of the Priority chart page (Mihir, 22 Nov 17:56: no separate Meeting page). For every DPA berth: who is on it, CONTINUE or KHALI,
-// which priority operates there and who has a chance — each vessel with her details (cargo, quantity, agent, ready since, length, list ranks).
-// The chance names are the engine's own pick and its next in line (so berth fit, draught and seniority are already counted); a berth HP vessels
-// can use shows the bid pool first. A berth the engine gives to nobody in this window is never shown as staying vacant (Mihir, 22 Nov 17:28) and
-// never under a made-up priority (Mihir, 17:48: "port convenience" is not a priority): the count is run from the top of the order — the first line
-// with a vacant place and a ready vessel that can use the berth is the priority, its vessels are the chance, and the shift that would let that
-// line's senior vessel in is shown beside it.
+// ---- NEXT MEETING, berth by berth — at the top of the Priority chart page. SIMPLE VERSION (Mihir, 22 Nov 18:20: "bahut complicated kar diya, simple bana").
+// It follows his rule of 18:09 and nothing else:
+//   1. Every berthed vessel holds a priority — the one the berthing list prints for her.
+//   2. When she leaves, the next vessel of THAT priority comes ("24 ke badle 24").
+//   3. If that priority has no vessel, the one after it in the order gets it.
+// One more line is shown only when it applies: a HIGHER priority with a place vacant and a vessel waiting for a berth that suits her.
+// The names come straight from the list's rank columns. The board's own opinion on whether the berth suits a vessel is only a small tag on her name.
 let HPB_CAND=[]; // filled by hpbid(): every HP bidder with the meeting she bids at
 const MB_PR={GOV:'Govt',COASTAL:'Coastal',HP:'HP · bid',SAAGAR:'SAAGAR','24H':'24 hrs','8K':'8K',STL:'Steel / Project',BIT:'Bitumen',GEN:'General'};
 const MB_HOLD=Object.assign({},MB_PR,{HP:'HP'});
@@ -1412,86 +1414,56 @@ const MB_RK={GOV:'GOV',COASTAL:'CSTL',HP:'HP',SAAGAR:'SGR','24H':'24H','8K':'8K'
 function meetBoard(){
   const el=document.getElementById('mtgb'); if(!el)return;
   const M=NXM, WE=M-11+24+18, base=n=>n.replace(/ \(.*$/,''), ex=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-  const fa=x=>x.freeAt!=null?x.freeAt:x.prevAt, dd=x=>{const d=dt(x);return d.getUTCDate()+' '+MON[d.getUTCMonth()];};
+  const dd=x=>{const d=dt(x);return d.getUTCDate()+' '+MON[d.getUTCMonth()];};
   const lies=(v,B)=>v.b===B.id||(v.p&&Math.min(v.p[1],B.p[1])-Math.max(v.p[0],B.p[0])>2.5); // a vessel lying across into the berth blocks it too (Flag Marina, 254 m, over CJ-7 and CJ-8)
   const ready=w=>w.rdy!=null&&w.rdy<=M+0.01, canUse=(w,b)=>{try{return allowedBerths(w).includes(b);}catch(e){return false;}};
-  const inWin=x=>x.proj&&!x.shifted&&x.prevAt!=null&&fa(x)<=WE+0.01, firmIn=x=>inWin(x)&&!x.softWait&&x.prevAt<WE-0.01; // firm = her place is open inside this meeting's window
-  const placed={};S.filter(firmIn).forEach(x=>{placed[x.n]=String(x.b);});
-  const ORD=CATS.map(c=>c.k), below=L=>ORD.indexOf(L)>ORD.indexOf('HP');
-  const eff=v=>Math.max(v.T,typeof v.overrun==='number'?v.overrun:0); // a vessel whose work will run past her list ETC is not counted as leaving on it (Parvraj, 22 Nov: 36 h of cargo beyond the ETC)
-  const lineOf=x=>x.slot||x.cat;
-  const occN=L=>V.filter(v=>v.cat!=='SPACE'&&v.T>NOW&&eff(v)>WE&&lineOf(v)===L).length+S.filter(x=>firmIn(x)&&lineOf(x)===L).length; // places of a line held through this window
-  const holdAt=(L,t)=>V.filter(v=>v.cat!=='SPACE'&&lineOf(v)===L&&v.F<=t+0.01&&eff(v)>t+0.01&&!(L==='GOV'&&v.via)&&!(L==='HP'&&(v.cat==='GEN'||v.cat==='STL'))); // the vessels holding a line's places at that hour
-  // the count from the top for one berth: the first line with a vacant place and a ready vessel the berth suits.
-  // mode 'win' — places counted over the whole window (kept places + the engine's firm picks); mode 'at' — places as they stand at hour t
-  const count=(B,t,from,mode,skipN)=>{const run=slotRun(B.id,t+0.1)*RUN_TOL;
-    const taken=w=>mode==='win'?!!placed[w.n]:S.some(x=>firmIn(x)&&x.n===w.n&&String(x.b)!==B.id&&x.F<t+2.01);
-    const ok=w=>ready(w)&&!taken(w)&&w.n!==skipN, fits=w=>ok(w)&&canUse(w,B.id)&&(w.loa||0)<=run;
-    for(let i=from;i<CATS.length;i++){const C=CATS[i];if(C.k==='HP')continue;
-      const held=mode==='win'?occN(C.k):holdAt(C.k,t).length+S.filter(x=>firmIn(x)&&lineOf(x)===C.k&&x.F<t+2.01&&x.n!==skipN).length;
-      if(held>=C.max)continue;
-      const line=W.filter(w=>ok(w)&&w.rk&&w.rk[C.k]!=null&&w.rk[C.k]<98).sort((a,z)=>a.rk[C.k]-z.rk[C.k]), c=line.filter(fits);
-      if(!c.length)continue;
-      return {pr:C.k,vac:C.max-held,ch:c.slice(0,3).map(w=>w.n),sen:(line.find(w=>w.rk[C.k]<c[0].rk[C.k]&&!fits(w))||{}).n||''};}
-    return {pr:'',vac:0,ch:W.filter(fits).sort((a,z)=>((((a.rk||{}).GEN)||99)-(((z.rk||{}).GEN)||99))||(a.rdy-z.rdy)).slice(0,3).map(w=>w.n),sen:''};};
+  const ORD=CATS.map(c=>c.k), lineOf=x=>x.slot||x.cat;
+  const eff=v=>Math.max(v.T,typeof v.overrun==='number'?v.overrun:0); // a vessel whose work will run past her list ETC is not counted as leaving on it
+  const holdAt=(L,t)=>V.filter(v=>v.cat!=='SPACE'&&lineOf(v)===L&&v.F<=t+0.01&&eff(v)>t+0.01&&!(L==='GOV'&&v.via)&&!(L==='HP'&&(v.cat==='GEN'||v.cat==='STL'))); // who holds a line's places at that hour
   const rows=BERTHS.filter(B=>!B.ppp&&!B.mnt&&!B.kict).map(B=>{
     const r={b:B.id}, occ=V.filter(v=>v.cat!=='SPACE'&&v.T>NOW&&lies(v,B)).sort((a,z)=>eff(a)-eff(z)), last=occ[occ.length-1]||null;
     if(!last){r.run=Math.round(slotRun(B.id,NOW)*RUN_TOL);if(!W.some(w=>ready(w)&&canUse(w,B.id)&&(w.loa||0)<=r.run)){r.st='S';return r;}r.st='K';r.t=NOW;r.now=1;}
     else{r.v=last;r.t=(eff(last)<PROG_END&&!PROG_SAIL.has(last.n))?PROG_END:eff(last);r.over=typeof last.overrun==='number'&&last.overrun>last.T; // a sailing the present programme does not print falls to the next window
-      r.st=r.t<=WE+0.01?'K':'C';r.coming=last.F>NOW;r.est=!!last.est||!!last.dpr;if(r.st==='C')return r;}
-    const pk=S.filter(x=>inWin(x)&&String(x.b)===B.id).sort((a,z)=>a.F-z.F)[0]||null;
-    if(pk&&!r.now&&fa(pk)>r.t&&fa(pk)<=WE)r.t=fa(pk);
-    if(pk&&firmIn(pk)){r.pr=lineOf(pk);r.via=(pk.via||'').replace(/ \(Sr No 7\)/,'');r.ch=[pk.n].concat(pk.alt&&pk.alt.n&&pk.alt.n!==pk.n?[pk.alt.n]:[]);
-      // Is her line's place vacant when this berth frees? If the line is still full then, the pick rests on another vessel of that line sailing later in
-      // the same window (regulation as Mihir gave it on 1 / 7 Nov: such a place is allotted for the window). Say so, and show the line that takes the berth otherwise.
-      const L=r.pr, CC=CATS.find(c=>c.k===L), hold=holdAt(L,r.t).filter(v=>v!==r.v), early=S.filter(x=>x!==pk&&firmIn(x)&&lineOf(x)===L&&x.F<pk.F-0.01).length;
-      if(CC&&L!=='HP'&&hold.length+early>=CC.max){const dep=hold.filter(v=>eff(v)<=WE+0.01).sort((a,z)=>eff(a)-eff(z))[0];
-        if(dep){r.cond={n:base(dep.n),b:dep.b,t:eff(dep),est:!!dep.est||!!dep.dpr,max:CC.max};const al=count(B,r.t,ORD.indexOf(L)+1,'at',pk.n);if(al.pr)r.alt=al;}}}
-    else{const c=count(B,r.t,0,'win',null);r.pr=c.pr;r.vac=c.vac;r.ch=c.ch;r.sen=c.sen; // the engine gives the berth to nobody inside the window → the count from the top decides the line
-      r.sh=V.filter(v=>v.F<=NOW&&v.T>WE&&/\blogs?\b/i.test(v.c)&&(BERTHS.find(x=>x.id===v.b)||{}).clean&&canUse({n:v.n,c:v.c,q:v.q,u:v.u,loa:v.loa,dr:v.dr||0,g:v.g,rk:{},x:''},B.id)).map(v=>({n:base(v.n),b:v.b}));
-      if(r.sen){const sw=W.find(w=>w.n===r.sen);if(!(sw&&r.sh.some(x=>canUse(sw,x.b))))r.sen='';}}
+      r.st=r.t<=WE+0.01?'K':'C';r.est=!!last.est||!!last.dpr;if(r.st==='C')return r;}
+    const run=slotRun(B.id,r.t+0.1)*RUN_TOL, suits=w=>canUse(w,B.id)&&(w.loa||0)<=run;
     const pool=HPB_CAND.filter(c=>c.st===0&&c.mt===M&&c.al.includes(B.id)).sort((a,z)=>((a.rank||99)-(z.rank||99))||((a.w.rdy||1e9)-(z.w.rdy||1e9)));
-    if(pool.length&&(r.pr==='HP'||!r.pr||below(r.pr))){const hp=pool.filter(c=>r.pr==='HP'||!pk||!firmIn(pk)||c.w.n!==pk.n);if(hp.length)r.hp=hp;}
-    return r;});
-  // "24 ke badle 24" (Mihir, 22 Nov 18:09): the place a leaving vessel frees goes to the next vessel of her own line — at this berth if it suits her, else at another
-  ORD.forEach(L=>{const lv=rows.filter(r=>r.st==='K'&&r.v&&r.v.b===r.b&&lineOf(r.v)===L).sort((a,z)=>a.t-z.t), pk=S.filter(x=>firmIn(x)&&lineOf(x)===L).sort((a,z)=>a.F-z.F);lv.forEach((r,i)=>{if(pk[i])r.succ=pk[i];});});
-  const holdTxt=v=>{const X=lineOf(v);return (MB_HOLD[X]||X)+(v.slot&&v.cat!==v.slot?' ki jagah mein · '+(MB_HOLD[v.cat]||v.cat)+' vessel':/30k\/25k/i.test(v.via||'')?' · 30K quote':/project/i.test(v.via||'')?' · project':'');};
-  const repl=r=>{const v=r.v;if(!v)return '';const X=lineOf(v), own=rows.find(q=>q.v===v&&q.b===v.b)||r, sc=own.succ;
-    if(X==='HP')return 'HP ki jagah: bid se';
-    if(sc)return String(sc.b)===r.b?'':`${MB_HOLD[X]||X} ki jagah: <b>${ex(base(sc.n))}</b> ko, CJ-${sc.b} par`;
-    return `${MB_HOLD[X]||X} ki jagah: is meeting mein kisi ko nahi`;};
-  // the other side of a conditional pick: if she does not get that berth, she comes in behind the vessel of her own line — at THAT vessel's berth
-  rows.forEach(r=>{if(!r.cond)return;const q=rows.find(x=>x.st==='K'&&x.v&&base(x.v.n)===r.cond.n&&x.b===r.cond.b);if(q&&q!==r)q.back={pr:r.pr,ch:r.ch.slice(),from:r.b};});
+    const queue=L=>L==='HP'?pool.map(c=>c.w):W.filter(w=>ready(w)&&w.rk&&w.rk[L]!=null&&w.rk[L]<98).sort((a,z)=>a.rk[L]-z.rk[L]);
+    const X=r.v?lineOf(r.v):null, ix=X?ORD.indexOf(X):-1;
+    r.up=[];r.same=null;r.next=null;
+    ORD.forEach((L,i)=>{if(ix>=0&&i>=ix)return;const C=CATS[i];                       // a higher priority: a place vacant AND a vessel this berth suits
+      if(L!=='HP'&&holdAt(L,r.t).length>=C.max)return;const c=queue(L).filter(suits);if(c.length&&r.up.length<2)r.up.push({L,ws:c.slice(0,2)});});
+    if(ix>=0){r.same={L:X,ws:queue(X).slice(0,X==='HP'?6:3)};                                       // the same priority, in list order — whether or not the board thinks the berth suits
+      if(!r.same.ws.some(suits))for(let i=ix+1;i<ORD.length;i++){const c=queue(ORD[i]).filter(w=>suits(w)&&!r.same.ws.includes(w));if(c.length){r.next={L:ORD[i],ws:c.slice(0,2)};break;}}}  // the one after it — only when the same priority has no vessel this berth suits
+    r.sv=suits;return r;});
   const K=rows.filter(r=>r.st==='K'), C=rows.filter(r=>r.st==='C'), Sm=rows.filter(r=>r.st==='S');
   const isEta=n=>(typeof ETA!=='undefined')&&!!ETA[n], ag=n=>agOf(n)!=='—'?agOf(n):(agOf(base(n))!=='—'?agOf(base(n)):'');
   const rkTxt=w=>ORD.filter(k=>w.rk&&w.rk[k]!=null).map(k=>MB_RK[k]+(w.govAuto&&k==='GOV'?'':' '+(w.rk[k]>=98?'Y':w.rk[k]))).join(' · ');
   const wdet=w=>[ex(w.c),nf.format(w.q)+' '+ex(w.u),ag(w.n)?'agent '+ex(ag(w.n)):'',w.rdy==null?'':isEta(w.n)?'ETA '+dd(w.rdy)+' · abhi pahunchi nahi':'ready '+dd(w.rdy)+' · '+Math.max(0,Math.floor((M-w.rdy)/24))+' din se',w.loa?Math.round(w.loa)+' m':'',w.dr?w.dr+' m draft':''].filter(Boolean).join(' · ');
   const vdet=v=>{const F0=Math.min(...V.filter(x=>base(x.n)===base(v.n)).map(x=>x.F)), d=DPR.rows.find(x=>base(x.n)===base(v.n)&&/^CJ/.test(x.loc||''));
     return [ex(v.c),nf.format(v.q)+' '+ex(v.u),ag(v.n)?'agent '+ex(ag(v.n)):'',(F0<=NOW?'lagi ':'aayegi ')+fmt(F0),d&&d.bal>0?'baaki '+nf.format(d.bal)+' '+ex(v.u)+' (DPR '+DPR.d.slice(0,5)+')':''].filter(Boolean).join(' · ');};
-  const vrow=(n,i,x)=>{const w=W.find(y=>y.n===n)||{n,c:'',q:0,u:'',rk:{}};return `<div class="mbv${isMine(n)?' me':''}"><div class="mbv1">${i!=null?`<b>${i+1}</b>`:''}<span>${ex(base(n))}</span>${x&&x.two?'<em>2 berth chahiye</em>':''}${isEta(n)?'<em>ETA</em>':''}${isMine(n)?'<em class="mbm">M&amp;Co</em>':''}<i>${rkTxt(w)}</i></div><div class="mbv2">${wdet(w)}</div></div>`;};
-  const prl=r=>MB_PR[r.pr]||r.pr;
+  const holdTxt=v=>{const X=lineOf(v);return (MB_HOLD[X]||X)+(v.slot&&v.cat!==v.slot?' ki jagah mein · '+(MB_HOLD[v.cat]||v.cat)+' vessel':/30k\/25k/i.test(v.via||'')?' · 30K quote':/project/i.test(v.via||'')?' · project':'');};
+  const vrow=(w,i,r,nonum)=>{const hc=HPB_CAND.find(c=>c.w===w);return `<div class="mbv${isMine(w.n)?' me':''}"><div class="mbv1">${nonum?'':`<b>${i+1}</b>`}<span>${ex(base(w.n))}</span>${hc&&hc.two?'<em>2 berth chahiye</em>':''}${isEta(w.n)?'<em>ETA</em>':''}${isMine(w.n)?'<em class="mbm">M&amp;Co</em>':''}${r&&r.sv&&!r.sv(w)?'<em class="mbx">board: yeh berth suit nahi</em>':''}<i>${rkTxt(w)}</i></div><div class="mbv2">${wdet(w)}</div></div>`;};
+  const grp=(lab,g,r,note)=>`<div class="mbr mbw"><label>${lab} <span class="mbp">${MB_PR[g.L]||g.L}</span>${note?` <small>${note}</small>`:''}</label><div>${g.ws.length?g.ws.map((w,i)=>vrow(w,i,r,g.L==='HP')).join(''):'<span class="mbno">is priority mein abhi koi ready vessel nahi</span>'}</div></div>`;
   const card=r=>{const v=r.v, across=v&&v.b!==r.b;
-    const out=r.now?'<span class="mbno">Abhi khali hai</span>':`<span class="mbo">${ex(base(v.n))}</span><span class="mbh">${holdTxt(v)}</span>${across?` <small>· CJ-${v.b} wali vessel, dono berth par</small>`:''}<div class="mbv2">${vdet(v)}</div>${repl(r)?`<div class="mbrp">${repl(r)}</div>`:''}`;
+    const out=r.now?'<span class="mbno">Abhi khali hai</span>':`<span class="mbo">${ex(base(v.n))}</span><span class="mbh">${holdTxt(v)}</span>${across?` <small>· CJ-${v.b} wali vessel, dono berth par</small>`:''}<div class="mbv2">${vdet(v)}</div>`;
     let h=`<div class="mbc"><div class="mbt"><span class="mbn">CJ-${r.b}</span><span class="mbk">KHALI · ${r.now?'abhi':(r.est?'~':'')+fmt(r.t)}</span></div><div class="mbr"><label>Niklegi</label><div>${out}</div></div>`;
-    const pri=r.pr?`<span class="mbp">${prl(r)}</span>${r.via?` <small>· ${ex(r.via)}</small>`:''}${r.vac?` <small>· ${r.vac} jagah khali</small>`:''}${r.v&&r.v.b===r.b&&r.pr===lineOf(r.v)&&r.pr!=='HP'?` <small>· ${MB_HOLD[r.pr]} ke badle ${MB_HOLD[r.pr]}</small>`:''}${r.cond?`<div class="mbcd">Tabhi, agar <b>${ex(r.cond.n)}</b> (CJ-${r.cond.b}) ${r.cond.est?'~':''}${fmt(r.cond.t)} tak nikal jaye · ${prl(r)} ki ${r.cond.max===1?'ek hi jagah hai':r.cond.max+' jagah hain'}, abhi bhari</div>`:''}`:'<span class="mbno">ginti mein koi line khali nahi · jo lag sakti hain:</span>';
-    if(r.hp){h+=`<div class="mbr"><label>Priority</label><div><span class="mbp">HP · bid</span></div></div><div class="mbr mbw"><label>Chance · bid mein</label><div>${r.hp.map(c=>vrow(c.w.n,null,c)).join('')}</div></div>`;
-      if(r.pr!=='HP'&&r.ch.length)h+=`<div class="mbr"><label>Bid na ho</label><div>${pri}</div></div><div class="mbr mbw"><div>${r.ch.map((n,i)=>vrow(n,i)).join('')}</div></div>`;}
-    else h+=`<div class="mbr"><label>Priority</label><div>${pri}</div></div><div class="mbr mbw"><label>Chance</label><div>${r.ch.length?r.ch.map((n,i)=>vrow(n,i)).join(''):'<span class="mbno">abhi koi naam nahi</span>'}</div></div>`;
-    if(r.alt)h+=`<div class="mbr"><label>Nahi to</label><div><span class="mbp">${MB_PR[r.alt.pr]||r.alt.pr}</span> <small>· ${r.alt.vac} jagah khali</small></div></div><div class="mbr mbw"><div>${r.alt.ch.map((n,i)=>vrow(n,i)).join('')}</div></div>`;
-    if(r.back)h+=`<div class="mbr"><label>Ya</label><div><span class="mbp">${MB_PR[r.back.pr]||r.back.pr}</span> <small>· agar ${ex(base(r.back.ch[0]))} ko CJ-${r.back.from} na mile, to woh apni line ki vessel ke peeche yahin</small></div></div><div class="mbr mbw"><div>${r.back.ch.slice(0,1).map((n,i)=>vrow(n,i)).join('')}</div></div>`;
-    if(r.sh&&r.sh.length)h+=`<div class="mbr mbw"><label>Shifting se</label><div><small class="mbs">${r.sen?`${prl(r)} ki senior <b>${ex(base(r.sen))}</b> is berth par nahi lag sakti. `:''}${r.sh.map(x=>ex(x.n)).join(' ya ')} (logs) yahan shift ho, to ${r.sh.length>1?'unki':'uski'} clean berth ${r.sen?ex(base(r.sen))+' ko':'doosri vessel ko'}.</small></div></div>`;
+    if(r.same)h+=grp('Usi priority ki agli',r.same,r,r.same.L==='HP'?'· jo bid mein hain':'');
+    r.up.forEach(g=>{h+=grp(r.same?'Upar ki priority':'Lag sakti hai',g,r,r.same?'· jagah khali, berth ke wait mein':'');});
+    if(r.next)h+=grp('Uske baad',r.next,r,r.next.L==='HP'?'· jo bid mein hain':'');
+    if(!r.same&&!r.up.length)h+='<div class="mbr mbw"><div class="mbno">abhi koi naam nahi</div></div>';
     return h+'</div>';};
   const crow=r=>`<tr><td>CJ-${r.b}</td><td><b>${ex(base(r.v.n))}</b><span class="mbh">${holdTxt(r.v)}</span>${isMine(r.v.n)?' <small class="mbm">M&amp;Co</small>':''}${r.over?` <small>· list ETC ${fmt(r.v.T)}, par kaam baaki</small>`:''}<div class="mbv2">${vdet(r.v)}</div></td><td>~${dd(r.t)}</td></tr>`;
   const srow=r=>`<tr><td>CJ-${r.b}</td><td class="mbno">Jagah chhoti (~${r.run} m) · koi vessel fit nahi</td><td></td></tr>`;
   const hh=document.getElementById('mbh'), hs=document.getElementById('mbsub');
   if(hh)hh.innerHTML=`${fday(M)} <span>· 11:00</span>`;
-  if(hs)hs.innerHTML=(PEND?'<b style="color:var(--warn)">Meeting ho chuki</b> · programme ka intezaar · ':'')+`Kaunsi berth khali hogi, aur kisko mil sakti hai · ${fday(WE)} 18:00 tak ki berths`;
+  if(hs)hs.innerHTML=(PEND?'<b style="color:var(--warn)">Meeting ho chuki</b> · programme ka intezaar · ':'')+`Jo vessel nikli, uski priority ki agli vessel aati hai · us priority mein koi na ho to uske baad wali · ${fday(WE)} 18:00 tak ki berths`;
   el.innerHTML=`<div class="mbstrip">${rows.map(r=>(r.b==='13'?'<u></u>':'')+`<i class="${r.st==='K'?'k':r.st==='S'?'s':''}">${r.b}</i>`).join('')}</div>`
     +`<div class="mbleg"><span><b style="background:#e0a23a"></b>Khali hogi · ${K.length}</span><span><b style="background:#22303d"></b>Continue · ${C.length}</span>${Sm.length?`<span><b style="background:repeating-linear-gradient(135deg,#1b242d 0 3px,#3a4856 3px 6px)"></b>Chhoti jagah · ${Sm.length}</span>`:''}</div>`
     +(K.length?`<div class="mbgrid">${K.map(card).join('')}</div>`:'<p class="mbno">Is meeting ki window mein koi berth khali nahi ho rahi.</p>')
     +((C.length||Sm.length)?`<div class="mbcont"><h3>Continue · khali nahi hongi</h3><table>${C.map(crow).join('')}${Sm.map(srow).join('')}</table></div>`:'')
-    +`<p class="mbfoot">Chance mein naam us line ki seniority ke order mein · HP mein bid hoti hai, order nahi · daayin taraf list ke rank (SGR = SAAGAR, GEN = General, Y = rank nahi chhapa)<br>Yeh board ka andaza hai · port ka programme aane par milaya jayega</p>`;
-  window.__MEETB={meet:fday(M)+' 11:00',end:fmt(WE),at:fmt(NOW),rows:rows.map(r=>({b:r.b,st:r.st,out:r.v?base(r.v.n):'',t:r.t!=null?fmt(r.t):'',pr:r.pr||'',via:r.via||'',ch:(r.ch||[]).map(base),hp:(r.hp||[]).map(c=>base(c.w.n)),sh:(r.sh||[]).map(x=>x.n),hold:r.v?lineOf(r.v):'',succ:r.succ?base(r.succ.n)+' → CJ-'+r.succ.b:'',sen:r.sen?base(r.sen):'',cond:r.cond?r.cond.n+' out by '+fmt(r.cond.t):'',alt:r.alt?{pr:r.alt.pr,ch:r.alt.ch.map(base)}:null,back:r.back?{pr:r.back.pr,ch:r.back.ch.map(base)}:null}))};
+    +`<p class="mbfoot">Naam list ke rank ke order mein (daayin taraf rank: SGR = SAAGAR, GEN = General, Y = rank nahi chhapa) · HP mein bid hoti hai, order nahi<br>Yeh board ka andaza hai · port ka programme aane par milaya jayega</p>`;
+  const nm=g=>g?{pr:g.L,ch:g.ws.map(w=>base(w.n))}:null;
+  window.__MEETB={meet:fday(M)+' 11:00',end:fmt(WE),at:fmt(NOW),rows:rows.map(r=>({b:r.b,st:r.st,out:r.v?base(r.v.n):'',hold:r.v?lineOf(r.v):'',t:r.t!=null?fmt(r.t):'',same:nm(r.same),up:(r.up||[]).map(nm),next:nm(r.next)}))};
 }
 function preview(){
   // The 11:00 berthing meeting programmes movements up to 18:00 of the next day. Preview covers the NEXT meeting's window:

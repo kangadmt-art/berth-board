@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 22 Nov 18:20 — NO PAPER. Mihir: we are reading it wrong (a salt vessel is never berthed under General) and it has become too complicated — review and make it simple. v261: the meeting section rewritten on his one rule (same priority first, the one after only if needed), names from the list's rank columns; record reviewed (salt: never General; same priority followed on the same berth 36 of 97 times).
 - 22 Nov 18:09 — NO PAPER. Mihir withdrew his rule of 1 / 7 Nov (a place given out again inside the window while its vessel is alongside): "24 ke badle 24; koi 24 nahi to uske baad wale ko". v260: rule switched off in the projection (WINDOW_ALLOT=false) → Blue Shark CJ-15A, Manta Sena CJ-1, AG Varvara CJ-5 25 Nov, CD Glory CJ-13 26 Nov 07:25; cards show the priority each berthed vessel holds.
 - 22 Nov 17:56 — NO PAPER. Mihir: CJ-15A will not go under 8K — look again; and no separate Meeting page, put it all in the Priority chart page. v259: section moved to the top of the Priority chart page, Meeting tab removed; the 8K pick at CJ-15A now carries its condition (Crystal O must sail inside the window) and the General alternative.
 - 22 Nov 17:48 — NO PAPER. Mihir: "port convenience" is not a priority — what is it?; and show every vessel's details on the Meeting page. v258: the priority now comes from the count from the top (CJ-5 → General), every vessel shows cargo, quantity, agent, ready since, length, draught, list ranks.
