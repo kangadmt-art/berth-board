@@ -444,6 +444,31 @@ header.top.band .asof{position:relative;z-index:1}
 .hscene{top:auto;bottom:24px;right:8px;width:150px;opacity:.3}.qrule{font-size:8.5px;height:20px}
 body[data-view="timber"] .hscene,header.top.band:has(.srcmore[open]) .hscene{display:none}body[data-view="timber"] header.top.band{padding-bottom:42px}}
 @media (max-width:380px){header.top.band{padding:13px 12px 34px}.brandrow{column-gap:9px}.bmark{width:40px;height:40px}header.top.band h1{font-size:31px}header.top.band .eyebrow{letter-spacing:.05em}}
+/* v257 Meeting page — the next meeting berth by berth: strip of the berths, one card per berth that empties (Niklegi / Priority / Chance), a short Continue list */
+.views a[data-view="meeting"]{--sc:#e0a23a}
+.mbhead{margin-bottom:12px}.mbey{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:#c9a24c;text-transform:uppercase}
+.mbhead h2{font-family:var(--f-disp);font-weight:800;font-size:clamp(30px,4vw,38px);line-height:1;text-transform:uppercase;margin:2px 0 4px}.mbhead h2 span{color:var(--brass)}
+.mbhead p{color:var(--muted);font-size:13.5px;margin:0}
+.mbstrip{display:flex;gap:2px;margin:0 0 6px;max-width:560px}.mbstrip i{flex:1 1 0;font-style:normal;text-align:center;font-family:var(--f-mono);font-size:10.5px;padding:7px 0;border-radius:4px;background:#22303d;color:#8fa1b3}
+.mbstrip i.k{background:#e0a23a;color:#17100a;font-weight:600}.mbstrip i.s{background:repeating-linear-gradient(135deg,#1b242d 0 4px,#232e39 4px 8px);color:var(--dim)}.mbstrip u{flex:0 0 8px}
+.mbleg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);margin-bottom:14px}.mbleg b{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.mbgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:9px;align-items:start}
+.mbc{background:var(--panel2);border:1px solid var(--line);border-left:5px solid #e0a23a;border-radius:10px;padding:10px 12px 11px}
+.mbt{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:7px}
+.mbn{font-family:var(--f-disp);font-weight:800;font-size:27px;line-height:1}
+.mbk{font-family:var(--f-mono);font-size:12px;background:rgba(224,162,58,.14);border:1px solid #e0a23a;color:#f0bd60;border-radius:20px;padding:3px 10px;white-space:nowrap}
+.mbr{display:grid;grid-template-columns:74px 1fr;gap:4px 8px;align-items:baseline;margin-top:5px}
+.mbr label{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;color:#7d8c9b;text-transform:uppercase}
+.mbr>div{font-size:15.5px;min-width:0}.mbr small{color:var(--muted);font-size:13px}.mbr small.mbs{font-size:14px;color:#c5d0da}
+.mbp{display:inline-block;background:#12314a;border:1px solid #2f6f9c;color:#8fd6ff;border-radius:5px;padding:1px 8px;font-weight:600;font-size:14px;white-space:nowrap}
+.mbch{display:flex;flex-wrap:wrap;gap:5px 6px;align-items:center}.mbch span{background:#1f2a35;border:1px solid var(--line2);border-radius:6px;padding:2px 8px;font-weight:600;font-size:14.5px;white-space:nowrap}
+.mbch span.mbp{background:#12314a;border-color:#2f6f9c;font-size:13px}.mbch span.mbno{background:none;border:0;padding:0;font-weight:400}
+.mbch span b{color:#c9a24c;margin-right:5px;font-family:var(--f-mono);font-weight:500;font-size:12px}.mbch span em{font-style:normal;font-weight:400;color:var(--muted);font-size:11.5px;margin-left:6px}
+.mbch span.me{border-color:#c9a24c}.mbno{color:var(--muted)}
+.mbcont{margin-top:16px;border-top:1px solid var(--line);padding-top:10px;max-width:560px}.mbcont h3{margin:0 0 6px;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;color:#8fa1b3;text-transform:uppercase;font-weight:500}
+.mbcont table{width:100%;border-collapse:collapse;font-size:14px}.mbcont td{padding:4px 0;border-bottom:1px solid #1d2731}.mbcont td:first-child{width:62px;font-weight:700}.mbcont td:last-child{text-align:right;color:var(--muted);font-size:13px;white-space:nowrap}.mbcont small{color:var(--muted);font-size:12.5px}.mbcont small.mbm{color:#c9a24c}
+.mbfoot{color:var(--dim);font-size:11.5px;margin:12px 0 0;font-family:var(--f-mono);line-height:1.55}
+@media (max-width:640px){#view-meeting>section.card{padding-left:11px;padding-right:11px}.mbr{grid-template-columns:62px 1fr}.mbch span{font-size:14px;padding:2px 7px}.mbc{padding:10px 10px 11px}}
 </style>
 
 <div class="wrap">
@@ -458,6 +483,7 @@ body[data-view="timber"] .hscene,header.top.band:has(.srcmore[open]) .hscene{dis
   </header>
   <nav class="views" id="views" aria-label="Boards on this page">
     <a href="#cargo" data-view="cargo"><b>Cargo jetties</b><small>CJ-1 to CJ-16 · dry cargo · berthing policy &amp; projection</small><span class="vb" id="vb-cargo"></span></a>
+    <a href="#meeting" data-view="meeting"><b>Meeting</b><small>Next berthing meeting · berth by berth · who leaves, which priority, who has a chance</small><span class="vb" id="vb-meeting"></span></a>
     <a href="#priority" data-view="priority"><b>Priority chart</b><small>Dry cargo · port's waiting chart · rank / Y / N in each priority</small><span class="vb" id="vb-priority"></span></a>
     <a href="#barge" data-view="barge"><b>Barge</b><small>Midstream · vessels working by barge · daily discharge / loading · commodity-wise</small><span class="vb" id="vb-barge"></span></a>
     <a href="#timber" data-view="timber"><b>Timber</b><small>Log vessels · position · laytime &amp; demurrage · record</small><span class="vb" id="vb-timber"></span></a>
@@ -574,6 +600,9 @@ body[data-view="timber"] .hscene,header.top.band:has(.srcmore[open]) .hscene{dis
   </section>
   </div><!-- /view cargo -->
 
+  <div class="view" data-view="meeting" id="view-meeting">
+  <section class="card"><div class="mbhead"><div class="mbey">Agli meeting</div><h2 id="mbh"></h2><p id="mbsub"></p></div><div id="mtgb"></div></section>
+  </div>
   <div class="view" data-view="priority" id="view-priority"><div id="pqtab"></div></div>
   <div class="view" data-view="barge" id="view-barge">
   <section class="card" aria-labelledby="bgh"><div class="sechead"><h2 id="bgh">Barge work · midstream</h2><p id="bgsub"></p></div>
@@ -678,8 +707,8 @@ const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-22 15:39');
 const PROG_END=h('11-23 18:00'); // programme 23.11 (meeting of 22 Nov) covers till here — barge windows end here;
 // ---- the boards live on this one page as views (tabs): cargo (dry cargo CJ-1–16, projected), timber (log vessels: position, laytime, record — since 16 Nov), tuna (TT-1–4) and liquid (OJ-1–7), status only.
-const VIEWS={cargo:'Deendayal Port · Kandla · Dry cargo jetty',priority:'Deendayal Port · Kandla · Priority chart',barge:'Deendayal Port · Kandla · Barge work',timber:'Deendayal Port · Kandla · Timber vessels',salt:'Deendayal Port · Kandla · Salt vessels',ppp:'Deendayal Port · Kandla · CJ-9 and CJ-10 (PPP)',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
-const VIEW_NAME={ppp:'CJ-9 · CJ-10',salt:'Salt',cargo:'Cargo jetties',priority:'Priority chart',barge:'Barge',timber:'Timber',tuna:'Tuna',liquid:'Liquid'};
+const VIEWS={cargo:'Deendayal Port · Kandla · Dry cargo jetty',meeting:'Deendayal Port · Kandla · Berthing meeting',priority:'Deendayal Port · Kandla · Priority chart',barge:'Deendayal Port · Kandla · Barge work',timber:'Deendayal Port · Kandla · Timber vessels',salt:'Deendayal Port · Kandla · Salt vessels',ppp:'Deendayal Port · Kandla · CJ-9 and CJ-10 (PPP)',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
+const VIEW_NAME={meeting:'Meeting',ppp:'CJ-9 · CJ-10',salt:'Salt',cargo:'Cargo jetties',priority:'Priority chart',barge:'Barge',timber:'Timber',tuna:'Tuna',liquid:'Liquid'};
 let VIEW='cargo';
 const pageHref=k=>'#'+k; // same page, just another tab
 function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
@@ -691,7 +720,7 @@ function setView(k,opts){opts=opts||{};if(!VIEWS[k])k='cargo';VIEW=k;
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='22 Nov 2026 · 15:43 IST';
+const UPDATED='22 Nov 2026 · 17:42 IST';
 const BOARD_SRC='HM signal 21 Nov night sheet amended (disp 2230) · HM signal 21 Nov night sheet (disp 1900) · programme 22.11 · list 21.11 revised · HM signal 21 Nov amended (disp 1257) · DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1339,6 +1368,7 @@ function hpbid(){
       if(opt){mt=Math.max(M,winMeet(opt.go));for(let k=0;k<3&&w.rep!=null&&w.rep>mt&&w.rep>firstHW(mt);k++)mt+=24;}}
     return {w,rank,two,al,exp,last,pj,opt,mt,st:w.rdy==null?3:opt?0:2};
   }).sort((a,z)=>a.st-z.st||((a.mt||1e9)-(z.mt||1e9))||((a.rank||99)-(z.rank||99))||((a.w.rdy||1e9)-(z.w.rdy||1e9)));
+  HPB_CAND=cand;
   const stTxt=c=>{const w=c.w;const t=[c.st===0?`<b class="des">${fday(c.mt)} meeting</b> · CJ-${c.opt.b} frees ~${fmt(c.opt.t)}`:c.st===2?'<span style="color:var(--muted)">ready, no berth of hers in sight</span>':'<span style="color:var(--muted)">not ready</span>'];
     if(c.st===0&&c.exp)t.push('if she arrives on her ETA');if(c.two)t.push('two berths ('+Math.round(w.loa)+' m)');if(w.noHP)t.push('passed over before');return t.join(' · ');};
   const grp={};cand.filter(c=>c.st===0).forEach(c=>{(grp[c.mt]=grp[c.mt]||[]).push(c);});const mts=Object.keys(grp).map(Number).sort((a,z)=>a-z);
@@ -1357,6 +1387,63 @@ function hpbid(){
   if(sm)sm.innerHTML=Object.keys(fam).sort((a,z)=>fam[z].length-fam[a].length).map(k=>`<b>${k}</b> · ${fam[k].map(r=>K(r.qt)).join(' → ')} <span style="color:var(--muted)">(latest ${dd(fam[k][fam[k].length-1].F)})</span>`).join('<br>')+`<br><span style="color:var(--muted)">${rec.length} HP berths on record since ${dd(rec[rec.length-1].F)} · 40K means nobody bid against her.</span>`;
   if(lg)lg.innerHTML=tbl(['Vessel','Quote','Cargo','MT','Berth','Berthed','Sailed','Days at berth','MT a day over the whole stay','Whole stay vs quote','Agent'],rec.map(r=>{const days=(r.T-r.F)/24, live=r.est, rate=(!r.x&&!live&&days>0)?r.q/days:null;
     return `<tr${/mihir/i.test(r.ag||'')?' class="our"':''}><td class="l"><b>${r.n}</b></td><td><b>${K(r.qt)}</b></td><td class="l">${r.c}</td><td>${nf.format(Math.round(r.q))}</td><td>CJ-${r.b}</td><td class="l">${fmt(r.F)}</td><td class="l">${live?'~'+fmt(r.T)+' est':fmt(r.T)}</td><td>${live?'at berth':days.toFixed(1)}</td><td>${rate?nf.format(Math.round(rate)):(r.x?'shift / top-up':'—')}</td><td>${rate?Math.round(rate/r.qt*100)+' %':'—'}</td><td class="l">${r.ag||'—'}</td></tr>`;}))+'<p style="font-size:12px;color:var(--muted);margin:2px 2px 8px">Whole stay vs quote = cargo ÷ days from made fast to sailing, against the quote. The stay counts the hours before commencement and the wait for the tide after completion, so it reads lower than the working rate — a vessel can meet her quote and still show 80 %.</p>';
+}
+// ---- MEETING page (Mihir, 22 Nov 2026): the next berthing meeting, berth by berth. For every DPA berth: who is on it, CONTINUE or KHALI,
+// which priority operates there and who has a chance. The chance names are the engine's own pick and its next in line (so berth fit, draught
+// and seniority are already counted); a berth HP vessels can use shows the bid pool first; a berth no line takes in this window is filled on
+// PORT CONVENIENCE (Mihir, 22 Nov 17:28: no berth stays vacant while vessels wait) — the vessels that can use it, and the shift that would fill it.
+let HPB_CAND=[]; // filled by hpbid(): every HP bidder with the meeting she bids at
+const MB_PR={GOV:'Govt',COASTAL:'Coastal',HP:'HP · bid',SAAGAR:'SAAGAR','24H':'24 hrs','8K':'8K',STL:'Steel / Project',BIT:'Bitumen',GEN:'General'};
+function meetBoard(){
+  const el=document.getElementById('mtgb'); if(!el)return;
+  const M=NXM, WE=M-11+24+18, base=n=>n.replace(/ \(.*$/,''), ex=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const fa=x=>x.freeAt!=null?x.freeAt:x.prevAt, dd=x=>{const d=dt(x);return d.getUTCDate()+' '+MON[d.getUTCMonth()];};
+  const lies=(v,B)=>v.b===B.id||(v.p&&Math.min(v.p[1],B.p[1])-Math.max(v.p[0],B.p[0])>2.5); // a vessel lying across into the berth blocks it too (Flag Marina, 254 m, over CJ-7 and CJ-8)
+  const ready=w=>w.rdy!=null&&w.rdy<=M+0.01, canUse=(w,b)=>{try{return allowedBerths(w).includes(b);}catch(e){return false;}};
+  const inWin=x=>x.proj&&!x.shifted&&x.prevAt!=null&&fa(x)<=WE+0.01, firmIn=x=>inWin(x)&&!x.softWait&&x.prevAt<WE-0.01; // firm = her place is open inside this meeting's window
+  const placed={};S.filter(firmIn).forEach(x=>{placed[x.n]=String(x.b);});
+  const ORD=CATS.map(c=>c.k), below=L=>L==='PC'||ORD.indexOf(L)>ORD.indexOf('HP');
+  const eff=v=>Math.max(v.T,typeof v.overrun==='number'?v.overrun:0); // a vessel whose work will run past her list ETC is not counted as leaving on it (Parvraj, 22 Nov: 36 h of cargo beyond the ETC)
+  const rows=BERTHS.filter(B=>!B.ppp&&!B.mnt&&!B.kict).map(B=>{
+    const r={b:B.id}, occ=V.filter(v=>v.cat!=='SPACE'&&v.T>NOW&&lies(v,B)).sort((a,z)=>eff(a)-eff(z)), last=occ[occ.length-1]||null;
+    if(!last){r.run=Math.round(slotRun(B.id,NOW)*RUN_TOL);if(!W.some(w=>ready(w)&&canUse(w,B.id)&&(w.loa||0)<=r.run)){r.st='S';return r;}r.st='K';r.t=NOW;r.now=1;}
+    else{r.v=last;r.t=(eff(last)<PROG_END&&!PROG_SAIL.has(last.n))?PROG_END:eff(last);r.over=typeof last.overrun==='number'&&last.overrun>last.T; // a sailing the present programme does not print falls to the next window
+      r.st=r.t<=WE+0.01?'K':'C';r.coming=last.F>NOW;r.est=!!last.est||!!last.dpr;if(r.st==='C')return r;}
+    const pk=S.filter(x=>inWin(x)&&String(x.b)===B.id).sort((a,z)=>a.F-z.F)[0]||null;
+    if(pk&&!r.now&&fa(pk)>r.t&&fa(pk)<=WE)r.t=fa(pk);
+    if(pk&&firmIn(pk)){r.pr=pk.slot||pk.cat;r.via=(pk.via||'').replace(/ \(Sr No 7\)/,'');r.ch=[pk.n].concat(pk.alt&&pk.alt.n&&pk.alt.n!==pk.n?[pk.alt.n]:[]);}
+    else{r.pr='PC';const run=slotRun(B.id,r.t+0.1)*RUN_TOL; // no line takes it in this window → port convenience: the engine's later pick first, then whoever can use the berth, by General seniority
+      const c=W.filter(w=>ready(w)&&canUse(w,B.id)&&(w.loa||0)<=run&&!(placed[w.n]&&placed[w.n]!==B.id)).sort((a,z)=>((((a.rk||{}).GEN)||99)-(((z.rk||{}).GEN)||99))||(a.rdy-z.rdy)).map(w=>w.n);
+      r.ch=(pk?[pk.n]:[]).concat(c.filter(n=>!pk||n!==pk.n)).slice(0,3);
+      r.sh=V.filter(v=>v.F<=NOW&&v.T>WE&&/\blogs?\b/i.test(v.c)&&(BERTHS.find(x=>x.id===v.b)||{}).clean&&canUse({n:v.n,c:v.c,q:v.q,u:v.u,loa:v.loa,dr:v.dr||0,g:v.g,rk:{},x:''},B.id)).map(v=>base(v.n));}
+    const pool=HPB_CAND.filter(c=>c.st===0&&c.mt===M&&c.al.includes(B.id)).sort((a,z)=>((a.rank||99)-(z.rank||99))||((a.w.rdy||1e9)-(z.w.rdy||1e9)));
+    if(pool.length&&(r.pr==='HP'||below(r.pr))){const hp=pool.filter(c=>r.pr==='HP'||r.pr==='PC'||!pk||c.w.n!==pk.n);if(hp.length)r.hp=hp;}
+    return r;});
+  const K=rows.filter(r=>r.st==='K'), C=rows.filter(r=>r.st==='C'), Sm=rows.filter(r=>r.st==='S');
+  const tag=n=>((typeof ETA!=='undefined')&&ETA[n]?'<em>ETA</em>':'')+(isMine(n)?'<em>M&amp;Co</em>':'');
+  const chip=(n,i)=>`<span class="${isMine(n)?'me':''}"><b>${i+1}</b>${ex(base(n))}${tag(n)}</span>`;
+  const hchip=c=>`<span class="${isMine(c.w.n)?'me':''}">${ex(base(c.w.n))}${c.two?'<em>2 berth</em>':''}${tag(c.w.n)}</span>`;
+  const prl=r=>r.pr==='PC'?'Port convenience':(MB_PR[r.pr]||r.pr);
+  const card=r=>{const v=r.v, across=v&&v.b!==r.b;
+    const out=r.now?'<span class="mbno">Abhi khali hai</span>':`${ex(base(v.n))} <small>· ${ex(v.c)}${across?' · CJ-'+v.b+' wali vessel, dono berth par':''}</small>`;
+    let h=`<div class="mbc"><div class="mbt"><span class="mbn">CJ-${r.b}</span><span class="mbk">KHALI · ${r.now?'abhi':(r.est?'~':'')+fmt(r.t)}</span></div><div class="mbr"><label>Niklegi</label><div>${out}</div></div>`;
+    if(r.hp){h+=`<div class="mbr"><label>Priority</label><div><span class="mbp">HP · bid</span></div></div><div class="mbr"><label>Chance</label><div class="mbch">${r.hp.map(hchip).join('')}</div></div>`;
+      if(r.pr!=='HP'&&r.ch.length)h+=`<div class="mbr"><label>Bid na ho</label><div class="mbch"><span class="mbp">${prl(r)}</span>${r.ch.map(chip).join('')}</div></div>`;}
+    else h+=`<div class="mbr"><label>Priority</label><div><span class="mbp">${prl(r)}</span>${r.via?` <small>· ${ex(r.via)}</small>`:''}</div></div><div class="mbr"><label>Chance</label><div class="mbch">${r.ch.length?r.ch.map(chip).join(''):'<span class="mbno">abhi koi naam nahi</span>'}</div></div>`;
+    if(r.sh&&r.sh.length)h+=`<div class="mbr"><label>Shifting</label><div><small class="mbs">${r.sh.map(ex).join(' ya ')} (logs) yahan shift, ${r.sh.length>1?'unki':'uski'} clean berth doosri vessel ko</small></div></div>`;
+    return h+'</div>';};
+  const crow=r=>`<tr><td>CJ-${r.b}</td><td>${ex(base(r.v.n))}${isMine(r.v.n)?' <small class="mbm">M&amp;Co</small>':''}${r.coming?` <small>· aayegi ${fmt(r.v.F)}</small>`:''}${r.over?` <small>· list ETC ${fmt(r.v.T)}, par kaam baaki</small>`:''}</td><td>~${dd(r.t)}</td></tr>`;
+  const srow=r=>`<tr><td>CJ-${r.b}</td><td class="mbno">Jagah chhoti (~${r.run} m) · koi vessel fit nahi</td><td></td></tr>`;
+  const hh=document.getElementById('mbh'), hs=document.getElementById('mbsub');
+  if(hh)hh.innerHTML=`${fday(M)} <span>· 11:00</span>`;
+  if(hs)hs.innerHTML=(PEND?'<b style="color:var(--warn)">Meeting ho chuki</b> · programme ka intezaar · ':'')+`Kaunsi berth khali hogi, aur kisko mil sakti hai · ${fday(WE)} 18:00 tak ki berths`;
+  el.innerHTML=`<div class="mbstrip">${rows.map(r=>(r.b==='13'?'<u></u>':'')+`<i class="${r.st==='K'?'k':r.st==='S'?'s':''}">${r.b}</i>`).join('')}</div>`
+    +`<div class="mbleg"><span><b style="background:#e0a23a"></b>Khali hogi · ${K.length}</span><span><b style="background:#22303d"></b>Continue · ${C.length}</span>${Sm.length?`<span><b style="background:repeating-linear-gradient(135deg,#1b242d 0 3px,#3a4856 3px 6px)"></b>Chhoti jagah · ${Sm.length}</span>`:''}</div>`
+    +(K.length?`<div class="mbgrid">${K.map(card).join('')}</div>`:'<p class="mbno">Is meeting ki window mein koi berth khali nahi ho rahi.</p>')
+    +((C.length||Sm.length)?`<div class="mbcont"><h3>Continue · khali nahi hongi</h3><table>${C.map(crow).join('')}${Sm.map(srow).join('')}</table></div>`:'')
+    +`<p class="mbfoot">Chance mein naam seniority ke order mein · HP mein bid hoti hai, order nahi · ETA = list par abhi pahunchi nahi thi<br>Yeh board ka andaza hai · port ka programme aane par milaya jayega</p>`;
+  const vb=document.getElementById('vb-meeting');if(vb)vb.innerHTML=`<b>${K.length}</b> khali · ${fday(M)}`;
+  window.__MEETB={meet:fday(M)+' 11:00',end:fmt(WE),at:fmt(NOW),rows:rows.map(r=>({b:r.b,st:r.st,out:r.v?base(r.v.n):'',t:r.t!=null?fmt(r.t):'',pr:r.pr||'',via:r.via||'',ch:(r.ch||[]).map(base),hp:(r.hp||[]).map(c=>base(c.w.n)),sh:r.sh||[]}))};
 }
 function preview(){
   // The 11:00 berthing meeting programmes movements up to 18:00 of the next day. Preview covers the NEXT meeting's window:
@@ -2667,7 +2754,7 @@ W.forEach(w=>{w.rep=REP[w.n]?h(REP[w.n]):w.rdy;});
 // or is a typing slip. So a BULK fertiliser vessel without a printed Govt rank still queues as Govt, by seniority, behind the printed ranks.
 // Confirmed by Mihir (14 Nov 10:07): ONLY BULK cargo counts as Govt priority — bagged fertiliser parcels (NPK / manganese sulphate J-bags) stay as listed.
 // Mihir (20 Nov 15:53): ROCK PHOSPHATE IS NOT GOVERNMENT CARGO — the cargo rule below skips it (the board's reading in v189, now confirmed).
-(()=>{const l=W.filter(w=>/\b(urea|mop|npk|dap|tsp|dsp|ssp)\b|fertil|sulphate|potash|phosphate/i.test(w.c)&&!/bag|acid|rock/i.test(w.c)&&!(w.rk&&w.rk.GOV)).sort((a,z)=>(a.rep||1e9)-(z.rep||1e9));
+(()=>{const l=W.filter(w=>/\b(urea|mop|npk|dap|tsp|dsp|ssp)\b|fertil|sulphate|potash|phosphate/i.test(w.c)&&!/bag|acid|rock/i.test(w.c)&&!(w.rk&&w.rk.GOV)).sort((a,z)=>(Math.max(a.rep||0,a.rdy||0)||1e9)-(Math.max(z.rep||0,z.rdy||0)||1e9)); // 22 Nov: the later of reported and readiness / ETA time decides — an expected vessel's old reporting entry goes stale as her ETA moves, so a vessel that has arrived stands before one still expected (Zheng Hui before Tai Keystone)
  l.forEach((w,i)=>{w.rk=Object.assign({},w.rk,{GOV:60+i});w.govAuto=1;});})();
 // agents from the berthing list (waiting sheet carries no agent column); stevedores to be filled in
 const AG={'African Quail':'Mihir & Company','Rahma':'Parekh Marine','Cervia':'Dariya Shg','Karpathos Dawn':'DBC','Horizon Chaser':'Preetika','Seagautam':'Atlantic Shg','Theometor':'BS Shg','Nord Newport':'Kashmira','Bomustafao O':'DBC','Deniz ID':'DBC','Saga Viking':'Ben Line','Lakmos':'AML','DSM London':'DBC','Vishva Preeti':'Interocean','Blue Shark':'Interocean','HN Doris':'DBC','Meghna Venus':'Shantilal','New Bliss':'GAC Shg','Yuan Hang Wei Ye':'Genesis','Bao He Ling':'Cross Trade','Mak 1':'Samsara','KSL Ruiyang':'Genesis','Katong WW':'Parekh Marine','Levante Spirit':'Interocean','Zheng Rong':'Genesis','Tan Binh 267':'OTA Kandla','Leya':'Genesis','Yasa Eagle':'Dariya','Michelangelo':'Taurus','Manta Sena':'ACT Infraport','Crystal Land':'BS Shg','Orion':'Cross Trade','Lanna Naree':'Synergy','Shen Hai Shou Xin':'Genesis','Ege-M':'Ben Line','Feng Hai Da':'Mystic Shg','Bristol':'Taurus','Tai Knight':'Ambika','African Peacock':'DBC','Libra':'DBC','Haj Abdullah T':'DBC','Alasia':'Scorpio Shg','Rome Trader':'James Mackintosh','Lady Naeima':'DBC','Mettle Star':'Cross Trade','Andreas Petrakis':'Dariya Shg','Outlander':'BS Shg','Hai Long 1':'BS Shg','Defne':'JM Baxi','Star Fighter':'Cross Trade','Belasitza':'Interocean','Valentina Sea':'Excel Infra','Tai Keystone':'Interocean','Emmanouil':'BS Shg','Moonlit':'Upasana','Eva Bright':'JM Baxi','Aya':'Excel Infra','Outrivaling 3':'Mystic Shg','Xanadu':'Ambika','Fu Hai 16':'Genesis','Ocean Camellia':'Anline','Lacerta':'Gautam Freight','Bauhinia':'Mitsutor','AC Kathryn':'DBC','African Predator':'Synergy','Centurion Buyo':'Synergy','Agia Fevronia':'Gautam Freight','Maritime Harmony':'Cross Trade','Suvari Bey':'DBC','Yara J':'DBC','Fortunelit':'Anline','Crystal O':'DBC','Safi Alfa':'ACT Infraport','North Gate':'JM Baxi','Alacrity 666 (barge)':'Chandra','Enshi':'DBC','Gautham B Star II':'Samsara','African Bateleur':'Ambica','Pioneer Fortune':'Marine Links','Unity Melody':'Gautham Freight','Global Express':'Seascape','JSW Mihirgad':'Atlantic Shg','ML Egret':'Cross Trade','Iki':'DBC','Drake Well':'Mihir & Company','Xin Hai Tong 71':'JM Baxi','Devbulk Doruk':'Parekh Marine','DP World Godavari':'Unifeeder','Mariblue':'Scorpio Shg','Phoenix Coral':'Seaworld','Katerina K':'Ambica','Cape Diversity':'Genesis','Gokova-M':'Delta','Truong Minh Dream':'Taurus','Mykonos Wave':'Atlantic Shg','African Bateleur':'Ambica','Gautham B Star II':'Samsara','MK Lamis':'DBC','Royal O':'DBC','Uni Blossom':'Synergy','Glimlit':'Upasana','Alberta':'BS Shg','Lolo Gate':'BS Shg','Aboudi D':'DBC','Honor Star':'Spartans','Ken Ann':'DBC','Queen Coral':'Seaworld','Global Express (GL)':'Seascape','Navios Felicity I':'Dariya Shg','Doukato':'Interocean','Heng Yuan Fa Zhan':'Shantilal','CS Rotterdam':'JM Baxi','Bow Platinum':'GAC Shg','Korea Chemi':'GAC Shg','Cape Venture':'Genesis','Ariston Bulker':'Ambica','African Hornbill':'Synergy','Chang Hang':'Genesis','KSS Edmond':'Excel Infra','Marina L':'Arnav Shg','CD Cherry':'Crosstrade','Tan Bin 259':'DBC','Vishva Bandhan':'JM Baxi','Marvelous Star':'Atlantic Shg','Lanna Naree (reload)':'ACT Infraport','Caribbean 1':'Atlantic Shg','RM 7':'Dirgh','Tug Chandra Sun + barge Victoria 251':'Chandra','African Loon':'Synergy','AG Varvara':'DBC','Merchia':'Genesis','Sea Gautham':'Atlantic Shg','Princess Joanna':'Sealink','Tug Sagar 5 + barge Victoria 250':'JM Baxi','Princess Manissa':'Alap Carriers','Eva Fuji':'GAC Shg','Zao Galaxy':'GAC Shg','Bristol (salt, next call)':'Trueblue','Coastal Amigo':'Indoglobal','Evangelia D':'BS Shg','Nord Copper':'Cross Trade','Porto Fiscardo':'DBC','Captainannis L':'ACT Infraport','Seacon Monaco':'Cross Trade','Marsal':'DBC','Alberta (re-berthing)':'BS Shg','HN Doris (salt, next call)':'Crosstrade','Coral Bay':'Liladhar Pasoo','CD Glory':'Mihir'};
@@ -3606,7 +3693,7 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();salt();ppp();dpr();msWork();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();hpbid();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();salt();ppp();dpr();msWork();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();hpbid();meetBoard();qdetail();side();gantt();groups();moves();
   summaries();
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }

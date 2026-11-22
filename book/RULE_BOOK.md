@@ -37,6 +37,7 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - **6.5K / 8K goes by seniority.** A junior does not take the place at a berth her seniors cannot use. *(Mihir, 20 Nov 16:50)*
 - In the other single-place lines, if the berth does not suit the senior vessel, it goes to the next senior it does suit. *(Mihir, 11 Nov)*
 - A vessel whose holds are rejected loses her turn and is held until she is ready again. *(Mihir, 19 Nov)*
+- **Government line when the list prints no rank:** the vessel that reported first is senior. A vessel still on the expected sheet has not reported, so her ETA counts as her time and she stands behind a vessel that has arrived. *(board, 22 Nov — shown to Mihir on the Meeting page draft: Zheng Hui, reported 21 Nov 08:12, before Tai Keystone, still expected for 22 Nov)*
 
 ## 4. Which cargo at which berth
 
@@ -54,6 +55,7 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - A shift made because an agent wants a particular berth is at that agent's cost.
 - A shift that was programmed and then cancelled is not assumed again until a programme prints it. *(Mihir, 20 Nov)*
 - The shifted vessel must fit the berth she is moved to. No shift is made for a junior in a line that goes by seniority. *(board, 21 Nov)*
+- **No berth is left vacant while vessels are waiting.** With a long waiting list every agent pushes for his vessel, and the port does not keep its own jetty empty: it shifts vessels on the port's convenience to fit one in, and the agent whose vessel can use the berth asks the port for exactly that. So the board never says a berth "stays vacant" when a waiting vessel can use it. For such a berth it shows who can use it, in seniority order, and the shift that would fill it. *(Mihir, 22 Nov 17:28)* How the port chooses among them is not a rule yet: the meeting table shows the chances, and the projection still follows section 3 until the programmes show a pattern.
 
 ## 6. Time at the berth
 
@@ -104,6 +106,15 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - **DPR table:** CJ-9 and CJ-10 come first, under the name "Gautam Freight (PPP berths)", whatever their state — working, completed or vacant *(Mihir, 21 Nov 21:52)*.
 - **Where the data starts:** every record says it. The board's record begins at the end of October 2026 (earliest berthing on it: 25 Oct; CJ-9: 28 Oct). Nothing earlier is on record.
 - **Viewers count (Mihir, 21 Nov 22:00):** the public link shows at the top how many times it has been opened. Every opening counts, his own included. It uses an outside free counter (Abacus); if that service is down the number is simply not shown.
+- **Meeting page** *(Mihir, 22 Nov 16:58–17:32)*. A page of its own (tab "Meeting", link `#meeting`) shows the next berthing meeting berth by berth, kept as simple as it can be:
+  - a strip of the DPA berths — the ones that empty in the meeting's window are marked;
+  - one card for each berth that empties, with three lines: **Niklegi** (the vessel leaving, and when), **Priority** (the line that operates at that berth), **Chance** (who can get it — more than one name, in seniority order);
+  - a short list of the berths that **continue**, with the date each is expected to clear.
+  - How the count runs *(Mihir, 22 Nov 17:09)*: at every meeting the count starts again from the top of the order. A place that falls vacant goes to its own line. The berth that falls vacant is not kept for that line — it goes to the first line from the top that has a vacant place and a vessel the berth suits.
+  - The chance names are the board's own pick and the vessel next in line behind her. A berth HP vessels can use shows the bid pool first, and under it who gets the berth if nobody bids.
+  - A berth no line takes in that window is shown as **Port convenience** — never as staying vacant (section 5): the vessels that can use it, by General seniority, and the shift that would fill it.
+  - A vessel whose cargo will run more than a few hours past her list ETC is shown as continuing, with her list ETC beside her.
+  - After each programme the page is scored on one question: was the vessel that got the berth in the chance list (or the HP pool)?
 - **HP bid panel** *(Mihir, 22 Nov 00:07)*. HP is decided by a bid at the meeting, so the board does not name an HP winner. Right under the meeting preview it shows **who bids at which meeting**: every vessel with an HP number or an HP "Y" on the list, in seniority order, with the meeting that programmes the first berth she can use once it is clear (a vessel lying across two berths blocks both; a berth more than 1 m short of her draft is left out), the last quote that won HP for the same cargo, and where the board expects her otherwise. Below it: the winning quotes so far, cargo-wise, and the full record (`HP_LOG` + the HP vessels still in `V`; `trim_board.js` moves a vessel into `HP_LOG` when it drops her). An HP pick in the meeting preview carries the tag "HP · decided by bid". The programme prints only the winner's quote — the losing bids come only from the team after the meeting.
 
 ## 9. Which paper wins when two disagree
