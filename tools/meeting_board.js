@@ -6,5 +6,5 @@ const {chromium}=require('playwright');const path=require('path');
 (async()=>{const b=await chromium.launch();const p=await b.newPage();await p.goto('file://'+path.resolve(process.argv[2]));await p.waitForTimeout(2400);
 const m=await p.evaluate(()=>window.__MEETB||null);if(!m){console.log('no meeting page on this board');await b.close();return;}
 console.log('// meeting '+m.meet+' · window to '+m.end+' · board as at '+m.at);
-for(const r of m.rows)console.log(['CJ-'+r.b,r.st,r.out||'-',r.t||'-',r.pr+(r.via?' ('+r.via+')':''),'chance: '+(r.ch.join(', ')||'-'),r.hp.length?'HP pool: '+r.hp.join(', '):'',r.sh.length?'shift: '+r.sh.join(' / '):''].filter(Boolean).join(' | '));
+for(const r of m.rows)console.log(['CJ-'+r.b,r.st,r.out||'-',r.t||'-',r.pr+(r.via?' ('+r.via+')':''),'chance: '+(r.ch.join(', ')||'-'),r.hp.length?'HP pool: '+r.hp.join(', '):'',r.sh.length?'shift: '+r.sh.join(' / '):'',r.cond?'ONLY IF '+r.cond:'',r.alt?'else '+r.alt.pr+': '+r.alt.ch.join(', '):'',r.back?'or '+r.back.pr+': '+r.back.ch.join(', '):''].filter(Boolean).join(' | '));
 await b.close();})();

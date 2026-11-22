@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 22 Nov 17:56 — NO PAPER. Mihir: CJ-15A will not go under 8K — look again; and no separate Meeting page, put it all in the Priority chart page. v259: section moved to the top of the Priority chart page, Meeting tab removed; the 8K pick at CJ-15A now carries its condition (Crystal O must sail inside the window) and the General alternative.
 - 22 Nov 17:48 — NO PAPER. Mihir: "port convenience" is not a priority — what is it?; and show every vessel's details on the Meeting page. v258: the priority now comes from the count from the top (CJ-5 → General), every vessel shows cargo, quantity, agent, ready since, length, draught, list ranks.
 - 22 Nov 17:32 — NO PAPER. Mihir's instructions (16:58–17:32): show the next meeting berth by berth — vessel, continue or khali, priority, who has a chance; "no berth stays vacant, the port shifts to fit a vessel in"; "haan daal do". Meeting page added in v257 (tab #meeting). Govt line order corrected: Zheng Hui before Tai Keystone.
 - 22 Nov 16:44 — NO PAPER. Mihir's instruction: put a design at the top of the board (asked 16:35, draft first; 16:44 "tumhe acha lage woh kar do"). Header band applied in v256 — own mark, quay line drawing, berth strip; the DPA logo is not used. No data changed.
