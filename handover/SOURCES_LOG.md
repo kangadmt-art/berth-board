@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 22 Nov 12:18 — DPR 22.11 (0700, xlsx) and HM signal 22 Nov day sheet (Capt Madaan, disp 08:05 / 08:25 / 09:00); the amended night sheet of 21 Nov came again with them. No list 22.11 yet
 - 22 Nov 00:26 — HM signal 21 Nov night sheet AMENDED ("Amendment & new signal", disp 22:30, Capt Sandeep), sent with the 19:00 sheet again — Nord Copper out and Sanghi Sundarshan / tug Sagar 5 in moved up to the night; New Bliss / Crystal O rows not on it
 - 21 Nov 23:43 — 10 PDFs (e1–e10) from Mihir, all of 2021: 8 new on the register (port entry pass circulars, OJ and CJ-2 and Bunder Basin dredging notices, bagged cargo norms 50 %, COVID oxygen cargo priority); a compassionate-appointment list not filed
 - 21 Nov 23:40 — 7 PDFs and 2 zips from Mihir (Civil / Mechanical / Medical papers): 1 new on the register (trade notice 02.02.2024, Geology & Mining NOC for export of minerals / ores); work orders for the Berth 17 DPR and the CJ-1 to 6 fender up-gradation, hospital circulars and a staff attendance sheet kept in the file, not on the register
