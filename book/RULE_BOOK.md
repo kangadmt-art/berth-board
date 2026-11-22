@@ -31,6 +31,13 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
 - A real vessel of the group always goes before a quote vessel.
 - A quote vessel works to 30,000 tonnes a day.
 
+## 2A. When a vessel leaves *(Mihir, 22 Nov 18:09)*
+
+- The priority a berthed vessel holds is the one the berthing list prints against her.
+- **Like for like.** When she leaves, her place goes to the next vessel of the same priority — a 24-hours vessel is replaced by a 24-hours vessel. If the berth she leaves suits that vessel, she takes that berth; if not, she takes the first berth that does suit her, and the berth left behind goes down the order.
+- If that priority has no vessel, the place goes to the priority after it in the order.
+- **A place is free only once its vessel has sailed.** The earlier rule (1 and 7 Nov) — a place whose vessel sails inside the same meeting window is given out again for that window, while she is still alongside — is **withdrawn**.
+
 ## 3. Seniority
 
 - **General goes strictly by seniority.** Only the senior-most ready vessel of the General line is offered a General berth. If that berth does not suit her, General takes nothing there. "At most three bag vessels" does not mean skip the bag vessels and take the next one. *(Mihir, 20 Nov 17:13)*
@@ -111,7 +118,7 @@ How berths are given at the Kandla cargo jetties, as the board applies it. Each 
   - one card for each berth that empties, with three lines: **Niklegi** (the vessel leaving, and when), **Priority** (the line that operates at that berth), **Chance** (who can get it — more than one name, in seniority order);
   - a short list of the berths that **continue**, with the date each is expected to clear.
   - How the count runs *(Mihir, 22 Nov 17:09)*: at every meeting the count starts again from the top of the order. A place that falls vacant goes to its own line. The berth that falls vacant is not kept for that line — it goes to the first line from the top that has a vacant place and a vessel the berth suits.
-  - **A pick that rests on a place still held when the berth frees says so** *(Mihir, 22 Nov 17:56, on CJ-15A: "8K mein nahi hoga")*. A line with one place cannot take a second berth until its vessel sails. The regulation as Mihir gave it on 1 and 7 Nov lets the meeting allot a place whose vessel sails inside the same window — so the board keeps that pick, but writes the condition on it ("only if Crystal O sails by …") and shows under it the line that takes the berth otherwise; the berth of the vessel she waits for shows her as the other possibility.
+  - Each card shows the priority the leaving vessel holds, as the list prints it, and where her place goes: to the next vessel of her own line — at this berth ("8K ke badle 8K") or, when this berth does not suit her, at another one — while this berth goes to the line the count gives it *(section 2A)*.
   - The chance names are the board's own pick and the vessel next in line behind her. A berth HP vessels can use shows the bid pool first, and under it who gets the berth if nobody bids.
   - A berth the board's projection gives to nobody in that window is never shown as staying vacant (section 5), and never under a made-up priority — **"port convenience" is not a priority** *(Mihir, 22 Nov 17:48)*. The count is run from the top of the order: the first line with a vacant place and a ready vessel the berth suits is shown as the priority, its vessels (in that line's seniority) as the chance, and beside them the shift that would let that line's senior vessel in.
   - **Every vessel on the page carries her details** *(Mihir, 22 Nov 17:48)*. A waiting vessel: cargo, quantity, agent, ready since and days waiting (or her ETA if she has not arrived), length, draught and her ranks on the list. A vessel at berth: cargo, quantity, agent, when she berthed and the balance on the latest DPR.
