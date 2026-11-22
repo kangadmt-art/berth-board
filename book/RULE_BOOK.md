@@ -2,6 +2,23 @@
 
 How berths are given at the Kandla cargo jetties, as the board applies it. Each rule says where it came from. When a rule changes, it is changed here first and then in the board.
 
+## 0. The one rule — worked out from the record *(13 to 23 Nov; Mihir, 22 Nov 18:38: "keep only the rule that is needed")*
+
+The port's berthing list is itself laid out by priority. Each priority has a fixed number of places, and every berthed vessel sits under one priority heading.
+
+- **A vessel berths only when a place of her priority falls vacant** — the vessel holding it sails. All 31 berthings of the ten days came in this way.
+- **The place goes to rank 1 of that priority's column on the list**, if the berth suits her.
+- Four things the rank does not decide:
+  1. **Govt** — any bulk fertiliser vessel, with or without a rank.
+  2. **HP** — the bid. The vessel ranked HP 1 got the berth once in seven.
+  3. **24 hours** — a real 24-hour vessel (a small parcel, often declared at the meeting itself) goes before the big 30K / 25K quote vessels that stand in that column.
+  4. **SAAGAR** — bulk, break-bulk (logs) and project cargo are separate lines.
+- A place with no vessel of its own goes to a 30K quote vessel — the first one the free berth suits (salt at the clean berths: Belmoira, Hai Nam 81). The Bitumen place goes to General rank 1.
+- **Which berth:** the new vessel usually takes the berth the last vessel of her own priority left, when it suits her — 8K at CJ-1 every time; Govt at CJ-5 / 6 / 8; SAAGAR at CJ-13 / 15.
+- Salt has berthed under HP, 24 hours, Coastal, SAAGAR and 8K — never under General.
+
+The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 were settled at the meeting — three real 24-hour vessels and two 30K quote vessels. The sections below are the detail behind it.
+
 ## 1. Priority places (in this order)
 
 - **Government — 2 places.** Every bulk fertiliser cargo is Government cargo, even when the list prints no rank. Fertiliser in bags is not. Rock phosphate is not. *(Mihir, 20 Nov)*
