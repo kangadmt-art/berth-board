@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
 <script>try{var k=localStorage.getItem('dpaSkin');if(k)document.documentElement.setAttribute('data-skin',k);}catch(e){}</script>
 <style>
 /* Layout: vessel finder first (the one question: when does my ship berth?), then quay drawn to panel scale, then the berth timeline. Single dark navy/brass look by choice. */
@@ -518,6 +518,12 @@ body[data-view="timber"] .hscene,header.top.band:has(.srcmore[open]) .hscene{dis
 .sktile[aria-pressed="true"] .nm::after{background:var(--brass);border-color:var(--brass)}
 .sktile small{display:block;font-size:11.5px;line-height:1.25;color:var(--muted);margin:0 2px}
 @media (max-width:640px){.skpop{left:12px!important;right:12px;top:auto!important;bottom:12px;width:auto}.skgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.skbtn{padding:5px 10px 5px 7px}}
+
+/* v268 headings bold — headings 800, table column heads and group bands 700, small section labels 600 */
+h2,.sechead h2{font-weight:800}
+th,.sdt th,.score th,.mt th,.mpt th,.mst th{font-weight:700}
+tr.grp td:first-child{font-weight:700}
+.eyebrow,.mine .ht,.mbey,.striplabel,.mbcont h3,.why h3,.oklist h3{font-weight:600}
 </style>
 
 <div class="wrap">
@@ -794,7 +800,7 @@ function setView(k,opts){opts=opts||{};if(k==='meeting')k='priority';if(!VIEWS[k
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='23 Nov 2026 · 16:45 IST';
+const UPDATED='23 Nov 2026 · 17:50 IST';
 const BOARD_SRC='HM signal 23 Nov evening sheet (disp 1625) · programme 24.11 (TF/SH/2102 dt 23 Nov) · list 23.11 revised after the meeting · HM signal 23 Nov day sheet (disp 0815) · list 23.11 (0700) · DPR 23.11 (0700) · HM signal 22 Nov night sheet, amendment & new signal (disp 2130 / 2155) · HM signal 21 Nov night sheet amended (disp 2230) · HM signal 21 Nov night sheet (disp 1900) · programme 22.11 · list 21.11 revised · HM signal 21 Nov amended (disp 1257) · DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1788,7 +1794,7 @@ function tmbRuleMonths(){const MN={'01':'Jan','02':'Feb','03':'Mar','04':'Apr','
   const rows=ks.map(k=>`<tr><td style="text-align:left">${MN[k]} 2026</td><td>${m[k].n}</td><td>${f(m[k].cbm)}${m[k].nq?' *':''}</td><td>${m[k].e?m[k].e+(m[k].ecbm?' · '+f(m[k].ecbm):''):'—'}</td></tr>`).join('');
   const T=ks.reduce((s,k)=>({n:s.n+m[k].n,cbm:s.cbm+m[k].cbm}),{n:0,cbm:0});
   return `<div style="margin-top:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;font-size:12.5px;line-height:1.5"><b style="color:var(--brass)">Demurrage rule.</b> The first ${DEM.free} hours after arrival at Kandla are free. Allowed time = CBM ÷ ${f(DEM.rate)} a day. After that, USD ${f(DEM.usd)} a day until she completes. Finished early = despatch at half, USD ${f(DEM.desp)} a day.<br><b style="color:var(--brass)">Port norm</b> (Circular 5237 of 21.11.2026, from the meeting of 23 Nov): pine logs 4,000 a day, hardwood logs 5,500 a day. It decides how long the port allows her at the berth. It does not change demurrage.</div>`
-   +`<table style="width:100%;margin-top:8px;border-collapse:collapse;font-size:12.5px;text-align:right"><tr style="color:var(--mut)"><th style="text-align:left;font-weight:600">Timber arrivals</th><th style="font-weight:600">Vessels</th><th style="font-weight:600">CBM</th><th style="font-weight:600">Still expected</th></tr>${rows}<tr style="border-top:1px solid var(--line);font-weight:700"><td style="text-align:left">On record</td><td>${T.n}</td><td>${f(T.cbm)}</td><td></td></tr></table>${ks.some(k=>m[k].nq)?'<div style="font-size:11.5px;color:var(--mut)">* a vessel whose CBM is not given is counted in the vessels only</div>':''}`;}
+   +`<table style="width:100%;margin-top:8px;border-collapse:collapse;font-size:12.5px;text-align:right"><tr style="color:var(--mut)"><th style="text-align:left;font-weight:700">Timber arrivals</th><th style="font-weight:700">Vessels</th><th style="font-weight:700">CBM</th><th style="font-weight:700">Still expected</th></tr>${rows}<tr style="border-top:1px solid var(--line);font-weight:700"><td style="text-align:left">On record</td><td>${T.n}</td><td>${f(T.cbm)}</td><td></td></tr></table>${ks.some(k=>m[k].nq)?'<div style="font-size:11.5px;color:var(--mut)">* a vessel whose CBM is not given is counted in the vessels only</div>':''}`;}
 const tmbNow=()=>{const live=(Date.now()-Date.UTC(2026,9,24,18,30))/36e5;return (live>NOW&&live<NOW+72)?live:NOW;};
 const tmbKind=c=>{c=String(c||'');return /hardwood/i.test(c)?'<b style="color:var(--brass)">Hardwood</b>':/jas/i.test(c)?'JAS pine':/pine/i.test(c)?'Pine':'Logs — kind not given';}; // the kind of timber decides the port norm since circular 5237 (pine 4,000, hardwood 5,500 a day)
 const tmbMoney=x=>'$'+(Math.round(x/100)*100).toLocaleString('en-US');
@@ -1904,7 +1910,7 @@ function salt(){const el=document.getElementById('saltlist');if(!el)return;
   const wt=W.filter(w=>isS(w.c)&&w.rep!=null&&w.rep<=NOW),ex=W.filter(w=>isS(w.c)&&(w.rep==null||w.rep>NOW)).sort((a,z)=>(a.rep||1e9)-(z.rep||1e9));
   const tag=x=>mine(x)?' <span class="ie" style="border:1px solid var(--brass);color:var(--brass)">Mihir &amp; Co</span>':'';
   const row=(name,ag,top,l1,l2)=>`<div style="padding:10px 2px;border-bottom:1px solid var(--line)${mine({ag})?';border-left:3px solid var(--brass);padding-left:9px':''}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap"><b style="font-size:15px">${name}${tag({ag})}${gearChip(name)}</b><span style="font-size:12px;color:var(--brass)">${top}</span></div><div style="font-size:12.5px;color:var(--muted);margin-top:2px">${l1}</div><div style="font-size:12.5px;margin-top:2px">${l2}</div></div>`;
-  const head=t=>`<div style="font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:14px 0 2px;padding:5px 8px;background:rgba(var(--ov-rgb),.04)">${t}</div>`;
+  const head=t=>`<div style="font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:14px 0 2px;padding:5px 8px;background:rgba(var(--ov-rgb),.04)">${t}</div>`;
   // the active lists as tables — one row per vessel, fixed columns (Mihir, 21 Nov 18:30)
   const s2=t=>{if(t==null)return '—';const d=dt(t);return String(d.getUTCDate()).padStart(2,'0')+' '+MN[d.getUTCMonth()]+' '+String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');},dn=x=>x==null?'—':x.toFixed(1);
   const nmC=n=>`<td class="l"><b>${base(n)}</b>${gearChip(n)}</td>`,trO=n=>`<tr${mine({ag:agOf(n)})?' class="our"':''}>`,tbl=(th,rows)=>`<div class="sdwrap"><table class="sdt"><tr>${th.map((t,i)=>`<th${(i===0||i===th.length-1)?' class="l"':''}>${t}</th>`).join('')}</tr>${rows.join('')}</table></div>`;
@@ -1918,7 +1924,7 @@ function salt(){const el=document.getElementById('saltlist');if(!el)return;
   // month-wise — by the month she was berthed (Mihir, 21 Nov 15:05: a vessel counts in the month she berthed, or the month her barging began)
   const m={};done.forEach(r=>{const d=dt(r.mf),k=d.getUTCFullYear()*100+d.getUTCMonth();const o=m[k]=m[k]||{n:0,q:0,st:0,ns:0,lab:MN[d.getUTCMonth()]+' '+d.getUTCFullYear()};o.n++;o.q+=r.q||0;const t=dd(r.mf,r.out);o.st+=t;});
   const ks=Object.keys(m).sort(),T=ks.reduce((s,k)=>({n:s.n+m[k].n,q:s.q+m[k].q,st:s.st+m[k].st}),{n:0,q:0,st:0});
-  const mt=`<table style="width:100%;margin-top:8px;border-collapse:collapse;font-size:12.5px;text-align:right"><tr style="color:var(--muted)"><th style="text-align:left;font-weight:600">Salt loaded · by month of berthing</th><th style="font-weight:600">Vessels</th><th style="font-weight:600">MT</th><th style="font-weight:600">Avg days at berth</th><th style="font-weight:600">MT a day</th></tr>${ks.map(k=>`<tr><td style="text-align:left">${m[k].lab}</td><td>${m[k].n}</td><td>${f(m[k].q)}</td><td>${(m[k].st/m[k].n).toFixed(1)}</td><td>${f(m[k].q/m[k].st)}</td></tr>`).join('')}<tr style="border-top:1px solid var(--line);font-weight:700"><td style="text-align:left">On record</td><td>${T.n}</td><td>${f(T.q)}</td><td>${T.n?(T.st/T.n).toFixed(1):'—'}</td><td>${T.st?f(T.q/T.st):'—'}</td></tr></table>`;
+  const mt=`<table style="width:100%;margin-top:8px;border-collapse:collapse;font-size:12.5px;text-align:right"><tr style="color:var(--muted)"><th style="text-align:left;font-weight:700">Salt loaded · by month of berthing</th><th style="font-weight:700">Vessels</th><th style="font-weight:700">MT</th><th style="font-weight:700">Avg days at berth</th><th style="font-weight:700">MT a day</th></tr>${ks.map(k=>`<tr><td style="text-align:left">${m[k].lab}</td><td>${m[k].n}</td><td>${f(m[k].q)}</td><td>${(m[k].st/m[k].n).toFixed(1)}</td><td>${f(m[k].q/m[k].st)}</td></tr>`).join('')}<tr style="border-top:1px solid var(--line);font-weight:700"><td style="text-align:left">On record</td><td>${T.n}</td><td>${f(T.q)}</td><td>${T.n?(T.st/T.n).toFixed(1):'—'}</td><td>${T.st?f(T.q/T.st):'—'}</td></tr></table>`;
   const sub=document.getElementById('saltsub');if(sub)sub.innerHTML='Arrived, berthed and sailed — and the days each took. No demurrage on this tab. Tonnage is the list quantity. Load rate = tonnage ÷ the days she lay at the berth (made fast to left the berth). A vessel is counted in the month she berthed (or the month her barging began).'+mt;
   const sKey=r=>{const d=dt(r.mf);return d.getUTCFullYear()*100+d.getUTCMonth();},FM=['January','February','March','April','May','June','July','August','September','October','November','December'];
   // completed record as a table — one row per vessel, the same columns in every month (Mihir, 21 Nov 18:23: details in columns, easier to read)
@@ -3972,6 +3978,8 @@ table.pt td.vac{color:var(--dim);text-align:left}
 .key{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12.5px;margin:8px 0 10px}.key b{font-family:var(--f-disp);font-size:16px;font-weight:800;color:var(--fg);margin-right:4px}.key .sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:5px}
 .foot{margin-top:22px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}.foot b{color:var(--fg);font-weight:500}
 @media (max-width:760px){.mv .pick{text-align:left}table.rt th:nth-child(3),table.rt td:nth-child(3){display:none}table.pt td.v{min-width:132px;max-width:150px}table.pt{font-size:13px}}
+/* v268 headings bold */
+h2{font-weight:800}table.pt th,table.rt th{font-weight:700}table.pt th small{font-weight:500}tr.grp td{font-weight:700}
 </style><p class="sub">Port ki waiting sheet ka format: har vessel ki line, priority ke column — number list ka rank hai, Y = declared par rank nahi, N = us priority mein nahi. Upar hamare vessels aur at-berth sheet. Dates berth board ka projection hain, port ka order nahi.</p>
 <div class="sec"><div class="sechead"><h2>Hamare vessels</h2><p>Mihir &amp; Company — har priority mein number aur us line se baari</p></div><div class="mine" id="mine"></div></div>
 
