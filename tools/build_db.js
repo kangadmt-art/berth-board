@@ -36,7 +36,22 @@ const {chromium}=require('/opt/npm-tools/node_modules/playwright');const fs=requ
  const file=path.join(out,'databook.json');
  if(fs.existsSync(file)){const old=JSON.parse(fs.readFileSync(file,'utf8'));
   const merge=(now,was,key,onKeep)=>{const k=new Set((now||[]).map(key));const kept=(was||[]).filter(x=>!k.has(key(x)));if(onKeep)kept.forEach(onKeep);return (now||[]).concat(kept);};
-  db.calls=merge(db.calls,old.calls,c=>c.vessel+'|'+c.berth+'|'+c.madeFast,c=>{c.status='sailed';c.outIsEstimate=false;});
+  // A call that was still 'coming' when it left the board never happened as entered — its hour was revised (the new entry is on the board) or the vessel was
+  // taken off the programme. It is NOT kept. (Till 23 Nov such forecasts stayed in the book as 'sailed' calls: 14 old versions and one berthing that never took place.)
+  db.calls=merge(db.calls,(old.calls||[]).filter(c=>c.status!=='coming'),c=>c.vessel+'|'+c.berth+'|'+c.madeFast,c=>{c.status='sailed';c.outIsEstimate=false;});
+  // Older versions of a stay: the same vessel on the same berth with an overlapping stay further down the array. The array is newest-first by construction
+  // (board entries, then what the last build had, then what the build before had …), so the first one met is the latest word and the later ones go.
+  const VOID=new Set(['Hai Nam 81|14|2026-11-23 19:30']); // entered from programme 23.11 as provisional; CJ-14 went to Lila Tokyo — she never berthed there
+  const T=x=>x?Date.parse(x.replace(' ','T')+':00Z'):NaN, keep=[], gone=[], odd=[];
+  db.calls.forEach(c=>{const k=c.vessel+'|'+c.berth+'|'+c.madeFast;
+   if(VOID.has(k)){gone.push(k+' (never berthed)');return;}
+   const ov=y=>y.vessel===c.vessel&&T(c.madeFast)<T(y.out)&&T(y.madeFast)<T(c.out);
+   const dup=keep.find(y=>y.berth===c.berth&&ov(y)); if(dup){gone.push(k+' (older version of '+dup.madeFast+')');return;}
+   const two=keep.find(y=>y.berth!==c.berth&&ov(y)&&!(y.madeFast===c.madeFast&&y.out===c.out)); if(two)odd.push(k+' overlaps CJ-'+two.berth+' '+two.madeFast); // one vessel lying across two berths has the same hours on both rows — that is not odd
+   keep.push(c);});
+  if(gone.length)console.log('calls not kept:',gone.length,'—',gone.join(' · '));
+  if(odd.length)console.log('LOOK: the same vessel on two berths at once —',odd.join(' · '));
+  db.calls=keep;
   db.moves=merge(db.moves,old.moves,m=>m[0]);
   // a sheet still on the board may have been cut to today's rows: keep the fuller copy
   db.moves=db.moves.map(m=>{const o=(old.moves||[]).find(x=>x[0]===m[0]);return (o&&o[1].length>m[1].length)?o:m;});
