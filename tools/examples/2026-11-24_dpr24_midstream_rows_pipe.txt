@@ -1,0 +1,22 @@
+CJ-1 | MV - CRYSTAL O | EXP | SUGAR BAGS |  |  | 5347 | 0 | 0 | 18877 | 0 | 0 | 8323 | 4 | 4 | 4 | 12 | DBC | GFPL | SUDAN |
+CJ-5 | MV - BLUE SHARK | EXP | RICE BAGS |  |  | 324 | 0 | 0 | 324 | 0 | 0 | 11420 | 0 | 0 | 2 | 2 | INTEROCEAN | TB/TSAS | DJIBOUTI |
+CJ | MV - YARA J | IMP | RICE BAGS |  |  | 80 | 0 | 0 | 25580 | 0 | 0 | 4420 |  |  |  | 0 | DBC | AML/RSIPL |  |
+CJ/OP | MV - CAPTAINANNIS L | EXP | RICE BAGS |  |  | 1520 | 0 | 0 | 8320 | 0 | 0 | 9480 | 1 | 1 | 1 | 3 | ACT INFRAPORT | TRUEBLUE/TSAS | CONGO |
+IFFCO | MV - LIBRA | EXP | RICE BAGS |  |  | 15 | 0 | 0 | 23000 | 0 | 0 | 0 |  |  |  | 0 | DBC | TRS | DJIBOUTI |
+MS | MV - AFRICAN LOON ( MV ) | IMP | BARITE ORE |  |  | 2000 | 0 | 0 | 27237 | 0 | 0 | 30513 | 1 | 1 | 1 | 3 | SYNERGY | SYNERGY |  |
+MS | MV - SHENG TAI ( DV ) | EXP | BARITE ORE |  |  | 2000 | 0 | 0 | 27237 | 0 | 0 | 28763 | 1 | 1 | 1 | 3 | SYNERGY | SYNERGY |  |
+OP/CJ | MV - NORTH GATE | EXP | CHICK PEAS/RICE J BAGS |  |  | 500 | 0 | 0 | 25822 | 0 | 0 | 1178 |  |  |  | 0 | J M BAXI | J M BAXI | ALGERIA |
+CJ/IFFCO | MV - FORTUNELIT | EXP | RICE BAGS |  |  | 0 | 0 | 0 | 9051 | 0 | 0 | 949 |  |  |  | 0 | AN LINE | TSAS | SUDAN |
+BA | MV - ARISTON BULKER | EXP | BENTONITE J BAGS |  |  | 0 | 0 | 0 | 3000 | 0 | 0 | 5000 |  |  |  | 0 | AMBICA | INAYAT | DURBAN |
+OP | MV - MAK 1 | EXP | RICE IN J BAGS |  |  | 803 | 0 | 0 | 21888 | 0 | 0 | 0 |  |  |  | 0 | SAMSARA | INAYAT | S ARABIA |
+IFFCO | MV - MK LAMIS | EXP | RICE BAGS |  |  | 0 | 0 | 0 | 0 | 0 | 0 | 11500 |  |  |  | 0 | DBC | RISHI | IRAN |
+MS | MV - CAPTAINANNIS L | EXP | RICE BAGS |  |  | 739 | 0 | 0 | 5800 | 0 | 0 | 12000 | 2 | 2 | 2 | 6 | ACT INFRAPORT | TRUEBLUE/TSAS |  |
+MS | MV - ARISTON BULKER | EXP | BENTONITE J BAGS |  |  | 0 | 0 | 0 | 3530 | 0 | 0 | 4470 |  |  |  | 0 | AMBICA | INAYAT | DURBAN |
+MS | MV - MANTA OMER MECIT | IMP | FERTILIZER J/BAGS |  |  | 1268 | 0 | 0 | 1268 | 0 | 0 | 2471 | 0 | 1 | 1 | 2 | JM BAXI | JM BAXI |  |
+MS | MV - NORTH GATE | EXP | CHICK PEAS/RICE J BAGS |  |  | 694 | 0 | 0 | 24821 | 0 | 0 | 886 | 0 | 1 | 1 | 2 | J M BAXI | J M BAXI | ALGERIA |
+MS | MV - FORTUNELIT | EXP | RICE BAGS |  |  | 0 | 0 | 0 | 7000 | 0 | 0 | 3000 |  |  |  | 0 | AN LINE | TSAS | SUDAN |
+MS | MV - MAK 1 | EXP | RICE IN J BAGS |  |  | 620 | 0 | 0 | 21888 | 0 | 0 | 0 | 1 | 1 | 1 | 3 | SAMSARA | INAYAT | S ARABIA |
+MS | MV - LIBRA | EXP | RICE BAGS |  |  | 2310 | 0 | 0 | 22943 | 0 | 0 | 57 | 1 | 1 | 1 | 3 | DBC | TRS | DJIBOUTI |
+MS | MV - SEA POSTMAN | IMP | ROCK PHOSPHATE |  |  | 7196 | 0 | 0 | 28400 | 0 | 0 | 100 | 2 | 2 | 2 | 6 | DBC | RSIPL |  |
+MS | MV - DARIYA PRIYA | IMP | PINE LOGS |  | 4300 | 1202 | 0 | 17400 | 4864 | 0 | 143448 | 40104 | 2 | 2 | 2 | 6 | DBC | RSIPL |  |
+MS | MV - YARA J | IMP | RICE BAGS |  |  | 876 | 0 | 0 | 28233 | 0 | 0 | 1767 | 2 | 2 | 2 | 6 | DBC | AML/RSIPL |  |
