@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 25 Nov 17:02 — MIHIR (chat), no paper → v274: gearless coal / iron ore vessels berth at CJ-16; allotment strictly by the order of priority, then a suitable available berth (LOA, draft, cargo, working needs); a vessel is ours when Mihir & Company is the stevedore too.
 - 25 Nov 16:23 — MIHIR (chat): show the stevedoring company's name wherever a paper has it → v273 (from the DPR's "Stevd." column, beside the agent).
 - 25 Nov 16:11 — PROGRAMME 26.11 (xlsx) + LIST 25.11 revised after the meeting (xlsx), no text → v273. Tug Varahi + barge AKG 11 "CSTL" at CJ-14 behind Lila Tokyo; MSC Magali "HP(50K)" at CJ-16, African Hornbill shifted to CJ-15A behind Ocean Kudos (port convenience); Parvraj out 23:45, nobody in at CJ-6. The call of 24 Nov 22:51 (Hai Nam 81 → 14, Meghna Prestige → 15A): neither. Revised list: Marsal ready GEN 11; KM Jakarta off both sheets; Paiwan Wisdom first printed (19,320 CBM, 28 Nov).
 - 25 Nov 14:47 — MIHIR (chat), no paper → v272. Five points after the meeting of 25 Nov: Asian Summit under SAAGAR; no vessel bid for HP; berthing by the vacant places, by priority, first; Lila Tokyo was senior (Hai Nam 81 allotted by mistake); circular 5237 (i) to be checked against the policy of 24.03.2025, 21.05.2026 and 09.07.2026 — done from the scans in `circ/` (OCR in `circ/ocr/`): vacant Govt / Coastal place → Coastal → HP bid → SAAGAR → then the quote. On the board as written; not yet seen at a meeting.

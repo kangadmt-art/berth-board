@@ -15,6 +15,7 @@ The port's berthing list is itself laid out by priority. Each priority has a fix
   2. **HP** — the bid. The vessel ranked HP 1 got the berth once in seven.
   3. **24 hours** — a real 24-hour vessel (a small parcel, often declared at the meeting itself) goes before the big 30K / 25K quote vessels that stand in that column.
   4. **SAAGAR** — bulk, break-bulk (logs) and project cargo are separate lines.
+- **Allotment first, berth afterwards** *(Mihir, 25 Nov 17:02)*: "Berthing allotment shall be made strictly in accordance with the prescribed order of priority, and the vessel shall thereafter be allocated a suitable available berth, considering its LOA, draft, cargo and operational requirements." So the place belongs to the senior vessel in the order; if the berth in hand does not suit her but another berth of the same meeting window does, the place waits for her there. Only if no berth of the window suits her is the next vessel taken.
 - **Berthing goes by the vacant places, in order of priority, first** *(Mihir, 25 Nov 14:47)* — the policy of 24.03.2025 says the same: the vacant berths are assessed in the Order of Allotment, a higher category ahead of a lower one. The vessel then takes the free berth that suits her.
 - A place with no vessel of its own: see section 2. Till 25 Nov the board gave a vacant Govt / Coastal place to a 30K quote vessel; from 25 Nov it follows circular 5237 (i) as written. A quote place goes to the **senior** quote vessel *(Mihir, 25 Nov: Lila Tokyo was senior; the port had allotted Hai Nam 81 by mistake)*.
 - **Which berth:** the new vessel usually takes the berth the last vessel of her own priority left, when it suits her — 8K at CJ-1 every time; Govt at CJ-5 / 6 / 8; SAAGAR at CJ-13 / 15.
@@ -84,7 +85,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 - **CJ-6** is a damaged berth: nothing may be dumped on it, so only fertiliser vessels work there. *(Mihir, 6 Nov)*
 - **Coal, coke and ore** do not go to the bag berths CJ-1 to 4; aggregates do.
 - **Ball clay / feldspar** normally go to CJ-5 to 8 — the agents ask for these. A clean berth is used only when her list remark asks for it. *(Mihir, 31 Oct and 6 Nov; seen again 21 Nov: Gokova-M, 24H 1, was passed over at CJ-15A)*
-- **Gearless and over 200 m:** the shore-crane berths CJ-7 / 8, unless her cargo works only at the clean berths. A gearless **coal / coke / ore** vessel may also lie at CJ-16 *(programme 26.11: MSC Magali, 253 m, coal, HP(50K) at CJ-16)*.
+- **Gearless and over 200 m:** the shore-crane berths CJ-7 / 8, unless her cargo works only at the clean berths. A gearless vessel of **coal or iron ore** berths at CJ-16 *(Mihir, 25 Nov 17:02; first seen on programme 26.11 — MSC Magali, 253 m, coal, HP(50K))*.
 - **Only two fertiliser vessels** work at a time. *(Mihir, 7 Nov)*
 
 ## 5. Shifting
@@ -133,6 +134,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 - **Gear chip (Mihir, 21 Nov 15:05):** shown for dry cargo vessels and Tuna vessels only. Liquid vessels carry no gear chip.
 - **DPR table (Mihir, 21 Nov 18:30):** only vessels still working are shown. A completed or sailed vessel's DPR line is kept in the data book.
 - **Lists as tables (Mihir, 21 Nov 18:23–18:30):** Salt and Timber records and the Salt working / waiting / expected lists are drawn as tables with the same columns in every row; on a phone the table scrolls sideways and the vessel name stays in place.
+- **Our vessels (Mihir, 25 Nov 17:02):** a vessel is ours when Mihir & Company is her agent **or her stevedore** — she is then marked and treated like every other vessel of ours (our-vessels cards, the M&Co mark in the Salt and Timber tables and records). The stevedore comes from the DPR, or from Mihir's word for a vessel not yet on a DPR.
 - **Stevedore (Mihir, 25 Nov 16:23):** wherever a vessel's agent is shown, the stevedoring company is shown with it when a paper names one — "stev. …" under the agent. The source is the DPR's "Stevd." column, as printed (the port's short names: RSIPL, TSAS, GFPL, TRS …); a vessel not yet on a DPR shows none.
 - **Priority column (Mihir, 21 Nov 18:45):** every Salt and Timber table says under which priority the vessel berthed ("Berthed under"); for a waiting vessel, the priority the board expects her to berth by ("Board: under").
 - **Liquid tab (Mihir, 21 Nov 18:45):** short tables only — jetties, waiting, expected. The long notes stay under "Full notes". Mihir does not follow liquid.
@@ -167,7 +169,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 ## 10. Rules taken out — not to be used again
 
 - **Taken out:** A place whose vessel sails inside the same meeting window is given out again while she is still alongside *(1 and 7 Nov)* — **Why:** Withdrawn by Mihir, 22 Nov 18:09. In the one-place lines a second vessel almost never berthed while the first was alongside (8K 0 of 10). **Final rule now:** A place is free only once its vessel has sailed (section 2A).
-- **Taken out:** A place is held for the senior vessel who will be served at another berth later in the window *(9 Nov)* — **Why:** Withdrawn by Mihir, 11 Nov. **Final rule now:** Each berth, as it frees, goes to the senior it suits.
+- **Taken out:** Each berth, as it frees, goes to the senior vessel it suits — the place is never held *(Mihir, 11 Nov)* — **Why:** Mihir, 25 Nov 17:02: allotment strictly by the order of priority, the berth afterwards. **Final rule now:** The place waits for the senior vessel when a berth of the same window suits her (section 0). *(This is the 9 Nov reading, back in force.)*
 - **Taken out:** HP goes by the list rank; the senior takes the 30K place and the junior commits 50K under HP *(1 Nov)* — **Why:** Overridden 21 Nov: HP is a bid. HP 1 won once in seven. **Final rule now:** HP is a bid; the board names the vessels in the bid, not a winner (section 1).
 - **Taken out:** The Bitumen place goes to the senior General vessel — **Why:** Overridden by Circular 5237, from the meeting of 23 Nov. **Final rule now:** The senior vessel of the 6.5K line (section 2).
 - **Taken out:** If the free berth does not suit the senior General vessel, General takes nothing there *(20 Nov)* — **Why:** Overridden by Mihir, 22 Nov 17:28: no berth is left vacant. **Final rule now:** General still goes by seniority; the port shifts to fit the senior in (sections 3, 5).
