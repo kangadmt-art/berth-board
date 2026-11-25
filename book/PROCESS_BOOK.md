@@ -18,6 +18,8 @@ What is done with each paper, step by step. The aim: papers go into the data boo
 
 ## 3. Daily performance report — DPR (position 0700)
 
+- The DPR's "Stevd." column gives the stevedore of every working vessel. After each DPR the board's stevedore list is rebuilt from all the DPRs on file and shown beside the agent *(Mihir, 25 Nov)*.
+
 - For each vessel: work in the last 24 hours, total so far, balance, gangs and hooks.
 - Remarks give the actual hours: made fast, commenced, completed, left the berth.
 - Midstream and mooring rows go to the barge record.

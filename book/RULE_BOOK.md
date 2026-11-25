@@ -26,7 +26,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 
 - **Government — 2 places.** Every bulk fertiliser cargo is Government cargo, even when the list prints no rank. Fertiliser in bags is not. Rock phosphate is not. *(Mihir, 20 Nov)*
 - **Coastal — 1 place.**
-- **Higher productivity (HP) — 2 places.** HP is a bid *(Mihir's team, 21 Nov)*. Only vessels that can do more than 40,000 MT a day take part. The bid starts at 40,000 and goes up to 50,000 at most. The highest bid gets the berth. If two vessels both bid 50,000, the senior one gets it. So the HP rank on the list does not decide the berth, and the board cannot know the winner before the meeting. **No vessel is bidding for HP at present** *(Mihir, 25 Nov 14:47)* — the board gives no berth on an HP bid until a programme prints one. HP time is enforced: a vessel that runs past her quoted time is taken off the berth.
+- **Higher productivity (HP) — 2 places.** HP is a bid *(Mihir's team, 21 Nov)*. Only vessels that can do more than 40,000 MT a day take part. The bid starts at 40,000 and goes up to 50,000 at most. The highest bid gets the berth. If two vessels both bid 50,000, the senior one gets it. So the HP rank on the list does not decide the berth, and the board cannot know the winner before the meeting. **No vessel is bidding for HP at present** *(Mihir, 25 Nov 14:47)* — the board gives no berth on an HP bid it cannot see. Programme 26.11, from the same meeting, printed MSC Magali as HP(50K): she is entered as printed; for the vessels still waiting the board keeps Mihir's word **(open — Mihir to say whether any of them is bidding)**. The port shifts another vessel on port convenience to fit an HP bid in (African Hornbill, CJ-16 → CJ-15A). HP time is enforced: a vessel that runs past her quoted time is taken off the berth.
 - **SAAGAR — 1 bulk place and 1 break-bulk place.** They are two separate priorities. SAAGAR project cargo does not use these two places. *(Mihir, 1 and 14 Nov)*
 - **24 hours — 1 place.** For a vessel that can finish in 24 hours, by seniority and by the berth she needs.
 - **6.5K / 8K — 1 place.**
@@ -84,7 +84,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 - **CJ-6** is a damaged berth: nothing may be dumped on it, so only fertiliser vessels work there. *(Mihir, 6 Nov)*
 - **Coal, coke and ore** do not go to the bag berths CJ-1 to 4; aggregates do.
 - **Ball clay / feldspar** normally go to CJ-5 to 8 — the agents ask for these. A clean berth is used only when her list remark asks for it. *(Mihir, 31 Oct and 6 Nov; seen again 21 Nov: Gokova-M, 24H 1, was passed over at CJ-15A)*
-- **Gearless and over 200 m:** the shore-crane berths CJ-7 / 8, unless her cargo works only at the clean berths.
+- **Gearless and over 200 m:** the shore-crane berths CJ-7 / 8, unless her cargo works only at the clean berths. A gearless **coal / coke / ore** vessel may also lie at CJ-16 *(programme 26.11: MSC Magali, 253 m, coal, HP(50K) at CJ-16)*.
 - **Only two fertiliser vessels** work at a time. *(Mihir, 7 Nov)*
 
 ## 5. Shifting
@@ -133,6 +133,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 - **Gear chip (Mihir, 21 Nov 15:05):** shown for dry cargo vessels and Tuna vessels only. Liquid vessels carry no gear chip.
 - **DPR table (Mihir, 21 Nov 18:30):** only vessels still working are shown. A completed or sailed vessel's DPR line is kept in the data book.
 - **Lists as tables (Mihir, 21 Nov 18:23–18:30):** Salt and Timber records and the Salt working / waiting / expected lists are drawn as tables with the same columns in every row; on a phone the table scrolls sideways and the vessel name stays in place.
+- **Stevedore (Mihir, 25 Nov 16:23):** wherever a vessel's agent is shown, the stevedoring company is shown with it when a paper names one — "stev. …" under the agent. The source is the DPR's "Stevd." column, as printed (the port's short names: RSIPL, TSAS, GFPL, TRS …); a vessel not yet on a DPR shows none.
 - **Priority column (Mihir, 21 Nov 18:45):** every Salt and Timber table says under which priority the vessel berthed ("Berthed under"); for a waiting vessel, the priority the board expects her to berth by ("Board: under").
 - **Liquid tab (Mihir, 21 Nov 18:45):** short tables only — jetties, waiting, expected. The long notes stay under "Full notes". Mihir does not follow liquid.
 - **Our vessels card:** one line per reading and per option; the reasoning opens on a tap.
