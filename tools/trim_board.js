@@ -35,9 +35,15 @@ const js=o=>o===null||o===undefined?'null':typeof o==='number'?String(o):typeof 
   const n=g('n'),bn=n.replace(/ \(.*$/,''),mf=g('f'),qm=l.match(/\bq:([0-9.]+)/);const blk=(s.indexOf('const HP_LOG=[')>0)?s.slice(s.indexOf('const HP_LOG=[')).split('\n];')[0]:'';if(!blk||(blk.includes("{n:'"+bn+"',")&&blk.includes("f:'"+mf+"'")))return;
   const agm=s.match(new RegExp("'"+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+"':'([A-Z][^']*)'"));
   hd.push(" {n:'"+bn+"',b:'"+g('b')+"',c:'"+g('c')+"',q:"+(qm?qm[1]:0)+",ag:'"+(agm?agm[1]:'')+"',qt:"+nm[1]+",f:'"+mf+"',o:'"+g('t')+"'}");});
+ // a vessel of CJ-16 that leaves V goes into CJ16_LOG first (the CJ-16 non-clean cargo section's record of every call at the berth — Mihir, 25 Nov 23:48)
+ const cd=[];[...drop].forEach(i=>{const l=lines[i];const g=k=>{const m=l.match(new RegExp("\\b"+k+":'((?:[^'\\\\]|\\\\.)*)'"));return m?m[1]:'';};if(g('b')!=='16'||g('cat')==='SPACE')return;
+  const n=g('n'),bn=n.replace(/ \(.*$/,''),mf=g('f'),qm=l.match(/\bq:([0-9.]+)/),nm=l.match(/\bnm:(\d+)/);const blk=(s.indexOf('const CJ16_LOG=[')>0)?s.slice(s.indexOf('const CJ16_LOG=[')).split('\n];')[0]:'';if(!blk||(blk.includes("{n:'"+bn+"',")&&blk.includes("f:'"+mf+"'")))return;
+  const esc=n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');const agm=s.match(new RegExp("'"+esc+"':'([A-Z][^']*)'"));const iem=s.match(new RegExp("'"+esc+"':'(IMP|EXP)'"));const lom=s.match(new RegExp("'"+esc+"':([0-9.]+)[,}]"));
+  cd.push(" {n:'"+bn+"',c:'"+g('c')+"',q:"+(qm?qm[1]:0)+",u:'"+(g('u')||'MT')+"',ie:'"+(iem?iem[1]:'')+"',ag:'"+(agm?agm[1]:'')+"',cat:'"+(g('slot')||g('cat'))+"',qt:"+(nm?nm[1]:'null')+",loa:"+(lom?lom[1]:'null')+",g:'',f:'"+mf+"',o:'"+g('t')+"'"+(/\best:1/.test(l)?',est:1':'')+"}");});
  s=s.slice(0,a)+lines.filter((l,i)=>!drop.has(i)).join('\n')+s.slice(e);
  if(pd.length){const x=s.indexOf('const PPP_DONE=['),y=s.indexOf('\n];',x);if(x>0)s=s.slice(0,y)+',\n'+pd.join(',\n')+s.slice(y);console.log('CJ-9/10 record +',pd.length,'— CHECK the I/E, agent and sailing hour of the new line(s) in PPP_DONE');}
  if(hd.length){const x=s.indexOf('const HP_LOG=['),y=s.indexOf('\n];',x);if(x>0)s=s.slice(0,y)+',\n'+hd.join(',\n')+s.slice(y);console.log('HP record +',hd.length,'— CHECK the agent of the new line(s) in HP_LOG');}
+ if(cd.length){const x=s.indexOf('const CJ16_LOG=['),y=s.indexOf('\n];',x);if(x>0)s=s.slice(0,y)+',\n'+cd.join(',\n')+s.slice(y);console.log('CJ-16 record +',cd.length,'— CHECK the I/E, agent, LOA, gear and sailing hour of the new line(s) in CJ16_LOG');}
  if(sd.length){const x=s.indexOf('const SALT_DONE=['),y=s.indexOf('\n];',x);if(x>0)s=s.slice(0,y)+',\n'+sd.join(',\n')+s.slice(y);console.log('salt record +',sd.length,'— CHECK the agent and arrival of the new line(s) in SALT_DONE');}
  // ---- 2. MV and LIQ.moves — rows of the board's day only
  const cutMoves=(start,endMark,ind)=>{const a=s.indexOf(start); if(a<0)return [0,0]; const a2=a+start.length, e=s.indexOf(endMark,a2); const arr=Function('return ['+s.slice(a2,e)+'\n]')();

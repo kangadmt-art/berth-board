@@ -564,6 +564,12 @@ tr.grp td:first-child{font-weight:700}
     <div class="quick" id="quick"></div>
     <div class="result" id="result"></div>
   </section>
+  <section class="card" data-sec="c16" aria-labelledby="c16h">
+    <div class="sechead"><h2 id="c16h">CJ-16 · non-clean cargo</h2><p id="c16sub"></p></div>
+    <div class="stats" id="c16stats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"></div>
+    <div id="c16tbl"></div>
+    <details class="tdfull"><summary>Every vessel at CJ-16 since 28 Oct — clean and non-clean</summary><div id="c16all"></div></details>
+  </section>
   <section class="card" data-sec="mpt" aria-labelledby="mp">
     <div class="sechead"><h2 id="mp">Meeting preview · berth-wise</h2><p id="mpsub">Berth-wise view of the same window (18:00 on the meeting day → 18:00 next day): for each DPA berth expected to free up, who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated.</p></div>
     <div class="scroll"><table class="mpt wd" id="mpt"></table></div>
@@ -801,7 +807,7 @@ function setView(k,opts){opts=opts||{};if(k==='meeting')k='priority';if(!VIEWS[k
   try{document.title='DPA Berth Board · '+VIEW_NAME[k];}catch(e){}
   if(opts.hash!==false&&location.hash!=='#'+k){try{history.replaceState(null,'','#'+k);}catch(e){}}
   if(opts.top)window.scrollTo({top:0,behavior:'auto'});}
-const UPDATED='25 Nov 2026 · 23:40 IST';
+const UPDATED='25 Nov 2026 · 23:52 IST';
 const BOARD_SRC='HM signal 25 Nov evening sheet (disp 1728) + amendment (disp 2028) · programme 26.11 (TF/SH/2102 dt 25 Nov) · list 25.11 revised after the meeting · list 25.11 (0700) · DPR 25.11 (0700) · programme 25.11 (TF/SH/2102 dt 24 Nov) · HM evening signal 24 Nov (disp 1655, amended to 1920) · DPR 24.11 (0700) · HM day signal 24 Nov (disp 2115 / 0547) · HM night signal 23 Nov (amendment, disp 2100 / 0128) · HM signal 23 Nov evening sheet (disp 1625) · programme 24.11 (TF/SH/2102 dt 23 Nov) · list 23.11 revised after the meeting · HM signal 23 Nov day sheet (disp 0815) · list 23.11 (0700) · DPR 23.11 (0700) · HM signal 22 Nov night sheet, amendment & new signal (disp 2130 / 2155) · HM signal 21 Nov night sheet amended (disp 2230) · HM signal 21 Nov night sheet (disp 1900) · programme 22.11 · list 21.11 revised · HM signal 21 Nov amended (disp 1257) · DPR 21.11 (0700) · HM signal 21 Nov (day sheet, disp 0746) · list 21.11 (0700) · HM signal 20 Nov amended (disp 1400) · programme 21.11 · list 20.11 (revised after the meeting) · HM signal 20 Nov (12:40 sheet) · timber desk 20 Nov 12:00 · HM signal 20 Nov (day sheet, amended) · list 20.11 (0700) · DPR 20.11 (0700) · evening signal 19 Nov (disp 1640, amended 1940) · list 19.11 (0700) · programme 20.11 (TF/SH/2102) · list 18.11 (0700, revised after the meeting) · DPR 19.11 (0700) · programme 19.11 and 18.11 (TF/SH/2102) · signals 19 Nov (disp 0745 / 1040), 18 Nov (disp 2130, amended), 17 Nov (amended to 1750), night 16 Nov (disp 2005) · DPR 18.11 / 17.11 · list 16.11 (0700, revised after the meeting) · programme 17.11 (TF/SH/2102, dated 16.11) · night signal 16 Nov (disp 1710) · night signal 15 Nov, amended (disp 2048) · programme 16.11 · DPR 15.11 (0700) · HM signals to the 13 Nov night sheet — 2nd amendment (hand-corrected to 14 Nov 09:35) · gang sheet 13 Nov III shift · Mihir 14 Nov 10:07 · Mihir 11 Nov 12:10 + 16:03 + 19:46 + 20:08 · Mihir notes 7 Nov 11:37 / 14:45 / 15:02 / 15:40 · 9 Nov 00:04 · timber 07.11 · tanker line-up 03.11';
 // ---- Timber desk: the team's own "Kandla Timber Vessel's Position" report (their arrivals, berthings and ETB estimates). Shown beside the
 // board's projection so the two readings can be compared every day. Dates 'MM-DD' or 'MM-DD HH:MM'. cbm null = not given (XXXXX).
@@ -1478,6 +1484,40 @@ function prospects(){
 // The board cannot see the bids, so it names no winner: it shows who bids at which meeting (the meeting that programmes the first berth she can use),
 // by list seniority, and the quotes that won so far (the programme prints the winner's quote).
 const hpFam=c=>/salt/i.test(c)?'Salt':/coal|coke/i.test(c)?'Coal / coke':/aggregate/i.test(c)?'Aggregates':/pellet|iron|\bore\b|fines/i.test(c)?'Ore / pellets':/clay|feldspar/i.test(c)?'Clay':/gypsum/i.test(c)?'Gypsum':'Other';
+// ---- CJ-16 · non-clean cargo (Mihir, 25 Nov 23:48): every coal / coke / iron ore / pellet vessel at CJ-16, how many so far, and the berth time they took
+function c16(){
+  const sub=document.getElementById('c16sub'),st=document.getElementById('c16stats'),tb=document.getElementById('c16tbl'),al=document.getElementById('c16all'); if(!tb)return;
+  const base=n=>n.replace(/ \(.*$/,''),K=x=>x?(x>=1000?(Math.round(x/100)/10+'K').replace('.0K','K'):x):'—';
+  const tbl=(th,rows)=>`<div class="sdwrap"><table class="sdt"><tr>${th.map((x,i)=>`<th${(i===0||i===th.length-1)?' class="l"':''}>${x}</th>`).join('')}</tr>${rows.join('')}</table></div>`;
+  const rows=CJ16_LOG.map(r=>({n:r.n,c:r.c,q:r.q,u:r.u||'MT',ie:r.ie,ag:r.ag,cat:r.cat,qt:r.qt,loa:r.loa,g:r.g,F:h(r.f),T:h(r.o),est:!!r.est,st:'sailed'}));
+  const seen=r=>rows.some(x=>x.n===base(r.n)&&Math.abs(x.F-r.F)<24);
+  V.filter(v=>v.b==='16'&&v.cat!=='SPACE').forEach(v=>{if(seen(v))return;const gr=gearOf(v.n);rows.push({n:base(v.n),full:v.n,c:v.c,q:v.q,u:v.u||'MT',ie:(typeof IE!=='undefined'&&IE[v.n])||'',ag:agOf(v.n),cat:v.slot||v.cat,via:v.via,qt:v.nm||null,loa:(typeof LOA!=='undefined'&&LOA[v.n])||null,g:gr?(gr.g==='GL'?'gearless':gr.g==='G'?'geared':gr.g==='M'?'may be gearless':''):'',F:v.F,T:v.T,est:!!v.est,st:v.T<=NOW?'sailed':v.F<=NOW?'alongside':'programmed'});});
+  (typeof S!=='undefined'?S:[]).filter(s=>s.b==='16').forEach(s=>{const w=s.w||{};rows.push({n:base(s.n),full:s.n,c:s.c||w.c,q:s.q||w.q,u:s.u||w.u||'MT',ie:(typeof IE!=='undefined'&&IE[s.n])||'',ag:agOf(s.n),cat:s.cat,via:s.via,qt:null,loa:w.loa||null,g:(gr=>gr?(gr.g==='GL'?'gearless':gr.g==='G'?'geared':gr.g==='M'?'may be gearless':''):'')(gearOf(s.n)),F:s.F,T:s.T,est:true,st:'expected'});});
+  rows.sort((a,z)=>a.F-z.F);
+  const nc=rows.filter(r=>NC16(r.c)), been=nc.filter(r=>r.st==='sailed'||r.st==='alongside'), next=nc.filter(r=>r.st==='programmed'||r.st==='expected');
+  const hrs=r=>Math.max(0,Math.min(r.T,NOW)-r.F), d1=x=>(x/24).toFixed(1);
+  const first=nc.length?nc[0].F:null, span=first!=null?Math.max(1,NOW-first):0, used=been.reduce((a,r)=>a+hrs(r),0), mt=been.reduce((a,r)=>a+(r.u==='MT'?r.q:0),0);
+  const since=first!=null?rows.filter(r=>r.F>=first&&r.F<=NOW):[];
+  const famOf=r=>NC16(r.c)?'non-clean':/salt/i.test(r.c)?'salt':/blade|windmill|project|steel/i.test(r.c)?'project / steel':/rice|sugar|wheat|bag/i.test(r.c)?'food cargo':/aggregate/i.test(r.c)?'aggregates':'other';
+  const mix={};since.forEach(r=>{mix[famOf(r)]=(mix[famOf(r)]||0)+1;});
+  const stTxt=r=>r.st==='sailed'?'sailed':r.st==='alongside'?'<b style="color:var(--warn)">at berth now</b>':r.st==='programmed'?'<b style="color:var(--gold)">on the programme</b>':'<span style="color:var(--muted)">board expects</span>';
+  const under=r=>(CL[r.cat]||r.cat||'—')+(r.qt&&/^(HP|24H|GOV|COASTAL)$/.test(r.cat||'')?' · '+K(r.qt):'')+(r.via&&/30k\/25k/i.test(r.via)?' · quote':'');
+  const tile=(c,v,l)=>`<div class="stat" style="--sc:${c};cursor:default"><div class="v" style="font-size:26px">${v}</div><div class="l">${l}</div></div>`;
+  if(sub)sub.innerHTML=`Coal, coke, iron ore and pellet vessels berthed at CJ-16 — cargoes kept off the clean berths until this month (pellets let in from 11 Nov; Trade Notice 3089 of 15 Nov: coal, coke, iron ore fines and pellets at CJ-16). `+
+    (nc.length?`<b>${been.length} vessel${been.length===1?'':'s'} so far</b>${first!=null?' · the first on '+fmt(first).replace(/ \d\d:\d\d$/,''):''}${next.length?` · <b>${next.length} more</b> ${next.some(r=>r.st==='programmed')?'programmed / expected':'expected by the board'}`:''}.`:'None on the board\'s record yet.')+
+    ` <span style="color:var(--muted)">Aggregates are not counted — they lay at CJ-16 before the notice too.</span>`;
+  if(st)st.innerHTML=nc.length?[
+    tile('var(--warn)',been.length,`<b>non-clean vessels so far</b> · ${Object.entries(been.reduce((a,r)=>{const k=NC16_FAM(r.c);a[k]=(a[k]||0)+1;return a;},{})).map(([k,n])=>n+' '+k.toLowerCase()).join(' · ')||'—'}`),
+    tile('var(--gold)',next.length,`<b>coming</b> · ${next.length?next.map(r=>r.n+' ~'+fmt(r.F).replace(/ \d\d:\d\d$/,'')).join(' · '):'none in sight'}`),
+    tile('var(--dry)',nf.format(Math.round(mt)),'<b>MT</b> of non-clean cargo over CJ-16 so far'),
+    tile('var(--brk)',d1(used),`<b>berth-days</b> taken · ${Math.round(used/span*100)} % of CJ-16's time since ${first!=null?fmt(first).replace(/ \d\d:\d\d$/,''):'—'}`),
+    tile('var(--tmb,var(--brass))',since.length,`<b>vessels at CJ-16</b> since then · ${Object.entries(mix).sort((a,z)=>z[1]-a[1]).map(([k,n])=>n+' '+k).join(' · ')}`)].join(''):'';
+  const TH=['Vessel','Cargo','MT','I / E','Berthed under','Made fast','Left','Days at berth','LOA · gear','Status','Agent · stevedore'];
+  const tr=(r,mark)=>`<tr${isMine(r.full||r.n)?' class="our"':''}${mark&&NC16(r.c)?' style="background:rgba(var(--ov-rgb),.06)"':''}><td class="l"><b>${r.n}</b>${mark&&NC16(r.c)?' <span class="chip" style="margin-left:4px;color:var(--warn);border-color:var(--warn)">non-clean</span>':''}</td><td class="l">${r.c}</td><td>${nf.format(Math.round(r.q))}${r.u!=='MT'?' '+r.u:''}</td><td>${r.ie||'—'}</td><td class="l">${under(r)}</td>`+
+    `<td class="l">${(r.st==='programmed'||r.st==='expected')?'~'+fmt(r.F)+' est':fmt(r.F)}</td><td class="l">${r.st==='sailed'&&!r.est?fmt(r.T):'~'+fmt(r.T)+' est'}</td><td>${r.st==='sailed'?d1(r.T-r.F):r.st==='alongside'?d1(NOW-r.F)+' so far':'~'+d1(r.T-r.F)}</td><td class="l">${r.loa?Math.round(r.loa)+' m':'—'}${r.g?' · '+r.g:''}</td><td class="l">${stTxt(r)}</td><td class="l">${r.ag||'—'}${stvS(r.full||r.n,r.F,r.T)}</td></tr>`;
+  tb.innerHTML=nc.length?tbl(TH,nc.slice().reverse().map(r=>tr(r,false))):'<div class="empty">No coal, coke, iron ore or pellet vessel has been berthed at CJ-16 on the board\'s record.</div>';
+  if(al)al.innerHTML=tbl(TH,rows.slice().reverse().map(r=>tr(r,true)))+`<p style="font-size:12px;color:var(--muted);margin:2px 2px 8px">${rows.filter(r=>r.st==='sailed').length} completed calls on record since ${fmt(rows[0].F).replace(/ \d\d:\d\d$/,'')}. "Board expects" rows are the board's own projection, not a programme.</p>`;
+}
 function hpRecs(){
   const base=n=>n.replace(/ \(.*$/,'');
   const rec=HP_LOG.map(r=>({n:r.n,b:r.b,c:r.c,q:r.q,ag:r.ag,qt:r.qt,F:h(r.f),T:h(r.o),est:!!r.est,x:!!r.x}));
@@ -1916,6 +1956,20 @@ const tmbResult=(tot,final)=>tot==null?'<span style="color:var(--dim)">—</span
 // "Salt wale mae sirf aaya, laga aur nikla — total kitne din huve; completed vessel dikhte rahe aur monthly figure bhi." No demurrage here.
 // SALT_DONE = the record of salt vessels that have sailed: n, q (MT), ag, b (berth), pri, arr (reported for the salt call; null = not on record), mf (made fast), out (left the berth).
 // tools/trim_board.js adds a salt vessel here when it takes her out of V.
+const CJ16_LOG=[ // every completed call at CJ-16 on the board's record, oldest first (from the data book, 25 Nov) — tools/trim_board.js appends a vessel here before it drops her from V. qt = the MT-a-day she was berthed on (quote or norm). Read by c16() — the CJ-16 non-clean cargo section (Mihir, 25 Nov 23:48).
+ {n:'Agia Fevronia',c:'Salt in bulk',q:60500,u:'MT',ie:'',ag:'Gautam Freight',cat:'HP',qt:40000,loa:199.85,g:'geared',f:'10-28 18:06',o:'10-30 06:00'},
+ {n:'Maritime Harmony',c:'Salt',q:74850,u:'MT',ie:'EXP',ag:'Cross Trade',cat:'HP',qt:40000,loa:224.94,g:'gearless',f:'10-30 13:00',o:'11-01 18:00'},
+ {n:'Alasia',c:'Aggregates',q:59900,u:'MT',ie:'EXP',ag:'Scorpio Shg',cat:'HP',qt:40000,loa:199.98,g:'geared',f:'11-01 20:36',o:'11-03 10:32'},
+ {n:'Nord Newport',c:'Rice in bulk',q:30000,u:'MT',ie:'EXP',ag:'Kashmira',cat:'GEN',qt:3278,loa:182.93,g:'geared',f:'11-03 13:30',o:'11-05 11:45'},
+ {n:'Orion',c:'Salt in bulk',q:61600,u:'MT',ie:'EXP',ag:'Cross Trade',cat:'24H',qt:30000,loa:199,g:'geared',f:'11-05 14:30',o:'11-06 14:30'},
+ {n:'Karpathos Dawn',c:'Rice bags',q:50000,u:'MT',ie:'EXP',ag:'DBC',cat:'8K',qt:6500,loa:189.99,g:'geared',f:'11-07 23:45',o:'11-09 13:30'},
+ {n:'Star Fighter',c:'Salt in bulk',q:58000,u:'MT',ie:'EXP',ag:'Cross Trade',cat:'8K',qt:8000,loa:199.98,g:'geared',f:'11-09 15:54',o:'11-12 01:35'},
+ {n:'Cape Diversity',c:'DR pellets',q:116540,u:'MT',ie:'IMP',ag:'Genesis',cat:'HP',qt:40000,loa:292,g:'gearless',f:'11-12 05:48',o:'11-16 03:00'},
+ {n:'Evangelia D',c:'Aggregates',q:60216,u:'MT',ie:'EXP',ag:'BS Shg',cat:'HP',qt:50000,loa:199.9,g:'geared',f:'11-16 07:54',o:'11-17 19:15'},
+ {n:'HN Doris',c:'Salt in bulk',q:75000,u:'MT',ie:'EXP',ag:'Cross Trade',cat:'HP',qt:46000,loa:229,g:'',f:'11-17 21:12',o:'11-19 21:20'}
+];
+const NC16=c=>/coal|coke|iron|pellet|\bore\b|fines/i.test(c||'')&&!/mill ?scale/i.test(c||''); // "non-clean" at CJ-16 = the cargoes Trade Notice 3089 (15.11.2026) let in: coal, coke (petcoke too), iron ore fines, pellets. Aggregates are NOT counted — they lay at CJ-16 before the notice as well (Alasia, 1 Nov).
+const NC16_FAM=c=>/coal/i.test(c)?'Coal':/coke/i.test(c)?'Coke':/pellet/i.test(c)?'Pellets':'Iron ore';
 const HP_LOG=[ // every berth given under HP since 28 Oct with the quote the programme printed (from the data book, 22 Nov) — trim_board.js appends an HP vessel here before it drops her from V. x:1 = quantity not worked at this berth alone (shift / top-up), no rate shown
  {n:'Xanadu',b:'7',c:'Coal bulk',q:79219,ag:'Ambika',qt:50000,f:'10-28 16:05',o:'10-30 23:30'},
  {n:'Agia Fevronia',b:'16',c:'Salt in bulk',q:60500,ag:'Gautam Freight',qt:40000,f:'10-28 18:06',o:'10-30 06:00'},
@@ -3896,12 +3950,12 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();salt();ppp();dpr();msWork();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();hpbid();meetBoard();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();salt();ppp();dpr();msWork();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();hpbid();c16();meetBoard();qdetail();side();gantt();groups();moves();
   summaries();
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }
 // ---- collapsible sections: every card opens on tap; closed cards show a one-line summary. State is remembered per viewer (localStorage, best effort).
-const SEC_OPEN_DEFAULT=new Set(['finder','mine','hpb']);
+const SEC_OPEN_DEFAULT=new Set(['finder','mine','hpb','c16']);
 let SECST={};try{SECST=JSON.parse(localStorage.getItem('bb.sec')||'{}')||{};}catch(e){SECST={};}
 function saveSec(){try{localStorage.setItem('bb.sec',JSON.stringify(SECST));}catch(e){}}
 function setSec(id,open,save){const sec=document.querySelector(`section.card[data-sec="${id}"]`);if(!sec)return;sec.classList.toggle('closed',!open);const b=sec.querySelector('.tgl');if(b)b.setAttribute('aria-expanded',open?'true':'false');if(save!==false){SECST[id]=open?1:0;saveSec();}}
