@@ -18,6 +18,7 @@ What is done with each paper, step by step. The aim: papers go into the data boo
 
 ## 3. Daily performance report — DPR (position 0700)
 
+- When a later list re-states a vessel's quantity, the DPR balance is out of date: no finishing time is taken from it until the next DPR. When a programme shifts a working vessel, the hours of the shift are added to her finish. *(board, 26 Nov — Safi Alfa; Asian Summit, Blue Shark)*
 - The DPR's "Stevd." column gives the stevedore of every working vessel. After each DPR the board's stevedore list is rebuilt from all the DPRs on file and shown beside the agent *(Mihir, 25 Nov)*.
 
 - For each vessel: work in the last 24 hours, total so far, balance, gangs and hooks.

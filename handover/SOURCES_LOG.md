@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 26 Nov 15:14 — PAPERS (no text): DAILY BERTHING LIST 26.11.2026 (xlsx) + the same REVISED after the meeting (xlsx) · DPR 26.11.2026 (xlsx, position 07:00) · PROGRAMME FOR 27.11.2026 (TF/SH/2102 dt 26 Nov, xlsx) · HM SIGNAL day sheet 26 Nov (two images: to 08:15, 5 rows; to 09:10, 10 rows) → v278. Meeting of 26 Nov scored 0 of 3. Port facts: Hai Nam 81 "GOV(30K)" at CJ-15A ahead of the SAAGAR line (circular 5237 (i) closed against the board's reading); Katerina K (GEN 3) at CJ-6 past GEN 1 / GEN 2. New own vessel on the expected sheet: Xin Bo (salt 50,000 MT, ETA 27 Nov 03:00). Archive: `data/2026-11-26/`.
 - 25 Nov 23:56 — MIHIR (chat): the CJ-16 non-clean cargo page and the open questions each get a tab at the top, like Priority and Salt → v277.
 - 25 Nov 23:48 — MIHIR (chat): show every non-clean cargo vessel that berths at CJ-16, with the count → v276 (new Cargo-page section "CJ-16 · non-clean cargo"; record `CJ16_LOG`). Site login: parked by him.
 - 25 Nov 23:39 — HM SIGNAL 25 Nov evening sheet (disp 17:28) + amendment (disp 20:28), two images, no text → v275. Lila Tokyo's sailing moved from 01:36 to RT OUT 08:00 on 26 Nov; Tug Varahi + barge AKG 11 in behind her (about noon, est); Parvraj out 23:45; African Hornbill turn around 21:30; OJ-1 / OJ-3 / OJ-7 turn over tonight.
