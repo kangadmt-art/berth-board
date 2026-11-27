@@ -266,6 +266,12 @@ table{border-collapse:collapse;width:100%}
 /* Timber tab (16 Nov): own sheet. v168 — the list on top: summary pills, then ONE table of the active vessels, then the completed record.
    Phones: every vessel is a 3–4 line summary (td.sm); a tap opens the labelled details. */
 :root{--tmb:#a3c46a}
+.views a[data-view="moves"]{--sc:var(--dry)}.views a[data-view="score"]{--sc:var(--ok)}
+.qgt{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 14px}.qgt th{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line2)}
+.qgt td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}.qgt td.num,.qgt th.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}.qgt td.pn{white-space:nowrap;font-weight:700}
+.qgt tr.g td{background:rgba(95,191,127,.10);color:var(--ok);font-weight:700}.qgt tr.g.sm td{background:transparent;color:var(--muted);font-weight:400}.qgt tr.g td small{color:var(--muted);font-weight:400}.qgt td small{color:var(--muted)}
+.qgt tr.tot td{border-top:2px solid var(--line2);border-bottom:0;font-weight:700}.qgcap{font-family:var(--f-disp);font-size:17px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;margin:10px 0 2px}
+@media (max-width:640px){.qgt{font-size:12px}.qgt td,.qgt th{padding:6px 5px}.qgt .hidem{display:none}}
 .views a[data-view="mine"]{--sc:var(--brass)}.views a[data-view="late"]{--sc:var(--bad)}body:not([data-view="cargo"]) .topstats{display:none}.topstats{margin:0 0 14px}
 .views a[data-view="dpr"]{--sc:var(--dry)}.views a[data-view="circ"]{--sc:var(--brass)}.morenote{color:var(--muted);font-size:12.5px;margin:14px 2px 6px}
 .qgw{margin:6px 0 12px}.qgh{font-size:12.5px;margin:10px 0 4px;color:var(--muted)}.qgh b{color:var(--fg)}.qgh .tot{color:var(--ok);font-weight:700}
@@ -549,11 +555,13 @@ tr.grp td:first-child{font-weight:700}
     <a href="#priority" data-view="priority"><b>Priority chart</b><small>Next meeting berth by berth · port's waiting chart · rank / Y / N in each priority</small><span class="vb" id="vb-priority"></span></a>
     <a href="#sawal" data-view="sawal"><b>Open questions</b><small>Khule sawal · what the board is waiting on · who has to answer</small><span class="vb" id="vb-sawal"></span></a>
     <a href="#late" data-view="late"><b>Routine se hat ke</b><small>Not sailing on time · past ETC · sailing postponed</small><span class="vb" id="vb-late"></span></a>
+    <a href="#moves" data-view="moves"><b>Movements</b><small>Harbour Master's signal sheets · in · out · shift · cargo berths</small><span class="vb" id="vb-moves"></span></a>
     <a href="#barge" data-view="barge"><b>Barge</b><small>Midstream · vessels working by barge · daily discharge / loading · commodity-wise</small><span class="vb" id="vb-barge"></span></a>
     <a href="#timber" data-view="timber"><b>Timber</b><small>Log vessels · position · laytime &amp; demurrage · record</small><span class="vb" id="vb-timber"></span></a>
     <a href="#salt" data-view="salt"><b>Salt</b><small>Salt vessels · arrived · berthed · sailed · days · record</small><span class="vb" id="vb-salt"></span></a>
     <a href="#dpr" data-view="dpr"><b>DPR</b><small>Cargo progress · last 24 hours · balance and pace, vessel by vessel</small><span class="vb" id="vb-dpr"></span></a>
     <a href="#circ" data-view="circ"><b>Circulars</b><small>DPA circulars &amp; trade notices · number · date · what it means · PDF</small><span class="vb" id="vb-circ"></span></a>
+    <a href="#score" data-view="score"><b>Accuracy</b><small>Board's meeting call against the port's programme · day by day</small><span class="vb" id="vb-score"></span></a>
     <a href="#cj16" data-view="cj16"><b>CJ-16 · non-clean</b><small>Coal · coke · iron ore · pellets at berth 16 · how many · berth time</small><span class="vb" id="vb-cj16"></span></a>
     <a href="#ppp" data-view="ppp"><b>CJ-9 · 10</b><small>PPP berths · Gautam Freight · what is alongside and what is next</small><span class="vb" id="vb-ppp"></span></a>
     <a href="#tuna" data-view="tuna"><b>Tuna</b><small>TT-1 to TT-4 · Adani PPP terminal · status only</small><span class="vb" id="vb-tuna"></span></a>
@@ -577,10 +585,10 @@ tr.grp td:first-child{font-weight:700}
   <section class="card" data-sec="quay">
     <div class="sechead">
       <h2>Quay by panel number</h2>
-      <p class="qhelp">North (CJ-1) on the left, south (CJ-16) on the right. First the free space between vessels, then the quay drawn to scale. Move the slider to see another hour.</p>
+      <p class="qhelp">North (CJ-1) on the left, south (CJ-16) on the right. First a table — every vessel with her panel numbers, and every empty stretch with its length in metres — then the quay drawn to scale. Position as the board stands now. CJ-9 and CJ-10 have their own page.</p>
     </div>
     <details class="tdfull" style="margin:0 0 8px"><summary>How this picture is drawn · berth lengths, panel marks, draught</summary><p class="qhelp" style="margin-top:8px">North end (CJ-1) left, south (CJ-16) right. Solid hull = at berth as per list/signal. Dotted hull = projected by the board. Click a hull to look it up above. Drawn to scale in metres from the Civil Engg "Cargo Berth Details" sheet (CJ-1–4 182.93 m, CJ-5–6 205.79, CJ-7 238.64, CJ-8 213.64, CJ-9 182.93, CJ-10 209.14, CJ-13–16 300 each); permissible draught from the Deputy Conservator's chart. Panel marks are not equal: ~22.9 m on CJ-1–6, ~34 m on CJ-7, ~21 m on CJ-8–10, and on CJ-13–16 the HM's marks 111–189 run ~15.4 m apart over the 1,200 m (the Civil sheet counts 20 m structural panels there, 131–145 / 146–159 / 160–174). Tidal benefit applies at CJ-6–10 only. Quay live load (Civil Engg sheet): 3.3 t/m² at CJ-1–5 and CJ-6 panels 42–45, 3.5 t/m² quay-side at CJ-7–9, 5 t/m² at CJ-10–16 and in the transit areas behind CJ-6–9 (IIT Mumbai report), which is why heavy stacking stays off the north berths. CJ-13–16 are shown as the operational slots the DPA list uses (13 · 14 · 15 · 15A · 16) — but the panels are not fixed: when the port needs to berth a vessel and the metres can be made, it warps the neighbours and packs by LOA (Mihir, 2 Nov; e.g. 3 Nov: Outrivaling 3 142¼–150¾ · Nord Newport 152½–161¾ · Centurion Buyo 163–173¾ · Emmanouil 175¾–188). The projection still works slot-wise; the barge-window strip packs by metres. CJ-9 and CJ-10 (panel 69 to the end of CJ-10) are operated by Gautam Freight from 11.09.2026 (trade circular 2810 dt 17.09.2026): vessels berth there with GFPL's consent, and when the berth lies idle for more than 24 h DPA may use it for other vessels until GFPL's own arrival (vacate in the next tide) — which is how KSL Ruiyang got CJ-9 after Cervia on 4 Nov.</p></details>
-    <div class="controls">
+    <div class="controls" hidden style="display:none">
       <div class="presets" id="presets" role="group" aria-label="Time"></div>
       <div class="slider">
         <label for="tslider"><span>Drag to move through the next 10 days</span><b id="tlabel"></b></label>
@@ -596,23 +604,12 @@ tr.grp td:first-child{font-weight:700}
     <div class="barge" id="runs"></div>
     <div class="barge" id="barge"></div>
     <div class="qdetail" id="qdetail"></div>
-    <div class="striplabel">Outside the DPA queue · CJ-9 (PPP) and CJ-10 (maintenance)</div>
-    <div class="side" id="side"></div>
+    <div hidden style="display:none"><div class="side" id="side"></div></div>
   </section>
 
 
-  <section class="card" data-sec="moves">
-    <div class="sechead"><h2>Signal movements · cargo berths</h2><p>From the Harbour Master's signal sheets, red-ink corrections included.</p></div>
-    <div id="moves"></div>
-  </section>
 
 
-  <section class="card" data-sec="score" aria-labelledby="sch">
-    <div class="sechead"><h2 id="sch">Accuracy · meeting call vs programme</h2><p><b>Mihir's measure (19 Nov):</b> before each day's berthing meeting the board names the vessels it expects to get a berth. When the programme comes, every name gets a <b style="color:var(--tx-ok)">✓</b> or a <b style="color:var(--tx-miss)">✗</b> — that is the score.</p></div>
-    <div id="mscore"></div>
-    <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--muted);font-size:12.5px">Detail · berth and time of every single prediction (the earlier measure)</summary><p style="color:var(--muted);font-size:12.5px;margin:8px 0 10px"><b>Earlier measure (13 Nov):</b> each day, from that morning's DPR and the berthing policy, the board says <b>which berth</b> a waiting vessel gets and <b>when</b>. That call is frozen and scored against the actual berthing (DPR made-fast time) — <b>before</b> the port's programme or signal for it existed. A programme-based call is not a prediction and is not counted. Hit = right berth and within 6 h · near = right berth, within 12 h · miss = wrong berth, &gt; 12 h, or not predicted at all. Sailing times are not scored (a sailing two hours late is not important). Record starts with DPR 11.11.</p>
-    <div id="score"></div></details>
-  </section>
 
   </div><!-- /view cargo -->
 
@@ -638,6 +635,20 @@ tr.grp td:first-child{font-weight:700}
   <section>
     <div class="sechead"><h2>Berth timeline · next 10 days</h2><p>Solid = at berth till ETC from the list. Hatched = ETC estimated (qty ÷ norm). Dotted outline = projected next vessel. Only DPA queue berths shown; CJ-9 (PPP), CJ-10 (maintenance) and container berths CJ-11/12 are left out.</p></div>
     <div class="scroll"><svg id="gantt" class="strip" role="img" aria-label="Berth timeline"></svg></div>
+  </section>
+  </div>
+  <div class="view" data-view="moves" id="view-moves">
+  <section class="card">
+    <div class="sechead"><h2>Signal movements · cargo berths</h2><p>From the Harbour Master's signal sheets, red-ink corrections included.</p></div>
+    <div id="moves"></div>
+  </section>
+  </div>
+  <div class="view" data-view="score" id="view-score">
+  <section class="card" aria-labelledby="sch">
+    <div class="sechead"><h2 id="sch">Accuracy · meeting call vs programme</h2><p><b>Mihir's measure (19 Nov):</b> before each day's berthing meeting the board names the vessels it expects to get a berth. When the programme comes, every name gets a <b style="color:var(--tx-ok)">✓</b> or a <b style="color:var(--tx-miss)">✗</b> — that is the score.</p></div>
+    <div id="mscore"></div>
+    <details style="margin-top:14px"><summary style="cursor:pointer;color:var(--muted);font-size:12.5px">Detail · berth and time of every single prediction (the earlier measure)</summary><p style="color:var(--muted);font-size:12.5px;margin:8px 0 10px"><b>Earlier measure (13 Nov):</b> each day, from that morning's DPR and the berthing policy, the board says <b>which berth</b> a waiting vessel gets and <b>when</b>. That call is frozen and scored against the actual berthing (DPR made-fast time) — <b>before</b> the port's programme or signal for it existed. A programme-based call is not a prediction and is not counted. Hit = right berth and within 6 h · near = right berth, within 12 h · miss = wrong berth, &gt; 12 h, or not predicted at all. Sailing times are not scored (a sailing two hours late is not important). Record starts with DPR 11.11.</p>
+    <div class="scroll" style="overflow-x:auto"><div id="score"></div></div></details>
   </section>
   </div>
   <div class="view" data-view="priority" id="view-priority">
@@ -819,8 +830,8 @@ const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-27 13:58');
 const PROG_END=h('11-28 18:00'); // programme 28.11 (meeting of 27 Nov) covers till here — barge windows end here;
 // ---- the boards live on this one page as views (tabs): cargo (dry cargo CJ-1–16, projected), timber (log vessels: position, laytime, record — since 16 Nov), tuna (TT-1–4) and liquid (OJ-1–7), status only.
-const VIEWS={mine:'Deendayal Port · Kandla · Mihir & Company vessels',late:'Deendayal Port · Kandla · Not sailing on time',dpr:'Deendayal Port · Kandla · Daily performance report',circ:'Deendayal Port · Kandla · Circulars and trade notices',cargo:'Deendayal Port · Kandla · Dry cargo jetty',priority:'Deendayal Port · Kandla · Priority chart',barge:'Deendayal Port · Kandla · Barge work',timber:'Deendayal Port · Kandla · Timber vessels',salt:'Deendayal Port · Kandla · Salt vessels',cj16:'Deendayal Port · Kandla · CJ-16 · non-clean cargo',sawal:'Deendayal Port · Kandla · Open questions',ppp:'Deendayal Port · Kandla · CJ-9 and CJ-10 (PPP)',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
-const VIEW_NAME={mine:'Mihir & Co',late:'Routine se hat ke',dpr:'DPR',circ:'Circulars',ppp:'CJ-9 · CJ-10',cj16:'CJ-16 · non-clean cargo',sawal:'Open questions',salt:'Salt',cargo:'Cargo jetties',priority:'Priority chart',barge:'Barge',timber:'Timber',tuna:'Tuna',liquid:'Liquid'};
+const VIEWS={moves:'Deendayal Port · Kandla · Signal movements',score:'Deendayal Port · Kandla · Accuracy of the board',mine:'Deendayal Port · Kandla · Mihir & Company vessels',late:'Deendayal Port · Kandla · Not sailing on time',dpr:'Deendayal Port · Kandla · Daily performance report',circ:'Deendayal Port · Kandla · Circulars and trade notices',cargo:'Deendayal Port · Kandla · Dry cargo jetty',priority:'Deendayal Port · Kandla · Priority chart',barge:'Deendayal Port · Kandla · Barge work',timber:'Deendayal Port · Kandla · Timber vessels',salt:'Deendayal Port · Kandla · Salt vessels',cj16:'Deendayal Port · Kandla · CJ-16 · non-clean cargo',sawal:'Deendayal Port · Kandla · Open questions',ppp:'Deendayal Port · Kandla · CJ-9 and CJ-10 (PPP)',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
+const VIEW_NAME={moves:'Movements',score:'Accuracy',mine:'Mihir & Co',late:'Routine se hat ke',dpr:'DPR',circ:'Circulars',ppp:'CJ-9 · CJ-10',cj16:'CJ-16 · non-clean cargo',sawal:'Open questions',salt:'Salt',cargo:'Cargo jetties',priority:'Priority chart',barge:'Barge',timber:'Timber',tuna:'Tuna',liquid:'Liquid'};
 let VIEW='cargo';
 const pageHref=k=>'#'+k; // same page, just another tab
 function setView(k,opts){opts=opts||{};if(k==='meeting')k='priority';if(!VIEWS[k])k='cargo';VIEW=k;
@@ -2704,6 +2715,7 @@ const MEETLOG=[
 ];
 const CALL_FROZEN=null;
 function renderMeetlog(){
+  {const vs=document.getElementById('vb-score'),L=MEETLOG[0];if(vs&&L){const got=(L.got||[]).map(x=>x[0]+'|'+x[1]),hit=(L.call||[]).filter(x=>got.includes(x[0]+'|'+x[1])).length;vs.innerHTML=`last meeting <b>${hit}</b> of ${(L.call||[]).length} right`;}}
   const el=document.getElementById('mscore'); if(!el) return;
   const bl=b=>b?(/^OJ|^TT/.test(b)?b:'CJ-'+b):'', clean=n=>n.replace(/\s*\(.*\)\s*$/,''), dayOf=d=>fday(h(d+' 12:00'));
   const pad=x=>String(x).padStart(2,'0'), iso=t=>{const d=dt(t);return pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate())+' '+pad(d.getUTCHours())+':'+pad(d.getUTCMinutes());};
@@ -3715,16 +3727,19 @@ function quayRuns(t,seg=SEGS[0]){
 }
 function quayGaps(){
   const el=document.getElementById('qgaps'); if(!el)return;
-  const pn=x=>{const r=Math.round(x*4)/4;return frac(r);};
+  const pn=x=>frac(Math.round(x*4)/4);
   const block=seg=>{
     const present=runFleet(seg).filter(v=>v.p&&v.F<=T&&T<v.T).sort((a,z)=>a.p[0]-z.p[0]);
-    const R=quayRuns(T,seg); const items=[]; let cur=seg.from, free=0, freeM=0, n=0, best=null;
-    const gap=(a,z)=>{ if(z-a<0.01)return; const m=gapM(a,z); const r=R.find(x=>Math.abs(x.a-a)<0.01&&Math.abs(x.z-z)<0.01); free+=z-a; freeM+=m; n++; if(!best||m>best.m)best={a,z,m};
-      items.push(`<div class="g${m<RUN_MIN_M?' sm':''}"><b>KHALI · ${pn(z-a)} panel${z-a===1?'':'s'}</b>${pr([a,z])} · ~${Math.round(m)} m<small>${r&&r.maxLoa>=70?'vessel up to ~'+r.maxLoa+' m fits':m<RUN_MIN_M?'too short for a vessel':'short'}</small></div>`); };
-    for(const v of present){ gap(cur,v.p[0]); items.push(`<div><b>${v.n.replace(/\s*\(.*\)\s*$/,'')}</b>${pr(v.p)}<small>CJ-${v.b}${LOA[v.n]?' · '+Math.round(LOA[v.n])+' m':''}</small></div>`); cur=Math.max(cur,v.p[1]); }
+    const R=quayRuns(T,seg); const rows=[]; let cur=seg.from, free=0, freeM=0, n=0, usedM=0;
+    const gap=(a,z)=>{ if(z-a<0.01)return; const m=gapM(a,z); const r=R.find(x=>Math.abs(x.a-a)<0.01&&Math.abs(x.z-z)<0.01); free+=z-a; freeM+=m; n++;
+      const fit=r&&r.maxLoa>=70?'a vessel up to ~'+r.maxLoa+' m can berth':'too short for a vessel';
+      rows.push(`<tr class="g${m<RUN_MIN_M?' sm':''}"><td class="hidem">—</td><td>KHALI · empty<br><small>${fit}</small></td><td class="pn">${frac(a)} – ${frac(z)}</td><td class="num">${pn(z-a)}</td><td class="num">${Math.round(m)} m</td></tr>`); };
+    for(const v of present){ gap(cur,v.p[0]); const m=gapM(v.p[0],v.p[1]); usedM+=m;
+      rows.push(`<tr><td class="hidem">CJ-${v.b}</td><td><b>${v.n.replace(/\s*\(.*\)\s*$/,'')}</b><br><small><span class="showm">CJ-${v.b} · </span>${LOA[v.n]?'vessel length '+Math.round(LOA[v.n])+' m':''}</small></td><td class="pn">${frac(v.p[0])} – ${frac(v.p[1])}</td><td class="num">${pn(v.p[1]-v.p[0])}</td><td class="num">${Math.round(m)} m</td></tr>`); cur=Math.max(cur,v.p[1]); }
     gap(cur,seg.to);
-    return `<div class="qgh"><b>${seg.label}</b> · panels ${seg.from}–${seg.to} · <span class="tot">khali ${pn(free)} panels · ~${Math.round(freeM)} m</span> in ${n} place${n===1?'':'s'}${best?' · longest ~'+Math.round(best.m)+' m ('+pr([best.a,best.z])+')':''}</div><div class="qg">${items.join('')}</div>`; };
-  el.innerHTML=`<div class="qgh"><b>Khali jagah · free space between vessels</b> at ${fmt(T)} — north to south. Solid box = a vessel with her panels; dashed green = empty quay. Vessels the board only projects (dotted hulls) are not counted.</div>`+SEGS.slice().reverse().map(block).join('');
+    return `<div class="qgcap">${seg.label} · panels ${seg.from} to ${seg.to}</div><div class="scroll"><table class="qgt"><thead><tr><th class="hidem">Berth</th><th>Vessel / empty space</th><th>Panel no. · from – to</th><th class="num">Panels</th><th class="num">Length</th></tr></thead><tbody>${rows.join('')}
+      <tr class="tot"><td class="hidem"></td><td>Total empty · ${n} place${n===1?'':'s'}</td><td></td><td class="num">${pn(free)}</td><td class="num">${Math.round(freeM)} m</td></tr></tbody></table></div>`; };
+  el.innerHTML=`<div class="qgh"><b>Kaun kahan lagi hai aur kitni jagah khali hai</b> · ${fmt(T)} · north to south. Green rows = empty quay. "Length" = metres of quay between the two panel numbers.</div>`+SEGS.slice().reverse().map(block).join('');
 }
 function runs(){
   const el=document.getElementById('runs'); if(!el)return;
@@ -4042,7 +4057,7 @@ function render(scroll){
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }
 // ---- collapsible sections: every card opens on tap; closed cards show a one-line summary. State is remembered per viewer (localStorage, best effort).
-const SEC_OPEN_DEFAULT=new Set(['finder','quay','hpb']);
+const SEC_OPEN_DEFAULT=new Set(['finder','quay','hpb']); // the cargo tab is now two sections — both open
 let SECST={};try{SECST=JSON.parse(localStorage.getItem('bb.sec')||'{}')||{};}catch(e){SECST={};}
 function saveSec(){try{localStorage.setItem('bb.sec',JSON.stringify(SECST));}catch(e){}}
 function setSec(id,open,save){const sec=document.querySelector(`section.card[data-sec="${id}"]`);if(!sec)return;sec.classList.toggle('closed',!open);const b=sec.querySelector('.tgl');if(b)b.setAttribute('aria-expanded',open?'true':'false');if(save!==false){SECST[id]=open?1:0;saveSec();}}
@@ -4109,6 +4124,7 @@ function summaries(){
   setSum('groups',`Next vessel in each of the <b>${SLOTS.length}</b> priority groups`);
   // moves
   const mvN=MV.reduce((a,[g,rows])=>a+rows.length,0);
+  {const vb=document.getElementById('vb-moves');if(vb)vb.innerHTML=`<b>${mvN}</b> moves · latest ${MV[0][0].replace(/\s*[·(—].*$/,'').replace(/^HM signal /,'')}`;}
   setSum('moves',`<b>${pl(mvN,'movement')}</b> · latest: ${MV[0][0].replace(/\s*\(.*$/,'')}`);
   // learn
   const lo=LEARN.filter(x=>x.st==='open').length, la=LEARN.filter(x=>x.st==='adopted').length, lk=LEARN.filter(x=>x.st==='ok').length;
