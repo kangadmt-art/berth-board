@@ -27,6 +27,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 
 - **Government — 2 places.** Every bulk fertiliser cargo is Government cargo, even when the list prints no rank. Fertiliser in bags is not. Rock phosphate is not. *(Mihir, 20 Nov)*
 - **Coastal — 1 place.**
+- **HP goes senior-first** among the bidders *(Mihir, 27 Nov 10:19)*; the 1 Nov swap (junior under HP, senior on the 30K slot) is switched off.
 - **Higher productivity (HP) — 2 places.** HP is a bid *(Mihir's team, 21 Nov)*. Only vessels that can do more than 40,000 MT a day take part. The bid starts at 40,000 and goes up to 50,000 at most. The highest bid gets the berth. If two vessels both bid 50,000, the senior one gets it. So the HP rank on the list does not decide the berth, and the board cannot know the winner before the meeting. **The vessels in the HP column of the list are the bidders** *(Mihir, 27 Nov 10:19: "MSC Magali and other 5 vessels bid for HP and most senior MSC Magali got movement in HP")* — the board gives a vacant HP place to the senior-most of them the berth suits. *(From 25 to 27 Nov the board gave no berth on an HP number, on his word of 25 Nov that nobody was bidding.)* The port shifts another vessel on port convenience to fit an HP bid in (African Hornbill, CJ-16 → CJ-15A). HP time is enforced: a vessel that runs past her quoted time is taken off the berth.
 - **SAAGAR — 1 bulk place and 1 break-bulk place.** They are two separate priorities. SAAGAR project cargo does not use these two places. *(Mihir, 1 and 14 Nov)*
 - **24 hours — 1 place.** For a vessel that can finish in 24 hours, by seniority and by the berth she needs.
@@ -101,6 +102,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 ## 6. Time at the berth
 
 - **List ETC** is the permissible time at the norm the list prints. It is shown as printed.
+- **The port programmes a berth only on a declared completion.** Programme 28.11 gave no dry-cargo berth and printed no outward row, though three vessels would have finished inside the window by DPR pace or list ETC. The DPR pace says when a berth could come free; the meeting gives it only when the outgoing vessel's completion is declared. *(port's action, meeting of 27 Nov)*
 - **The real finish** is counted from the DPR: balance divided by the last 24 hours' work. The DPR's day is not a ceiling; it can be more or less the next day. *(Mihir, 11 and 19 Nov)* Two cautions *(board, 26 Nov)*: when a later list re-states the vessel's quantity (Safi Alfa, "32100 total"), the DPR balance is out of date and gives no finishing time (`noPace`); when a programme shifts a working vessel, the hours of the shift are added (`lag`).
 - A vessel with no norm (project cargo) is carried at her DPR rate once she has a full day on the sheet.
 - **Bag vessels under General** may stay two days beyond the list ETC. *(Mihir, 15 Nov)*
