@@ -27,11 +27,11 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 
 - **Government — 2 places.** Every bulk fertiliser cargo is Government cargo, even when the list prints no rank. Fertiliser in bags is not. Rock phosphate is not. *(Mihir, 20 Nov)*
 - **Coastal — 1 place.**
-- **Higher productivity (HP) — 2 places.** HP is a bid *(Mihir's team, 21 Nov)*. Only vessels that can do more than 40,000 MT a day take part. The bid starts at 40,000 and goes up to 50,000 at most. The highest bid gets the berth. If two vessels both bid 50,000, the senior one gets it. So the HP rank on the list does not decide the berth, and the board cannot know the winner before the meeting. **No vessel is bidding for HP at present** *(Mihir, 25 Nov 14:47)* — the board gives no berth on an HP bid it cannot see. Programme 26.11, from the same meeting, printed MSC Magali as HP(50K): she is entered as printed; for the vessels still waiting the board keeps Mihir's word **(open — Mihir to say whether any of them is bidding)**. The port shifts another vessel on port convenience to fit an HP bid in (African Hornbill, CJ-16 → CJ-15A). HP time is enforced: a vessel that runs past her quoted time is taken off the berth.
+- **Higher productivity (HP) — 2 places.** HP is a bid *(Mihir's team, 21 Nov)*. Only vessels that can do more than 40,000 MT a day take part. The bid starts at 40,000 and goes up to 50,000 at most. The highest bid gets the berth. If two vessels both bid 50,000, the senior one gets it. So the HP rank on the list does not decide the berth, and the board cannot know the winner before the meeting. **The vessels in the HP column of the list are the bidders** *(Mihir, 27 Nov 10:19: "MSC Magali and other 5 vessels bid for HP and most senior MSC Magali got movement in HP")* — the board gives a vacant HP place to the senior-most of them the berth suits. *(From 25 to 27 Nov the board gave no berth on an HP number, on his word of 25 Nov that nobody was bidding.)* The port shifts another vessel on port convenience to fit an HP bid in (African Hornbill, CJ-16 → CJ-15A). HP time is enforced: a vessel that runs past her quoted time is taken off the berth.
 - **SAAGAR — 1 bulk place and 1 break-bulk place.** They are two separate priorities. SAAGAR project cargo does not use these two places. *(Mihir, 1 and 14 Nov)*
 - **24 hours — 1 place.** For a vessel that can finish in 24 hours, by seniority and by the berth she needs.
 - **6.5K / 8K — 1 place.**
-- **Steel / Project — 1 place.**
+- **Steel / Project — 1 place.** By the STL / PRJ column of the list *(Mihir, 27 Nov 10:19: Josco Taicang is under Steel as the list prints; Jumbo Kinetic went under Coastal)*. A vessel ranked in two columns takes whichever place comes first.
 - **Bitumen — 1 place.**
 - **General — 3 places,** with at most three bag vessels alongside at a time. *(Mihir, 19 Nov)*
 
@@ -68,7 +68,8 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 
 ## 3. Seniority
 
-- **General goes strictly by seniority — among the vessels the berth suits.** A junior does not jump a ready senior who can use the berth. "At most three bag vessels" does not mean skip the bag vessels and take the next one. *(Mihir, 20 Nov 17:13)* If the free berth does not suit the senior, the berth is still not left empty *(Mihir, 22 Nov 17:28)*: the port shifts vessels to fit her in (section 5), or gives the berth to the senior General vessel it does suit *(port's action, 26 Nov: Katerina K, GEN 3, at CJ-6 past GEN 1 and GEN 2 — open question to Mihir, since it narrows his word of 20 Nov)*.
+- **General has 3 places.** On 27 Nov they are Safi Alfa (1st), Blue Shark (2nd) and Katerina K (3rd); DSM London at CJ-2 stands in the Bitumen place, not in General. *(Mihir, 27 Nov 10:19)*
+- **General goes strictly by seniority — among the vessels the berth suits.** A junior does not jump a ready senior who can use the berth. "At most three bag vessels" does not mean skip the bag vessels and take the next one. *(Mihir, 20 Nov 17:13)* If the free berth does not suit the senior, the berth is still not left empty *(Mihir, 22 Nov 17:28)*: the port shifts vessels to fit her in (section 5), or gives the berth to the senior General vessel it does suit *(port's action, 26 Nov: Katerina K, GEN 3, at CJ-6 past GEN 1 and GEN 2; Mihir, 27 Nov: she took the 3rd General place)*.
 - **6.5K / 8K goes by seniority.** A junior does not take the place at a berth her seniors cannot use. *(Mihir, 20 Nov 16:50)*
 - In the other single-place lines, if the berth does not suit the senior vessel, it goes to the next senior it does suit. *(Mihir, 11 Nov)*
 - A vessel whose holds are rejected loses her turn and is held until she is ready again. *(Mihir, 19 Nov)*
@@ -84,7 +85,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 - **Loaded draught:** an export vessel is not put at a berth she would have to leave before she is full. The board counts 12.5 m for 40,000 MT and above, 11.2 m for 30,000 MT and above (35,000 MT for bags), otherwise her arrival draught. *(the bag step is the board's reading, not yet confirmed)*
 - One panel of clear quay is kept between two vessels. *(Mihir, 7 Nov)*
 - **CJ-6** is a damaged berth: nothing may be dumped on it, so only fertiliser vessels work there. *(Mihir, 6 Nov)*
-- **Coal, coke and ore** do not go to the bag berths CJ-1 to 4; aggregates do.
+- **Coal, coke and ore** do not go to the bag berths CJ-1 to 4; aggregates do. **Aggregates are not dirty cargo** *(Mihir, 27 Nov 10:19)* — they are not counted as non-clean at CJ-16.
 - **Ball clay / feldspar** normally go to CJ-5 to 8 — the agents ask for these. A clean berth is used only when her list remark asks for it. *(Mihir, 31 Oct and 6 Nov; seen again 21 Nov: Gokova-M, 24H 1, was passed over at CJ-15A)*
 - **Gearless and over 200 m:** the shore-crane berths CJ-7 / 8, unless her cargo works only at the clean berths. A gearless vessel of **coal or iron ore** berths at CJ-16 *(Mihir, 25 Nov 17:02; first seen on programme 26.11 — MSC Magali, 253 m, coal, HP(50K))*.
 - **Only two fertiliser vessels** work at a time. *(Mihir, 7 Nov)*
@@ -167,6 +168,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 - On a signal sheet, only a struck row is cancelled. A row that is merely missing is kept and asked about.
 - **Team's timber desk sheet vs the port list (Mihir, 21 Nov):** the team's message is corrected from the port's papers. Where the two differ (arrival hour, berthing hour, ETA, quantity), the DPA berthing list is right. The desk sheet is used only for what the list does not print (ETB dates, port of loading, vessels not yet on the list).
 - **Ready or not ready:** a vessel is ready only when her agent declares it and the berthing list shows it. A rank printed on the list is not readiness.
+- **The team's word of a hold vs a later list (Mihir, 27 Nov 10:19: "please go through the berthing list"):** the berthing list decides. If a later list prints the vessel ready and ranked, the board follows the list.
 - **Vessel names:** the port's list can carry typing errors ("Paiwan Ice" for Paiwan Ace). The team's name is used; the list spelling is kept in the note.
 
 ## 10. Rules taken out — not to be used again
@@ -183,5 +185,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 - **Taken out:** Under circular 5237 (i) a vacant Govt / Coastal place goes to SAAGAR before a 30K quote (the board's paper reading of 25 Nov) — **Why:** Programme 27.11 gave Parvraj's Govt place to Hai Nam 81 on a 30K quote while CD Glory waited. **Final rule now:** The quote vessels of the HP column come before SAAGAR.
 - **Taken out:** General takes no berth when the berth does not suit its senior-most vessel — **Why:** Katerina K (GEN 3) was berthed at CJ-6 on 26 Nov past GEN 1 and GEN 2. **Final rule now:** The senior General vessel the berth suits (section 3).
 - **Taken out:** A waiting vessel is given an HP berth by her HP number on the list — **Why:** Mihir, 25 Nov 14:47: no vessel bid for the HP category; the number is seniority, not a bid. **Final rule now:** No berth on an HP bid until a programme prints one.
+- **Taken out:** No berth on an HP number of the list *(25 to 27 Nov)* — **Why:** Mihir, 27 Nov 10:19: the HP column vessels are the bidders, and the senior-most got the HP berth. **Final rule now:** A vacant HP place goes to the senior vessel of the HP column the berth suits (section 1).
+- **Taken out:** Steel / Project ranks kept out of the board *(15 to 27 Nov)* — **Why:** Mihir, 27 Nov 10:19. **Final rule now:** The STL / PRJ column counts (section 1).
 
 Circular 5237 (i) was put to the test at the meeting of 26 Nov — see section 2.
