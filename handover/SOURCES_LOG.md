@@ -2,6 +2,8 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 27 Nov 23:31 — MIHIR: answers to the 18 questions (A1–F18) from his experienced man + HM signal 27 Nov day amendment sheet (disp 11:50) + HM signal 27 Nov evening sheet (disp 17:27, 18:01, 22:15) + gang / shore-crane sheet 27 Nov 3rd shift → v288, RULE_BOOK 0B.
+- 27 Nov 20:41 — MIHIR: the sequence note was written by his experienced man; purpose = the prediction must come right. 18 questions given to him to ask.
 - 27 Nov 20:02 — MIHIR (docx, no text): BERTHING SEQUENCE NOTE — the order of allotment, 11 priorities, meeting eligibility (first high water), which-berth rule, worked example → v287, RULE_BOOK 0A.
 - 27 Nov 19:42 — MIHIR: put the load port on the Timber tab for every timber vessel (standing) → v286. Load ports read from Maritime Optima public port-call pages; two not found.
 - 27 Nov 13:58 — PAPERS (no text): PROGRAMME FOR 28.11.2026 (TF/SH/2102 dt 27 Nov, xlsx) — no dry-cargo berthing · DAILY BERTHING LIST 27.11.2026 revised after the meeting (xlsx) → v281. Meeting of 27 Nov scored 0 of 5. KM Jakarta ready, HP 6 · SGR 7; Xin Bo still on the expected sheet.

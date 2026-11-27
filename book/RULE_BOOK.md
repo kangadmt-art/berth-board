@@ -45,6 +45,44 @@ The places are filled in this order. When a priority has no vessel, the allotmen
 
 **What this changed on the board (v287):** a vacant Govt / Coastal place now goes to a SAAGAR project vessel and then a 30K / 25K quote vessel — the earlier reading of circular 5237 (i) (a Coastal vessel, then the SAAGAR line by seniority) is no longer applied; it is an open question to Mihir. The place a SAAGAR bulk vessel leaves goes to the next senior bulk vessel. Not yet in the engine: the 10K step (no list prints a 10K quote yet), the 40,000 MT parcel test for HP, "ungeared Govt vessel at CJ-7 / 8" for vessels of 200 m or less, and norm + 15 % for the left-over berths (the engine gives a left-over berth to the senior General vessel it suits).
 
+## 0B. Answers from Mihir's experienced man *(Mihir, 27 Nov 23:31 — to the board's 18 questions; the latest word)*
+
+**When a berth counts as falling vacant**
+- A berth is allotted at the meeting **only when the agent of the outgoing vessel declares her completion time at the meeting**. The port does not go by the list ETC or the DPR pace on its own.
+- A vessel whose declared completion falls late in the window (say 16:00–18:00 the next day) is still replaced at that same 11:00 meeting.
+- The next vessel is alongside normally **2 to 3 hours** after the berth is free, by tide and pilot availability.
+
+**Vacant Govt / Coastal / HP place**
+- A vacant **Govt** or **Coastal** place: only a **SAAGAR project** vessel, or a **30K / 25K / 10K** vessel. SAAGAR logs or bulk cannot take it. (African Hornbill berthed as SAAGAR (Project) against a vacant Govt place.)
+- A vacant **HP** place: only a **SAAGAR project** vessel. A 30K / 25K / 10K vessel cannot take it.
+- HP / quote vessels are marked in the last column of the berthing list.
+
+**HP**
+- Bidders: vessels with a parcel of 40,000 MT or more that are ready — seen from the list. The bid itself is at the meeting, and a vessel may decline there.
+- A vessel that does not finish in her quoted time is to be taken off the berth, but the port normally gives **6 to 10 hours** extra to complete.
+
+**Shifting and suitability**
+- The port can shift **any** vessel on its own account, for **any** incoming vessel. A vessel cannot refuse, unless there is an operational problem.
+- If no berth suits the senior-most vessel, the place goes to the **next senior** vessel the berth suits. *(This replaces "the place waits for her" of 25 Nov and "a junior does not take the 6.5K / 8K place at a berth her seniors cannot use" of 20 Nov.)*
+
+**Which cargo at which berth** *(replaces the matching lines of section 4)*
+- Logs: not at CJ-2, 3, 6.
+- Bags: not at CJ-6, 7, 8 — jumbo bags may work at CJ-6. At most **3 bag vessels** alongside.
+- Salt: not at CJ-6, 7, 8; in practice only CJ-13 to 16.
+- Coal: not at CJ-1 to 4, nor CJ-13 to 15A.
+- Fertiliser: not at CJ-13 to 16; a gearless fertiliser vessel not at CJ-1 to 6.
+- Agri cargo: not at CJ-6, 7, 8.
+- Steel / project: any berth; the agent asks for a berth and the list prints it in the last column.
+- Ungeared coal / iron ore / fertiliser: only CJ-7 or CJ-8; coal and iron ore also at CJ-16 since the circular of 21.11.2026.
+
+**Left-over berths (norm + 15 %)** — who is ready for norm + 15 % is said at the meeting; for some vessels the list prints it in the last column.
+
+**Seniority**
+- By arrival time, **but the vessel must be ready**: a vessel that arrived later and is ready at today's meeting counts senior to one that arrived earlier and is not ready. A vessel whose holds are not ready **keeps** her seniority *(replaces "loses her turn" of 19 Nov)*.
+- A vessel in two lines normally takes the place that opens first; the agent may decline it.
+
+**In the engine from v288:** bags at CJ-1 to 5 and 13 to 16, jumbo bags also CJ-6; agri cargo off CJ-6 / 7 / 8; HP only for parcels of 40,000 MT or more; vacant Govt / Coastal → SAAGAR project, then quote (v287). **Not in the engine:** completion "as declared at the meeting" (the board cannot see it before the meeting — it still estimates from the list ETC and DPR pace, and that is the main reason a call can miss); the 2–3 hour gap (engine uses 2); HP extension of 6–10 hours; gearless fertiliser of 200 m or less to CJ-7 / 8 (gear details missing for most vessels); norm + 15 %.
+
 ## 1. Priority places (in this order)
 
 - **Government — 2 places.** Every bulk fertiliser cargo is Government cargo, even when the list prints no rank. Fertiliser in bags is not. Rock phosphate is not. *(Mihir, 20 Nov)*
