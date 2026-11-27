@@ -267,6 +267,10 @@ table{border-collapse:collapse;width:100%}
    Phones: every vessel is a 3–4 line summary (td.sm); a tap opens the labelled details. */
 :root{--tmb:#a3c46a}
 .views a[data-view="moves"]{--sc:var(--dry)}.views a[data-view="score"]{--sc:var(--ok)}
+.kh{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:6px 0 14px}.kh>div{border:1.5px solid var(--ok);border-radius:10px;padding:10px 12px;background:rgba(95,191,127,.08)}
+.kh .pp{font-family:var(--f-disp);font-size:22px;font-weight:800;line-height:1.1}.kh .pp small{font-family:var(--f-body);font-size:11px;font-weight:400;color:var(--muted);display:block;letter-spacing:0}
+.kh .nn{display:flex;gap:14px;margin-top:6px;font-size:13px}.kh .nn b{font-size:17px;color:var(--ok)}.kh .ft{font-size:11.5px;color:var(--muted);margin-top:4px}.kh>div.sm{border-color:var(--line2);background:transparent}.kh>div.sm .nn b{color:var(--fg)}
+.khcap{font-size:13px;margin:10px 0 2px}.khcap b{font-size:14px}
 .qgt{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 14px}.qgt th{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line2)}
 .qgt td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}.qgt td.num,.qgt th.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}.qgt td.pn{white-space:nowrap;font-weight:700}
 .qgt tr.g td{background:rgba(95,191,127,.10);color:var(--ok);font-weight:700}.qgt tr.g.sm td{background:transparent;color:var(--muted);font-weight:400}.qgt tr.g td small{color:var(--muted);font-weight:400}.qgt td small{color:var(--muted)}
@@ -585,7 +589,7 @@ tr.grp td:first-child{font-weight:700}
   <section class="card" data-sec="quay">
     <div class="sechead">
       <h2>Quay by panel number</h2>
-      <p class="qhelp">North (CJ-1) on the left, south (CJ-16) on the right. First a table — every vessel with her panel numbers, and every empty stretch with its length in metres — then the quay drawn to scale. Position as the board stands now. CJ-9 and CJ-10 have their own page.</p>
+      <p class="qhelp">North (CJ-1) on the left, south (CJ-16) on the right. Pehle khali jagah — panel se panel, kitne panel, kitne metre. Phir poori quay ki table, phir naap se bana chitra. CJ-9 aur CJ-10 apne page par hain.</p>
     </div>
     <details class="tdfull" style="margin:0 0 8px"><summary>How this picture is drawn · berth lengths, panel marks, draught</summary><p class="qhelp" style="margin-top:8px">North end (CJ-1) left, south (CJ-16) right. Solid hull = at berth as per list/signal. Dotted hull = projected by the board. Click a hull to look it up above. Drawn to scale in metres from the Civil Engg "Cargo Berth Details" sheet (CJ-1–4 182.93 m, CJ-5–6 205.79, CJ-7 238.64, CJ-8 213.64, CJ-9 182.93, CJ-10 209.14, CJ-13–16 300 each); permissible draught from the Deputy Conservator's chart. Panel marks are not equal: ~22.9 m on CJ-1–6, ~34 m on CJ-7, ~21 m on CJ-8–10, and on CJ-13–16 the HM's marks 111–189 run ~15.4 m apart over the 1,200 m (the Civil sheet counts 20 m structural panels there, 131–145 / 146–159 / 160–174). Tidal benefit applies at CJ-6–10 only. Quay live load (Civil Engg sheet): 3.3 t/m² at CJ-1–5 and CJ-6 panels 42–45, 3.5 t/m² quay-side at CJ-7–9, 5 t/m² at CJ-10–16 and in the transit areas behind CJ-6–9 (IIT Mumbai report), which is why heavy stacking stays off the north berths. CJ-13–16 are shown as the operational slots the DPA list uses (13 · 14 · 15 · 15A · 16) — but the panels are not fixed: when the port needs to berth a vessel and the metres can be made, it warps the neighbours and packs by LOA (Mihir, 2 Nov; e.g. 3 Nov: Outrivaling 3 142¼–150¾ · Nord Newport 152½–161¾ · Centurion Buyo 163–173¾ · Emmanouil 175¾–188). The projection still works slot-wise; the barge-window strip packs by metres. CJ-9 and CJ-10 (panel 69 to the end of CJ-10) are operated by Gautam Freight from 11.09.2026 (trade circular 2810 dt 17.09.2026): vessels berth there with GFPL's consent, and when the berth lies idle for more than 24 h DPA may use it for other vessels until GFPL's own arrival (vacate in the next tide) — which is how KSL Ruiyang got CJ-9 after Cervia on 4 Nov.</p></details>
     <div class="controls" hidden style="display:none">
@@ -3730,16 +3734,23 @@ function quayGaps(){
   const pn=x=>frac(Math.round(x*4)/4);
   const block=seg=>{
     const present=runFleet(seg).filter(v=>v.p&&v.F<=T&&T<v.T).sort((a,z)=>a.p[0]-z.p[0]);
-    const R=quayRuns(T,seg); const rows=[]; let cur=seg.from, free=0, freeM=0, n=0, usedM=0;
-    const gap=(a,z)=>{ if(z-a<0.01)return; const m=gapM(a,z); const r=R.find(x=>Math.abs(x.a-a)<0.01&&Math.abs(x.z-z)<0.01); free+=z-a; freeM+=m; n++;
-      const fit=r&&r.maxLoa>=70?'a vessel up to ~'+r.maxLoa+' m can berth':'too short for a vessel';
-      rows.push(`<tr class="g${m<RUN_MIN_M?' sm':''}"><td class="hidem">—</td><td>KHALI · empty<br><small>${fit}</small></td><td class="pn">${frac(a)} – ${frac(z)}</td><td class="num">${pn(z-a)}</td><td class="num">${Math.round(m)} m</td></tr>`); };
-    for(const v of present){ gap(cur,v.p[0]); const m=gapM(v.p[0],v.p[1]); usedM+=m;
-      rows.push(`<tr><td class="hidem">CJ-${v.b}</td><td><b>${v.n.replace(/\s*\(.*\)\s*$/,'')}</b><br><small><span class="showm">CJ-${v.b} · </span>${LOA[v.n]?'vessel length '+Math.round(LOA[v.n])+' m':''}</small></td><td class="pn">${frac(v.p[0])} – ${frac(v.p[1])}</td><td class="num">${pn(v.p[1]-v.p[0])}</td><td class="num">${Math.round(m)} m</td></tr>`); cur=Math.max(cur,v.p[1]); }
-    gap(cur,seg.to);
-    return `<div class="qgcap">${seg.label} · panels ${seg.from} to ${seg.to}</div><div class="scroll"><table class="qgt"><thead><tr><th class="hidem">Berth</th><th>Vessel / empty space</th><th>Panel no. · from – to</th><th class="num">Panels</th><th class="num">Length</th></tr></thead><tbody>${rows.join('')}
-      <tr class="tot"><td class="hidem"></td><td>Total empty · ${n} place${n===1?'':'s'}</td><td></td><td class="num">${pn(free)}</td><td class="num">${Math.round(freeM)} m</td></tr></tbody></table></div>`; };
-  el.innerHTML=`<div class="qgh"><b>Kaun kahan lagi hai aur kitni jagah khali hai</b> · ${fmt(T)} · north to south. Green rows = empty quay. "Length" = metres of quay between the two panel numbers.</div>`+SEGS.slice().reverse().map(block).join('');
+    const R=quayRuns(T,seg); const rows=[], cards=[]; let cur=seg.from, free=0, freeM=0, n=0, lastN='';
+    const gap=(a,z,after,before)=>{ if(z-a<0.01)return; const m=gapM(a,z); const r=R.find(x=>Math.abs(x.a-a)<0.01&&Math.abs(x.z-z)<0.01); free+=z-a; freeM+=m; n++;
+      const fit=r&&r.maxLoa>=70?'~'+r.maxLoa+' m tak ki vessel lag sakti hai':'vessel ke liye chhoti jagah';
+      const where=after&&before?after+' aur '+before+' ke beech':after?after+' ke baad, quay ke aakhir tak':before?'quay ke shuru se '+before+' tak':'poora hissa khali';
+      cards.push({m,h:`<div class="${m<RUN_MIN_M?'sm':''}"><div class="pp">Panel ${frac(a)} se ${frac(z)}<small>${where}</small></div><div class="nn"><span><b>${pn(z-a)}</b> panel khali</span><span><b>${Math.round(m)}</b> metre</span></div><div class="ft">${fit}</div></div>`});
+      rows.push(`<tr class="g${m<RUN_MIN_M?' sm':''}"><td class="hidem">—</td><td>KHALI<br><small>${fit}</small></td><td class="pn">${frac(a)} se ${frac(z)}</td><td class="num">${pn(z-a)}</td><td class="num">${Math.round(m)} m</td></tr>`); };
+    const short=v=>v.n.replace(/\s*\(.*\)\s*$/,'');
+    for(const v of present){ gap(cur,v.p[0],lastN,short(v)); const m=gapM(v.p[0],v.p[1]);
+      rows.push(`<tr><td class="hidem">CJ-${v.b}</td><td><b>${short(v)}</b><br><small>CJ-${v.b}${LOA[v.n]?' · vessel '+Math.round(LOA[v.n])+' m lambi':''}</small></td><td class="pn">${frac(v.p[0])} se ${frac(v.p[1])}</td><td class="num">${pn(v.p[1]-v.p[0])}</td><td class="num">${Math.round(m)} m</td></tr>`); cur=Math.max(cur,v.p[1]); lastN=short(v); }
+    gap(cur,seg.to,lastN,'');
+    const big=cards.filter(c=>c.m>=RUN_MIN_M), small=cards.filter(c=>c.m<RUN_MIN_M);
+    return {top:`<div class="khcap"><b>${seg.label}</b> · kul khali <b>${pn(free)} panel</b> · <b>${Math.round(freeM)} metre</b> · ${n} jagah</div><div class="kh">${big.concat(small).map(c=>c.h).join('')}</div>`,
+      full:`<div class="qgcap">${seg.label} · panel ${seg.from} se ${seg.to}</div><div class="scroll"><table class="qgt"><thead><tr><th class="hidem">Berth</th><th>Vessel / khali jagah</th><th>Panel se panel</th><th class="num">Kitne panel</th><th class="num">Metre</th></tr></thead><tbody>${rows.join('')}
+      <tr class="tot"><td class="hidem"></td><td>Kul khali · ${n} jagah</td><td></td><td class="num">${pn(free)}</td><td class="num">${Math.round(freeM)} m</td></tr></tbody></table></div>`}; };
+  const bl=SEGS.slice().reverse().map(block);
+  el.innerHTML=`<div class="qgcap">Khali jagah · abhi (${fmt(T)})</div><div class="qgh">Har dabba ek khali jagah hai: kis panel se kis panel tak, kitne panel khali, aur metre mein kitni doori. Hara dabba = vessel lag sakti hai.</div>`+bl.map(x=>x.top).join('')
+    +`<div class="qgcap" style="margin-top:18px">Poori quay · vessel aur khali jagah, north se south</div><div class="qgh">Safed line = lagi hui vessel aur uske panel number. Hari line = khali jagah.</div>`+bl.map(x=>x.full).join('');
 }
 function runs(){
   const el=document.getElementById('runs'); if(!el)return;
