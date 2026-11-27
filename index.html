@@ -266,6 +266,10 @@ table{border-collapse:collapse;width:100%}
 /* Timber tab (16 Nov): own sheet. v168 — the list on top: summary pills, then ONE table of the active vessels, then the completed record.
    Phones: every vessel is a 3–4 line summary (td.sm); a tap opens the labelled details. */
 :root{--tmb:#a3c46a}
+.views a[data-view="dpr"]{--sc:var(--dry)}.views a[data-view="circ"]{--sc:var(--brass)}.morenote{color:var(--muted);font-size:12.5px;margin:14px 2px 6px}
+.qgw{margin:6px 0 12px}.qgh{font-size:12.5px;margin:10px 0 4px;color:var(--muted)}.qgh b{color:var(--fg)}.qgh .tot{color:var(--ok);font-weight:700}
+.qg{display:flex;flex-wrap:wrap;gap:6px;align-items:stretch}.qg>div{border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:12px;line-height:1.35;background:var(--panel2);min-width:96px}
+.qg>div b{display:block;font-weight:700}.qg small{display:block;color:var(--muted);font-size:11px}.qg .g{border:1.5px dashed var(--ok);background:transparent}.qg .g b{color:var(--ok)}.qg .g.sm{border-color:var(--line2)}.qg .g.sm b{color:var(--muted)}
 .views a[data-view="sawal"]{--sc:var(--warn)}.views a[data-view="cj16"]{--sc:var(--amber)}.views a[data-view="timber"]{--sc:var(--tmb)}.views a[data-view="salt"]{--sc:var(--tab-salt)}.views a[data-view="ppp"]{--sc:var(--tab-ppp)}.views a[data-view="priority"]{--sc:var(--tab-pri)}.views a[data-view="barge"]{--sc:var(--tab-barge)}
 .timber{border-color:var(--line)}.timber .sechead h2{color:var(--fg)}.timber .sechead p{max-width:none}
 .tmb th{box-sizing:border-box}
@@ -544,6 +548,8 @@ tr.grp td:first-child{font-weight:700}
     <a href="#barge" data-view="barge"><b>Barge</b><small>Midstream · vessels working by barge · daily discharge / loading · commodity-wise</small><span class="vb" id="vb-barge"></span></a>
     <a href="#timber" data-view="timber"><b>Timber</b><small>Log vessels · position · laytime &amp; demurrage · record</small><span class="vb" id="vb-timber"></span></a>
     <a href="#salt" data-view="salt"><b>Salt</b><small>Salt vessels · arrived · berthed · sailed · days · record</small><span class="vb" id="vb-salt"></span></a>
+    <a href="#dpr" data-view="dpr"><b>DPR</b><small>Cargo progress · last 24 hours · balance and pace, vessel by vessel</small><span class="vb" id="vb-dpr"></span></a>
+    <a href="#circ" data-view="circ"><b>Circulars</b><small>DPA circulars &amp; trade notices · number · date · what it means · PDF</small><span class="vb" id="vb-circ"></span></a>
     <a href="#cj16" data-view="cj16"><b>CJ-16 · non-clean</b><small>Coal · coke · iron ore · pellets at berth 16 · how many · berth time</small><span class="vb" id="vb-cj16"></span></a>
     <a href="#ppp" data-view="ppp"><b>CJ-9 · 10</b><small>PPP berths · Gautam Freight · what is alongside and what is next</small><span class="vb" id="vb-ppp"></span></a>
     <a href="#tuna" data-view="tuna"><b>Tuna</b><small>TT-1 to TT-4 · Adani PPP terminal · status only</small><span class="vb" id="vb-tuna"></span></a>
@@ -566,21 +572,6 @@ tr.grp td:first-child{font-weight:700}
     <div class="quick" id="quick"></div>
     <div class="result" id="result"></div>
   </section>
-  <section class="card" data-sec="mpt" aria-labelledby="mp">
-    <div class="sechead"><h2 id="mp">Meeting preview · berth-wise</h2><p id="mpsub">Berth-wise view of the same window (18:00 on the meeting day → 18:00 next day): for each DPA berth expected to free up, who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated.</p></div>
-    <div class="scroll"><table class="mpt wd" id="mpt"></table></div>
-  </section>
-  <section class="card" data-sec="hpb" aria-labelledby="hpbh">
-    <div class="sechead"><h2 id="hpbh">HP berth · who is in the bid</h2><p id="hpbsub"></p></div>
-    <div id="hpbpool"></div>
-    <div class="sdh">Quotes that won an HP berth so far</div>
-    <p id="hpbsum" style="font-size:12.5px;line-height:1.7;margin:8px 2px 10px"></p>
-    <details class="tdfull"><summary>Every HP berth given so far — quote, stay, and what was done against the quote</summary><div id="hpblog"></div></details>
-  </section>
-  <section class="card" data-sec="spt" aria-labelledby="sp">
-    <div class="sechead"><h2 id="sp">Next-day prospects · slot-wise</h2><p id="spsub"></p></div>
-    <div class="scroll"><table class="mpt spt wd" id="spt"></table></div>
-  </section>
   <section class="card" data-sec="rules" aria-labelledby="rh">
     <div class="sechead"><h2 id="rh">Routine se hat ke · not sailing on time</h2><p>Only vessels still alongside past their ETC, or whose sailing was postponed, show up here. Vessels finishing on or before ETC are not listed.</p></div>
     <div class="rsum" id="rsum" role="group" aria-label="Filter checks"></div>
@@ -588,11 +579,6 @@ tr.grp td:first-child{font-weight:700}
     <div class="oklist" id="oklist"></div>
   </section>
 
-  <section class="card" data-sec="dpr" aria-labelledby="dh">
-    <div class="sechead"><h2 id="dh">Cargo progress · DPR</h2><p id="dsub"></p></div>
-    <div class="stats" id="dstats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"></div>
-    <div class="scroll"><table class="mpt dprt wd" id="dpr"></table></div>
-  </section>
 
   <section class="card" data-sec="quay">
     <div class="sechead">
@@ -606,6 +592,7 @@ tr.grp td:first-child{font-weight:700}
         <input type="range" id="tslider" step="1">
       </div>
     </div>
+    <div class="qgw" id="qgaps"></div>
     <div class="legend" id="legend"></div>
     <div class="striplabel">Panels 0 – 85 · CJ-1 to CJ-10</div>
     <div class="scroll"><svg class="strip" id="stripA" role="img" aria-label="Quay CJ-1 to CJ-10"></svg></div>
@@ -623,16 +610,10 @@ tr.grp td:first-child{font-weight:700}
     <div class="scroll"><svg id="gantt" class="strip" role="img" aria-label="Berth timeline"></svg></div>
   </section>
 
-  <div class="two">
-    <section class="card" data-sec="groups">
-      <div class="sechead"><h2>Who's next, by group</h2><p>Projected berthing date for the next vessels in each priority group.</p></div>
-      <div id="groups"></div>
-    </section>
-    <section class="card" data-sec="moves">
-      <div class="sechead"><h2>Signal movements · cargo berths</h2><p>From the Harbour Master's signal sheets, red-ink corrections included.</p></div>
-      <div id="moves"></div>
-    </section>
-  </div>
+  <section class="card" data-sec="moves">
+    <div class="sechead"><h2>Signal movements · cargo berths</h2><p>From the Harbour Master's signal sheets, red-ink corrections included.</p></div>
+    <div id="moves"></div>
+  </section>
 
 
   <section class="card" data-sec="score" aria-labelledby="sch">
@@ -642,20 +623,50 @@ tr.grp td:first-child{font-weight:700}
     <div id="score"></div></details>
   </section>
 
-    <section class="card" data-sec="notices" aria-labelledby="nh">
-    <div class="sechead"><h2 id="nh">DPA circulars &amp; trade notices · library</h2><p>Every circular, trade notice and reference document the board knows — from the DPA website (Mihir, 3 Nov), the KPSAA mail and the DC — with its number, date, status, what it says in one line, what it means for berthing, and the PDF itself. Filter by kind or search; newest first.</p></div>
-    <div class="nbar" id="nbar"></div>
-    <div class="scroll"><table class="mpt ntt" id="notices"></table></div>
-  </section>
-  <section class="card" data-sec="news" aria-labelledby="nwh">
-    <div class="sechead"><h2 id="nwh">DPA news</h2><p>Important news on Deendayal Port and Kandla trade — from the port's site and the trade press (LinkedIn cannot be read by the board). Newest first, with what it means for berthing.</p></div>
-    <div class="scroll"><table class="mpt ntt" id="news"></table></div>
-  </section>
   </div><!-- /view cargo -->
 
   <div class="view" data-view="priority" id="view-priority">
   <section class="card mbsec"><div class="mbhead"><a class="mbjump" href="#priority" onclick="document.getElementById('pqtab').scrollIntoView({behavior:'smooth'});return false;">Priority chart ↓</a><div class="mbey">Agli meeting · berth-wise</div><h2 id="mbh"></h2><p id="mbsub"></p></div><div id="mtgb"></div></section>
-  <div id="pqtab"></div></div>
+  <div id="pqtab"></div>
+  <p class="morenote">Aur detail · the same berthing picture in other cuts — tap a heading to open it.</p>
+  <section class="card" data-sec="mpt" aria-labelledby="mp">
+    <div class="sechead"><h2 id="mp">Meeting preview · berth-wise</h2><p id="mpsub">Berth-wise view of the same window (18:00 on the meeting day → 18:00 next day): for each DPA berth expected to free up, who the board thinks gets it, who is next in line, and what could overturn it. Berths already fixed by a published programme are not repeated.</p></div>
+    <div class="scroll"><table class="mpt wd" id="mpt"></table></div>
+  </section>
+  <section class="card" data-sec="spt" aria-labelledby="sp">
+    <div class="sechead"><h2 id="sp">Next-day prospects · slot-wise</h2><p id="spsub"></p></div>
+    <div class="scroll"><table class="mpt spt wd" id="spt"></table></div>
+  </section>
+  <section class="card" data-sec="groups">
+    <div class="sechead"><h2>Who's next, by group</h2><p>Projected berthing date for the next vessels in each priority group.</p></div>
+    <div id="groups"></div>
+  </section>
+  <section class="card" data-sec="hpb" aria-labelledby="hpbh">
+    <div class="sechead"><h2 id="hpbh">HP berth · who is in the bid</h2><p id="hpbsub"></p></div>
+    <div id="hpbpool"></div>
+    <div class="sdh">Quotes that won an HP berth so far</div>
+    <p id="hpbsum" style="font-size:12.5px;line-height:1.7;margin:8px 2px 10px"></p>
+    <details class="tdfull"><summary>Every HP berth given so far — quote, stay, and what was done against the quote</summary><div id="hpblog"></div></details>
+  </section>
+  </div>
+  <div class="view" data-view="dpr" id="view-dpr">
+  <section class="card" aria-labelledby="dh">
+    <div class="sechead"><h2 id="dh">Cargo progress · DPR</h2><p id="dsub"></p></div>
+    <div class="stats" id="dstats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"></div>
+    <div class="scroll"><table class="mpt dprt wd" id="dpr"></table></div>
+  </section>
+  </div>
+  <div class="view" data-view="circ" id="view-circ">
+  <section class="card" aria-labelledby="nh">
+    <div class="sechead"><h2 id="nh">DPA circulars &amp; trade notices · library</h2><p>Every circular, trade notice and reference document the board knows — from the DPA website (Mihir, 3 Nov), the KPSAA mail and the DC — with its number, date, status, what it says in one line, what it means for berthing, and the PDF itself. Filter by kind or search; newest first.</p></div>
+    <div class="nbar" id="nbar"></div>
+    <div class="scroll"><table class="mpt ntt" id="notices"></table></div>
+  </section>
+  <section class="card" aria-labelledby="nwh">
+    <div class="sechead"><h2 id="nwh">DPA news</h2><p>Important news on Deendayal Port and Kandla trade — from the port's site and the trade press (LinkedIn cannot be read by the board). Newest first, with what it means for berthing.</p></div>
+    <div class="scroll"><table class="mpt ntt" id="news"></table></div>
+  </section>
+  </div>
   <div class="view" data-view="barge" id="view-barge">
   <section class="card" aria-labelledby="bgh"><div class="sechead"><h2 id="bgh">Barge work · midstream</h2><p id="bgsub"></p></div>
     <div class="stats" id="bgstats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))"></div></section>
@@ -797,8 +808,8 @@ const nf=new Intl.NumberFormat('en-IN');
 const NOW=h('11-27 13:58');
 const PROG_END=h('11-28 18:00'); // programme 28.11 (meeting of 27 Nov) covers till here — barge windows end here;
 // ---- the boards live on this one page as views (tabs): cargo (dry cargo CJ-1–16, projected), timber (log vessels: position, laytime, record — since 16 Nov), tuna (TT-1–4) and liquid (OJ-1–7), status only.
-const VIEWS={cargo:'Deendayal Port · Kandla · Dry cargo jetty',priority:'Deendayal Port · Kandla · Priority chart',barge:'Deendayal Port · Kandla · Barge work',timber:'Deendayal Port · Kandla · Timber vessels',salt:'Deendayal Port · Kandla · Salt vessels',cj16:'Deendayal Port · Kandla · CJ-16 · non-clean cargo',sawal:'Deendayal Port · Kandla · Open questions',ppp:'Deendayal Port · Kandla · CJ-9 and CJ-10 (PPP)',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
-const VIEW_NAME={ppp:'CJ-9 · CJ-10',cj16:'CJ-16 · non-clean cargo',sawal:'Open questions',salt:'Salt',cargo:'Cargo jetties',priority:'Priority chart',barge:'Barge',timber:'Timber',tuna:'Tuna',liquid:'Liquid'};
+const VIEWS={dpr:'Deendayal Port · Kandla · Daily performance report',circ:'Deendayal Port · Kandla · Circulars and trade notices',cargo:'Deendayal Port · Kandla · Dry cargo jetty',priority:'Deendayal Port · Kandla · Priority chart',barge:'Deendayal Port · Kandla · Barge work',timber:'Deendayal Port · Kandla · Timber vessels',salt:'Deendayal Port · Kandla · Salt vessels',cj16:'Deendayal Port · Kandla · CJ-16 · non-clean cargo',sawal:'Deendayal Port · Kandla · Open questions',ppp:'Deendayal Port · Kandla · CJ-9 and CJ-10 (PPP)',tuna:'Deendayal Port · Kandla · Tuna Tekra terminal (Adani PPP)',liquid:'Deendayal Port · Kandla · Oil jetties OJ-1 to OJ-7'};
+const VIEW_NAME={dpr:'DPR',circ:'Circulars',ppp:'CJ-9 · CJ-10',cj16:'CJ-16 · non-clean cargo',sawal:'Open questions',salt:'Salt',cargo:'Cargo jetties',priority:'Priority chart',barge:'Barge',timber:'Timber',tuna:'Tuna',liquid:'Liquid'};
 let VIEW='cargo';
 const pageHref=k=>'#'+k; // same page, just another tab
 function setView(k,opts){opts=opts||{};if(k==='meeting')k='priority';if(!VIEWS[k])k='cargo';VIEW=k;
@@ -3691,6 +3702,19 @@ function quayRuns(t,seg=SEGS[0]){
     const clr=(left?gapM(a,Math.min(z,a+GAP_P)):0)+(right?gapM(Math.max(a,z-GAP_P),z):0);
     const bb=BERTHS.filter(b=>seg.ids.includes(b.id)&&b.p[0]<z&&b.p[1]>a);return {a,z,m,clr,maxLoa:Math.floor(Math.max(0,m-clr)*RUN_TOL),left,right,nxt,ids:bb.map(b=>b.id),berths:bb.map(b=>'CJ-'+b.id)};});
 }
+function quayGaps(){
+  const el=document.getElementById('qgaps'); if(!el)return;
+  const pn=x=>{const r=Math.round(x*4)/4;return frac(r);};
+  const block=seg=>{
+    const present=runFleet(seg).filter(v=>v.p&&v.F<=T&&T<v.T).sort((a,z)=>a.p[0]-z.p[0]);
+    const R=quayRuns(T,seg); const items=[]; let cur=seg.from, free=0, freeM=0, n=0, best=null;
+    const gap=(a,z)=>{ if(z-a<0.01)return; const m=gapM(a,z); const r=R.find(x=>Math.abs(x.a-a)<0.01&&Math.abs(x.z-z)<0.01); free+=z-a; freeM+=m; n++; if(!best||m>best.m)best={a,z,m};
+      items.push(`<div class="g${m<RUN_MIN_M?' sm':''}"><b>KHALI · ${pn(z-a)} panel${z-a===1?'':'s'}</b>${pr([a,z])} · ~${Math.round(m)} m<small>${r&&r.maxLoa>=70?'vessel up to ~'+r.maxLoa+' m fits':m<RUN_MIN_M?'too short for a vessel':'short'}</small></div>`); };
+    for(const v of present){ gap(cur,v.p[0]); items.push(`<div><b>${v.n.replace(/\s*\(.*\)\s*$/,'')}</b>${pr(v.p)}<small>CJ-${v.b}${LOA[v.n]?' · '+Math.round(LOA[v.n])+' m':''}</small></div>`); cur=Math.max(cur,v.p[1]); }
+    gap(cur,seg.to);
+    return `<div class="qgh"><b>${seg.label}</b> · panels ${seg.from}–${seg.to} · <span class="tot">khali ${pn(free)} panels · ~${Math.round(freeM)} m</span> in ${n} place${n===1?'':'s'}${best?' · longest ~'+Math.round(best.m)+' m ('+pr([best.a,best.z])+')':''}</div><div class="qg">${items.join('')}</div>`; };
+  el.innerHTML=`<div class="qgh"><b>Khali jagah · free space between vessels</b> at ${fmt(T)} — north to south. Solid box = a vessel with her panels; dashed green = empty quay. Vessels the board only projects (dotted hulls) are not counted.</div>`+SEGS.slice().reverse().map(block).join('');
+}
 function runs(){
   const el=document.getElementById('runs'); if(!el)return;
   const ORD=CATS.map(c=>c.k);
@@ -4002,7 +4026,7 @@ function render(scroll){
   vsel.value=focus;
   slider.value=T-T0;document.getElementById('tlabel').textContent=fmt(T)+' IST';
   PRESETS.forEach((p,i)=>document.getElementById('pr'+i).setAttribute('aria-pressed',Math.abs(p[1]-T)<0.01?'true':'false'));
-  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);runs();if(SHOW_BARGE)barge();notices();news();learn();salt();ppp();dpr();msWork();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();hpbid();c16();meetBoard();qdetail();side();gantt();groups();moves();
+  stats();result();mine();rules();strip(document.getElementById('stripA'),0,85);strip(document.getElementById('stripB'),110,189);quayGaps();runs();if(SHOW_BARGE)barge();notices();news();learn();salt();ppp();dpr();msWork();timber();demur();tuna();liquid();lineup();prospects();tideLine();preview();hpbid();c16();meetBoard();qdetail();side();gantt();groups();moves();
   summaries();
   if(scroll){setSec('finder',true);document.getElementById('fh').scrollIntoView({behavior:'smooth',block:'start'});}
 }
@@ -4039,6 +4063,8 @@ function summaries(){
   setSum('finder',`<b>${focus}</b>${rd?' · '+txt(rq).replace(/\?$/,'').toLowerCase()+': <b>'+txt(rd)+'</b>':''}`);
   // circulars
   const nd=NOTICES[0]?NOTICES.filter(n=>n.d===NOTICES[0].d).length:0;
+  {const vb=document.getElementById('vb-circ');if(vb){const L=NOTICES.slice().sort((a,z)=>(z.iso||'').localeCompare(a.iso||''))[0];vb.innerHTML=`<b>${NOTICES.length}</b> papers${L?' · latest '+L.rd:''}`;}
+   const vd=document.getElementById('vb-dpr');if(vd)vd.innerHTML=`<b>${DPR.d.slice(0,5)}</b> · ${Math.round(DPR.tot.all).toLocaleString('en-IN')} MT in 24 h`;}
   setSum('notices',NOTICES.length?`<b>${pl(NOTICES.length,'reference')}</b>${nd?' · latest '+NOTICES[0].d+': <b>'+NOTICES[0].t+'</b>'+(nd>1?' + '+(nd-1)+' more ('+(NOTICES[0].kind||'')+')':''):''}`:'No circular on the board yet');
   // Mihir & Co
   const names=[...new Set(V.map(v=>v.n).concat(W.map(w=>w.n)))].filter(isMine);
