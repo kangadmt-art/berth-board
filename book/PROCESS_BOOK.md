@@ -67,3 +67,8 @@ What is done with each paper, step by step. The aim: papers go into the data boo
 
 - Under the title: "Board owned by @mk", the last-updated time, and one small box per paper — List, Programme, DPR, Signals — with the date the board is updated to.
 - "Sources & tide" holds one sentence naming the day's papers, and the tide. The full log of every paper received is kept in `handover/SOURCES_LOG.md`, newest first; add a line there with every update.
+
+
+## Timber vessels — load port (standing, Mihir 27 Nov 2026)
+
+For every timber vessel, when she first appears: find her load port from public AIS port calls (Maritime Optima public page, last 3 calls) and put it on her `TIMBER.rows` entry as `lp` with the note `lpn`. Take the last log port, not a bunker stop. Not sure → add "?"; nothing reliable → leave `lp` empty (the tab shows "port not found") and try again at the next update. The agent's paper or Mihir's word overrides what the web shows.
