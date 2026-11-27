@@ -23,6 +23,28 @@ The port's berthing list is itself laid out by priority. Each priority has a fix
 
 The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 were settled at the meeting — three real 24-hour vessels and two 30K quote vessels. The sections below are the detail behind it.
 
+## 0A. The sequence of allotment *(note sent by Mihir, 27 Nov 20:02: "Please follow below sequences berthing allotment" — the latest word; transcript in `data/2026-11-27/`)*
+
+The places are filled in this order. When a priority has no vessel, the allotment moves to the next one.
+
+1. **Government — 2 berths**, by seniority. A geared vessel berths at CJ-1 to CJ-8; an ungeared vessel at CJ-7 / CJ-8.
+2. **Coastal — 1 berth**, by seniority.
+3. **Higher productivity — 2 berths.** Only a vessel whose **parcel is 40,000 MT or more** qualifies. The ready vessels bid, from 40,000 up to 50,000; the highest bid gets the berth; if all bid 50,000 or the same, seniority decides.
+4. **SAAGAR — 2 berths: 1 break bulk and 1 bulk**, each by seniority. If one kind has no vessel, the other kind may take both.
+5. **SAAGAR (Project) — 1 vessel at a time, and only against a vacant Government, Coastal or HP place.**
+6. **30K / 25K / 10K** — opens only when a Government berth or the Coastal berth is vacant, and the vessel berths against that vacant place. Vessels ready to do 30,000 go by seniority; if none, those at 25,000; if none, those at 10,000.
+7. **24 hours — 1 berth**: a vessel that will complete and sail within 24 hours, by seniority. If none, a 30K / 25K / 10K vessel as in 6.
+8. **8,000 / 6,500 — 1 berth**, by seniority.
+9. **Steel / Project — 1 berth**, by seniority.
+10. **Bitumen — 1 berth.** With no bitumen vessel: a break-bulk vessel ready at 6,500, by seniority.
+11. **General — 3 berths**, the three senior-most vessels. **Any berth still vacant after that** goes to "Sr. No. 7": a vessel ready to handle **norm + 15 %**, by seniority.
+
+**Who is in the meeting.** The meeting is at 11:00 and decides the movements from 18:00 that day to 18:00 the next. A vessel must have arrived and been declared ready by 11:00. An expected vessel is also taken, if she arrives at or before the **first high water** inside that 18:00–18:00 window; one expected after it waits for the next day's meeting.
+
+**Which berth.** The group whose vessel leaves gets a berth in her place. If the berth she leaves does not suit the next vessel of that group, that vessel gets another berth falling vacant; if a shift of another vessel makes a suitable berth, the port shifts and berths her. The note's own example: second HP vessel — shift the log vessel from CJ-13 to CJ-5 and give CJ-13; next senior SAAGAR bulk vessel (salt) — shift CJ-14 to CJ-2 and give CJ-14; then the vacant 24-hours place at CJ-15A.
+
+**What this changed on the board (v287):** a vacant Govt / Coastal place now goes to a SAAGAR project vessel and then a 30K / 25K quote vessel — the earlier reading of circular 5237 (i) (a Coastal vessel, then the SAAGAR line by seniority) is no longer applied; it is an open question to Mihir. The place a SAAGAR bulk vessel leaves goes to the next senior bulk vessel. Not yet in the engine: the 10K step (no list prints a 10K quote yet), the 40,000 MT parcel test for HP, "ungeared Govt vessel at CJ-7 / 8" for vessels of 200 m or less, and norm + 15 % for the left-over berths (the engine gives a left-over berth to the senior General vessel it suits).
+
 ## 1. Priority places (in this order)
 
 - **Government — 2 places.** Every bulk fertiliser cargo is Government cargo, even when the list prints no rank. Fertiliser in bags is not. Rock phosphate is not. *(Mihir, 20 Nov)*
@@ -45,7 +67,7 @@ The record: 31 berthings. 21 follow straight from this rule. 5 were HP bids. 5 w
 
 ## 2. When a place has no vessel of its own
 
-- **Government and Coastal (Circular 5237 (i) of 21.11.2026, from the meeting of 23 Nov) — read on 25 Nov, at Mihir's asking, against the policy of 24.03.2025, the circular of 21.05.2026 and the corrigendum of 09.07.2026:**
+- **SUPERSEDED on 27 Nov by section 0A (sequence note) — kept for the record until Mihir answers the open question.** Government and Coastal (Circular 5237 (i) of 21.11.2026, from the meeting of 23 Nov) — read on 25 Nov, at Mihir's asking, against the policy of 24.03.2025, the circular of 21.05.2026 and the corrigendum of 09.07.2026:**
   - A vacant Govt place, with no suitable Govt vessel, goes down the order: a Coastal vessel → the vessels of the HP column (3(A)) → the SAAGAR line by seniority (3(B)). A vacant Coastal place: the HP column → SAAGAR.
   - **"The HP column" means the vessels standing in the HP column of the list on their 30,000 / 25,000 quotes, in that column's order — not only a vessel bidding 40,000 or more.** *(Port's action, programme 27.11: Hai Nam 81, HP 1, printed "GOV(30K)" at CJ-15A while CD Glory, SGR 1, waited for a berth that suits her.)* The board had read this step as "an HP bid" and so sent the place to SAAGAR; that reading is withdrawn.
   - When no quote vessel of the HP column can use the berth, the place goes to the senior SAAGAR vessel the berth suits — bulk, logs or project alike (the one-bulk / one-break-bulk split is for SAAGAR's own two places).

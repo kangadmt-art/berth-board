@@ -1,0 +1,160 @@
+Please follow below sequences berthing allotment.
+
+1)  Government Priority – me 2 vessels ko berth milega (Geared vessel
+    can berth from CJ 1 to CJ 8 and ungeared vessel can berth from CJ 7
+    to CJ8). Government priority Seniority basis lagna hai. Government
+    priority full karneke baad. Agar koi vessel nai hai Government
+    priority pe to berth allotment next priority pe jayega jo hai
+    coastal Priority
+
+2)  Coastal Priority - me 1 vessels ko berth milega. Is priority me
+    berthing seniority ke hisab se allotment hota hai. Agar koi vessel
+    nai hai coastal priority me to next allotment High productivity
+    priority pe jayega.
+
+3)  High productivity - me 2 berth allot kiye jayenge. HP me allotment
+    ke liye jo vessels ka parcel size 40000 mts ya us se jyada hai wo hi
+    HP ke liye qualified hai. Jo vessel ready hai unke bich me bid ki
+    jati hai. Bid 40000 mts se start hota hai or max 50000 mts tak ja
+    sakte hai. HP me jo vessel max bid karta hai usko allotment milta
+    hai. Agar sare vessel 50000 mts tak jate hai ya same bid lagate hai
+    to usme berting seniority ko milta hai. HP allotment full karne ke
+    baad ya agar koi vessel nai hai HP priority me to berth allotment
+    next priority pe jeyaga to hai Saagar Priority ko.
+
+4)  SAAGAR PRIORITY – me 2 vessels ko berth milega. 1 berth jayega Break
+    bulk and 1 berth jayega Bulk cargo ko. Iska allotment seniority ke
+    base pe hota hai. At one time 1 vessel in each category me rahega.
+    Agar koi category me saagar priority me vessel nai hai to allotment
+    dusre category me lag sakta hai. Example 1 vessel break bulk me hai
+    or bulk me koi nai hai to 2 vessel bhi break bulk ka lag sakta hai.
+    Saagar priority fullfill karne ke baad agar Government or Coastal or
+    HP Priority me koi slot khali hai to uski jagah pe 1^(st) Saagar
+    Priority (Project) vessel ko berth milega.
+
+5)  Saagar Priority (Project) – me 1 vessel hi berth ho sakta hai. Jo
+    Project vessel Saagar me declared hai us ko Saagar me allotment hoga
+    agar Government ya coastal ya HP me se kisi me berth khali hai to hi
+    milega. Agar is me bhi koi vessel nai hai to next allotment
+    30k/25k/10k ko jayega.
+
+6)  30K/25K/10K – ye priority sirf tab open hoga or vessels lagega jab
+    Government priority me 1 berth khali hai ya fir Coastal priority me
+    berth khali hai. Jo priority me khali hoga uske against ye priority
+    me vessel lagega. Is priority me jo vessels ready hai 30000 mts
+    karne ko usko senirity ke hisab se milega. Agar koi vessel 30000 mts
+    me nai hai to 25000 karne ko jo vessels ready honge unko seniority
+    ke hisabse milega or 25000 mts karne ke liy koi nai hai to 10000 mts
+    karne ko jo vessel sready honge unko seniority ke hisabse milega.
+    Agar koi nai hai to next priority 24 hrs priority ko berth milega.
+
+7)  24 hrs Priority – me 1 vessel ko berth milega. Jo vessel ready hai
+    24 hrs me compelte kar ke sail hone ke liye usko berth milega
+    seniority ke basis pe. Agar koi vessel 24 hrs me compelte kar ke
+    sail hone wale nai hai to uski jagh pe agar koi vessel 30k/25k/10k
+    mer ready hai to usko berth milega. Is priority me jo vessels ready
+    hai 30000 mts karne ko usko senirity ke hisab se milega. Agar koi
+    vessel 30000 mts me nai hai to 25000 karne ko jo vessels ready honge
+    unko seniority ke hisabse milega or 25000 mts karne ke liy koi nai
+    hai to 10000 mts karne ko jo vessel sready honge unko seniority ke
+    hisabse milega. Ye priority fullfill karne ke baad ya Agar koi nai
+    hai to next priority 8000/6500 k priority ko berth milega.
+
+8)  8000/6500 k Prioirity – me 1 vessel ko berth milega. Jo vessel ready
+    hai 8000 ya 6500 mts per day karne ke hisabse wo vessles seniority
+    ke hisab se berth allotment hoga. Is priority ko fullfill karne ke
+    baad ya agar koi vessel nai hai to allotment next priority
+    Steel/Project Priority ko milega.
+
+9)  Steel/Project Priority – me 1 vessel ko berth milega. Jo vessel
+    Steel ya project cargo ke saath ready hai usko seniority ke hisabse
+    berth milega. Is priority ko fullfill karne ke baad ya agar koi
+    vessel nai hai to allotment next priority Bitumen Priority ko
+    milega.
+
+10) Bitumen Priority – me 1 vessel ko berth milega jo vessel ka cargo
+    Bitumen hai. Agar Bitumen priority me koi vessel nai hai to uska
+    berth 6500 mts me jo break bulk vessel ready hai unko seniority ke
+    hisabse milega. Is priority ko fullfill karne ke baad ya agar koi
+    vessel nai hai to allotment next allotment general group ko milega.
+
+11) General – me 3 vessels ko berth milega. Most 3 senior vessel ko
+    berth milega respectively. Agar iske baad koi berth khali hai to wo
+    berth jayega Sr. No. 7 Priority me. Is me jo vessel norms + 15%
+    handle karne ko ready hai usko seniority ke hisabse berth milega.
+
+Other rules:
+
+Port ki daily berthing meeting 1100 hrs par hoti hai, jisme 1800 hrs
+same day se lekar next day 1800 hrs tak ke vessel movements decide kiye
+jaate hain. Meeting mein wahi vessels eligible hoti hain jo 1100 hrs tak
+Port par arrive ho chuki hoti hain aur jinhe 1100 hrs tak ready declare
+kar diya gaya hota hai. Iske alawa, jo vessels expected mein hoti hain,
+unko bhi meeting mein consider kiya jaata hai, lekin unka arrival same
+day 1800 hrs se next day 1800 hrs ke movement period ke andar aane wale
+first High Water se pehle ya usi samay hona chahiye.
+
+For example, agar aaj ki date 27.11.2026 hai, toh 27.11.2026 ke 1800 hrs
+se 28.11.2026 ke 1800 hrs tak ke movement period mein agar first High
+Water 2100 hrs par hai, toh jo vessels 2100 hrs tak ya usse pehle
+expected hain, wahi vessels 27.11.2026 ki meeting mein berth
+consideration ke liye eligible hongi. Lekin jo vessels 2100 hrs ke baad
+expected hain, woh 27.11.2026 ki meeting mein eligible nahi hongi aur
+unhe next day's berthing meeting mein consideration ke liye liya jayega.
+
+Normally jo berth khali ho raha hai jis group me us group ko hi us jagah
+pe berth milega. Agar jo berth khali ho raha hai wo group me next vessel
+ke liye suitable berth nai hai to usko pehle dusri jo berth khali ho
+rahi hai vaha pe berth milega. Agar kisiko shift karne ki jarurat padi
+to usko shift karke first group ko berth diya jayega.
+
+For example, aaaj niche ki berth khali ho rahi ahi baki ke vessels jo
+sail nai ho rahe hai wo sr. no. 5 se hai.
+
+1)  Saagar Priority against Govt priority from CJ 15A se kahalie hoga
+    1600 hrs on 28.11.2026
+
+2)  HP priority from CJ 16 se khali hoga 2100 hrs on 27.11.2026
+
+3)  Saagar Priority (bulk vsl) from CJ 5 khali hoga 2200 hrs on
+    27.11.2026
+
+4)  Bitumen Priority from CJ 2 Khali hoga 1100 hrs on 28.11.2026
+
+5)  Safi Alfa general group from CJ 4 khali hoga 1700 hrs on 28.11.2026
+
+6)  Govt Priority stays at CJ 8
+
+7)  Coastal priority stays at CJ 7
+
+8)  Saagar priority (break bulk vsl ) stays at CJ 13
+
+9)  8000/6500 k priority stays at CJ 1
+
+10) Steel priority stays at CJ 15
+
+11) General vsl stays at CJ 6
+
+12) General vsl stays at CJ 14
+
+Us hisabse pehle allotment hoga niche ke hisabse
+
+1)  First Govt ka slot khali hai to usko diya jayega agar uske liye
+    suitable berth hai to. Agar nai hai to kisi ko shift karke suitable
+    berth ban raha hai to wo karke bhi berth dega port. Agar wo bhi nai
+    hai ban raha to next priority me jaynge. (Koi bhi suitable berth nai
+    hai)
+
+2)  HP priority me ek vessel jar aha hai but slot dono khali hai to abhi
+    2 berth HP walo ko jayega. Jese ke do Salt vale vessel ko HP me
+    50000 ki bid me mile to wo niche ke hisab se lagenge
+
+CJ 16 pe ek HP to HP follow karega or dusra CJ 13 ko CJ 5 pe shift karke
+CJ 13 pe denge.
+
+3)  HP ke baad Saagar ka turn hai or uska bhi ek vessel jara hai to wo
+    bulk vessel ko jayega next senior bulk me salt hai to CJ 14 ko CJ 2
+    pe shift karke CJ 14 pe berth denge
+
+4)  Saagar me berth allot karne ke baad 24 hrs ka slot khali hai to next
+    berth usko jayge jese Berth no 15A pe 24hrs ka vessel lagega

@@ -2,6 +2,7 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 27 Nov 20:02 — MIHIR (docx, no text): BERTHING SEQUENCE NOTE — the order of allotment, 11 priorities, meeting eligibility (first high water), which-berth rule, worked example → v287, RULE_BOOK 0A.
 - 27 Nov 19:42 — MIHIR: put the load port on the Timber tab for every timber vessel (standing) → v286. Load ports read from Maritime Optima public port-call pages; two not found.
 - 27 Nov 13:58 — PAPERS (no text): PROGRAMME FOR 28.11.2026 (TF/SH/2102 dt 27 Nov, xlsx) — no dry-cargo berthing · DAILY BERTHING LIST 27.11.2026 revised after the meeting (xlsx) → v281. Meeting of 27 Nov scored 0 of 5. KM Jakarta ready, HP 6 · SGR 7; Xin Bo still on the expected sheet.
 - 27 Nov 10:19 — MIHIR (chat) + PAPERS: DAILY BERTHING LIST 27.11.2026 (xlsx, 07:00) · DPR 27-11-2026 (xlsx, 07:00). His words, answering the seven open questions in order: "1. In todays berthing list it will be declared 2. Katerina K as 3rd General, the 1st general is Safi Alfa & 2nd general is Blue Shark 3. Aggregates is not dirty cargo 4. No Such vessel 5. Josco taicang is under steel already metioned in berthing list and Jumbo Kinetic is under coastal 6. MSC magali and other 5 vessels bid for HP and most senior MSC MAGALI got movement in HP 7. Please go through Berthing list" → v280. Archive: `data/2026-11-27/`.
