@@ -260,3 +260,5 @@ The places are filled in this order. When a priority has no vessel, the allotmen
 - **Taken out:** Steel / Project ranks kept out of the board *(15 to 27 Nov)* — **Why:** Mihir, 27 Nov 10:19. **Final rule now:** The STL / PRJ column counts (section 1).
 
 Circular 5237 (i) was put to the test at the meeting of 26 Nov — see section 2.
+
+- **Layout (Mihir, 28 Nov):** the waiting + expected totals tile stays on top of every tab.
