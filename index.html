@@ -3267,8 +3267,11 @@ Object.assign(SAILDR,{'Hai Nam 81':12.6,'Zheng Run':12.63,'KM Jakarta':13.0,'Rex
 // goes to the next vessel direct (Belasitza, Govt → CJ-5). Loaded draught: as printed / stated, else estimated from the parcel (≥ 40,000 MT ≈ 12.5 m; ≥ 25,000 ≈ 11.2 m).
 const loadedDr=w=>{if(SAILDR[w.n])return SAILDR[w.n];if((w.ie||IE[w.n])!=='EXP')return w.dr||0;const q=+w.q||0,st=isBag(w.c||'')?35000:30000;return q>=40000?12.5:q>=st?11.2:(w.dr||0);}; // 20 Nov: for BAG loaders the 11.2 m step starts at 35,000 MT — the port has New Bliss (sugar bags 34,000 MT) loading at CJ-1 and DSM London (32,700 MT) at CJ-2, both 10.5 m berths; North Gate left CJ-2 at 9.5 m with 24,000 MT on board. The 30,000 step had kept Manta Sena (30,170 MT) and Crystal Land (31,700 MT) off CJ-1 to 4; // 14 Nov (programme 15.11): the 11.2 m step now starts at 30,000 MT, not 25,000 — African Hornbill loads 25,000 MT to a 10.0 m sailing draught at CJ-4 ("25K/10K DD- 10.5"), Moonlit sailed from CJ-2 with 28,800 MT and Emmanouil worked 26,710 MT at CJ-1; the old step kept every 25–30,000 MT bag loader off CJ-1 to CJ-5
 const berthDepth=b=>{const B=BERTHS.find(q=>q.id===b);return B?(B.dr||99)+(B.tide||0):99;};
+// Berths the LIST prints in a vessel's remark column (the agent's ask / the port's note) — the board keeps her to them. Update with every list. (28 Nov: Princess Manissa, rock phosphate, was being seated at CJ-4 though her remark is "3 HMC 7 TO 8".)
+const LIST_ASK={'Princess Manissa':['7','8'],'Star Unity':['1','2','3','4','5'],'Tug Marigold + barge Alaacrity 666':['13','14','15','15A','16'],'Porto Fiscardo':['1','2','3','4'],'Bos Costa':['2','3'],'MK Lamis':['1','2','3','4'],'Lanna Naree (reload)':['1','2','3','4','13','14','15','15A','16']};
 function allowedBerths(w){
   const c=w.c||''; let A=POOL.slice();
+  if(LIST_ASK[w.n])A=A.filter(b=>LIST_ASK[w.n].includes(b));
   if(IRON(c)||DIRTY14(c))A=A.filter(b=>!['1','2','3','4'].includes(b)); // coal / petcoke / ore not at the bag berths CJ-1–4 — but aggregates ARE (programme 08.11: Mariblue, aggregates 60,000 EXP, at CJ-4 22¼–30½ as HP(40K)); earlier reading: programme 02.11 berthed Yuan Hang Wei Ye (pellet feed) at CJ-5, never lower; 6 Nov: Mariblue (aggregates) is not the CJ-2 taker — the 8K senior Safi Alfa is (board's reading of Mihir's two statements)
   // CJ-6 is a damaged berth (Mihir, 6 Nov 20:14): nothing may be dumped on the berth — cargo goes vessel ↔ truck direct or ship → hopper → truck.
   // So normally only fertiliser vessels berth there; any other cargo needs a special hopper arrangement, which the board does not assume.
@@ -4198,8 +4201,8 @@ const s0=S.find(x=>x.n===focus);
 // on top our vessels (rank, vessels ahead, turn by each line) and an at-berth table priority-wise. It reads the live objects (V, W, S, OPTRES) — nothing to keep by hand.
 // Drawn in a shadow root so that its CSS and the board's stay apart. Source of the markup / code: tools/priority_page/template.html.
 (function(){const host=document.getElementById('pqtab');if(!host||!host.attachShadow)return;
- const proj={};S.filter(x=>x.proj).forEach(x=>{proj[x.n]={b:x.b,F:x.F,cat:x.cat,via:x.via||''};});
- const D={NOW,HZ,opt:OPTRES,
+ const proj={};S.filter(x=>x.proj).forEach(x=>{proj[x.n]={b:x.b,F:x.F,T:x.T,cat:x.cat,via:x.via||''};});
+ const D={NOW,HZ,PE:PROG_END,opt:OPTRES,
   berth:V.filter(v=>v.T>NOW&&!v.span).map(v=>({slot:v.slot||v.cat,cat:v.cat,via:v.via||'',b:v.b,n:v.n,c:v.c,q:v.q,u:v.u,F:v.F,T:v.T,est:!!v.est,lt:(v.listT&&Math.abs(v.listT-v.T)>0.5)?fmt(v.listT):'',future:v.F>NOW,mine:isMine(v.n)})),
   wait:W.map(w=>{const x=w.x||'',tags=[];if(/FINISHING AT MIDSTREAM/i.test(x.slice(0,400)))tags.push('finishing at midstream');else if(/working at (MS|MRG|midstream)/i.test(x.slice(0,260)))tags.push('working at midstream');
    if(/HELD|held out|still held|no berth; held/i.test(x.slice(0,400)))tags.push('held');
@@ -4269,7 +4272,7 @@ table.pt tr.grp td{background:var(--panel2);font-family:var(--f-mono);font-size:
 table.pt tr.dim td{opacity:.38}
 table.pt td.pr{text-align:left;white-space:nowrap}table.pt td.pr b{font-family:var(--f-disp);font-weight:800;font-size:17px;text-transform:uppercase;letter-spacing:.01em}table.pt td.pr small{display:block;color:var(--muted);font-size:11.5px}
 table.pt td.bj{font-family:var(--f-disp);font-weight:800;font-size:18px;color:var(--ok);white-space:nowrap}table.pt tr.fut td.bj{color:var(--warn)}
-table.pt td.vac{color:var(--dim);text-align:left}
+table.pt td.vac{color:var(--dim);text-align:left}table.pt tr.prd td{background:rgba(224,168,60,.07);border-top:1px dashed rgba(224,168,60,.35)}table.pt tr.prd td.bj{color:var(--warn)}
 .mini{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line2);color:var(--muted);border-radius:3px;padding:0 5px;margin-left:5px;white-space:nowrap}
 @media (max-width:640px){td .mini.gd,td .mini.gl,td .mini.gq,td .mini.glr,td .mini.gdr{display:block;width:max-content;max-width:100%;overflow:hidden;text-overflow:ellipsis;margin:2px 0 1px 0}}
 .mini.w{border-color:var(--warn);color:var(--warn)}.mini.m{border-color:var(--brass2);color:var(--brass)}.mini.gd{border-color:rgba(95,191,122,.5);color:var(--tx-ok)}.mini.gl{border-color:rgba(229,99,106,.55);color:var(--tx-bad)}.mini.gq{border-style:dashed}.mini.gdr{border-style:dashed;border-color:rgba(95,191,122,.6);color:var(--tx-ok)}.mini.glr{border-style:dashed;border-color:rgba(229,99,106,.65);color:var(--tx-bad)}.mini.gy{border-style:dashed;border-color:rgba(207,143,63,.7);color:var(--tx-warn)}.gsum{color:var(--muted);font-size:12.5px;margin:6px 0 2px}.gsum b{color:var(--fg)}
@@ -4282,7 +4285,7 @@ h2{font-weight:800}table.pt th,table.rt th{font-weight:700}table.pt th small{fon
 </style><p class="sub">Port ki waiting sheet ka format: har vessel ki line, priority ke column — number list ka rank hai, Y = declared par rank nahi, N = us priority mein nahi. Upar hamare vessels aur at-berth sheet. Dates berth board ka projection hain, port ka order nahi.</p>
 <div class="sec"><div class="sechead"><h2>Hamare vessels</h2><p>Mihir &amp; Company — har priority mein number aur us line se baari</p></div><div class="mine" id="mine"></div></div>
 
-<div class="sec"><div class="sechead"><h2>At berth · priority-wise</h2><p>port ki at-berth sheet jaisa — har priority ki jagah par kaun hai aur kab tak</p></div><div class="tw"><table class="pt" id="atb"></table></div></div>
+<div class="sec"><div class="sechead"><h2>At berth · priority-wise</h2><p>port ki at-berth sheet jaisa — har priority ki jagah par kaun hai aur kab tak · <b style="color:var(--warn)">peeli line = board ka andaza, agli meeting mein is priority se kaun lagega</b></p></div><div class="tw"><table class="pt" id="atb"></table></div></div>
 
 <div class="sec"><div class="sechead"><h2>Waiting vessels · port chart</h2><p>port ki waiting sheet jaisa — vessel ki line, priority ke column</p></div>
 <div class="pick2"><label for="vs">Vessel chuno</label><select id="vs"></select><span id="chips"></span></div><div class="pos" id="pos"></div>
@@ -4295,16 +4298,16 @@ h2{font-weight:800}table.pt th,table.rt th{font-weight:700}table.pt th small{fon
 `;
  (function(D,root){
 const CATS=[
- {k:'GOV',l:'Govt priority',p:'2 places · fertiliser / Govt cargo, by seniority · if vacant: Coastal, 30K quote (HP line), then SAAGAR',max:2},
- {k:'COASTAL',l:'Coastal',p:'1 place · if vacant: 30K quote (HP line), then SAAGAR',max:1},
- {k:'HP',l:'Higher productivity',p:'2 places · goes to the highest MTPD quote of the day, not to the rank · Mihir (25 Nov): no vessel is bidding — but programme 26.11 prints MSC Magali as HP(50K)',max:2},
- {k:'SAAGAR',l:'SAAGAR',p:'1 bulk + 1 break-bulk place',max:2},
+ {k:'GOV',l:'Govt priority',p:'2 places · fertiliser / Govt cargo, by seniority · if vacant: a SAAGAR project vessel, then a 30K / 25K / 10K vessel',max:2},
+ {k:'COASTAL',l:'Coastal',p:'1 place · if vacant: a SAAGAR project vessel, then a 30K / 25K / 10K vessel',max:1},
+ {k:'HP',l:'Higher productivity',p:'2 places · parcel of 40,000 MT or more · bid at 50K — pellets, aggregates, coal take it (28 Nov) · if vacant: only a SAAGAR project vessel',max:2},
+ {k:'SAAGAR',l:'SAAGAR',p:'1 bulk + 1 break-bulk place · the bulk place goes to the next senior bulk vessel',max:2},
  {k:'24H',l:'24 hours',p:'1 place · must leave within 24 h',max:1},
  {k:'8K',l:'6.5K / 8K',p:'1 place',max:1},
  {k:'STL',l:'Steel / project',p:'1 place',max:1},
  {k:'BIT',l:'Bitumen',p:'1 place · if no bitumen vessel, the senior BREAK BULK vessel of the 6.5K line takes it (corrigendum 26.11.2026)',max:1},
  {k:'GEN',l:'General',p:'3 places · by seniority · at most 3 bag vessels',max:3},
- {k:'Q7',l:'Sr No 7 · 30K / 25K quote',p:'no place of its own — takes a vacant Govt, Coastal or 24-hr place, by the seniority of the HP line (Hai Nam 81, GOV(30K), programme 27.11)',max:0}];
+ {k:'Q7',l:'Sr No 7 · 30K / 25K quote',p:'no place of its own — takes a vacant Govt or Coastal place at 30K (Hai Nam 81, Meghna Prestige: "GOVT(30K)")',max:0}];
 const CL=Object.fromEntries(CATS.map(c=>[c.k,c.l]));CL.PPP='GFPL berth';CL.SPC='Space a/c';
 const nf=new Intl.NumberFormat('en-IN');
 const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],DAY=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -4381,9 +4384,13 @@ function atBerth(){
  const order=CATS.map(c=>c.k).concat(['SPC','PPP']);B.forEach(v=>{if(!order.includes(v.slot))order.push(v.slot);});let sr=0;
  const rows=order.map(k=>{const c=CATS.find(x=>x.k===k)||{l:CL[k]||'Priority not printed yet',p:k==='PPP'?'CJ-9 / CJ-10 · outside the priority places':k==='SPC'?'free quay · uses no priority place':'berthed on a signal sheet · the list has not printed her priority'};
   const l=B.filter(v=>k==='Q7'?/30k\/25k/i.test(v.via):v.slot===k).sort((a,b)=>(a.future-b.future)||a.T-b.T);if(!l.length&&(k==='SPC'||k==='PPP'))return '';sr++;
-  const pr=`<td class="sr" rowspan="${Math.max(1,l.length)}">${sr}</td><td class="pr" rowspan="${Math.max(1,l.length)}"><b>${c.l}</b><small>${c.p}</small></td>`;
-  if(!l.length)return `<tr>${pr}<td class="vac" colspan="5">${k==='Q7'?'NIL':'— vacant —'}</td></tr>`;
-  return l.map((v,i)=>`<tr class="${v.mine?'me':''}${v.future?' fut':''}">${i?'':pr}<td class="bj">CJ-${v.b}</td><td class="l"><b>${esc(short(v.n))}</b>${v.mine?'<span class="mini m">Mihir</span>':''}${v.future?'<span class="mini w">coming</span>':''}${gm(v.n,v.c)}${v.via?'<small>'+esc(v.via)+'</small>':''}</td><td class="l">${esc(v.c)}<small>${nf.format(v.q)} ${v.u}</small></td><td class="l" style="white-space:nowrap">${v.future?'~'+ft(v.F)+' <small>est</small>':ft(v.F)}</td><td class="l" style="white-space:nowrap"><b>${ft(v.T)}</b>${v.est?' <small>estimate</small>':''}${v.lt?`<small>list ETC ${v.lt}</small>`:''}</td></tr>`).join('');}).join('');
+  // the board's call for the NEXT meeting, shown in the same priority block (Mihir, 28 Nov 16:59): waiting vessels the board expects to berth under this line before the end of the next programme window
+  const nx=W.filter(w=>w.proj&&lineOf(w.proj)===k&&w.proj.F<=D.PE+24.01).sort((a,b)=>a.proj.F-b.proj.F);
+  const nxRows=nx.map(w=>{const p=w.proj;return `<tr class="prd${w.mine?' me':''}"><td class="bj">CJ-${p.b}</td><td class="l"><b>${esc(short(w.n))}</b>${w.mine?'<span class="mini m">Mihir</span>':''}<span class="mini w">andaza · agli meeting</span>${gm(w.n,w.c)}${p.via?'<small>'+esc(viaTxt(p)||p.via)+'</small>':''}</td><td class="l">${esc(w.c)}<small>${nf.format(w.q)} ${w.u}</small></td><td class="l" style="white-space:nowrap">~${ft(p.F)} <small>est</small></td><td class="l" style="white-space:nowrap">${p.T?'~'+ft(p.T)+' <small>est</small>':'—'}</td></tr>`;}).join('');
+  const span=Math.max(1,l.length)+nx.length;
+  const pr=`<td class="sr" rowspan="${span}">${sr}</td><td class="pr" rowspan="${span}"><b>${c.l}</b><small>${c.p}</small></td>`;
+  if(!l.length)return `<tr>${pr}<td class="vac" colspan="5">${k==='Q7'?'NIL':'— vacant —'}</td></tr>`+nxRows;
+  return l.map((v,i)=>`<tr class="${v.mine?'me':''}${v.future?' fut':''}">${i?'':pr}<td class="bj">CJ-${v.b}</td><td class="l"><b>${esc(short(v.n))}</b>${v.mine?'<span class="mini m">Mihir</span>':''}${v.future?'<span class="mini w">coming</span>':''}${gm(v.n,v.c)}${v.via?'<small>'+esc(v.via)+'</small>':''}</td><td class="l">${esc(v.c)}<small>${nf.format(v.q)} ${v.u}</small></td><td class="l" style="white-space:nowrap">${v.future?'~'+ft(v.F)+' <small>est</small>':ft(v.F)}</td><td class="l" style="white-space:nowrap"><b>${ft(v.T)}</b>${v.est?' <small>estimate</small>':''}${v.lt?`<small>list ETC ${v.lt}</small>`:''}</td></tr>`).join('')+nxRows;}).join('');
  root.getElementById('atb').innerHTML=`<tr><th>Sr</th><th class="l">Priority</th><th>Berth</th><th class="l">Vessel</th><th class="l">Cargo</th><th class="l">Made fast</th><th class="l">Out · ETC</th></tr>`+rows;
 }
 function pickers(){const s=root.getElementById('vs');s.innerHTML='<option value="">— koi nahi —</option>'+W.slice().sort((a,b)=>a.n.localeCompare(b.n)).map(w=>`<option value="${esc(w.n)}"${w.n===sel?' selected':''}>${esc(short(w.n))}${w.mine?' · Mihir & Co':''}</option>`).join('');
