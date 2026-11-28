@@ -2,6 +2,8 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 28 Nov 11:12 — Mihir (no text): Daily Berthing List 28.11.2026 (xlsx, 07:00) + DPR 28-11-2026 (xlsx) + HM signal 28/11/26 day sheet (disp 10:45) + the 27 Nov evening sheet again (already in) → v289. Call for the 28 Nov meeting frozen from v288 first.
+- 27 Nov 23:40 — MIHIR: target 90%+ accuracy; 17 more questions given for his man (daily: who declares completion, who bids HP, who is ready for 30K/norm+15, who declines).
 - 27 Nov 23:31 — MIHIR: answers to the 18 questions (A1–F18) from his experienced man + HM signal 27 Nov day amendment sheet (disp 11:50) + HM signal 27 Nov evening sheet (disp 17:27, 18:01, 22:15) + gang / shore-crane sheet 27 Nov 3rd shift → v288, RULE_BOOK 0B.
 - 27 Nov 20:41 — MIHIR: the sequence note was written by his experienced man; purpose = the prediction must come right. 18 questions given to him to ask.
 - 27 Nov 20:02 — MIHIR (docx, no text): BERTHING SEQUENCE NOTE — the order of allotment, 11 priorities, meeting eligibility (first high water), which-berth rule, worked example → v287, RULE_BOOK 0A.
