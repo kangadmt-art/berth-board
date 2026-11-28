@@ -83,6 +83,13 @@ The places are filled in this order. When a priority has no vessel, the allotmen
 
 **In the engine from v288:** bags at CJ-1 to 5 and 13 to 16, jumbo bags also CJ-6; agri cargo off CJ-6 / 7 / 8; HP only for parcels of 40,000 MT or more; vacant Govt / Coastal → SAAGAR project, then quote (v287). **Not in the engine:** completion "as declared at the meeting" (the board cannot see it before the meeting — it still estimates from the list ETC and DPR pace, and that is the main reason a call can miss); the 2–3 hour gap (engine uses 2); HP extension of 6–10 hours; gearless fertiliser of 200 m or less to CJ-7 / 8 (gear details missing for most vessels); norm + 15 %.
 
+
+**What the meeting of 28 Nov showed (programme 29.11)** — to be confirmed with Mihir's man:
+- **HP is given as "HP(50K)"**: both places went to pellets (Zheng Run, HP 3) and aggregates (Pacific Apex, HP 4), over the clay vessel (HP 1) and the salt vessel (HP 2) senior to them in the column. Reading in the engine from v290: salt and clay do not take an HP place; a salt vessel of the HP column takes a vacant Govt / Coastal place at 30K ("GOVT(30K)": Hai Nam 81 on 26 Nov, Meghna Prestige on 28 Nov).
+- The port **shifted a log vessel (AG Varvara, CJ-13 → CJ-5, "port convenience") to open a clean berth for a salt vessel.**
+- Aggregates berthed at a clean berth (Pacific Apex, CJ-15A). Salt berthed at CJ-16 behind a coal vessel (Xin Bo).
+- All four berths given had an outgoing vessel declared at the meeting; the two bag vessels with under 3,000 MT left at 07:00 (DSM London, Safi Alfa) were not declared and their berths were not given.
+
 ## 1. Priority places (in this order)
 
 - **Government — 2 places.** Every bulk fertiliser cargo is Government cargo, even when the list prints no rank. Fertiliser in bags is not. Rock phosphate is not. *(Mihir, 20 Nov)*
