@@ -2,6 +2,9 @@
 
 Moved off the board on 21 Nov (Mihir: the header showed too much). Newest first. From v231 the header carries only the day's papers.
 
+- 29 Nov 00:34 — Mihir (no text): the cargo list PDF filled by his team — berths each cargo can use, geared / gearless → v297, RULE_BOOK 0C.
+- 28 Nov 19:47 — Mihir: list of dry cargoes handled, as PDF for the team (35 cargoes, 28 Oct–28 Nov, berths where worked).
+- 28 Nov 17:31 — Mihir: write the prediction rules point-wise for the team to check → Claude Doc + PDF (54 rules, 7 questions).
 - 28 Nov 14:24 — Mihir (no text): PROGRAMME FOR 29.11.2026 (xlsx; heading still "movement for 28.11.2026", TF/SH/2102 dt 27 Nov) + Daily Berthing List 28.11.2026 revised after the meeting (xlsx) + the morning list again → v290. Meeting of 28 Nov scored: 0 of 4.
 - 28 Nov 11:12 — Mihir (no text): Daily Berthing List 28.11.2026 (xlsx, 07:00) + DPR 28-11-2026 (xlsx) + HM signal 28/11/26 day sheet (disp 10:45) + the 27 Nov evening sheet again (already in) → v289. Call for the 28 Nov meeting frozen from v288 first.
 - 27 Nov 23:40 — MIHIR: target 90%+ accuracy; 17 more questions given for his man (daily: who declares completion, who bids HP, who is ready for 30K/norm+15, who declines).

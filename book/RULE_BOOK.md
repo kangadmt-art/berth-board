@@ -90,6 +90,34 @@ The places are filled in this order. When a priority has no vessel, the allotmen
 - Aggregates berthed at a clean berth (Pacific Apex, CJ-15A). Salt berthed at CJ-16 behind a coal vessel (Xin Bo).
 - All four berths given had an outgoing vessel declared at the meeting; the two bag vessels with under 3,000 MT left at 07:00 (DSM London, Safi Alfa) were not declared and their berths were not given.
 
+## 0C. Which cargo can berth where — the team's table *(Mihir's team, 29 Nov 00:34, written on the cargo list; replaces the matching lines of section 4 and of 0B)*
+
+"CJ-13 to 16" includes CJ-15A. **If the list remark names berths for a vessel, she is kept to those berths only.** Gearless = no ship's cranes.
+
+| Cargo | Geared vessel | Gearless vessel |
+| --- | --- | --- |
+| Rice, sugar, chick peas, lentils, mixed bags; rice in bulk | CJ-1 to 5, CJ-13 to 16 | same |
+| Jumbo bags (bentonite, soda ash, manganese sulphate) | CJ-1 to 6, CJ-13 to 16 | same |
+| Salt | CJ-13 to 16 | same |
+| Logs (pine, hardwood) | CJ-1, 4, 5, 7, 8, CJ-13 to 16 | same |
+| Coal, petcoke | CJ-5, 7, 8, 16 (CJ-5 if the draught suits); CJ-6 too when she is under SAAGAR | CJ-7, 8, 16 |
+| Iron ore pellets (DR, oxide) | CJ-3, 4, 5, 7, 8, 16 | CJ-7, 8, 16 |
+| Iron ore fines, pellet feed | CJ-5, 7, 8, 16 | CJ-7, 8, 16 |
+| Aggregates | CJ-4, 5, 7, 8, CJ-13 to 16 | CJ-7, 8, CJ-13 to 16 |
+| Ball clay, feldspar, kaolin | CJ-4, 5, 7, 8, CJ-13 to 16 | CJ-7, 8, CJ-13 to 16 |
+| Gypsum | CJ-5, 7, 8, CJ-13 to 16 | CJ-7, 8, CJ-13 to 16 |
+| Soda ash in bulk | CJ-1 to 5, 7, 8 | same |
+| Urea, DAP / TSP, MOP, NPK, ammonium sulphate, polyhalite | CJ-1 to 8 (CJ-1 to 5 if the draught suits) | CJ-7, 8 |
+| Rock phosphate | CJ-4, 5 (if the draught suits) | CJ-7, 8 |
+| Windmill blades | CJ-13 to 16 | same |
+| Steel pipes | CJ-13 to 16 | same |
+| Steel coils, steel / general, project cargo | CJ-1 to 8, CJ-13 to 16 (and the crane need printed in the remark) | same |
+| Kraft pulp | CJ-1 to 8 | same |
+
+Left blank by the team: bentonite in bulk, barite ore, manganese ore, steel slabs, bitumen tanker — the older rules still decide these.
+
+In the engine from v297: `teamBerths(w)` gives this table and `allowedBerths(w)` uses it first; a berth named in the list remark replaces it; the loaded-draught check for export vessels still applies. Gearless is taken from the gear record (online or "(GL)" on the list); when nothing is known, a vessel over 200 m is taken as gearless.
+
 ## 1. Priority places (in this order)
 
 - **Government — 2 places.** Every bulk fertiliser cargo is Government cargo, even when the list prints no rank. Fertiliser in bags is not. Rock phosphate is not. *(Mihir, 20 Nov)*
