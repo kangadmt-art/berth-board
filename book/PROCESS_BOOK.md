@@ -74,3 +74,5 @@ What is done with each paper, step by step. The aim: papers go into the data boo
 For every timber vessel, when she first appears: find her load port from public AIS port calls (Maritime Optima public page, last 3 calls) and put it on her `TIMBER.rows` entry as `lp` with the note `lpn`. Take the last log port, not a bunker stop. Not sure → add "?"; nothing reliable → leave `lp` empty (the tab shows "port not found") and try again at the next update. The agent's paper or Mihir's word overrides what the web shows.
 
 What Mihir wants on the Timber tab is the **country** the cargo comes from (28 Nov); the port is secondary — fill `from` first, `lp` when known.
+
+Timber tab (Mihir, 28 Nov 17:09): the country only — no port name.
